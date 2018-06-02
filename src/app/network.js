@@ -7,7 +7,7 @@ class Network {
   requests: Map<number, {resolve: Function}> = new Map();
   connection: WebSocket;
   connected = false;
-  pingDescriptor: number;
+  pingDescriptor: IntervalID;
   requestId: number = 0;
   requestBinaryData: ?ArrayBuffer;
   host: string = `ws://${window.location.hostname}`;
@@ -84,7 +84,7 @@ class Network {
     }, 5000);
   }
 
-  route(message, handler) {
+  route(message: string, handler) {
     if (typeof handler === 'function') {
       this.router[message] = handler;
     }

@@ -1,15 +1,12 @@
 // @flow
-import type { Mat4 } from 'gl-matrix';
 import { mat4, vec3 } from 'gl-matrix';
 
 export const canvas: HTMLCanvasElement = (document.getElementById('glcanvas'): HTMLCanvasElement);
 export const gl: WebGLRenderingContext = canvas.getContext('webgl2', { antialias: false });
 
-export function initWebGL(pMatrix: Mat4) {
+export function initWebGL() {
   try {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    const ratio = gl.drawingBufferWidth / gl.drawingBufferHeight;
-    mat4.perspective(pMatrix, 1.04719755, ratio, 0.01, 1024.0); // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
     gl.depthFunc(gl.LEQUAL);

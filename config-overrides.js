@@ -1,13 +1,17 @@
 const { injectBabelPlugin, getBabelLoader } = require('react-app-rewired');
+const path = require('path');
 
 module.exports = function override(config, env) {
-  // console.log(getBabelLoader(config.module.rules).options)
   getBabelLoader(config.module.rules).options.babelrc = true;
   getBabelLoader(config.module.rules).options.presets = [];
+  getBabelLoader(config.module.rules).include = [getBabelLoader(config.module.rules).include, path.resolve(__dirname, 'common')];
   // throw 1;
   config = injectBabelPlugin('babel-plugin-transform-decorators-legacy', config);
   config = injectBabelPlugin('transform-do-expressions', config);
-
+  config.resolve.plugins.splice(
+    config.resolve.plugins.indexOf(config.resolve.plugins.find(el => el.constructor.name === 'ModuleScopePlugin')),
+    1,
+  );
   config.module.rules.unshift({
     test: /\.vert$/,
     use: { loader: 'raw-loader' },

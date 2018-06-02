@@ -37,7 +37,7 @@ const Terrain = terrainProvider(store, Chunk, TerrainBase);
 
 const terrain = new Terrain();
 
-const Raytrace = raytraceProvider(store, world, Chunk);
+const Raytrace = raytraceProvider(world, Chunk);
 const GravitySystem = gravitySystemProvider(world);
 const VelocitySystem = velocitySystemProvider(world);
 const PhysicsSystem = physicsSystemProvider(world, terrain, Chunk);
@@ -103,13 +103,6 @@ class PhysicsThread {
     //     blockInUp: player.blockInUp,
     //   };
     // }
-    // store.dispatch({
-    //   type: 'PLAYERS_UPDATED',
-    //   payload: { players },
-    //   meta: {
-    //     worker: true,
-    //   },
-    // });
     // this.lastTime = timeNow;
   }
 }

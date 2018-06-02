@@ -1,5 +1,5 @@
 // @flow
-import { getGeoId } from '../../Terrain/Chunk/ChunkBase';
+import { getGeoId } from '../../../../common/chunk';
 import { connect } from '../../util';
 
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';

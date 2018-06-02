@@ -2,22 +2,7 @@
 import { mousePress, mouseRelease } from './mouseActions';
 import { playerStartRemoveBlock, playerStopRemoveBlock, playerPlaceBlock } from '../player/playerActions';
 
-const mapState = state => ({
-  playerId: state.players.mainPlayerId,
-  geoId: state.raytracer.geoId,
-  emptyBlockChunkId: state.raytracer.emptyBlockChunkId,
-  locked: state.mouse.locked,
-});
-
-const mapActions = () => ({
-  playerStartRemoveBlock,
-  playerStopRemoveBlock,
-  playerPlaceBlock,
-  mousePress,
-  mouseRelease,
-});
-
-const mouseProvider = (store) => {
+const mouseProvider = () => {
   class Mouse {
     playerStartRemoveBlock: typeof playerStartRemoveBlock;
     playerStopRemoveBlock: typeof playerStopRemoveBlock;

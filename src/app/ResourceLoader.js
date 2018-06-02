@@ -12,8 +12,8 @@ const addonsToLoad = [
 ];
 
 const resourceLoaderProvider = Addon => class ResourceLoader {
-  constructor(app) {
-    this.network = app.network;
+  constructor(app, network) {
+    this.network = network;
     this.app = app;
     Addon.exportExternals();
   }

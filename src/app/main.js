@@ -1,10 +1,9 @@
 // @flow
-import { mat4 } from 'gl-matrix';
 import { initWebGL } from './engine/glEngine';
 import Model from './engine/Model';
 import HUD from './hud/hud';
-import Gradient from './gradient';
 import { connect } from './util';
+import {getIndex} from '../../common/chunk';
 // import playerModel from '../models/player.json';
 import {
   playerJump,
@@ -16,6 +15,7 @@ import {
 } from './player/playerActions';
 
 import { World } from './ecs';
+console.log(getIndex)
 
 let tex = 0;
 setInterval(() => {
@@ -44,53 +44,39 @@ const engineProvider = (
   class Engine {
     ecs: World = ecs;
     lastTime: number = 0;
+    resourceLoader: ResourceLoader;
 
     constructor() {
-      this.network = network;
-      this.socketHandlers = new SocketHandlers(this);
+      this.socketHandlers = new SocketHandlers(this, network);
       this.init().catch((e) => { console.error(e); });
     }
 
     async init() {
-      this.globalColor = [0, 0, 0, 1];
       await network.connect();
-      this.resourceLoader = new ResourceLoader(this);
-      this.dayTime = Math.asin(-1);
-      this.lightColorGradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
-
-      const pMatrix = mat4.create();
-      initWebGL(pMatrix);
+      this.resourceLoader = new ResourceLoader(this, network);
+      initWebGL();
 
       Player.hudBillboardModel = Model.createPrimitive('billboard', 2.0);
-      this.textureLibrary = textureLibrary;
 
-      try {
-        this.player = await network.request('LOGIN', { cookie: 12345 });
+      this.player = await network.request('LOGIN', { cookie: 12345 });
 
-        // Player.model = new Model(playerModel, 2);
+      // Player.model = new Model(playerModel, 2);
 
-        Player.texture = textureLibrary.get('player');
-        this.player.mainPlayer = true;
-        this.player = Player(this.player);
+      Player.texture = textureLibrary.get('player');
+      this.player.mainPlayer = true;
+      this.player = Player(this.player);
 
-        this.hud = new HUD();
+      this.hud = new HUD();
 
-        await this.resourceLoader.loadAddons();
-        this.skyBox = Skybox();
-        await network.start();
-        requestAnimationFrame(this.gameCycle.bind(this));
-      } catch (e) {
-        console.error(e);
-      }
+      await this.resourceLoader.loadAddons();
+      this.skyBox = Skybox();
+      await network.start();
+      requestAnimationFrame(this.gameCycle.bind(this));
     }
 
     gameCycle(time: number): void {
       const delta: number = time - this.lastTime;
       this.lastTime = time;
-      const dayLightLevel = (Math.sin(this.dayTime) + 1) * 50;
-      const color = Math.floor(this.lightColorGradient.getAtPosition(dayLightLevel));
-      this.globalColor = [((color & 0xFF0000) >> 16) / 256, ((color & 0xFF00) >> 8) / 256, (color & 0xFF) / 256, 1];
-
       this.ecs.update(delta);
       requestAnimationFrame(this.gameCycle.bind(this));
     }

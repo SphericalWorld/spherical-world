@@ -1,5 +1,5 @@
 // @flow
-import { getGeoId } from '../Terrain/Chunk/ChunkBase';
+import { getGeoId } from '../../../common/chunk';
 import { CHUNK_STATUS_NEED_LOAD_VBO } from '../Terrain/Chunk/chunkConstants';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';

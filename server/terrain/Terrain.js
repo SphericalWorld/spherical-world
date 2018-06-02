@@ -1,6 +1,7 @@
 // @flow
 import Chunk from './Chunk';
 import ChunkGenerator from './ChunkGenerator';
+import { getGeoId } from '../../common/chunk';
 
 class Terrain {
   locationName: string;
@@ -16,10 +17,10 @@ class Terrain {
 
   addChunk(chunk: Chunk): void {
     this.chunks.set(chunk.geoId, chunk);
-    const northChunk = this.chunks.get(Chunk.getGeoId(chunk.x - 16, chunk.z));
-    const southChunk = this.chunks.get(Chunk.getGeoId(chunk.x + 16, chunk.z));
-    const westChunk = this.chunks.get(Chunk.getGeoId(chunk.x, chunk.z - 16));
-    const eastChunk = this.chunks.get(Chunk.getGeoId(chunk.x, chunk.z + 16));
+    const northChunk = this.chunks.get(getGeoId(chunk.x - 16, chunk.z));
+    const southChunk = this.chunks.get(getGeoId(chunk.x + 16, chunk.z));
+    const westChunk = this.chunks.get(getGeoId(chunk.x, chunk.z - 16));
+    const eastChunk = this.chunks.get(getGeoId(chunk.x, chunk.z + 16));
     if (northChunk) {
       chunk.northChunk = northChunk;
       northChunk.southChunk = chunk;
@@ -39,11 +40,11 @@ class Terrain {
   }
 
   getChunk(x: number, z: number) {
-    return this.chunks.get(Chunk.getGeoId(x, z));
+    return this.chunks.get(getGeoId(x, z));
   }
 
   async ensureChunk(x: number, z: number): Promise<Chunk> {
-    const existingChunk = this.chunks.get(Chunk.getGeoId(x, z));
+    const existingChunk = this.chunks.get(getGeoId(x, z));
     if (existingChunk) {
       return existingChunk;
     }
@@ -59,7 +60,7 @@ class Terrain {
       chunk = await this.ensureChunk(x, z);
       await chunk.generateWithSurrounding(2);
     } else {
-      chunk = this.chunks.get(Chunk.getGeoId(x, z));
+      chunk = this.chunks.get(getGeoId(x, z));
       if (!chunk) {
         chunk = new Chunk(this, x, z);
         try {

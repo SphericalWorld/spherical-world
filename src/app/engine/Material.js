@@ -3,14 +3,20 @@ import { gl } from './glEngine';
 import Texture from './Texture';
 import { GlShaderProgram } from './glShader';
 
-export const BLENDING_OPAQUE = 0;
-export const BLENDING_TRANSPARENT = 1;
-export const BLENDING_MASKED = 2;
-export const BLENDING_TRANSLUCENT = 3;
-export const BLENDING_ADDITIVE = 4;
-export const BLENDING_MODULATE = 5;
+export const BLENDING_OPAQUE: 0 = 0;
+export const BLENDING_TRANSPARENT: 1 = 1;
+export const BLENDING_MASKED: 2 = 2;
+export const BLENDING_TRANSLUCENT: 3 = 3;
+export const BLENDING_ADDITIVE: 4 = 4;
+export const BLENDING_MODULATE: 5 = 5;
 
-type BlendingMode = 0 | 1 | 2 | 3 | 4 | 5;
+type BlendingMode =
+  | typeof BLENDING_OPAQUE
+  | typeof BLENDING_TRANSPARENT
+  | typeof BLENDING_MASKED
+  | typeof BLENDING_TRANSLUCENT
+  | typeof BLENDING_ADDITIVE
+  | typeof BLENDING_MODULATE;
 
 type MaterialOptions = {
   name: string,

@@ -1,14 +1,18 @@
 // @flow
+import type Server from './server';
+
 const Player = require('./player.js');
 
 class SocketHandlers {
-  constructor() {
-    this.server = null;
+  server: Server;
+
+  constructor(server: Server) {
+    this.server = server;
     this.router = {};
     console.log('socketHandlers loaded');
   }
 
-  route(message, handler) {
+  route(message: string, handler) {
     this.router[message] = handler;
   }
 

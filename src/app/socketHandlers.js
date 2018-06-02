@@ -1,9 +1,9 @@
 // import Player from './player/Player';
 
-const SocketHandlers = Player => class SocketHandlers {
-  constructor(app) {
+const socketHandlersProvider = Player => class SocketHandlers {
+  constructor(app, network) {
     this.app = app;
-    this.network = app.network;
+    this.network = network;
     // this.network.route('LOAD_OTHER_PLAYER', this.loadOtherPlayer.bind(this));
     // this.network.route('OTHER_PLAYER_CHANGE_POSITION', this.otherPlayerChangePosition.bind(this));
     // this.network.route('OTHER_PLAYER_CHANGE_ROTATION', this.otherPlayerChangeRotation.bind(this));
@@ -76,4 +76,4 @@ const SocketHandlers = Player => class SocketHandlers {
   }
 };
 
-export default SocketHandlers;
+export default socketHandlersProvider;

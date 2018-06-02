@@ -13,7 +13,7 @@ module.exports = {
     store: 'gameExternals.store',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /.js?$/,
         loader: 'babel-loader',

@@ -34,7 +34,10 @@ export default class World {
     }
   }
 
-  createSelector(includeComponents: Function[], excludeComponents?: Function[]): (Component|Entity)[][] {
+  createSelector(
+    includeComponents: Function[],
+    excludeComponents?: Function[],
+  ): (Component | Entity)[][] {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
     return selector.components;
@@ -62,7 +65,14 @@ export default class World {
       const componentsToUpdate = [...changedData.entries()]
         .filter(([component]) => component.constructor.threads.includes(threadId))
         .map(([component, data]) => ({ type: component.constructor.name, data: [...data.entries()] }));
-      thread.postMessage({ type: 'UPDATE_COMPONENTS', payload: { components: componentsToUpdate, delta, events: this.events } });
+      thread.postMessage({
+        type: 'UPDATE_COMPONENTS',
+        payload: {
+          components: componentsToUpdate,
+          delta,
+          events: this.events,
+        },
+      });
     }
     this.events = [];
   }
@@ -74,7 +84,6 @@ export default class World {
         Object.assign(componentRegistry.get(key), data);
       }
     }
-    // console.log(data)
   }
 
   registerEntity(entityId: Entity, components: Component[]): void {

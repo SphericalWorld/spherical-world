@@ -1,6 +1,7 @@
 // @flow
 import type { ChunkState } from './chunkConstants';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from './chunkConstants';
+import { getGeoId } from '../../../../common/chunk';
 // north direction - decreasing of X
 
 class ChunkBase<TChunk, TTerrain> {
@@ -23,12 +24,8 @@ class ChunkBase<TChunk, TTerrain> {
     this.x = x;
     this.z = z;
     this.height = 256;
-    this.geoId = ChunkBase.getGeoId(x, z);
+    this.geoId = getGeoId(x, z);
     this.terrain = terrain;
-  }
-
-  static getGeoId(x: number, z: number) {
-    return `${x | 0}_${z | 0}`;
   }
 
   checkNestedChunks() {
@@ -63,8 +60,6 @@ class ChunkBase<TChunk, TTerrain> {
     this.checkNestedChunks();
   }
 }
-
-export const getGeoId = (x: number, z: number): string => `${x | 0}_${z | 0}`;
 
 export const COLUMN: 1 = 1;
 export const ROW: 16 = 16;

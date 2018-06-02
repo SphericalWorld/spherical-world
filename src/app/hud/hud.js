@@ -1,4 +1,4 @@
-// import angular from 'angular';
+// @flow
 // import './services/swMouse';
 // import './hudCore';
 

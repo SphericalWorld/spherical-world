@@ -5,10 +5,6 @@ import { Transform, Component } from '../components';
 export default class BlockRemove implements System {
   components: Component[][] = [];
 
-  constructor() {
-
-  }
-
   update(delta: number): void {
     // console.log(34)
     // for each( var target:MoveNode in targets )

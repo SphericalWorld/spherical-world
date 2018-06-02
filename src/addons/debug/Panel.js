@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 const mapState = (state) => {
-  const { x, y, z } = state.players.instances[state.players.mainPlayerId];
-  const [mouseX, mouseY, mouseZ] = state.mouse.worldPosition;
-
-  return {
-    x, y, z, mouseX, mouseY, mouseZ,
-  };
+  // const { x, y, z } = state.players.instances[state.players.mainPlayerId];
+  // const [mouseX, mouseY, mouseZ] = state.mouse.worldPosition;
+  //
+  // return {
+  //   x, y, z, mouseX, mouseY, mouseZ,
+  // };
 };
 
 const Panel = ({

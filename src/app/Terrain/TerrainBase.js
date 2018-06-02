@@ -1,5 +1,6 @@
 // @flow
 import type { TChunkBase } from './Chunk/ChunkBase';
+import { getGeoId } from '../../../common/chunk';
 
 const terrainBaseProvider = (Chunk: TChunkBase) => {
   class Terrain {
@@ -16,10 +17,10 @@ const terrainBaseProvider = (Chunk: TChunkBase) => {
 
     addChunk(chunk: Chunk) {
       this.chunks.set(chunk.geoId, chunk);
-      const northChunk = this.chunks.get(Chunk.getGeoId(chunk.x - 16, chunk.z));
-      const southChunk = this.chunks.get(Chunk.getGeoId(chunk.x + 16, chunk.z));
-      const westChunk = this.chunks.get(Chunk.getGeoId(chunk.x, chunk.z - 16));
-      const eastChunk = this.chunks.get(Chunk.getGeoId(chunk.x, chunk.z + 16));
+      const northChunk = this.chunks.get(getGeoId(chunk.x - 16, chunk.z));
+      const southChunk = this.chunks.get(getGeoId(chunk.x + 16, chunk.z));
+      const westChunk = this.chunks.get(getGeoId(chunk.x, chunk.z - 16));
+      const eastChunk = this.chunks.get(getGeoId(chunk.x, chunk.z + 16));
       if (northChunk) {
         chunk.setNorthChunk(northChunk);
         northChunk.setSouthChunk(chunk);
@@ -44,7 +45,7 @@ const terrainBaseProvider = (Chunk: TChunkBase) => {
     }
 
     getChunk(x: number, z: number) {
-      return this.chunks.get(Chunk.getGeoId(x, z));
+      return this.chunks.get(getGeoId(x, z));
     }
   }
 

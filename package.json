@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "express": "*",
+    "express": "^4.16.3",
     "fs-extra": "^6.0.0",
     "gl-matrix": "^2.5.1",
     "pako": "^1.0.6",
@@ -17,8 +17,8 @@
     "seedrandom": "^2.4.3",
     "simplex-noise": "^2.4.0",
     "uuid": "^3.2.1",
-    "ws": "*",
-    "zlib": "*"
+    "ws": "^5.2.0",
+    "zlib": "^1.0.5"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -45,11 +45,10 @@
     "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-flowtype": "^2.48.0",
     "eslint-plugin-import": "^2.11.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.7.0",
     "flow-bin": "^0.73.0",
     "raw-loader": "^0.5.1",
     "react-app-rewired": "^1.5.2",
-    "worker-loader": "^1.1.1"
+    "worker-loader": "^2.0.0"
   }
 }

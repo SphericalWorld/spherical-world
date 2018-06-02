@@ -102,7 +102,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         gl.canvas.width = width;
         gl.canvas.height = height;
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        this.pMatrix = mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0);
+        this.pMatrix = mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0);  // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
       }
     }
 

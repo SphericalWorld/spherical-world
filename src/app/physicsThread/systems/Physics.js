@@ -7,6 +7,7 @@ import Physics from '../../components/Physics';
 import { Terrain } from '../Terrain';
 import { Chunk as IChunk } from '../Terrain/Chunk';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
+import { getGeoId } from '../../../../common/chunk';
 
 const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
   class PhysicsSystem implements System {
@@ -24,9 +25,9 @@ const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChun
     }
 
     calculateMovement({ translation }: Transform, velocity: Velocity) {
-      const chunk = terrain.chunks.get(Chunk.getGeoId(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16));
+      const chunk = terrain.chunks.get(getGeoId(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16));
       // console.log(chunk)
-      // console.log(Chunk.getGeoId(Math.floor(position.x / 16) * 16, Math.floor(position.z / 16) * 16))
+      // console.log(getGeoId(Math.floor(position.x / 16) * 16, Math.floor(position.z / 16) * 16))
       if (!chunk) {
         return;
       }

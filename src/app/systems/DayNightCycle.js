@@ -13,8 +13,9 @@ const dayNightCycleProvider = (world: World, time: Time) => {
     currentShader: WebGLProgram;
 
     update(delta: number): void {
-      time.update(delta);
+      time.update(Date.now());
       const { day, hour, minute } = time;
+      // console.log(day, hour, minute, delta)
       // for (const [id, position, visual] of this.components) {
       //   if (visual.glObject.material.transparent) {
       //     continue;

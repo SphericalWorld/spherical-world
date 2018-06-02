@@ -84,7 +84,6 @@ class GlTextureLibrary {
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (const texture of this.textures.values()) {
       if (typeof texture.atlasId === 'number' && texture.meta && texture.meta.overlay) {
-        console.log(1231234);
         drawImage(this.ctx, texture.image, ((texture.atlasId % 16) * tileSize), tileSize * (Math.floor(texture.atlasId / 16)), 64, 64, 0, false, true);
       }
     }

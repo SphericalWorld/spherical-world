@@ -41,8 +41,6 @@ import inputSourcesProvider from './app/Input/inputSources/inputSourcesProvider'
 import inputContextsProvider from './app/Input/inputContexts';
 
 
-
-
 import {
   cameraMovedObservable,
   cameraLockedObservable,
@@ -50,7 +48,6 @@ import {
   CAMERA_MOVED,
   CAMERA_LOCKED,
   CAMERA_UNLOCKED,
-  PLAYER_MOVED_FORWARD,
 } from './app/player/events';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {

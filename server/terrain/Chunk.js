@@ -8,6 +8,7 @@ import type ChunkGenerator from './ChunkGenerator';
 import IO from '../../common/fp/monads/io';
 import { profileChunkGeneration } from '../../common/profileUtils';
 import { generate, generateObjects } from './ChunkGenerator';
+import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
@@ -49,15 +50,11 @@ class Chunk {
     this.x = x;
     this.z = z;
     this.chunkGenerator = terrain.chunkGenerator;
-    this.geoId = Chunk.getGeoId(x, z);
+    this.geoId = getGeoId(x, z);
     this.fileName = `${this.geoId}.bin`;
     this.metaFileName = `${this.geoId}.meta.json`;
     this.filePath = `./map/${this.terrain.locationName}/${this.fileName}`;
     this.metaPath = `./map/${this.terrain.locationName}/${this.metaFileName}`;
-  }
-
-  static getGeoId(x: number, z: number): string {
-    return `${x | 0}_${z | 0}`;
   }
 
   async load(): Promise<Chunk> {

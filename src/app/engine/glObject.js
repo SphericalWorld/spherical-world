@@ -1,5 +1,4 @@
 // @flow
-import { gl } from './glEngine';
 import Material from './Material';
 import Model from './Model';
 

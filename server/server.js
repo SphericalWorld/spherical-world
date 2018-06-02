@@ -30,11 +30,11 @@ function socketPostMessage(message, data, callback) {
   }
 }
 
-class Server {
-  router: SocketHandlers = new SocketHandlers();
+export default class Server {
+  router: SocketHandlers = new SocketHandlers(this);
+  terrain: Terrain;
 
   constructor() {
-    this.sockets = [];
     this.terrain = new Terrain('steppe', 11);
     setTimeout(() => {
       for (let i = -36; i < 36; i += 1) {
@@ -48,7 +48,6 @@ class Server {
     }, 50000);
     this.players = [];
     this.staticLoader = new StaticLoader(1337);
-    this.router.server = this;
     this.router.terrain = this.terrain;
     this.router.route('loadGameData', this.router.loadGameData.bind(this.router));
     this.router.route('PING', this.router.ping.bind(this.router));
@@ -64,7 +63,6 @@ class Server {
     this.wss = new WebSocketServer({ port: 8080 });
 
     this.wss.on('connection', (ws) => {
-      this.sockets.push(ws);
       ws.requests = [];
       ws.requestId = 0;
       ws.postMessage = socketPostMessage;
@@ -73,41 +71,38 @@ class Server {
         try {
           message = JSON.parse(message);
         } catch (e) {
-          message = null;
+          return;
         }
-        if (message) {
-          if (typeof message.id === 'number' && typeof message.type === 'undefined') {
-            for (let i = 0; i < ws.requests.length; i++) {
-              if (ws.requests[i].id === message.id) {
-                ws.requests[i].callback(message.data);
-                ws.requests.splice(i, 1);
-                break;
-              }
+        if (typeof message.id === 'number' && typeof message.type === 'undefined') {
+          for (let i = 0; i < ws.requests.length; i++) {
+            if (ws.requests[i].id === message.id) {
+              ws.requests[i].callback(message.data);
+              ws.requests.splice(i, 1);
+              break;
             }
-          } else if (typeof message.type === 'string') {
-            if (this.router.router[message.type]) {
-              if (typeof message.id === 'number') {
-                const callback = (result, data) => {
-                  if (ws) { // socked  could close to that moment
-                    ws.send(JSON.stringify({ id: message.id, result, data }));
-                  }
-                };
-                this.router.router[message.type](ws, message.data || callback, callback);
-              } else {
-                this.router.router[message.type](ws, message.data);
-              }
+          }
+        } else if (typeof message.type === 'string') {
+          if (this.router.router[message.type]) {
+            if (typeof message.id === 'number') {
+              const callback = (result, data) => {
+                if (ws) { // socked  could close to that moment
+                  ws.send(JSON.stringify({ id: message.id, result, data }));
+                }
+              };
+              this.router.router[message.type](ws, message.data || callback, callback);
             } else {
-              console.error('handler not registered', message.type);
+              this.router.router[message.type](ws, message.data);
             }
           } else {
-            console.error('unknown message format');
+            console.error('handler not registered', message.type);
           }
+        } else {
+          console.error('unknown message format');
         }
       });
 
       ws.on('close', () => {
         console.log('Player disconnected');
-        this.sockets.splice(this.sockets.indexOf(ws), 1);
         if (ws.player) {
           this.players.splice(this.players.indexOf(ws.player), 1);
           ws.player.destroy();
@@ -116,5 +111,3 @@ class Server {
     });
   }
 }
-
-export default new Server();

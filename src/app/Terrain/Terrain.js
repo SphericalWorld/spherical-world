@@ -3,6 +3,7 @@ import { mat4 } from 'gl-matrix';
 import type { Mat4 } from 'gl-matrix';
 
 import type Material from '../engine/Material';
+import { getGeoId } from '../../../common/chunk';
 import { connect } from '../util';
 import { loadChunk, loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
@@ -29,7 +30,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       this.texture = null;
       this.foliageColorMap = [];
       network.route('loadChunk', (data, binaryData) => {
-        let chunk = this.chunks.get(Chunk.getGeoId(data.x, data.z));
+        let chunk = this.chunks.get(getGeoId(data.x, data.z));
         if (!chunk) {
           chunk = this.addChunk(new Chunk(this, data.x, data.z));
         }
@@ -154,7 +155,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
     }
 
     onServerBlockPlaced(data) {
-      const geoId = Chunk.getGeoId(data.x, data.z);
+      const geoId = getGeoId(data.x, data.z);
       this.app.chunksHandlerThread.postMessage({
         type: 'PLACE_BLOCK', geoId, x: data.x, y: data.y, z: data.z, blockId: data.blockId, plane: data.plane,
       });
@@ -165,7 +166,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
     }
 
     onServerBlockRemoved(data) {
-      const geoId = Chunk.getGeoId(data.x, data.z);
+      const geoId = getGeoId(data.x, data.z);
       this.app.chunksHandlerThread.postMessage({
         type: 'REMOVE_BLOCK', geoId, x: data.x, y: data.y, z: data.z,
       });
