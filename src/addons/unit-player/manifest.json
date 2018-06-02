@@ -1,0 +1,8 @@
+{
+	"name":"unit-player",
+	"main": "index.html",
+	"style": "main.css",
+	"scripts": {
+		"main":"main.js"
+	}
+}

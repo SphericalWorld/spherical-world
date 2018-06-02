@@ -1,0 +1,2 @@
+// @flow
+export const TRACE_FINISHED: 'TRACE_FINISHED' = 'TRACE_FINISHED';

@@ -1,0 +1,9 @@
+{
+	"name":"xpbar",
+	"main": "index.html",
+	"style": "main.css",
+	"scripts": {
+		"main":"index.js",
+		"directives":"scripts/directives.js"
+	}
+}

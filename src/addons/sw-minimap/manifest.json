@@ -1,0 +1,8 @@
+{
+	"name":"sw-chat",
+	"main": "index.html",
+	"style": "main.css",
+	"scripts": {
+		"main":"main.js"
+	}
+}

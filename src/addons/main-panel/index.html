@@ -1,0 +1,16 @@
+<div id="main-panel"  ng-controller="mainPanel">
+	<ul class="main-panel-items-container">
+		<li ng-repeat="slot in items track by $index"  sw-droppable="true" ng-class="$index==selected?'selected':''">
+			<div>
+				<div class="item" sw-droppable="true" sw-draggable="slot" ng-style="{'background-image': 'url({{slot.icon}})'}" sw-item-tooltip="slot">
+					<span>{{slot.count}}</span>
+				</div>
+			</div>
+		</li>
+	</ul>
+	<div class="switch-panel">
+		<div class="up"></div>
+		<div class="down"></div>
+		<div class="number">1</div>
+	</div>
+</div>

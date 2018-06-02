@@ -1,0 +1,32 @@
+<div id="sw-chat"  ng-controller="sw-chat">
+	<div id="sw-chat-controls">
+		<div class="sw-chat-button" id="scroll-one-up"></div>
+		<div class="sw-chat-button" id="scroll-one-down"></div>
+		<div class="sw-chat-button" id="scroll-all"></div>
+	</div>
+	<div id="sw-chat-content">
+		<ul id="sw-chat-text-block">
+			<li ng-repeat="message in swChatService.messages[currentChannel.id]">[{{currentChannel.name}}] [{{message.name}}]: <span sw-bind-html-compile="message.data"></span></li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>
+			<li>saddsa</li>	
+		</ul>
+		<div id="sw-chat-input" sw-chat-input="sendMessage()" contenteditable ng-model="swChatService.textToSend">
+			
+		</div>
+	</div>
+</div>

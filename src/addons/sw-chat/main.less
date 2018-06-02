@@ -1,0 +1,79 @@
+@import "../../client/css/colors.less";
+
+#sw-chat {
+	@sw-chat-button-height: 30px;
+	@sw-chat-height: 240px;
+
+	position: fixed;
+	left: 20px;
+	bottom: 20px;
+	height: @sw-chat-height;
+
+	#sw-chat-controls{
+		position: relative;
+		width: 34px;
+		height: 100%;
+		float: left;		
+	}
+
+
+	.sw-chat-button{
+		background: rgba(0, 0, 0, 0.4);
+		width: 30px;
+		height: @sw-chat-button-height;
+		border-radius: 4px;
+		position: absolute;
+		cursor: pointer;
+	}
+
+	#scroll-all{
+		bottom: @sw-chat-button-height;
+	}
+
+	#scroll-one-down{
+		bottom: @sw-chat-button-height*2+4px;
+	}
+
+	#scroll-one-up{
+		bottom: @sw-chat-button-height*3+2*4px;
+	}
+
+	#sw-chat-content{
+		height: 100%;
+		width: 400px;
+		float: right;
+
+		#sw-chat-text-block{
+			margin: 0px;
+			padding: 0px;
+			list-style-type: none;
+			background: rgba(0, 0, 0, 0);
+			transition: background 0.4s ease-in-out;
+			width: 100%;
+			height: @sw-chat-height - 30px;
+			overflow: hidden;
+			color: @chat-color-main;
+			text-shadow: -1px 0 1px rgba(0, 0, 0, 0.4),0 1px 1px rgba(0, 0, 0, 0.4),1px 0 1px rgba(0, 0, 0, 0.4),0 -2px 1px rgba(0, 0, 0, 0.4);
+		}
+
+		#sw-chat-text-block:hover{
+			background: rgba(0, 0, 0, 0.4);
+			transition: background 0.4s ease-in-out;
+		}
+
+		#sw-chat-input{
+			outline:none;
+			background: rgba(0, 0, 0, 0.3);
+			border: 3px ridge rgba(145, 145, 145, 0.3);
+			padding-left: 6px;
+			width: 100%;
+			border-radius: 6px;
+			color: white;
+			text-shadow: -1px 0 1px rgba(0, 0, 0, 0.4),0 1px 1px rgba(0, 0, 0, 0.4),1px 0 1px rgba(0, 0, 0, 0.4),0 -1px 1px rgba(0, 0, 0, 0.4);
+			font-size: 17px;
+			outline: none;
+			box-sizing: border-box;
+			height: 30px;
+		}
+	}
+}
