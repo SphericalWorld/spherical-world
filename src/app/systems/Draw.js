@@ -48,20 +48,19 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       const globalColor = [((color & 0xFF0000) >> 16) / 256, ((color & 0xFF00) >> 8) / 256, (color & 0xFF) / 256, 1];
 
       terrain.draw(skyColor, globalColor, this.pMatrix, this.mvMatrix);
-
       const draw = (position: Transform, visual: Visual): void => {
         this.useShader(visual.glObject.material.shader);
         visual.glObject.material.use();
         gl.uniform4f(this.currentShader.uLighting, 1, 1, 1, 1);
         this.mvPushMatrix();
-        mat4.translate(this.mvMatrix, this.mvMatrix, position);
+        mat4.translate(this.mvMatrix, this.mvMatrix, position.translation);
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();
+        // console.log(position.translation);
       };
 
       for (const [id, position, visual] of this.components) {
-        console.log(id);
         if (visual.glObject.material.transparent) {
           continue;
         }
@@ -86,6 +85,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         visual.glObject.draw();
         this.mvPopMatrix();
       }
+      // console.log(this.components);
 
       for (const [id, position, visual] of this.components) {
         if (!visual.glObject.material.transparent) {

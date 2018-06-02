@@ -8,7 +8,6 @@ import {
 import configureStore from './store/configureStore';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';
-import raytracerProvider from './Raytracer';
 import chunkProvider from './Terrain/Chunk';
 
 import raytraceProvider from './systems/Raytrace';
@@ -33,8 +32,6 @@ const store = configureStore();
 
 const Chunk = chunkProvider(null);
 
-
-const RayTracer = raytracerProvider(store, Chunk);
 const TerrainBase = terrainBaseProvider(Chunk);
 const Terrain = terrainProvider(store, Chunk, TerrainBase);
 
@@ -55,10 +52,8 @@ world.subscribe((event) => {
 class PhysicsThread {
   lastTime: number = Date.now();
   terrain: Terrain = terrain;
-  raytracer: RayTracer;
 
   constructor() {
-    this.raytracer = new RayTracer(this.terrain);
     world.registerComponentTypes(
       Transform,
       Raytracer,

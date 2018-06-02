@@ -3,23 +3,11 @@ import { vec3 } from 'gl-matrix';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
-import Velocity from '../../components/Velocity';
 import UserControlled from '../../components/UserControlled';
 
-import { connect } from '../../util';
-
-const mapState = (state) => {
-  const { sight, worldPositionNear } = state.mouse;
-  return {
-    worldPositionNear,
-    sight,
-  };
-};
-
 const raytraceProvider = (store, ecs, Chunk) => {
-  @connect(mapState, null, store)
   class Raytrace implements System {
-    components: [string, Transform, Raytracer][] = ecs.createSelector([Transform, Raytracer]);
+    components: [string, Transform, Raytracer][] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
     userControlled: [string, Transform, UserControlled][] = ecs.createSelector([Transform, UserControlled]);
 
     mvMatrix: number[];
@@ -49,9 +37,9 @@ const raytraceProvider = (store, ecs, Chunk) => {
         // console.log(this)
 
         this.trace(userTransform.translation, [-v2[2], -v[2], -v3[2]]);
-        transform.x = this.block.x;
-        transform.y = this.block.y;
-        transform.z = this.block.z;
+        transform.translation[0] = this.block.x;
+        transform.translation[1] = this.block.y;
+        transform.translation[2] = this.block.z;
         result.push([id, transform]);
       }
 
