@@ -9,6 +9,7 @@ import { loadChunk, loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
+import type ChunkProgram from '../../shaders/Chunk/Chunk';
 
 const mapActions = () => ({
   loadChunk,
@@ -44,9 +45,13 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       network.route('REMOVE_BLOCK', this.onServerBlockRemoved.bind(this));
     }
 
-    draw(skyColor, globalColor, pMatrix: Mat4, mvMatrix: Mat4) {
-      const { shader } = this.material;
+    draw(skyColor, globalColor, pMatrix: Mat4, mvMatrix: Mat4): void {
+      const { shader } = (this.material: { shader: ChunkProgram });
+      const m = mat4.create();
+      mat4.multiply(m, pMatrix, mvMatrix);
 
+      const chunksToRender = [...this.chunks.values()]
+        .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m));
 
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.texture);
@@ -84,24 +89,14 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       gl.disable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-      const m = mat4.create();
-      mat4.multiply(m, pMatrix, mvMatrix);
-
       gl.activeTexture(gl.TEXTURE1);
-      for (const chunk of this.chunks.values()) {
-        if (chunk.state === CHUNK_STATUS_LOADED) {
-          if (chunk.inFrustum(m)) {
-            gl.bindTexture(gl.TEXTURE_2D, chunk.foliageTexture);
-            gl.bindVertexArray(chunk.buffers[0].vao);
-
-            let offset = 0;
-            for (let ii = 0; ii < chunk.buffers.length - 1; ii += 1) {
-              if (chunk.buffers[ii].itemCount) {
-                gl.uniform1i(shader.uBufferNum, ii);
-                gl.drawElements(gl.TRIANGLES, chunk.buffers[ii].itemCount, gl.UNSIGNED_SHORT, offset);
-                offset += chunk.buffers[ii].itemCount * 2;
-              }
-            }
+      for (const chunk of chunksToRender) {
+        gl.bindTexture(gl.TEXTURE_2D, chunk.foliageTexture);
+        gl.bindVertexArray(chunk.buffers.vao);
+        for (let i = 0; i < chunk.buffersInfo.length - 1; i += 1) {
+          if (chunk.buffersInfo[i].indexCount) {
+            gl.uniform1i(shader.uBufferNum, chunk.buffersInfo[i].index);
+            gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[i].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[i].offset);
           }
         }
       }
@@ -123,24 +118,20 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
 
       gl.disable(gl.CULL_FACE);
 
-      for (const chunk of this.chunks.values()) {
-        if (chunk.state === CHUNK_STATUS_LOADED) {
-          if (chunk.buffers[ii].itemCount) {
-            if (chunk.inFrustum(m)) {
-              gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[ii].colorBuffer);
-              gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
-              gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[ii].globalColorBuffer);
-              gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
-              gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[ii].texCoordBuffer);
-              gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
-              gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[ii].vertexBuffer);
-              gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
-              gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[ii].blockDataBuffer);
-              gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0);
-              gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, chunk.buffers[ii].indexBuffer);
-              gl.drawElements(gl.TRIANGLES, chunk.buffers[ii].itemCount, gl.UNSIGNED_SHORT, 0);
-            }
-          }
+      for (const chunk of chunksToRender) {
+        if (chunk.buffersInfo[ii].indexCount) {
+          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.colorBuffer);
+          gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.globalColorBuffer);
+          gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.texCoordBuffer);
+          gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.vertexBuffer);
+          gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.blockDataBuffer);
+          gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0);
+          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, chunk.buffers.indexBuffer);
+          gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[ii].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[ii].offset);
         }
       }
       gl.enable(gl.CULL_FACE);
@@ -156,24 +147,20 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
 
     onServerBlockPlaced(data) {
       const geoId = getGeoId(data.x, data.z);
-      this.app.chunksHandlerThread.postMessage({
+      const payload = {
         type: 'PLACE_BLOCK', geoId, x: data.x, y: data.y, z: data.z, blockId: data.blockId, plane: data.plane,
-      });
-      this.app.physicsThread.postMessage({
-        type: 'PLACE_BLOCK', geoId, x: data.x, y: data.y, z: data.z, blockId: data.blockId, plane: data.plane,
-      });
-      this.app.raytracer.trace();
+      };
+      this.app.chunksHandlerThread.postMessage(payload);
+      this.app.physicsThread.postMessage(payload);
     }
 
     onServerBlockRemoved(data) {
       const geoId = getGeoId(data.x, data.z);
-      this.app.chunksHandlerThread.postMessage({
+      const payload = {
         type: 'REMOVE_BLOCK', geoId, x: data.x, y: data.y, z: data.z,
-      });
-      this.app.physicsThread.postMessage({
-        type: 'REMOVE_BLOCK', geoId, x: data.x, y: data.y, z: data.z,
-      });
-      this.app.raytracer.trace();
+      };
+      this.app.chunksHandlerThread.postMessage(payload);
+      this.app.physicsThread.postMessage(payload);
     }
 
     generateBiomeColorMap(texture) {
@@ -205,9 +192,9 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       const chunkZ = Math.floor(this.playerZ / 16) * 16;
       if (chunkX !== chunkXold || chunkZ !== chunkZold) {
         this.chunks = new Map([...this.chunks.entries()].filter(([key, value]) => (value.x > chunkX - (this.halfSize * 16))
-            && (value.x < chunkX + (this.halfSize * 16))
-            && (value.z > chunkZ - (this.halfSize * 16))
-            && (value.z < chunkZ + (this.halfSize * 16))));
+          && (value.x < chunkX + (this.halfSize * 16))
+          && (value.z > chunkZ - (this.halfSize * 16))
+          && (value.z < chunkZ + (this.halfSize * 16))));
         // this.filterFarChunks();
       }
     }

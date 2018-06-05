@@ -13,11 +13,19 @@ const mapState = (state, chunk) => {
   }
   return ({
     buffers: state.chunks.instances[chunk.geoId].buffers,
+    buffersInfo: state.chunks.instances[chunk.geoId].buffersInfo,
   });
 };
 
 let timeOld;
 let chunksLoaded = 0;
+
+const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  return buffer;
+};
 
 const chunkProvider = (store) => {
   @connect(mapState, null, store)
@@ -59,8 +67,9 @@ const chunkProvider = (store) => {
       return this.frustum.boxInFrustum(m);
     }
 
-    bindVBO(data) {
-      const shader = this.terrain.material.shader;
+    bindVBO(buffers, buffersInfo) {
+      const { shader } = (this.terrain.material: { shader: ChunkProgram });
+
       if (!timeOld) {
         timeOld = Date.now();
       }
@@ -69,7 +78,7 @@ const chunkProvider = (store) => {
         console.log(Date.now() - timeOld);
       }
 
-      this.buffers = [{
+      this.buffers = {
         vertexBuffer: null,
         indexBuffer: null,
         texCoordBuffer: null,
@@ -77,84 +86,42 @@ const chunkProvider = (store) => {
         globalColorBuffer: null,
         blockDataBuffer: null,
         vao: null,
-        itemCount: 0,
-      }, {
-        vertexBuffer: null,
-        indexBuffer: null,
-        texCoordBuffer: null,
-        colorBuffer: null,
-        globalColorBuffer: null,
-        blockDataBuffer: null,
-        vao: null,
-        itemCount: 0,
-      }, {
-        vertexBuffer: null,
-        indexBuffer: null,
-        texCoordBuffer: null,
-        colorBuffer: null,
-        globalColorBuffer: null,
-        blockDataBuffer: null,
-        vao: null,
-        itemCount: 0,
-      }];
-      for (let i = 0; i < this.buffers.length; i += data.buffers.length - 1) {
-        this.buffers[i].vao = gl.createVertexArray();
-        gl.bindVertexArray(this.buffers[i].vao);
+      };
+      this.buffers.vao = gl.createVertexArray();
+      gl.bindVertexArray(this.buffers.vao);
 
-        this.buffers[i].texCoordBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i].texCoordBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data.buffers[i].texCoordBuffer, gl.STATIC_DRAW);
-        this.buffers[i].texCoordBuffer.itemSize = 2;
-        gl.enableVertexAttribArray(shader.aTextureCoord);
-        gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
+      this.buffers.texCoordBuffer = createBuffer(buffers.texCoordBuffer);
+      gl.enableVertexAttribArray(shader.aTextureCoord);
+      gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
 
-        this.buffers[i].vertexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i].vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data.buffers[i].vertexBuffer, gl.STATIC_DRAW);
-        this.buffers[i].vertexBuffer.itemSize = 3;
-        gl.enableVertexAttribArray(shader.aVertexPosition);
-        gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+      this.buffers.vertexBuffer = createBuffer(buffers.vertexBuffer);
+      gl.enableVertexAttribArray(shader.aVertexPosition);
+      gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
 
-        this.buffers[i].indexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers[i].indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data.buffers[i].indexBuffer, gl.STATIC_DRAW);
-        this.buffers[i].indexBuffer.itemSize = 2;
+      this.buffers.indexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indexBuffer);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 
-        this.buffers[i].indexBuffer.itemCount = data.buffers[i].indexCount;
+      this.buffers.colorBuffer = createBuffer(buffers.colorBuffer);
+      gl.enableVertexAttribArray(shader.aVertexColor);
+      gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
 
-        this.buffers[i].colorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i].colorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data.buffers[i].colorBuffer, gl.STATIC_DRAW);
-        this.buffers[i].colorBuffer.itemSize = 3;
-        gl.enableVertexAttribArray(shader.aVertexColor);
-        gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
+      this.buffers.globalColorBuffer = createBuffer(buffers.globalColorBuffer);
+      gl.enableVertexAttribArray(shader.aVertexGlobalColor);
+      gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
 
-        this.buffers[i].globalColorBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i].globalColorBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data.buffers[i].globalColorBuffer, gl.STATIC_DRAW);
-        this.buffers[i].globalColorBuffer.itemSize = 1;
-        gl.enableVertexAttribArray(shader.aVertexGlobalColor);
-        gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
+      this.buffers.blockDataBuffer = createBuffer(buffers.blockDataBuffer);
+      gl.enableVertexAttribArray(shader.aBlockData);
+      gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0); // TODO: maybe float to uint
 
-        this.buffers[i].blockDataBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[i].blockDataBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, data.buffers[i].blockDataBuffer, gl.STATIC_DRAW);
-        this.buffers[i].blockDataBuffer.itemSize = 1;
-        gl.enableVertexAttribArray(shader.aBlockData);
-        gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0); // TODO: maybe float to uint
+      gl.bindVertexArray(null);
 
-        gl.bindVertexArray(null);
-      }
-
-      for (let i = 0; i < data.buffers.length; i += 1) {
-        this.buffers[i].itemCount = data.buffers[i].indexCount;
-      }
       this.state = CHUNK_STATUS_LOADED;
     }
 
     componentDidUpdate(prevState) {
       if (this.buffers && (prevState.buffers !== this.buffers)) {
-        this.bindVBO({ buffers: this.buffers });
+        this.bindVBO(this.buffers, this.buffersInfo);
       }
     }
   }

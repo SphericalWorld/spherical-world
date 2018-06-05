@@ -29,6 +29,26 @@ export default class ChunkProgram extends GlShaderProgram {
   attributes = ['aVertexPosition', 'aTextureCoord', 'aVertexColor', 'aVertexGlobalColor', 'aBlockData'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uBlocksTexture', 'uGrassColorMapTexture', 'uBlocksOverlayTexture', 'uAnimationTexture', 'uGlobalColor', 'uBufferNum', 'uTime', 'uFogColor', 'uFogDensity', 'uFogType', 'uAnimTextures'];
 
+  aVertexPosition: number = 0;
+  aTextureCoord: number = 0;
+  aVertexColor: number = 0;
+  aVertexGlobalColor: number = 0;
+  aBlockData: number = 0;
+
+  uPMatrix: WebGLUniformLocation;
+  uMVMatrix: WebGLUniformLocation;
+  uBlocksTexture: WebGLUniformLocation;
+  uGrassColorMapTexture: WebGLUniformLocation;
+  uBlocksOverlayTexture: WebGLUniformLocation;
+  uAnimationTexture: WebGLUniformLocation;
+  uGlobalColor: WebGLUniformLocation;
+  uBufferNum: WebGLUniformLocation;
+  uTime: WebGLUniformLocation;
+  uFogColor: WebGLUniformLocation;
+  uFogDensity: WebGLUniformLocation;
+  uFogType: WebGLUniformLocation;
+  uAnimTextures: WebGLUniformLocation;
+
   constructor() {
     super();
     this.link();

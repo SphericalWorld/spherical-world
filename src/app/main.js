@@ -3,7 +3,6 @@ import { initWebGL } from './engine/glEngine';
 import Model from './engine/Model';
 import HUD from './hud/hud';
 import { connect } from './util';
-import {getIndex} from '../../common/chunk';
 // import playerModel from '../models/player.json';
 import {
   playerJump,
@@ -15,7 +14,6 @@ import {
 } from './player/playerActions';
 
 import { World } from './ecs';
-console.log(getIndex)
 
 let tex = 0;
 setInterval(() => {

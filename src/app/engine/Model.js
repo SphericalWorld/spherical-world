@@ -62,7 +62,6 @@ const createCube = (model, size, halfSize, isReversed) => {
     cubeVertexIndices.reverse();
   }
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-  model.indexBuffer.itemSize = 1;
   model.indexBuffer.numItems = 36;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, model.texCoordBuffer);
@@ -122,7 +121,6 @@ const createBillboard = (model, halfSize) => {
     0, 1, 2, 0, 2, 3,
   ];
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-  model.indexBuffer.itemSize = 1;
   model.indexBuffer.numItems = 6;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, model.texCoordBuffer);
@@ -186,7 +184,6 @@ class Model {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model.indices), gl.STATIC_DRAW);
-    this.indexBuffer.itemSize = 1;
     this.indexBuffer.numItems = model.indices.length;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);

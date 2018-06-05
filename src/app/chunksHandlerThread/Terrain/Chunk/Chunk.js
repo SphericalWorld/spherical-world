@@ -264,7 +264,6 @@ const chunkProvider = (store) => {
         globalColorBuffer: [],
         blockDataBuffer: [],
         vertexCount: 0,
-        indexCount: 0,
       }, {
         vertexBuffer: [],
         indexBuffer: [],
@@ -273,7 +272,6 @@ const chunkProvider = (store) => {
         globalColorBuffer: [],
         blockDataBuffer: [],
         vertexCount: 0,
-        indexCount: 0,
       }, {
         vertexBuffer: [],
         indexBuffer: [],
@@ -282,7 +280,6 @@ const chunkProvider = (store) => {
         globalColorBuffer: [],
         blockDataBuffer: [],
         vertexCount: 0,
-        indexCount: 0,
       }];
 
       const createPlane = (index, i, j, k, ii, jj, kk, textureIndex, color) => {
@@ -380,45 +377,54 @@ const chunkProvider = (store) => {
           }
         }
       }
-      buffers[0].indexCount = buffers[0].indexBuffer.length;
 
+      const buffersInfo = [{
+        indexCount: 0,
+        index: 0,
+        offset: 0,
+      }, {
+        indexCount: 0,
+        index: 1,
+        offset: 0,
+      }, {
+        indexCount: 0,
+        index: 2,
+        offset: 0,
+      }];
       let offset = 0;
-      for (let i = 1; i < buffers.length - 1; i += 1) {
+      for (let i = 0; i < buffers.length; i += 1) {
+        buffersInfo[i].indexCount = buffers[i].indexBuffer.length;
+      }
+      for (let i = 1; i < buffers.length; i += 1) {
         offset += buffers[i - 1].vertexCount;
         for (let j = 0; j < buffers[i].indexBuffer.length; j += 1) {
           buffers[i].indexBuffer[j] += offset;
         }
-        buffers[i].indexCount = buffers[i].indexBuffer.length;
-        buffers[0].texCoordBuffer = buffers[0].texCoordBuffer.concat(buffers[i].texCoordBuffer);
-        buffers[0].vertexBuffer = buffers[0].vertexBuffer.concat(buffers[i].vertexBuffer);
-        buffers[0].indexBuffer = buffers[0].indexBuffer.concat(buffers[i].indexBuffer);
-        buffers[0].colorBuffer = buffers[0].colorBuffer.concat(buffers[i].colorBuffer);
-        buffers[0].globalColorBuffer = buffers[0].globalColorBuffer.concat(buffers[i].globalColorBuffer);
-        buffers[0].blockDataBuffer = buffers[0].blockDataBuffer.concat(buffers[i].blockDataBuffer);
-
-        buffers[i].texCoordBuffer = null;
-        buffers[i].vertexBuffer = null;
-        buffers[i].indexBuffer = null;
-        buffers[i].colorBuffer = null;
-        buffers[i].globalColorBuffer = null;
-        buffers[i].blockDataBuffer = null;
+        buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
       }
-      buffers[0].texCoordBuffer = new Float32Array(buffers[0].texCoordBuffer).buffer;
-      buffers[0].vertexBuffer = new Float32Array(buffers[0].vertexBuffer).buffer;
-      buffers[0].indexBuffer = new Uint16Array(buffers[0].indexBuffer).buffer;
-      buffers[0].colorBuffer = new Float32Array(buffers[0].colorBuffer).buffer;
-      buffers[0].globalColorBuffer = new Float32Array(buffers[0].globalColorBuffer).buffer;
-      buffers[0].blockDataBuffer = new Float32Array(buffers[0].blockDataBuffer).buffer;
+      const buffersData = buffers.reduce((prev, curr) => ({
+        texCoordBuffer: prev.texCoordBuffer.concat(curr.texCoordBuffer),
+        vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
+        indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
+        colorBuffer: prev.colorBuffer.concat(curr.colorBuffer),
+        globalColorBuffer: prev.globalColorBuffer.concat(curr.globalColorBuffer),
+        blockDataBuffer: prev.blockDataBuffer.concat(curr.blockDataBuffer),
+      }));
+      buffersData.texCoordBuffer = new Float32Array(buffersData.texCoordBuffer).buffer;
+      buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
+      buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;
+      buffersData.colorBuffer = new Float32Array(buffersData.colorBuffer).buffer;
+      buffersData.globalColorBuffer = new Float32Array(buffersData.globalColorBuffer).buffer;
+      buffersData.blockDataBuffer = new Float32Array(buffersData.blockDataBuffer).buffer;
 
-      buffers[buffers.length - 1].indexCount = buffers[buffers.length - 1].indexBuffer.length;
-      buffers[buffers.length - 1].texCoordBuffer = new Float32Array(buffers[buffers.length - 1].texCoordBuffer).buffer;
-      buffers[buffers.length - 1].vertexBuffer = new Float32Array(buffers[buffers.length - 1].vertexBuffer).buffer;
-      buffers[buffers.length - 1].indexBuffer = new Uint16Array(buffers[buffers.length - 1].indexBuffer).buffer;
-      buffers[buffers.length - 1].colorBuffer = new Float32Array(buffers[buffers.length - 1].colorBuffer).buffer;
-      buffers[buffers.length - 1].globalColorBuffer = new Float32Array(buffers[buffers.length - 1].globalColorBuffer).buffer;
-      buffers[buffers.length - 1].blockDataBuffer = new Float32Array(buffers[buffers.length - 1].blockDataBuffer).buffer;
-
-      postMessage({ type: 'CHUNK_VBO_LOADED', payload: { geoId: this.geoId, buffers } }, [buffers[0].texCoordBuffer, buffers[0].vertexBuffer, buffers[0].indexBuffer, buffers[0].colorBuffer, buffers[0].globalColorBuffer, buffers[0].blockDataBuffer, buffers[buffers.length - 1].texCoordBuffer, buffers[buffers.length - 1].vertexBuffer, buffers[buffers.length - 1].indexBuffer, buffers[buffers.length - 1].colorBuffer, buffers[buffers.length - 1].globalColorBuffer, buffers[buffers.length - 1].blockDataBuffer]);
+      postMessage({
+        type: 'CHUNK_VBO_LOADED',
+        payload: {
+          geoId: this.geoId,
+          buffers: buffersData,
+          buffersInfo,
+        },
+      }, Object.values(buffersData));
     }
 
     prepareLight() {

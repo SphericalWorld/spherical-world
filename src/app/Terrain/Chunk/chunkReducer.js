@@ -9,13 +9,14 @@ const initialState = {
   instances: {},
 };
 
-const onChunkVBOLoaded = (state, { geoId, buffers }) => ({
+const onChunkVBOLoaded = (state, { geoId, buffers, buffersInfo }) => ({
   ...state,
   instances: {
     ...state.instances,
     [geoId]: {
       ...state.instances[geoId],
       buffers,
+      buffersInfo,
     },
   },
 });
