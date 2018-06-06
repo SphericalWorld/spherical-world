@@ -11,3 +11,4 @@ exclude_patterns:
 - "**/vendor/"
 - "**/*.d.ts"
 - "flow-typed/"
+- "src/registerServiceWorker.js"
