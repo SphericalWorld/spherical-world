@@ -1,3 +1,4 @@
+// @flow
 // import Player from './player/Player';
 
 const socketHandlersProvider = Player => class SocketHandlers {

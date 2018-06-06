@@ -362,9 +362,7 @@ const chunkProvider = (store) => {
                 // top plane
                 createPlane(index, i, j, k, 1, 0, 0, 0, 1);
                 // bottom plane
-                if (i > 0) {
-                  createPlane(index, i, j, k, -1, 0, 0, 1, 0.5);
-                }
+                createPlane(index, i, j, k, -1, 0, 0, 1, 0.5);
                 // north plane
                 createPlane(index, i, j, k, 0, -1, 0, 2, 0.6);
                 createPlane(index, i, j, k, 0, 1, 0, 3, 0.6);

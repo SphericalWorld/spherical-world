@@ -1,10 +1,14 @@
 // @flow
 import Flower from './Flower';
-import flowerYellow from '../../models/flowerYellow.json';
+import model from '../../models/flowerYellow.json';
 
-class FlowerYellow extends Flower {
-  id = 130;
-  model = flowerYellow;
-}
+const FlowerYellow = () => Object.assign(
+  {},
+  {
+    id: 130,
+    model,
+  },
+  Flower(),
+);
 
 export default FlowerYellow;

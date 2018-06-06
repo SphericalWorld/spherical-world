@@ -138,7 +138,7 @@ class Model {
   indexBuffer: WebGLBuffer = gl.createBuffer();
   texCoordBuffer: WebGLBuffer = gl.createBuffer();
   vao: WebGLVertexArrayObject;
-
+  // TODO: add vertex count, index count etc
   constructor(model?: Object, scale?: number) {
     if (typeof model === 'object') {
       this.loadFromJson(model, scale);

@@ -32,12 +32,12 @@ const blocks = [
   new CoalOre(),
   new IronOre(),
   new Water(),
-  new Torch(),
-  new TallGrass(),
-  new FlowerYellow(),
-  new FlowerRed(),
-  new DeadBush(),
-  new Reeds(),
+  Torch(),
+  TallGrass(),
+  FlowerYellow(),
+  FlowerRed(),
+  DeadBush(),
+  Reeds(),
   new Cobblestone(),
 ];
 
@@ -70,12 +70,12 @@ for (const block of blocks) {
 
   blocksInfo[block.id] = [block.fallSpeedCap, block.fallAcceleration, block]; // TODO remove block from array of number
 
-  blocksTextureInfo[block.id][0] = block.textures.top | 0;
-  blocksTextureInfo[block.id][1] = block.textures.bottom | 0;
-  blocksTextureInfo[block.id][2] = block.textures.north | 0;
-  blocksTextureInfo[block.id][3] = block.textures.south | 0;
-  blocksTextureInfo[block.id][4] = block.textures.west | 0;
-  blocksTextureInfo[block.id][5] = block.textures.east | 0;
+  blocksTextureInfo[block.id][0] = block.textures.top;
+  blocksTextureInfo[block.id][1] = block.textures.bottom;
+  blocksTextureInfo[block.id][2] = block.textures.north;
+  blocksTextureInfo[block.id][3] = block.textures.south;
+  blocksTextureInfo[block.id][4] = block.textures.west;
+  blocksTextureInfo[block.id][5] = block.textures.east;
 
   bufferInfo[block.id][0] = block.buffer.top | 0;
   bufferInfo[block.id][1] = block.buffer.bottom | 0;
