@@ -288,70 +288,73 @@ const chunkProvider = (store) => {
         const indexNear = jNear + (kNear * 16) + ((i + ii) * 256);
         const blockNear = chunkNear.blocks[indexNear];
 
-        if ((this.blocksFlags[blockNear][1]) && !(this.blocksFlags[block][4] && (block === blockNear))) {
-          const buffer = buffers[this.bufferInfo[block][textureIndex]];
-          const light = chunkNear.light[indexNear];
-          const textureInfo = this.blocksTextureInfo[block][textureIndex] / 16;
-
-          const addVertex = (i, j, k, u, v) => {
-            buffer.vertexBuffer.push(
-              j + jj + this.x + (ii ? v : kk ? u : (jj < 0 ? 1 : 0)),
-              i + ((jj || kk) ? (v - 1) : (ii < 0 ? -1 : 0)),
-              k + kk + this.z + ((ii || jj) ? u : (kk < 0 ? 1 : 0)),
-            );
-
-            i += ii;
-            j += jj;
-            k += kk;
-
-            let c = 0;
-            let cf = 0;
-            let s1f = 0;
-            let s1 = 0;
-            let s2f = 0;
-            let s2 = 0;
-            if (ii) {
-              [s2f, s2] = getLight(i, j, k + (u ? 1 : -1), this);
-              [s1f, s1] = getLight(i, j + (v ? 1 : -1), k, this);
-              if (s1 !== -1 || s2 !== -1) {
-                [cf, c] = getLight(i, j + (v ? 1 : -1), k + (u ? 1 : -1), this);
-              }
-            } else if (jj) {
-              [s2f, s2] = getLight(i, j, k + (u ? 1 : -1), this);
-              [s1f, s1] = getLight(i + (v ? 1 : -1), j, k, this);
-              if (s1 !== -1 || s2 !== -1) {
-                [cf, c] = getLight(i + (v ? 1 : -1), j, k + (u ? 1 : -1), this);
-              }
-            } else if (kk) {
-              [s2f, s2] = getLight(i, j + (u ? 1 : -1), k, this);
-              [s1f, s1] = getLight(i + (v ? 1 : -1), j, k, this);
-              if (s1 !== -1 || s2 !== -1) {
-                [cf, c] = getLight(i + (v ? 1 : -1), j + (u ? 1 : -1), k, this);
-              }
-            }
-            const [
-              r, g, b, vGlobal,
-            ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
-
-            buffer.colorBuffer.push(r, g, b);
-            buffer.globalColorBuffer.push(vGlobal * color);
-            buffer.texCoordBuffer.push(textureInfo + u / 16, Math.floor(textureInfo) / 16 + v / 16);
-          };
-
-          addVertex(i, j, k, 0, 0);
-          addVertex(i, j, k, 0, 1);
-          addVertex(i, j, k, 1, 0);
-          addVertex(i, j, k, 1, 1);
-
-          buffer.blockDataBuffer.push(block, block, block, block);
-          // TODO: create one index buffer per all chunks
-          if (ii < 0 || jj > 0 || kk < 0) {
-            buffer.indexBuffer.push(buffer.vertexCount, buffer.vertexCount + 1, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 2);
-          } else {
-            buffer.indexBuffer.push(buffer.vertexCount + 2, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 1, buffer.vertexCount);
-          }
-          buffer.vertexCount += 4;
+        if (!(this.blocksFlags[blockNear][1]) || (this.blocksFlags[block][4] && (block === blockNear))) {
+          return;
         }
+        const buffer = buffers[this.bufferInfo[block][textureIndex]];
+        const light = chunkNear.light[indexNear];
+        const textureInfo = this.blocksTextureInfo[block][textureIndex] / 16;
+
+        const addVertex = (i, j, k, u, v, uu, vv) => {
+          buffer.vertexBuffer.push(
+            j + jj + this.x + (ii ? v : kk ? u : (jj < 0 ? 1 : 0)),
+            i + ((jj || kk) ? (v - 1) : (ii < 0 ? -1 : 0)),
+            k + kk + this.z + ((ii || jj) ? u : (kk < 0 ? 1 : 0)),
+          );
+
+          i += ii;
+          j += jj;
+          k += kk;
+
+          let c = 0;
+          let cf = 0;
+          let s1f = 0;
+          let s1 = 0;
+          let s2f = 0;
+          let s2 = 0;
+          if (ii) {
+            [s2f, s2] = getLight(i, j, k + uu, this);
+            [s1f, s1] = getLight(i, j + vv, k, this);
+            j += vv;
+            k += uu;
+          } else if (jj) {
+            [s2f, s2] = getLight(i, j, k + uu, this);
+            [s1f, s1] = getLight(i + vv, j, k, this);
+            i += vv;
+            k += uu;
+          } else if (kk) {
+            [s2f, s2] = getLight(i, j + uu, k, this);
+            [s1f, s1] = getLight(i + vv, j, k, this);
+            i += vv;
+            j += uu;
+          }
+
+
+          if (s1 !== -1 || s2 !== -1) {
+            [cf, c] = getLight(i, j, k, this);
+          }
+          const [
+            r, g, b, vGlobal,
+          ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
+
+          buffer.colorBuffer.push(r, g, b);
+          buffer.globalColorBuffer.push(vGlobal * color);
+          buffer.texCoordBuffer.push(textureInfo + u / 16, Math.floor(textureInfo) / 16 + v / 16);
+        };
+
+        addVertex(i, j, k, 0, 0, -1, -1);
+        addVertex(i, j, k, 0, 1, -1, 1);
+        addVertex(i, j, k, 1, 0, 1, -1);
+        addVertex(i, j, k, 1, 1, 1, 1);
+
+        buffer.blockDataBuffer.push(block, block, block, block);
+        // TODO: create one index buffer per all chunks
+        if (ii < 0 || jj > 0 || kk < 0) {
+          buffer.indexBuffer.push(buffer.vertexCount, buffer.vertexCount + 1, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 2);
+        } else {
+          buffer.indexBuffer.push(buffer.vertexCount + 2, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 1, buffer.vertexCount);
+        }
+        buffer.vertexCount += 4;
       };
       for (let i = 1; i < this.height; i += 1) {
         for (let j = 0; j < 16; j += 1) {
