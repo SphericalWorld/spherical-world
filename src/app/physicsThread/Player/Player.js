@@ -1,40 +1,9 @@
 // @flow
 import { getGeoId } from '../../../../common/chunk';
-import { connect } from '../../util';
 
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
-function mapState(store, player) {
-  const {
-    x,
-    y,
-    z,
-    horizontalRotate,
-    verticalRotate,
-    movingForward,
-    movingBack,
-    movingLeft,
-    movingRight,
-    jumping,
-    running,
-  } = store.players.instances[player.id];
-  return {
-    x,
-    y,
-    z,
-    horizontalRotate,
-    verticalRotate,
-    movingForward,
-    movingBack,
-    movingLeft,
-    movingRight,
-    jumping,
-    running,
-  };
-}
-
 const playerProvider = (store, Chunk, Inventory) => {
-  @connect(mapState, null, store)
   class Player {
     id: number;
     x: number = 0.0;
@@ -112,95 +81,38 @@ const playerProvider = (store, Chunk, Inventory) => {
         } else {
           direction = -2;
         }
-        let fall = !chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) - direction, blockZ) || 0][2];
+        let fall = !chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) - direction, blockZ)][2];
 
-        const acceleration = chunk.blocksInfo[chunk.getBlock(blockX, Math.floor(this.y), blockZ) || 0][1];
-        const fallSpeedCap = chunk.blocksInfo[chunk.getBlock(blockX, Math.floor(this.y), blockZ) || 0][0];
+        const [fallSpeedCap, acceleration] = chunk.blocksInfo[chunk.getBlock(blockX, Math.floor(this.y), blockZ)];
+
+        const testFall = (x, y, z) => !chunk.blocksInfo[chunk.getBlock(x, y, z)][2];
 
         if (xInBlock >= 0.8) {
-          if (blockX < 15) {
-            fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX + 1, Math.floor(this.y) - direction, blockZ) || 0][2]);
-            if (zInBlock >= 0.8) {
-              if (blockZ < 15) {
-                fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX + 1, Math.floor(this.y) - direction, blockZ + 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.eastChunk.getBlock(blockX + 1, Math.floor(this.y) - direction, 0) || 0][2]);
-              }
-            } else if (zInBlock <= 0.2) {
-              if (blockZ > 0) {
-                fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX + 1, Math.floor(this.y) - direction, blockZ - 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.westChunk.getBlock(blockX + 1, Math.floor(this.y) - direction, 15) || 0][2]);
-              }
-            }
-          } else {
-            fall = fall && (!chunk.blocksFlags[chunk.southChunk.getBlock(0, Math.floor(this.y) - direction, blockZ) || 0][2]);
-            if (zInBlock >= 0.8) {
-              if (blockZ < 15) {
-                fall = fall && (!chunk.blocksFlags[chunk.southChunk.getBlock(0, Math.floor(this.y) - direction, blockZ + 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.southChunk.eastChunk.getBlock(0, Math.floor(this.y) - direction, 0) || 0][2]);
-              }
-            } else if (zInBlock <= 0.2) {
-              if (blockZ > 0) {
-                fall = fall && (!chunk.blocksFlags[chunk.southChunk.getBlock(0, Math.floor(this.y) - direction, blockZ - 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.southChunk.westChunk.getBlock(0, Math.floor(this.y) - direction, 15) || 0][2]);
-              }
-            }
+          fall = fall && testFall(blockX + 1, Math.floor(this.y) - direction, blockZ);
+          if (zInBlock >= 0.8) {
+            fall = fall && testFall(blockX + 1, Math.floor(this.y) - direction, blockZ + 1);
+          } else if (zInBlock <= 0.2) {
+            fall = fall && testFall(blockX + 1, Math.floor(this.y) - direction, blockZ - 1);
           }
         } else if (xInBlock <= 0.2) {
-          if (blockX > 0) {
-            fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX - 1, Math.floor(this.y) - direction, blockZ) || 0][2]);
-            if (zInBlock >= 0.8) {
-              if (blockZ < 15) {
-                fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX - 1, Math.floor(this.y) - direction, blockZ + 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.eastChunk.getBlock(blockX - 1, Math.floor(this.y) - direction, 0) || 0][2]);
-              }
-            } else if (zInBlock <= 0.2) {
-              if (blockZ > 0) {
-                fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX - 1, Math.floor(this.y) - direction, blockZ - 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.westChunk.getBlock(blockX - 1, Math.floor(this.y) - direction, 15) || 0][2]);
-              }
-            }
-          } else {
-            fall = fall && (!chunk.blocksFlags[chunk.northChunk.getBlock(15, Math.floor(this.y) - direction, blockZ) || 0][2]);
-            if (zInBlock >= 0.8) {
-              if (blockZ < 15) {
-                fall = fall && (!chunk.blocksFlags[chunk.northChunk.getBlock(15, Math.floor(this.y) - direction, blockZ + 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.northChunk.eastChunk.getBlock(15, Math.floor(this.y) - direction, 0) || 0][2]);
-              }
-            } else if (zInBlock <= 0.2) {
-              if (blockZ > 0) {
-                fall = fall && (!chunk.blocksFlags[chunk.northChunk.getBlock(15, Math.floor(this.y) - direction, blockZ - 1) || 0][2]);
-              } else {
-                fall = fall && (!chunk.blocksFlags[chunk.northChunk.westChunk.getBlock(15, Math.floor(this.y) - direction, 15) || 0][2]);
-              }
-            }
+          fall = fall && testFall(blockX - 1, Math.floor(this.y) - direction, blockZ);
+          if (zInBlock >= 0.8) {
+            fall = fall && testFall(blockX - 1, Math.floor(this.y) - direction, blockZ + 1);
+          } else if (zInBlock <= 0.2) {
+            fall = fall && testFall(blockX - 1, Math.floor(this.y) - direction, blockZ - 1);
           }
         }
 
         if (zInBlock >= 0.8) {
-          if (blockZ < 15) {
-            fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) - direction, blockZ + 1) || 0][2]);
-          } else {
-            fall = fall && (!chunk.blocksFlags[chunk.eastChunk.getBlock(blockX, Math.floor(this.y) - direction, 0) || 0][2]);
-          }
+          fall = fall && testFall(blockX, Math.floor(this.y) - direction, blockZ + 1);
         } else if (zInBlock <= 0.2) {
-          if (blockZ > 0) {
-            fall = fall && (!chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) - direction, blockZ - 1) || 0][2]);
-          } else {
-            fall = fall && (!chunk.blocksFlags[chunk.westChunk.getBlock(blockX, Math.floor(this.y) - direction, 15) || 0][2]);
-          }
+          fall = fall && testFall(blockX, Math.floor(this.y) - direction, blockZ - 1);
         }
 
         if (direction === 1) {
           fall = fall || ((this.y - Math.floor(this.y) - (this.fallSpeed + delta * 0.00002) * delta) > 0.1);
           if (fall) {
-            this.fallSpeed += ((delta * acceleration) || 0);
+            this.fallSpeed += ((delta * acceleration));
             this.y -= this.fallSpeed * delta;
           } else if (this.fallSpeed > 0) {
             this.y = Math.floor(this.y) + 0.1;
@@ -212,7 +124,7 @@ const playerProvider = (store, Chunk, Inventory) => {
         } else {
           fall = fall || ((this.y - Math.floor(this.y) - (this.fallSpeed + delta * 0.00002) * delta) < 0.3);
           if (fall) {
-            this.fallSpeed += ((delta * acceleration) || 0);
+            this.fallSpeed += ((delta * acceleration));
             this.y -= this.fallSpeed * delta;
           } else if (this.fallSpeed < 0) {
             this.fallSpeed = 0;
@@ -228,23 +140,23 @@ const playerProvider = (store, Chunk, Inventory) => {
         for (let i = 0; i < 2; i++) {
           if (deltaX > 0) {
             if (blockX < 15) {
-              if (chunk.blocksFlags[chunk.getBlock(blockX + 1, Math.floor(this.y) + i, blockZ) || 0][2]) {
+              if (chunk.blocksFlags[chunk.getBlock(blockX + 1, Math.floor(this.y) + i, blockZ)][2]) {
                 if (xInBlock + deltaX >= 0.8) {
                   deltaX = 0.79 - xInBlock;
                 }
               }
-            } else if (chunk.blocksFlags[chunk.southChunk.getBlock(0, Math.floor(this.y) + i, blockZ) || 0][2]) {
+            } else if (chunk.blocksFlags[chunk.southChunk.getBlock(0, Math.floor(this.y) + i, blockZ)][2]) {
               if (xInBlock + deltaX >= 0.8) {
                 deltaX = 0.79 - xInBlock;
               }
             }
           } else if (blockX > 0) {
-            if (chunk.blocksFlags[chunk.getBlock(blockX - 1, Math.floor(this.y) + i, blockZ) || 0][2]) {
+            if (chunk.blocksFlags[chunk.getBlock(blockX - 1, Math.floor(this.y) + i, blockZ)][2]) {
               if (xInBlock + deltaX <= 0.2) {
                 deltaX = 0.21 - xInBlock;
               }
             }
-          } else if (chunk.blocksFlags[chunk.northChunk.getBlock(15, Math.floor(this.y) + i, blockZ) || 0][2]) {
+          } else if (chunk.blocksFlags[chunk.northChunk.getBlock(15, Math.floor(this.y) + i, blockZ)][2]) {
             if (xInBlock + deltaX <= 0.2) {
               deltaX = 0.21 - xInBlock;
             }
@@ -252,23 +164,23 @@ const playerProvider = (store, Chunk, Inventory) => {
 
           if (deltaZ > 0) {
             if (blockZ < 15) {
-              if (chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) + i, blockZ + 1) || 0][2]) {
+              if (chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) + i, blockZ + 1)][2]) {
                 if (zInBlock + deltaZ >= 0.8) {
                   deltaZ = 0.79 - zInBlock;
                 }
               }
-            } else if (chunk.blocksFlags[chunk.eastChunk.getBlock(blockX, Math.floor(this.y) + i, 0) || 0][2]) {
+            } else if (chunk.blocksFlags[chunk.eastChunk.getBlock(blockX, Math.floor(this.y) + i, 0)][2]) {
               if (zInBlock + deltaZ >= 0.8) {
                 deltaZ = 0.79 - zInBlock;
               }
             }
           } else if (blockZ > 0) {
-            if (chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) + i, blockZ - 1) || 0][2]) {
+            if (chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) + i, blockZ - 1)][2]) {
               if (zInBlock + deltaZ <= 0.2) {
                 deltaZ = 0.21 - zInBlock;
               }
             }
-          } else if (chunk.blocksFlags[chunk.westChunk.getBlock(blockX, Math.floor(this.y) + i, 15) || 0][2]) {
+          } else if (chunk.blocksFlags[chunk.westChunk.getBlock(blockX, Math.floor(this.y) + i, 15)][2]) {
             if (zInBlock + deltaZ <= 0.2) {
               deltaZ = 0.21 - zInBlock;
             }
@@ -286,8 +198,8 @@ const playerProvider = (store, Chunk, Inventory) => {
         blockX = blockX >= 0 ? blockX : blockX + 16;
         blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
 
-        this.blockInDown = chunk.getBlock(blockX, Math.floor(this.y + 1), blockZ) || 0;
-        this.blockInUp = chunk.getBlock(blockX, Math.floor(this.y + 2), blockZ) || 0;
+        this.blockInDown = chunk.getBlock(blockX, Math.floor(this.y + 1), blockZ);
+        this.blockInUp = chunk.getBlock(blockX, Math.floor(this.y + 2), blockZ);
       }
     }
 
@@ -298,11 +210,6 @@ const playerProvider = (store, Chunk, Inventory) => {
           delete this.selectedItem;
         }
       }
-    }
-
-    destroy() {
-      clearInterval(this.removingInterval);
-      clearTimeout(this.removingTimeout);
     }
   }
   return Player;
