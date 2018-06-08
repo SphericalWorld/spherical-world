@@ -13,6 +13,29 @@ type Generator = {|
   +height: number;
 |};
 
+const leaves = (
+  chunk: Chunk,
+  position: Vector,
+  lengthRemain: number,
+): void => {
+  if (!lengthRemain) {
+    return;
+  }
+  const runRecursion = (vector: Vector) => {
+    if (!chunk.at(...vector)) {
+      chunk.setAt(...vector, 5);
+      leaves(chunk, vector, lengthRemain - 1);
+    }
+  };
+  const normalizedPosition = position.round();
+  runRecursion(normalizedPosition.add(new Vector(0, 1, 0)));
+  runRecursion(normalizedPosition.add(new Vector(0, -1, 0)));
+  runRecursion(normalizedPosition.add(new Vector(1, 0, 0)));
+  runRecursion(normalizedPosition.add(new Vector(-1, 0, 0)));
+  runRecursion(normalizedPosition.add(new Vector(0, 0, 1)));
+  runRecursion(normalizedPosition.add(new Vector(0, 0, -1)));
+};
+
 const branch = (
   chunk: Chunk,
   position: Vector,
@@ -47,30 +70,7 @@ const branch = (
       runRecursion(position.add(direction), direction, BRANCH_LENGTH);
     }
   }
-}
-
-const leaves = (
-  chunk: Chunk,
-  position: Vector,
-  lengthRemain: number,
-): void => {
-  if (!lengthRemain) {
-    return;
-  }
-  const runRecursion = (vector: Vector) => {
-    if (!chunk.at(...vector)) {
-      chunk.setAt(...vector, 5);
-      leaves(chunk, vector, lengthRemain - 1);
-    }
-  };
-  const normalizedPosition = position.round();
-  runRecursion(normalizedPosition.add(new Vector(0, 1, 0)));
-  runRecursion(normalizedPosition.add(new Vector(0, -1, 0)));
-  runRecursion(normalizedPosition.add(new Vector(1, 0, 0)));
-  runRecursion(normalizedPosition.add(new Vector(-1, 0, 0)));
-  runRecursion(normalizedPosition.add(new Vector(0, 0, 1)));
-  runRecursion(normalizedPosition.add(new Vector(0, 0, -1)));
-}
+};
 
 const generateTree = (seed: number) => {
   const simplex = new Simplex(PRNG(seed));

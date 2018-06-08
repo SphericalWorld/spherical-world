@@ -61,6 +61,13 @@ const calc = (raytrace, x, y, z) => {
   return false;
 };
 
+const calcMax = (position: number, delta: number, step: number): number => {
+  if (((position >= 0) && (step >= 0)) || ((position < 0) && (step < 0))) {
+    return delta * (1 - (Math.abs(position) - Math.floor(Math.abs(position))));
+  }
+  return delta * (1 - (Math.ceil(Math.abs(position)) - Math.abs(position)));
+};
+
 const raytraceProvider = (ecs: World, Chunk) => {
   class Raytrace implements System {
     components: [string, Transform, Raytracer][] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
@@ -91,12 +98,6 @@ const raytraceProvider = (ecs: World, Chunk) => {
         const v3 = vec3.fromValues(0, 0, 1);
         vec3.transformQuat(v3, v3, userTransform.rotation);
 
-        // console.log(v)
-        // this.vector = [-v2[2], -v[2], -v3[2]];
-        // vec3.add(velocity.linear, velocity.linear, [-v2[2], -v[2], -v3[2]]);
-
-        // console.log(this)
-
         this.trace(userTransform.translation, [-v2[2], -v[2], -v3[2]]);
         transform.translation[0] = this.block[0];
         transform.translation[1] = this.block[1];
@@ -111,10 +112,10 @@ const raytraceProvider = (ecs: World, Chunk) => {
       this.terrain = terrain;
     }
 
-    trace(position, sight) {
-      const stepX = sight[0] ? sight[0] < 0 ? -1 : 1 : 0;
-      const stepY = sight[1] ? sight[1] < 0 ? -1 : 1 : 0;
-      const stepZ = sight[2] ? sight[2] < 0 ? -1 : 1 : 0;
+    trace(position: Vec3, sight: Vec3) {
+      const stepX = sight[0] < 0 ? -1 : 1;
+      const stepY = sight[1] < 0 ? -1 : 1;
+      const stepZ = sight[2] < 0 ? -1 : 1;
 
       let x = Math.floor(position[0]);
       let y = Math.floor(position[1]);
@@ -124,27 +125,9 @@ const raytraceProvider = (ecs: World, Chunk) => {
       const tDeltaY = 1 / Math.abs(sight[1]);
       const tDeltaZ = 1 / Math.abs(sight[2]);
 
-      let tMaxX;
-      let tMaxY;
-      let tMaxZ;
-
-      if (((position[0] >= 0) && (stepX >= 0)) || ((position[0] < 0) && (stepX < 0))) {
-        tMaxX = tDeltaX * (1 - (Math.abs(position[0]) - Math.floor(Math.abs(position[0]))));
-      } else {
-        tMaxX = tDeltaX * (1 - (Math.ceil(Math.abs(position[0])) - Math.abs(position[0])));
-      }
-
-      if (stepY >= 0) {
-        tMaxY = tDeltaY * (1 - (Math.abs(position[1]) - Math.floor(Math.abs(position[1]))));
-      } else {
-        tMaxY = tDeltaY * (1 - (Math.ceil(Math.abs(position[1])) - Math.abs(position[1])));
-      }
-
-      if (((position[2] >= 0) && (stepZ >= 0)) || ((position[2] < 0) && (stepZ < 0))) {
-        tMaxZ = tDeltaZ * (1 - (Math.abs(position[2]) - Math.floor(Math.abs(position[2]))));
-      } else {
-        tMaxZ = tDeltaZ * (1 - (Math.ceil(Math.abs(position[2])) - Math.abs(position[2])));
-      }
+      let tMaxX = calcMax(position[0], tDeltaX, stepX);
+      let tMaxY = calcMax(position[1], tDeltaY, stepY);
+      let tMaxZ = calcMax(position[2], tDeltaZ, stepZ);
 
       for (let i = 0; i < 5; i += 1) {
         if (tMaxX < tMaxZ) {

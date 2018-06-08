@@ -34,7 +34,6 @@ const engineProvider = (
   Player,
   ResourceLoader,
   SocketHandlers,
-  textureLibrary,
   ecs: World,
   Skybox,
 ) => {
@@ -60,7 +59,6 @@ const engineProvider = (
 
       // Player.model = new Model(playerModel, 2);
 
-      Player.texture = textureLibrary.get('player');
       this.player.mainPlayer = true;
       this.player = Player(this.player);
 

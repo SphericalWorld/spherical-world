@@ -45,25 +45,25 @@ class Vector {
 
   cross(v: Vector): Vector {
     return new Vector(
-      this.y * v.z - this.z * v.y,
-      this.z * v.x - this.x * v.z,
-      this.x * v.y - this.y * v.x,
+      (this.y * v.z) - (this.z * v.y),
+      (this.z * v.x) - (this.x * v.z),
+      (this.x * v.y) - (this.y * v.x),
     );
   }
 
-  length() {
+  length(): number {
     return Math.sqrt(this.dot(this));
   }
 
-  unit() {
+  unit(): Vector {
     return this.divide(this.length());
   }
 
-  min() {
+  min(): number {
     return Math.min(Math.min(this.x, this.y), this.z);
   }
 
-  max() {
+  max(): number {
     return Math.max(Math.max(this.x, this.y), this.z);
   }
 
@@ -74,19 +74,19 @@ class Vector {
     };
   }
 
-  angleTo(a) {
+  angleTo(a: Vector): number {
     return Math.acos(this.dot(a) / (this.length() * a.length()));
   }
 
-  toArray(n) {
-    return [this.x, this.y, this.z].slice(0, n || 3);
+  toArray(): number[] {
+    return [this.x, this.y, this.z];
   }
 
-  clone() {
+  clone(): Vector {
     return new Vector(this.x, this.y, this.z);
   }
 
-  randomize(factor: number) {
+  randomize(factor: number): Vector {
     const u = new Vector(this.z, this.x, this.y).unit();
     const v = this.cross(u).unit();
     const rad = Math.random() * Math.PI * 2;
@@ -97,11 +97,6 @@ class Vector {
 
   round(): Vector {
     return new Vector(Math.round(this.x), Math.round(this.y), Math.round(this.z));
-  }
-
-  static negative(a, b) {
-    b.x = -a.x; b.y = -a.y; b.z = -a.z;
-    return b;
   }
 
   static add(a, b, c) {
@@ -129,14 +124,6 @@ class Vector {
     c.y = a.z * b.x - a.x * b.z;
     c.z = a.x * b.y - a.y * b.x;
     return c;
-  }
-
-  static unit(a, b) {
-    const length = a.length();
-    b.x = a.x / length;
-    b.y = a.y / length;
-    b.z = a.z / length;
-    return b;
   }
 
   static fromAngles(theta, phi) {

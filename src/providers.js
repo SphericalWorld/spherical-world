@@ -161,7 +161,7 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
     new CameraSystem(),
   ]);
 
-  return Main(store, network, Player, ResourceLoader, SocketHandlers, textureLibrary, world, Skybox);
+  return Main(store, network, Player, ResourceLoader, SocketHandlers, world, Skybox);
 };
 
 export default mainProvider;
