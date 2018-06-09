@@ -35,9 +35,9 @@ export default class World {
   }
 
   createSelector(
-    includeComponents: Function[],
-    excludeComponents?: Function[],
-  ): (Component | Entity)[][] {
+    includeComponents: Component[],
+    excludeComponents?: Component[],
+  ): (Object[]) {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
     return selector.components;
@@ -98,7 +98,14 @@ export default class World {
     for (const selector of this.selectors) {
       if (!selector.includeComponents.find(componentType => !componentMap.has(componentType.name))
         && !selector.excludeComponents.find(componentType => componentMap.has(componentType.name))) {
-        selector.components.push([entityId, ...selector.includeComponents.map(el => componentMap.get(el.name))]);
+        const components = {
+          id: entityId,
+        };
+        for (let i = 0; i < selector.includeComponents.length; i += 1) {
+          const component = componentMap.get(selector.includeComponents[i].name);
+          components[selector.includeComponents[i].componentName] = component;
+        }
+        selector.components.push(components);
       }
     }
   }

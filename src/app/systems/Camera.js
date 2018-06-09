@@ -1,16 +1,21 @@
 // @flow
 import { mat4, quat, vec3 } from 'gl-matrix';
+import type { World } from '../ecs';
+import type { Entity } from '../ecs/Entity';
 import GameEventQueue from '../GameEvent/GameEventQueue';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
 import { System } from './System';
-import type { World } from '../ecs';
 import { Transform, Camera } from '../components';
 import { cameraMovedObservable, cameraLockedObservable, cameraUnlockedObservable } from '../player/events';
 
 const cameraProvider = (world: World) => {
   class CameraSystem implements System {
-    camera: [string, Transform, Camera][] = world.createSelector([Transform, Camera]);
+    camera: {
+      id: Entity,
+      transform: Transform,
+      camera: Camera,
+    }[] = world.createSelector([Transform, Camera]);
     cameraMovements: GameEventQueue = new GameEventQueue(cameraMovedObservable);
     bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
 
@@ -31,7 +36,7 @@ const cameraProvider = (world: World) => {
 
     update(delta: number): void {
       const movement = this.cameraMovements.events.reduce(([x, y], { inputEvent }) => ([x + inputEvent.x, y + inputEvent.y]), [0, 0]);
-      const [[id, transform, camera]] = this.camera;
+      const [{ id, transform, camera }] = this.camera;
       const { translation, rotation } = transform;
       camera.yaw += movement[1] * 0.005;
       camera.pitch += movement[0] * 0.005;

@@ -5,10 +5,7 @@ import HUD from './hud/hud';
 import { connect } from './util';
 // import playerModel from '../models/player.json';
 import {
-  playerJump,
-  playerStopJumping,
-  playerMove,
-  playerStopMoving,
+  playerStopJumping, // TODO: needs only for swimming
   playerRun,
   playerStopRun,
 } from './player/playerActions';
@@ -78,7 +75,6 @@ const engineProvider = (
     }
 
     static initKeyboardActions() {
-      // this.keyboard.registerAction('jump', playerJump(this.player.id), playerStopJumping(this.player.id));
       // this.keyboard.registerAction('run', playerRun(this.player.id), playerStopRun(this.player.id));
       // this.keyboard.registerAction({
       //   name: 'showDebugInfo',

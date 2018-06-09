@@ -5,6 +5,8 @@ import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Camera {
   static threads = [THREAD_MAIN];
+  static componentName = 'camera';
+
   yaw: number = 0;
   pitch: number = 0;
   mvMatrix: Mat4 = mat4.identity(mat4.create());

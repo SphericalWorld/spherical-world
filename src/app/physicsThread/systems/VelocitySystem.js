@@ -10,11 +10,15 @@ import Velocity from '../../components/Velocity';
 const velocitySystemProvider = (ecs: World) => {
   class VelocitySystem implements System {
     world: World;
-    components: [string, Transform, Velocity][] = ecs.createSelector([Transform, Velocity]);
+    components: {
+      id: Entity,
+      transform: Transform,
+      velocity: Velocity,
+    }[] = ecs.createSelector([Transform, Velocity]);
 
     update(delta: number): (Entity | Component)[][] {
       const result = [];
-      for (const [id, transform, velocity] of this.components) {
+      for (const { id, transform, velocity } of this.components) {
         vec3.scaleAndAdd(transform.translation, transform.translation, velocity.linear, delta);
         result.push([id, transform]);
       }

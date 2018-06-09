@@ -200,12 +200,91 @@ const calcRecursionGreen = calcRecursion(0x0F00, 0xF0FF, 0x0100, 1);
 const calcRecursionBlue = calcRecursion(0x00F0, 0xFF0F, 0x0010, 1);
 const calcRecursionGlobal = calcRecursion(0x000F, 0xFFF0, 0x0001, 1);
 
+const addPlane = (ii, jj, kk, u, v, uu, vv) => ([
+  jj + (ii ? v : kk ? u : (jj < 0 ? 1 : 0)),
+  ((jj || kk) ? (v - 1) : (ii < 0 ? -1 : 0)),
+  kk + ((ii || jj) ? u : (kk < 0 ? 1 : 0)),
+]);
+
+const basePlanes = [
+  [
+    addPlane(1, 0, 0, 0, 0, -1, -1),
+    addPlane(1, 0, 0, 0, 1, -1, 1),
+    addPlane(1, 0, 0, 1, 0, 1, -1),
+    addPlane(1, 0, 0, 1, 1, 1, 1),
+  ],
+  [
+    addPlane(-1, 0, 0, 0, 0, -1, -1),
+    addPlane(-1, 0, 0, 0, 1, -1, 1),
+    addPlane(-1, 0, 0, 1, 0, 1, -1),
+    addPlane(-1, 0, 0, 1, 1, 1, 1),
+  ],
+  [
+    addPlane(0, -1, 0, 0, 0, -1, -1),
+    addPlane(0, -1, 0, 0, 1, -1, 1),
+    addPlane(0, -1, 0, 1, 0, 1, -1),
+    addPlane(0, -1, 0, 1, 1, 1, 1),
+  ],
+  [
+    addPlane(0, 1, 0, 0, 0, -1, -1),
+    addPlane(0, 1, 0, 0, 1, -1, 1),
+    addPlane(0, 1, 0, 1, 0, 1, -1),
+    addPlane(0, 1, 0, 1, 1, 1, 1),
+  ],
+  [
+    addPlane(0, 0, -1, 0, 0, -1, -1),
+    addPlane(0, 0, -1, 0, 1, -1, 1),
+    addPlane(0, 0, -1, 1, 0, 1, -1),
+    addPlane(0, 0, -1, 1, 1, 1, 1),
+  ],
+  [
+    addPlane(0, 0, 1, 0, 0, -1, -1),
+    addPlane(0, 0, 1, 0, 1, -1, 1),
+    addPlane(0, 0, 1, 1, 0, 1, -1),
+    addPlane(0, 0, 1, 1, 1, 1, 1),
+  ],
+];
+
+const addVertex = (i, j, k, u, v, ii, jj, kk, light, buffer, color, chunk) => {
+  let c = 0;
+  let cf = 0;
+  let s1f = 0;
+  let s1 = 0;
+  let s2f = 0;
+  let s2 = 0;
+  if (ii) {
+    [s2f, s2] = getLight(i, j, k + u, chunk);
+    [s1f, s1] = getLight(i, j + v, k, chunk);
+    j += v;
+    k += u;
+  } else if (jj) {
+    [s2f, s2] = getLight(i, j, k + u, chunk);
+    [s1f, s1] = getLight(i + v, j, k, chunk);
+    i += v;
+    k += u;
+  } else if (kk) {
+    [s2f, s2] = getLight(i, j + u, k, chunk);
+    [s1f, s1] = getLight(i + v, j, k, chunk);
+    i += v;
+    j += u;
+  }
+
+  if (s1 !== -1 || s2 !== -1) {
+    [cf, c] = getLight(i, j, k, chunk);
+  }
+  const [
+    r, g, b, vGlobal,
+  ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
+
+  buffer.colorBuffer.push(r, g, b);
+  buffer.globalColorBuffer.push(vGlobal * color);
+};
+
 const chunkProvider = (store) => {
   class Chunk extends ChunkWithData<Chunk, Terrain> {
     blocks: Uint8Array;
     blocksTextureInfo = blocksTextureInfo;
     blocksFlags = blocksFlags;
-    bufferInfo = bufferInfo;
     blocksInfo = blocksInfo;
 
     constructor(terrain: Terrain, x: number, z: number) {
@@ -282,97 +361,92 @@ const chunkProvider = (store) => {
         vertexCount: 0,
       }];
 
-      const createPlane = (index, i, j, k, ii, jj, kk, textureIndex, color) => {
-        const block = this.blocks[index];
+      const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
+        x + this.x,
+        y,
+        z + this.z,
+      ])));
+
+      const createPlane = (block, i, j, k, ii, jj, kk, planeIndex, color) => {
         const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, this);
-        const indexNear = jNear + (kNear * 16) + ((i + ii) * 256);
+        const indexNear = getIndex(jNear, i + ii, kNear);
         const blockNear = chunkNear.blocks[indexNear];
 
         if (!(this.blocksFlags[blockNear][1]) || (this.blocksFlags[block][4] && (block === blockNear))) {
           return;
         }
-        const buffer = buffers[this.bufferInfo[block][textureIndex]];
+        const buffer = buffers[bufferInfo[block][planeIndex]];
         const light = chunkNear.light[indexNear];
-        const textureInfo = this.blocksTextureInfo[block][textureIndex] / 16;
+        const iVertex = i + ii;
+        const jVertex = j + jj;
+        const kVertex = k + kk;
 
-        const addVertex = (i, j, k, u, v, uu, vv) => {
-          buffer.vertexBuffer.push(
-            j + jj + this.x + (ii ? v : kk ? u : (jj < 0 ? 1 : 0)),
-            i + ((jj || kk) ? (v - 1) : (ii < 0 ? -1 : 0)),
-            k + kk + this.z + ((ii || jj) ? u : (kk < 0 ? 1 : 0)),
-          );
+        addVertex(iVertex, jVertex, kVertex, -1, -1, ii, jj, kk, light, buffer, color, this);
+        addVertex(iVertex, jVertex, kVertex, -1, 1, ii, jj, kk, light, buffer, color, this);
+        addVertex(iVertex, jVertex, kVertex, 1, -1, ii, jj, kk, light, buffer, color, this);
+        addVertex(iVertex, jVertex, kVertex, 1, 1, ii, jj, kk, light, buffer, color, this);
 
-          i += ii;
-          j += jj;
-          k += kk;
+        const plane = planes[planeIndex];
+        buffer.vertexBuffer.push(
+          plane[0] + j,
+          plane[1] + i,
+          plane[2] + k,
 
-          let c = 0;
-          let cf = 0;
-          let s1f = 0;
-          let s1 = 0;
-          let s2f = 0;
-          let s2 = 0;
-          if (ii) {
-            [s2f, s2] = getLight(i, j, k + uu, this);
-            [s1f, s1] = getLight(i, j + vv, k, this);
-            j += vv;
-            k += uu;
-          } else if (jj) {
-            [s2f, s2] = getLight(i, j, k + uu, this);
-            [s1f, s1] = getLight(i + vv, j, k, this);
-            i += vv;
-            k += uu;
-          } else if (kk) {
-            [s2f, s2] = getLight(i, j + uu, k, this);
-            [s1f, s1] = getLight(i + vv, j, k, this);
-            i += vv;
-            j += uu;
-          }
+          plane[3] + j,
+          plane[4] + i,
+          plane[5] + k,
 
+          plane[6] + j,
+          plane[7] + i,
+          plane[8] + k,
 
-          if (s1 !== -1 || s2 !== -1) {
-            [cf, c] = getLight(i, j, k, this);
-          }
-          const [
-            r, g, b, vGlobal,
-          ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
+          plane[9] + j,
+          plane[10] + i,
+          plane[11] + k,
+        );
+        const textureU = this.blocksTextureInfo[block][planeIndex] / 16;
+        const textureV = Math.floor(textureU) / 16;
 
-          buffer.colorBuffer.push(r, g, b);
-          buffer.globalColorBuffer.push(vGlobal * color);
-          buffer.texCoordBuffer.push(textureInfo + u / 16, Math.floor(textureInfo) / 16 + v / 16);
-        };
-
-        addVertex(i, j, k, 0, 0, -1, -1);
-        addVertex(i, j, k, 0, 1, -1, 1);
-        addVertex(i, j, k, 1, 0, 1, -1);
-        addVertex(i, j, k, 1, 1, 1, 1);
+        buffer.texCoordBuffer.push(
+          textureU, textureV,
+          textureU, textureV + (1 / 16),
+          textureU + (1 / 16), textureV,
+          textureU + (1 / 16), textureV + (1 / 16),
+        );
 
         buffer.blockDataBuffer.push(block, block, block, block);
         // TODO: create one index buffer per all chunks
-        if (ii < 0 || jj > 0 || kk < 0) {
-          buffer.indexBuffer.push(buffer.vertexCount, buffer.vertexCount + 1, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 2);
-        } else {
-          buffer.indexBuffer.push(buffer.vertexCount + 2, buffer.vertexCount + 3, buffer.vertexCount, buffer.vertexCount + 3, buffer.vertexCount + 1, buffer.vertexCount);
-        }
+        const b = [
+          buffer.vertexCount,
+          buffer.vertexCount + 1,
+          buffer.vertexCount + 3,
+          buffer.vertexCount,
+          buffer.vertexCount + 3,
+          buffer.vertexCount + 2
+        ]
+        buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0)
+          ? b
+          : b.reverse());
         buffer.vertexCount += 4;
       };
       for (let i = 1; i < this.height; i += 1) {
         for (let j = 0; j < 16; j += 1) {
           for (let k = 0; k < 16; k += 1) {
-            const index: number = getIndex(j, i, k);
+            const index = getIndex(j, i, k);
             if (this.blocks[index]) {
-              if (!blocksFlags[this.blocks[index]][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
+              const block = this.blocks[index];
+              if (!blocksFlags[block][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
                 // top plane
-                createPlane(index, i, j, k, 1, 0, 0, 0, 1);
+                createPlane(block, i, j, k, 1, 0, 0, 0, 1);
                 // bottom plane
-                createPlane(index, i, j, k, -1, 0, 0, 1, 0.5);
+                createPlane(block, i, j, k, -1, 0, 0, 1, 0.5);
                 // north plane
-                createPlane(index, i, j, k, 0, -1, 0, 2, 0.6);
-                createPlane(index, i, j, k, 0, 1, 0, 3, 0.6);
-                createPlane(index, i, j, k, 0, 0, -1, 4, 0.8);
-                createPlane(index, i, j, k, 0, 0, 1, 5, 0.8);
+                createPlane(block, i, j, k, 0, -1, 0, 2, 0.6);
+                createPlane(block, i, j, k, 0, 1, 0, 3, 0.6);
+                createPlane(block, i, j, k, 0, 0, -1, 4, 0.8);
+                createPlane(block, i, j, k, 0, 0, 1, 5, 0.8);
               } else {
-                buffers[this.bufferInfo[this.blocks[index]][0]].vertexCount = this.blocksInfo[this.blocks[index]][2].renderToChunk(this, j, i, k, buffers[this.bufferInfo[this.blocks[index]][0]].texCoordBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].vertexBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].indexBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].colorBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].globalColorBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].blockDataBuffer, buffers[this.bufferInfo[this.blocks[index]][0]].vertexCount);
+                buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block][2].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]].texCoordBuffer, buffers[bufferInfo[block][0]].vertexBuffer, buffers[bufferInfo[block][0]].indexBuffer, buffers[bufferInfo[block][0]].colorBuffer, buffers[bufferInfo[block][0]].globalColorBuffer, buffers[bufferInfo[block][0]].blockDataBuffer, buffers[bufferInfo[block][0]].vertexCount);
               }
             }
           }

@@ -123,16 +123,6 @@
 //       }
 //     }
 //
-//     draw() {
-//       // this.blockRemover.draw();
-//       if (this.glObject) {
-//         this.glObject.x = this.x;
-//         this.glObject.y = this.y - 1.2;
-//         this.glObject.z = this.z;
-//         this.glObject.draw();
-//       }
-//     }
-//
 //     drawHud() {
 //       if (this.hudBillboard) {
 //         gl.enable(gl.BLEND);

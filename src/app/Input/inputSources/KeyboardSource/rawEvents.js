@@ -25,3 +25,4 @@ export const KEY_W: 'KeyW' = 'KeyW';
 export const KEY_X: 'KeyX' = 'KeyX';
 export const KEY_Y: 'KeyY' = 'KeyY';
 export const KEY_Z: 'KeyZ' = 'KeyZ';
+export const KEY_SPACE: 'Space' = 'Space';

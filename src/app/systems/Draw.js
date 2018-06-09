@@ -1,11 +1,12 @@
 // @flow
 import type { Mat4 } from 'gl-matrix';
 import { mat4 } from 'gl-matrix';
+import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
+import type { System } from './System';
 
 import { gl } from '../engine/glEngine';
 import { GlShaderProgram } from '../engine/glShader';
-import type { System } from './System';
 import { Transform, Visual, Skybox, Camera } from '../components';
 import { connect } from '../util';
 import { Time } from '../Time/Time';
@@ -15,9 +16,21 @@ import { Terrain } from '../Terrain/Terrain';
 const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
   class Draw implements System {
     world: World;
-    components: [string, Transform, Visual][] = world.createSelector([Transform, Visual], [Skybox]);
-    skybox: [string, Transform, Visual, Skybox][] = world.createSelector([Transform, Visual, Skybox]);
-    camera: [string, Camera][] = world.createSelector([Camera]);
+    components: {
+      id: Entity,
+      transform: Transform,
+      visual: Visual,
+    }[] = world.createSelector([Transform, Visual], [Skybox]);
+    skybox: {
+      id: Entity,
+      transform: Transform,
+      visual: Visual,
+      skybox: Skybox,
+    }[] = world.createSelector([Transform, Visual, Skybox]);
+    camera: {
+      id: Entity,
+      camera: Camera,
+    }[] = world.createSelector([Camera]);
 
     mvMatrixStack = [];
     mvMatrix: Mat4;
@@ -27,7 +40,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
     lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
 
     update(currentTime: number): void {
-      const camera = this.camera[0][1];
+      const { camera } = this.camera[0];
       this.mvMatrix = camera.mvMatrix;
 
       this.resize();
@@ -60,14 +73,14 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         // console.log(position.translation);
       };
 
-      for (const [id, position, visual] of this.components) {
+      for (const { transform, visual } of this.components) {
         if (visual.glObject.material.transparent) {
           continue;
         }
-        draw(position, visual);
+        draw(transform, visual);
       }
 
-      for (const [id, position, visual] of this.skybox) {
+      for (const { transform, visual } of this.skybox) {
         this.useShader(visual.glObject.material.shader);
         visual.glObject.material.use();
 
@@ -80,18 +93,18 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         // gl.uniform2f(this.currentShader.mouse, this.player.horizontalRotate * 0.5, -this.player.verticalRotate * 0.5);
 
         this.mvPushMatrix();
-        // mat4.translate(this.mvMatrix, this.mvMatrix, [position.x + this.player.x, position.y + this.player.y, position.z + this.player.z]);
+        // mat4.translate(this.mvMatrix, this.mvMatrix, [transform.x + this.player.x, transform.y + this.player.y, transform.z + this.player.z]);
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();
       }
       // console.log(this.components);
 
-      for (const [id, position, visual] of this.components) {
+      for (const { transform, visual } of this.components) {
         if (!visual.glObject.material.transparent) {
           continue;
         }
-        draw(position, visual);
+        draw(transform, visual);
       }
     }
 

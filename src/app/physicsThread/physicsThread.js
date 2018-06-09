@@ -2,7 +2,8 @@
 import {
   playerMovedObservable,
   PLAYER_MOVED,
-  playerStopedMoveObservable,
+  PLAYER_JUMPED,
+  playerJumpedObservable,
   PLAYER_STOPED_MOVE,
 } from '../player/events';
 import configureStore from './store/configureStore';
@@ -46,6 +47,9 @@ const UserControlSystem = userControlSystemProvider(world);
 world.subscribe((event) => {
   if (event.type === PLAYER_MOVED || event.type === PLAYER_STOPED_MOVE) {
     playerMovedObservable.emit(event);
+  }
+  if (event.type === PLAYER_JUMPED) {
+    playerJumpedObservable.emit(event);
   }
 });
 

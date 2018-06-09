@@ -1,6 +1,7 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
+import type { Entity } from '../../ecs/Entity';
 import type World from '../../ecs/World';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
@@ -70,8 +71,12 @@ const calcMax = (position: number, delta: number, step: number): number => {
 
 const raytraceProvider = (ecs: World, Chunk) => {
   class Raytrace implements System {
-    components: [string, Transform, Raytracer][] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
-    userControlled: [string, Transform, UserControlled][] = ecs.createSelector([Transform, UserControlled]);
+    components: {
+      id: Entity,
+      transform: Transform,
+      raytracer: Raytracer,
+    }[] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
+    userControlled: { transform: Transform }[] = ecs.createSelector([Transform, UserControlled]);
 
     mvMatrix: number[];
     pMatrix: number[];
@@ -87,8 +92,8 @@ const raytraceProvider = (ecs: World, Chunk) => {
 
     update(delta: number): Array {
       const result = [];
-      for (const [id, transform] of this.components) {
-        const userTransform = this.userControlled[0][1];
+      for (const { id, transform } of this.components) {
+        const userTransform = this.userControlled[0].transform;
         const v = vec3.fromValues(0, 1, 0);
         vec3.transformQuat(v, v, userTransform.rotation);
 

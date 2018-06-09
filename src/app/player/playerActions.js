@@ -5,8 +5,6 @@ import {
   PLAYER_CHANGE_POSITION,
   PLAYER_JUMPED,
   PLAYER_STOPED_JUMPING,
-  PLAYER_MOVED,
-  PLAYER_STOPED_MOVING,
   PLAYER_RUN,
   PLAYER_STOPED_RUNING,
   DIRECTION_FORWARD,
@@ -82,18 +80,6 @@ export const playerJump = (id: number) => ({
 export const playerStopJumping = (id: number) => ({
   type: PLAYER_STOPED_JUMPING,
   payload: { id },
-  meta: { worker: true },
-});
-
-export const playerMove = (id: number, direction: Direction) => ({
-  type: PLAYER_MOVED,
-  payload: { id, direction },
-  meta: { worker: true },
-});
-
-export const playerStopMoving = (id: number, direction: Direction) => ({
-  type: PLAYER_STOPED_MOVING,
-  payload: { id, direction },
   meta: { worker: true },
 });
 

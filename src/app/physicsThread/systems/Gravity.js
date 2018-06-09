@@ -8,11 +8,15 @@ import Velocity from '../../components/Velocity';
 const gravitySystemProvider = (ecs: World) => {
   class GravitySystem implements System {
     world: World;
-    components: [Entity, Gravity, Velocity][] = ecs.createSelector([Gravity, Velocity]);
+    components: {
+      id: Entity,
+      gravity: Gravity,
+      velocity: Velocity,
+    }[] = ecs.createSelector([Gravity, Velocity]);
 
     update(delta: number): [Entity, ?Velocity][] {
       const result = [];
-      for (const [id,, velocity] of this.components) {
+      for (const { id, velocity } of this.components) {
         velocity.linear[1] -= (0.0002 * delta);
         result.push([id, velocity]);
       }

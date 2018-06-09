@@ -2,12 +2,6 @@
 import {
   CAMERA_MOVED,
   CAMERA_UNLOCKED,
-  PLAYER_MOVED,
-  PLAYER_STOPED_MOVE,
-  DIRECTION_FORWARD,
-  DIRECTION_BACK,
-  DIRECTION_LEFT,
-  DIRECTION_RIGHT
 } from '../../player/events';
 import InputContext from '../InputContext';
 import {
@@ -15,6 +9,7 @@ import {
   KEY_D,
   KEY_S,
   KEY_W,
+  KEY_SPACE,
 } from '../inputSources/KeyboardSource/rawEvents';
 import {
   MOUSE_MOVE,
@@ -25,7 +20,11 @@ import {
 import {
   INPUT_TYPE_RANGE,
   INPUT_TYPE_ACTION,
-  INPUT_TYPE_STATE,
+  PLAYER_MOVE_FORWARD_EVENT,
+  PLAYER_MOVE_BACKWARD_EVENT,
+  PLAYER_MOVE_LEFT_EVENT,
+  PLAYER_MOVE_RIGHT_EVENT,
+  PLAYER_JUMP_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
@@ -36,37 +35,10 @@ export default class GameplayMainContext extends InputContext {
       type: INPUT_TYPE_ACTION,
       gameEvent: CAMERA_UNLOCKED,
     });
-    this.events.set(KEY_W, {
-      type: INPUT_TYPE_STATE,
-      gameEvent: PLAYER_MOVED,
-      onEnd: PLAYER_STOPED_MOVE,
-      data: {
-        direction: DIRECTION_FORWARD,
-      },
-    });
-    this.events.set(KEY_S, {
-      type: INPUT_TYPE_STATE,
-      gameEvent: PLAYER_MOVED,
-      onEnd: PLAYER_STOPED_MOVE,
-      data: {
-        direction: DIRECTION_BACK,
-      },
-    });
-    this.events.set(KEY_A, {
-      type: INPUT_TYPE_STATE,
-      gameEvent: PLAYER_MOVED,
-      onEnd: PLAYER_STOPED_MOVE,
-      data: {
-        direction: DIRECTION_LEFT,
-      },
-    });
-    this.events.set(KEY_D, {
-      type: INPUT_TYPE_STATE,
-      gameEvent: PLAYER_MOVED,
-      onEnd: PLAYER_STOPED_MOVE,
-      data: {
-        direction: DIRECTION_RIGHT,
-      },
-    });
+    this.events.set(KEY_W, PLAYER_MOVE_FORWARD_EVENT);
+    this.events.set(KEY_S, PLAYER_MOVE_BACKWARD_EVENT);
+    this.events.set(KEY_A, PLAYER_MOVE_LEFT_EVENT);
+    this.events.set(KEY_D, PLAYER_MOVE_RIGHT_EVENT);
+    this.events.set(KEY_SPACE, PLAYER_JUMP_EVENT);
   }
 }

@@ -1,4 +1,5 @@
 // @flow
+import type { Entity } from '../../ecs/Entity';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
 import Velocity from '../../components/Velocity';
@@ -12,8 +13,6 @@ import { getGeoId } from '../../../../common/chunk';
 const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
   const calculateMovement = ({ translation }: Transform, velocity: Velocity) => {
     const chunk = terrain.chunks.get(getGeoId(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16));
-    // console.log(chunk)
-    // console.log(getGeoId(Math.floor(position.x / 16) * 16, Math.floor(position.z / 16) * 16))
     if (!chunk || chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
       return;
     }
@@ -34,14 +33,18 @@ const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChun
 
   class PhysicsSystem implements System {
     world: World;
-    components: [string, Transform, Velocity][] = ecs.createSelector([Transform, Velocity, Physics]);
+    components: {
+      id: Entity,
+      transform: Transform,
+      velocity: Velocity,
+    }[] = ecs.createSelector([Transform, Velocity, Physics]);
 
     update(delta: number): Array {
       const result = [];
-      for (const [id, position, velocity] of this.components) {
-        calculateMovement(position, velocity);
-        result.push([id, position, velocity]);
-        // console.log(position)
+      for (const { id, transform, velocity } of this.components) {
+        calculateMovement(transform, velocity);
+        result.push([id, transform, velocity]);
+        // console.log(transform)
       }
       return result;
     }

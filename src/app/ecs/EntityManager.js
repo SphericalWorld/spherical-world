@@ -6,13 +6,13 @@ import { Component } from '../components/Component';
 
 type SelectorFunction = (Entity) => boolean;
 
-export class EntitySelector {
-  includeComponents: Function[];
-  excludeComponents: Function[];
+export class EntitySelector<T> {
+  includeComponents: T;
+  excludeComponents: Component[];
   selectorFunction: SelectorFunction;
-  components: Component[] = [];
+  components: {id: Entity, data: T}[] = [];
 
-  constructor(world: World, includeComponents: Function[], excludeComponents: Function[] = []) {
+  constructor(world: World, includeComponents: T, excludeComponents: Component[] = []) {
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;
   }

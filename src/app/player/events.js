@@ -10,9 +10,10 @@ export const DIRECTION_FORWARD: 'DIRECTION_FORWARD' = 'DIRECTION_FORWARD';
 export const DIRECTION_BACK: 'DIRECTION_BACK' = 'DIRECTION_BACK';
 export const DIRECTION_LEFT: 'DIRECTION_LEFT' = 'DIRECTION_LEFT';
 export const DIRECTION_RIGHT: 'DIRECTION_RIGHT' = 'DIRECTION_RIGHT';
+export const PLAYER_JUMPED: 'PLAYER_JUMPED' = 'PLAYER_JUMPED';
 
 export const cameraMovedObservable = new GameEventObservable();
 export const cameraLockedObservable = new GameEventObservable();
 export const cameraUnlockedObservable = new GameEventObservable();
 export const playerMovedObservable = new GameEventObservable();
-export const playerStopedMoveObservable = new GameEventObservable();
+export const playerJumpedObservable = new GameEventObservable();
