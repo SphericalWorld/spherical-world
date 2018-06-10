@@ -12,16 +12,14 @@ const addonsToLoad = [
 ];
 
 const resourceLoaderProvider = Addon => class ResourceLoader {
-  constructor(app, network) {
+  constructor(network) {
     this.network = network;
-    this.app = app;
-    Addon.exportExternals();
   }
 
   async loadAddon(addonName: string) {
     let manifest = await (await fetch(`${this.network.addonServerInfo.host}/addons/${addonName}/package.json`)).text();
     manifest = JSON.parse(manifest);
-    const addon = new Addon(this.app, addonName, manifest);
+    const addon = new Addon(this, addonName, manifest);
     await addon.load();
   }
 

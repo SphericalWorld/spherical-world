@@ -47,7 +47,7 @@ const engineProvider = (
 
     async init() {
       await network.connect();
-      this.resourceLoader = new ResourceLoader(this, network);
+      this.resourceLoader = new ResourceLoader(network);
       initWebGL();
 
       Player.hudBillboardModel = Model.createPrimitive('billboard', 2.0);
@@ -56,10 +56,9 @@ const engineProvider = (
 
       // Player.model = new Model(playerModel, 2);
 
-      this.player.mainPlayer = true;
       this.player = Player(this.player);
 
-      this.hud = new HUD();
+      this.hud = new HUD(store);
 
       await this.resourceLoader.loadAddons();
       this.skyBox = Skybox();

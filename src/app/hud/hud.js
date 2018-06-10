@@ -1,8 +1,18 @@
 // @flow
 // import './services/swMouse';
 // import './hudCore';
+import react from 'react';
+import reactDom from 'react-dom';
+import * as reactRedux from 'react-redux';
 
-const HUD = function () {
+
+const HUD = function (store) {
+  window.gameExternals = {
+    react,
+    'react-dom': reactDom,
+    store,
+    'react-redux': reactRedux,
+  };
   // const self = this;
   // this.providers = {};
   // angular.module('ui', ['hudCore'], ($controllerProvider, $compileProvider, $provide) => {

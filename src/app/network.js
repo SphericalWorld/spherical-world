@@ -24,6 +24,44 @@ class Network {
     this.requestBinaryData = null;
   }
 
+  processBinaryData(data: ArrayBuffer) {
+    this.requestBinaryData = zlib.inflate(new Uint8Array(data));
+  }
+
+  processResponseToRequest(message: MessageEvent) {
+    const request = this.requests.get(message.id);
+    if (!request) {
+      console.warn(`Not found callback handler for request id=${message.id}`);
+      return;
+    }
+    const { resolve, reject } = request;
+    if (this.requestBinaryData) {
+      resolve([message.data, this.requestBinaryData]);
+      this.requestBinaryData = null;
+    } else {
+      resolve(message.data);
+    }
+    this.requests.delete(message.id);
+  }
+
+  processAction(message: MessageEvent) {
+    if (this.router[message.type]) {
+      if (typeof message.id === 'number') {
+        const callback = function (result) {
+          if (this.connected) {
+            this.connection.send(JSON.stringify({ id: message.id, data: result }));
+          }
+        };
+        this.router[message.type](message.data || callback, this.requestBinaryData || callback, callback);
+      } else {
+        this.router[message.type](message.data, this.requestBinaryData);
+      }
+    } else {
+      console.error('no handler regitered for message', message.type);
+    }
+    this.requestBinaryData = null;
+  }
+
   async connect(): Promise<void> {
     this.connection = new WebSocket(`${this.host}:${this.port}`);
     await new Promise((resolve, reject) => {
@@ -33,40 +71,15 @@ class Network {
 
       this.connection.onmessage = (message: MessageEvent) => {
         if (message.data instanceof ArrayBuffer) {
-          this.requestBinaryData = zlib.inflate(new Uint8Array(message.data));
-        } else {
-          message = JSON.parse(message.data);
-          if (typeof message.id === 'number' && typeof message.type === 'undefined') {
-            const request = this.requests.get(message.id);
-            if (!request) {
-              return console.warn(`Not found callback handler for request id=${message.id}`);
-            }
-            const { resolve, reject } = request;
-            if (this.requestBinaryData) {
-              resolve([message.data, this.requestBinaryData]);
-              this.requestBinaryData = null;
-            } else {
-              resolve(message.data);
-            }
-            this.requests.delete(message.id);
-          } else {
-            if (this.router[message.type]) {
-              if (typeof (message.id) === 'number') {
-                const callback = function(result) {
-                  if (this.connected) {
-                    this.connection.send(JSON.stringify({ id: message.id, data: result }));
-                  }
-                };
-                this.router[message.type](message.data || callback, this.requestBinaryData || callback, callback);
-              } else {
-                this.router[message.type](message.data, this.requestBinaryData);
-              }
-            } else {
-              console.error('no handler regitered for message', message.type);
-            }
-            this.requestBinaryData = null;
-          }
+          this.processBinaryData(message.data);
+          return;
         }
+        const parsedMessage = JSON.parse(message.data);
+        if (typeof parsedMessage.id === 'number') {
+          this.processResponseToRequest(parsedMessage);
+          return;
+        }
+        this.processAction(parsedMessage);
       };
     });
     this.connected = true;
@@ -84,10 +97,8 @@ class Network {
     }, 5000);
   }
 
-  route(message: string, handler) {
-    if (typeof handler === 'function') {
-      this.router[message] = handler;
-    }
+  route(message: string, handler: Function) {
+    this.router[message] = handler;
   }
 
   async request(type: string, data?: any): Promise<any> {

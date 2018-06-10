@@ -3,7 +3,7 @@ import shallowEqual from './shallowEqual';
 
 type MapActions = () => {| [string]: Function |};
 
-export default function connect(mapState: Function, mapActions: MapActions, store: Object) {
+export default function connect(mapState: ?Function, mapActions: ?MapActions, store: Object) {
   return function decorator(Target: Function) {
     if (!store) {
       return Target;

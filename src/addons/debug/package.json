@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
+    "start": "webpack --config webpack.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,5 +12,10 @@
   "devDependencies": {
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-redux": "*",
+    "react-dom": "*"
   }
 }

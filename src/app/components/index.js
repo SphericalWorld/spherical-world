@@ -8,3 +8,4 @@ export { default as Camera } from './Camera';
 export { default as Physics } from './Physics';
 export { default as Velocity } from './Velocity';
 export { default as Gravity } from './Gravity';
+export { default as UserControlled } from './UserControlled';

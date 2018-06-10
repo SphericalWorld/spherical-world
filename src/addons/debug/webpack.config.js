@@ -12,10 +12,13 @@ module.exports = {
     'react-redux': 'gameExternals[\'react-redux\']',
     store: 'gameExternals.store',
   },
+  resolve: {
+    extensions: ['.js', '.jsx'],
+  },
   module: {
     rules: [
       {
-        test: /.js?$/,
+        test: /\.(js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
