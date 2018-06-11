@@ -1,0 +1,19 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.mainMenu {
+  background: rgba(0,0,0,0.8);
+  width: 20em;
+  height: 30em;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  justify-content: space-around;
+  pointer-events: all;
+}

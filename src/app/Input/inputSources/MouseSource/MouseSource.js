@@ -21,9 +21,13 @@ export default class MouseSource implements InputSource {
   onEvent: (event: InputEvent) => any;
 
   constructor() {
+    const canvas = document.getElementById('glcanvas');
+    if (!canvas) {
+      throw new Error('canvas element not found');
+    }
+    canvas.addEventListener('mousedown', (e: MouseEvent) => this.onMouseDown(e), false);
+    canvas.addEventListener('mouseup', (e: MouseEvent) => this.onMouseUp(e), false);
     document.addEventListener('mousemove', (e: MouseEvent) => this.onMove(e), false);
-    document.addEventListener('mousedown', (e: MouseEvent) => this.onMouseDown(e), false);
-    document.addEventListener('mouseup', (e: MouseEvent) => this.onMouseUp(e), false);
     document.addEventListener('pointerlockchange', this.changeTracking.bind(this), false);
     document.addEventListener('mozpointerlockchange', this.changeTracking.bind(this), false);
     document.addEventListener('webkitpointerlockchange', this.changeTracking.bind(this), false);

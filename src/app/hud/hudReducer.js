@@ -7,6 +7,9 @@ const initialState = {
   player: {
     position: [],
   },
+  states: {
+    mainMenuToggled: false,
+  },
 };
 
 const onUpdateHudData = (state, data) => ({

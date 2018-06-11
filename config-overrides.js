@@ -13,6 +13,18 @@ module.exports = function override(config, env) {
     1,
   );
   config.module.rules.unshift({
+    test: /\.scss$/,
+    use: [{
+      loader: 'style-loader',
+    }, {
+      options: {
+        modules: true,
+      },
+      loader: 'css-loader',
+    }, {
+      loader: 'sass-loader',
+    }],
+  }, {
     test: /\.vert$/,
     use: { loader: 'raw-loader' },
   }, {
@@ -24,6 +36,6 @@ module.exports = function override(config, env) {
   });
   const assetLoaders = config.module.rules[config.module.rules.length - 1].oneOf;
   // throw 1;
-  assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);
+  assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/, /\.scss$/);
   return config;
 };
