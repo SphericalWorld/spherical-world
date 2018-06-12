@@ -1,10 +1,11 @@
 // @flow
 import type { InputSource } from '../../InputSource';
-import StateInputEvent from '../../StateInputEvent';
+import StateInputEvent, { STATE_DOWN, STATE_UP, STATE_PRESSED } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';
 
 export default class KeyboardSource implements InputSource {
   onEvent: (event: InputEvent) => any;
+  pressedKeys: Set<string> = new Set();
 
   constructor() {
     window.addEventListener('keydown', (e: KeyboardEvent) => this.onKeyDown(e));
@@ -12,10 +13,18 @@ export default class KeyboardSource implements InputSource {
   }
 
   onKeyDown(e: KeyboardEvent) {
-    this.onEvent(new StateInputEvent(e.code));
+    const isPressed = this.pressedKeys.has(e.code);
+    if (isPressed) {
+      this.onEvent(new StateInputEvent(e.code, STATE_PRESSED));
+    } else {
+      this.onEvent(new StateInputEvent(e.code, STATE_DOWN));
+      this.onEvent(new StateInputEvent(e.code, STATE_PRESSED));
+    }
+    this.pressedKeys.add(e.code);
   }
 
   onKeyUp(e: KeyboardEvent) {
-    this.onEvent(new StateInputEvent(e.code, true));
+    this.onEvent(new StateInputEvent(e.code, STATE_UP));
+    this.pressedKeys.delete(e.code);
   }
 }

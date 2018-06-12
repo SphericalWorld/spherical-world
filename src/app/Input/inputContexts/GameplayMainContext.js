@@ -10,6 +10,7 @@ import {
   KEY_S,
   KEY_W,
   KEY_SPACE,
+  KEY_ESCAPE,
 } from '../inputSources/KeyboardSource/rawEvents';
 import {
   MOUSE_MOVE,
@@ -25,6 +26,7 @@ import {
   PLAYER_MOVE_LEFT_EVENT,
   PLAYER_MOVE_RIGHT_EVENT,
   PLAYER_JUMP_EVENT,
+  TOGGLE_MENU_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
@@ -40,5 +42,6 @@ export default class GameplayMainContext extends InputContext {
     this.events.set(KEY_A, PLAYER_MOVE_LEFT_EVENT);
     this.events.set(KEY_D, PLAYER_MOVE_RIGHT_EVENT);
     this.events.set(KEY_SPACE, PLAYER_JUMP_EVENT);
+    this.events.set(KEY_ESCAPE, TOGGLE_MENU_EVENT);
   }
 }

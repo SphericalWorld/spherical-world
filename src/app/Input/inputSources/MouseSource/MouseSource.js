@@ -1,7 +1,7 @@
 // @flow
 import type { InputSource } from '../../InputSource';
 import RangeInputEvent from '../../RangeInputEvent';
-import StateInputEvent from '../../StateInputEvent';
+import StateInputEvent, { STATE_UP, STATE_DOWN } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';
 import {
   MOUSE_MOVE,
@@ -38,11 +38,11 @@ export default class MouseSource implements InputSource {
   }
 
   onMouseDown(e: MouseEvent) {
-    // this.onEvent(new StateInputEvent(e.movementX, e.movementY));
+    this.onEvent(new StateInputEvent(keys[e.button], STATE_DOWN));
   }
 
   onMouseUp(e: MouseEvent) {
-    this.onEvent(new StateInputEvent(keys[e.button]));
+    this.onEvent(new StateInputEvent(keys[e.button], STATE_UP));
   }
 
   changeTracking() {

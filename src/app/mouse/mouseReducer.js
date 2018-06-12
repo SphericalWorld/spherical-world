@@ -8,7 +8,6 @@ import {
   MOUSE_BUTTON_LEFT,
   MOUSE_BUTTON_MIDDLE,
   MOUSE_BUTTON_RIGHT,
-  MOUSE_LOCK_CHANGED,
 } from './mouseConstants';
 
 const initialState = {
@@ -42,14 +41,8 @@ const onMouseRelease = (state, payload) => ({
   },
 });
 
-const onMouseLockChanged = (state, { locked }) => ({
-  ...state,
-  locked,
-});
-
 export default createReducer(initialState, {
   [MOUSE_MOVED]: onMouseMoved,
   [MOUSE_BUTTON_PRESSED]: onMousePress,
   [MOUSE_BUTTON_RELEASED]: onMouseRelease,
-  [MOUSE_LOCK_CHANGED]: onMouseLockChanged,
 });

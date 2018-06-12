@@ -3,11 +3,19 @@ import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type { System } from './System';
 import { Transform, UserControlled } from '../components';
+import { menuToggledObservable } from '../hud/events';
 import { connect } from '../util';
-import { updateHudData } from '../hud/hudActions';
+import { updateHudData, toggleMenu } from '../hud/hudActions';
 
 const mapActions = () => ({
   updateHudData,
+  toggleMenu,
+});
+
+const mapState = ({
+  hudData: { states },
+}) => ({
+  states,
 });
 
 const hudProvider = (world: World, store) => {
@@ -16,6 +24,12 @@ const hudProvider = (world: World, store) => {
       id: Entity,
       transform: Transform,
     }[] = world.createSelector([Transform, UserControlled]);
+
+    constructor() {
+      menuToggledObservable.subscribe(() => {
+        this.toggleMenu(!this.states.mainMenuToggled);
+      });
+    }
 
     update(delta: number): void {
       this.updateHudData({
@@ -26,7 +40,7 @@ const hudProvider = (world: World, store) => {
     }
   }
 
-  return connect(null, mapActions, store)(Hud);
+  return connect(mapState, mapActions, store)(Hud);
 };
 
 export default hudProvider;

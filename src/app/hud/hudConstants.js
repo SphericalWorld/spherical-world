@@ -1,2 +1,3 @@
 // @flow
 export const HUD_DATA_UPDATED: 'HUD_DATA_UPDATED' = 'HUD_DATA_UPDATED';
+export const MENU_TOGGLED: 'MENU_TOGGLED' = 'MENU_TOGGLED';

@@ -1,5 +1,6 @@
 // @flow
 // keep constants in integers to be able to use shared memory for input sync in the future
+import { MENU_TOGGLED } from '../hud/hudConstants';
 import {
   CAMERA_MOVED,
   CAMERA_LOCKED,
@@ -63,4 +64,9 @@ export const PLAYER_JUMP_EVENT = {
 export const CAMERA_LOCK_EVENT = {
   type: INPUT_TYPE_ACTION,
   gameEvent: CAMERA_LOCKED,
+};
+
+export const TOGGLE_MENU_EVENT = {
+  type: INPUT_TYPE_ACTION,
+  gameEvent: MENU_TOGGLED,
 };

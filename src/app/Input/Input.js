@@ -2,7 +2,7 @@
 import type GameEvent from '../GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import InputEvent from './InputEvent';
-import InputContext from './InputContext';
+import InputContext, { activate, deactivate } from './InputContext';
 
 const inputProvider = (inputContexts: InputContext[]) => {
   class Input {
@@ -34,23 +34,17 @@ const inputProvider = (inputContexts: InputContext[]) => {
       return this.contexts.filter(el => el.active);
     }
 
-    activateContext(contextConstructor: Function): void {
+    switchContext = (activateFn: Function) => (contextConstructor: Function): void => {
       const context = this.contextsMap.get(contextConstructor);
       if (!context) {
         throw new Error('Context not found');
       }
-      context.activate();
+      activateFn(context);
       this.activeContexts = this.getActiveContexts();
     }
 
-    deactivateContext(contextConstructor: Function): void {
-      const context = this.contextsMap.get(contextConstructor);
-      if (!context) {
-        throw new Error('Context not found');
-      }
-      context.deactivate();
-      this.activeContexts = this.getActiveContexts();
-    }
+    activateContext = this.switchContext(activate);
+    deactivateContext = this.switchContext(deactivate);
 
     addEventSource(...inputSources: InputSource[]): void {
       for (const inputSource of inputSources) {

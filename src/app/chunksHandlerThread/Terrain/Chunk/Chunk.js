@@ -200,49 +200,26 @@ const calcRecursionGreen = calcRecursion(0x0F00, 0xF0FF, 0x0100, 1);
 const calcRecursionBlue = calcRecursion(0x00F0, 0xFF0F, 0x0010, 1);
 const calcRecursionGlobal = calcRecursion(0x000F, 0xFFF0, 0x0001, 1);
 
-const addPlane = (ii, jj, kk, u, v, uu, vv) => ([
-  jj + (ii ? v : kk ? u : (jj < 0 ? 1 : 0)),
-  ((jj || kk) ? (v - 1) : (ii < 0 ? -1 : 0)),
-  kk + ((ii || jj) ? u : (kk < 0 ? 1 : 0)),
+const addDefaultVertex = (i, j, k, u, v) => ([
+  j + (i ? v : k ? u : (j < 0 ? 1 : 0)),
+  ((j || k) ? (v - 1) : (i < 0 ? -1 : 0)),
+  k + ((i || j) ? u : (k < 0 ? 1 : 0)),
 ]);
 
+const addPlane = (i: number, j: number, k: number) => [
+  addDefaultVertex(i, j, k, 0, 0),
+  addDefaultVertex(i, j, k, 0, 1),
+  addDefaultVertex(i, j, k, 1, 0),
+  addDefaultVertex(i, j, k, 1, 1),
+];
+
 const basePlanes = [
-  [
-    addPlane(1, 0, 0, 0, 0, -1, -1),
-    addPlane(1, 0, 0, 0, 1, -1, 1),
-    addPlane(1, 0, 0, 1, 0, 1, -1),
-    addPlane(1, 0, 0, 1, 1, 1, 1),
-  ],
-  [
-    addPlane(-1, 0, 0, 0, 0, -1, -1),
-    addPlane(-1, 0, 0, 0, 1, -1, 1),
-    addPlane(-1, 0, 0, 1, 0, 1, -1),
-    addPlane(-1, 0, 0, 1, 1, 1, 1),
-  ],
-  [
-    addPlane(0, -1, 0, 0, 0, -1, -1),
-    addPlane(0, -1, 0, 0, 1, -1, 1),
-    addPlane(0, -1, 0, 1, 0, 1, -1),
-    addPlane(0, -1, 0, 1, 1, 1, 1),
-  ],
-  [
-    addPlane(0, 1, 0, 0, 0, -1, -1),
-    addPlane(0, 1, 0, 0, 1, -1, 1),
-    addPlane(0, 1, 0, 1, 0, 1, -1),
-    addPlane(0, 1, 0, 1, 1, 1, 1),
-  ],
-  [
-    addPlane(0, 0, -1, 0, 0, -1, -1),
-    addPlane(0, 0, -1, 0, 1, -1, 1),
-    addPlane(0, 0, -1, 1, 0, 1, -1),
-    addPlane(0, 0, -1, 1, 1, 1, 1),
-  ],
-  [
-    addPlane(0, 0, 1, 0, 0, -1, -1),
-    addPlane(0, 0, 1, 0, 1, -1, 1),
-    addPlane(0, 0, 1, 1, 0, 1, -1),
-    addPlane(0, 0, 1, 1, 1, 1, 1),
-  ],
+  addPlane(1, 0, 0),
+  addPlane(-1, 0, 0),
+  addPlane(0, -1, 0),
+  addPlane(0, 1, 0),
+  addPlane(0, 0, -1),
+  addPlane(0, 0, 1),
 ];
 
 const addVertex = (i, j, k, u, v, ii, jj, kk, light, buffer, color, chunk) => {

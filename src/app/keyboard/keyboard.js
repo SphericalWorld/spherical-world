@@ -187,15 +187,9 @@ const keyboardProvider = store => class Keyboard {
   }
 
   setKeys() {
-    this.setPrimaryKeyForAction('moveForward', 'w');
-    this.setPrimaryKeyForAction('moveBack', 's');
-    this.setPrimaryKeyForAction('moveLeft', 'a');
-    this.setPrimaryKeyForAction('moveRight', 'd');
     this.setPrimaryKeyForAction('showDebugInfo', 'f2');
     this.setPrimaryKeyForAction('enterFullscreen', 'f9');
-    this.setPrimaryKeyForAction('jump', 'space');
     this.setPrimaryKeyForAction('run', 'shift');
-
 
     this.setSecondaryKeyForAction('moveForward', 'up arrow');
     this.setSecondaryKeyForAction('moveBack', 'down arrow');

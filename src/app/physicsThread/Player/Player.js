@@ -37,7 +37,7 @@ const playerProvider = (store, Chunk, Inventory) => {
         this.fallSpeed = -0.007;
       }
       const chunk = this.terrain.chunks.get(getGeoId(Math.floor(this.x / 16) * 16, Math.floor(this.z / 16) * 16));
-      if (!chunk || chunk.state === CHUNK_STATUS_NEED_LOAD_AL) {
+      if (!chunk || chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
         return;
       }
 

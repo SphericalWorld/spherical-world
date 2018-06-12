@@ -1,4 +1,6 @@
 // @flow
+import { menuToggledObservable } from './app/hud/events';
+import { MENU_TOGGLED } from './app/hud/hudConstants';
 import Main from './app/main';
 import BlockRemove from './app/systems/BlockRemove';
 import socketHandlers from './app/socketHandlers';
@@ -81,6 +83,9 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
     }
     if (event.type === CAMERA_UNLOCKED) {
       cameraUnlockedObservable.emit(event);
+    }
+    if (event.type === MENU_TOGGLED) {
+      menuToggledObservable.emit(event);
     }
   });
 

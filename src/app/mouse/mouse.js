@@ -11,7 +11,6 @@ const mouseProvider = () => {
     mouseRelease: typeof mouseRelease;
 
     playerId: number;
-    body: HTMLElement = document.getElementsByTagName('body')[0];
     locked: boolean;
 
     constructor() {
