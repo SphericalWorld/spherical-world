@@ -42,7 +42,7 @@ const engineProvider = (
 
     constructor() {
       this.socketHandlers = new SocketHandlers(this, network);
-      this.init().catch((e) => { console.error(e); });
+      this.init().catch(console.error);
     }
 
     async init() {

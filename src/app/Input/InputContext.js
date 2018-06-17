@@ -6,11 +6,12 @@ import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './events'
 import InputEvent from './InputEvent';
 import { STATE_DOWN, STATE_PRESSED } from './StateInputEvent';
 
-type MappedEvent = {
+type MappedEvent = {|
   +type: INPUT_TYPE,
   +gameEvent: GAME_EVENT_TYPE,
-  +data: Object,
-};
+  +data?: Object,
+  +onEnd?: GAME_EVENT_TYPE,
+|};
 
 export default class InputContext {
   active: boolean = false;

@@ -99,7 +99,7 @@ export default (ecs: World) => {
       // console.log( quat.rotateX(quat.create(), quat.create(), transform.rotation.x))
 
       const angle = getAngle(movingX, movingZ);
-      const rotation = quat.rotateY(quat.create(), transform.rotation, angle * Math.PI / 180);
+      const rotation = quat.rotateY(quat.create(), transform.rotation, (angle * Math.PI) / 180);
 
       if (userControls.movingForward || userControls.movingBackward || userControls.movingLeft || userControls.movingRight) {
         const v = vec3.fromValues(1, 0, 0);

@@ -62,12 +62,10 @@ const calc = (raytrace, x, y, z) => {
   return false;
 };
 
-const calcMax = (position: number, delta: number, step: number): number => {
-  if (((position >= 0) && (step >= 0)) || ((position < 0) && (step < 0))) {
-    return delta * (1 - (Math.abs(position) - Math.floor(Math.abs(position))));
-  }
-  return delta * (1 - (Math.ceil(Math.abs(position)) - Math.abs(position)));
-};
+const calcMax = (position: number, delta: number, step: number): number =>
+  delta * (1 - (((position >= 0 && step >= 0) || (position < 0 && step < 0))
+    ? Math.abs(position) - Math.floor(Math.abs(position))
+    : Math.ceil(Math.abs(position)) - Math.abs(position)));
 
 const raytraceProvider = (ecs: World, Chunk) => {
   class Raytrace implements System {
