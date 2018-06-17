@@ -1,6 +1,6 @@
 // @flow
 import type { Terrain } from '../Terrain';
-import { getIndex } from '../../../Terrain/Chunk/ChunkBase';
+import { getIndex } from '../../../../../common/chunk';
 import { connect } from '../../../util';
 import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
 import {

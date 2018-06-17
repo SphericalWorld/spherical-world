@@ -1,5 +1,6 @@
 // @flow
 import type { Terrain } from '../Terrain';
+import { getIndex } from '../../../../../common/chunk';
 import {
   blocksTextureInfo,
   blocksFlags,
@@ -11,14 +12,7 @@ import {
 } from '../../../blocks/blockInfo';
 import { connect } from '../../../util';
 import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
-import {
-  getIndex,
-  COLUMN,
-  ROW,
-  SLICE,
-  ROW_NESTED_CHUNK,
-  COLUMN_NESTED_CHUNK,
-} from '../../../Terrain/Chunk/ChunkBase';
+import { SLICE } from '../../../Terrain/Chunk/ChunkBase';
 
 import {
   CHUNK_STATUS_LOADED,
@@ -26,6 +20,36 @@ import {
   CHUNK_STATUS_NEED_LOAD_LIGHT,
   CHUNK_STATUS_NEED_LOAD_VBO,
 } from '../../../Terrain/Chunk/chunkConstants';
+import {
+  calcRecursionRed,
+  calcRecursionGreen,
+  calcRecursionBlue,
+  calcRecursionGlobal,
+  calcRecursionRedRemove,
+  calcRecursionGreenRemove,
+  calcRecursionBlueRemove,
+  calcRecursionGlobalRemove,
+} from './chunkLigting';
+
+type ChunkBuffers = {|
+  +vertexBuffer: number[],
+  +indexBuffer: number[],
+  +texCoordBuffer: number[],
+  +colorBuffer: number[],
+  +globalColorBuffer: number[],
+  +blockDataBuffer: number[],
+  vertexCount: number,
+|}
+
+const createBuffers = (): ChunkBuffers => ({
+  vertexBuffer: [],
+  indexBuffer: [],
+  texCoordBuffer: [],
+  colorBuffer: [],
+  globalColorBuffer: [],
+  blockDataBuffer: [],
+  vertexCount: 0,
+});
 
 const mapState = (state, chunk) => {
   if (!state.chunks.instances[chunk.geoId]) {
@@ -76,137 +100,13 @@ const getLight = (i: number, j: number, k: number, chunk) => {
   return [0, -1];
 };
 
-const calcRecursion = (
-  mask: number,
-  reversedMask: number,
-  dec: number,
-  type: number, // TODO boolean?
-) => {
-  const calcCurrent = (
-    chunk,
-    x: number,
-    y: number,
-    z: number,
-    index,
-  ): number => (chunk.light[index] & reversedMask) | (Math.max(
-    (type ? 0 : (chunk.light[index] & mask)) + dec,
-    ((z < 15) ? (chunk.light[index + ROW]) : (chunk.eastChunk.light[index - ROW_NESTED_CHUNK])) & mask,
-    ((z > 0) ? (chunk.light[index - ROW]) : (chunk.westChunk.light[index + ROW_NESTED_CHUNK])) & mask,
-    ((x < 15) ? (chunk.light[index + COLUMN]) : (chunk.southChunk.light[index - COLUMN_NESTED_CHUNK])) & mask,
-    ((x > 0) ? (chunk.light[index - COLUMN]) : (chunk.northChunk.light[index + COLUMN_NESTED_CHUNK])) & mask,
-    chunk.light[index + SLICE] & mask,
-    chunk.light[index - SLICE] & mask,
-  ) - dec);
-
-  const updateIfLight = (
-    index,
-    lightTmp,
-    chunk,
-    ...params
-  ) => {
-    if (lightTmp > (chunk.light[index] & mask)) {
-      calcRecursionInternal(chunk, ...params);
-    }
-  };
-
-  const calcNear = (
-    chunk,
-    x: number,
-    y: number,
-    z: number,
-    limit: number,
-    index,
-    lightTmp,
-  ) => {
-    if (z < 15) {
-      updateIfLight(index + ROW, lightTmp, chunk, x, y, z + 1, limit);
-    } else {
-      updateIfLight(index - ROW_NESTED_CHUNK, lightTmp, chunk.eastChunk, x, y, 0, limit);
-    }
-
-    if (z > 0) {
-      updateIfLight(index - ROW, lightTmp, chunk, x, y, z - 1, limit);
-    } else {
-      updateIfLight(index + ROW_NESTED_CHUNK, lightTmp, chunk.westChunk, x, y, 15, limit);
-    }
-
-    if (x < 15) {
-      updateIfLight(index + COLUMN, lightTmp, chunk, x + 1, y, z, limit);
-    } else {
-      updateIfLight(index - COLUMN_NESTED_CHUNK, lightTmp, chunk.southChunk, 0, y, z, limit);
-    }
-
-    if (x > 0) {
-      updateIfLight(index - COLUMN, lightTmp, chunk, x - 1, y, z, limit);
-    } else {
-      updateIfLight(index + COLUMN_NESTED_CHUNK, lightTmp, chunk.northChunk, 15, y, z, limit);
-    }
-
-    if (y < 255) {
-      updateIfLight(index + SLICE, lightTmp, chunk, x, y + 1, z, limit);
-    }
-
-    if (y > 0) {
-      updateIfLight(index - SLICE, lightTmp, chunk, x, y - 1, z, limit);
-    }
-  };
-
-  const calcRecursionInternal = (
-    chunk,
-    x: number,
-    y: number,
-    z: number,
-    limit: number,
-  ) => {
-    if (!limit) {
-      return;
-    }
-    const index = getIndex(x, y, z);
-
-    if (type) {
-      const lightTmp = (chunk.light[index] & mask);
-      if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
-        chunk.light[index] &= reversedMask;
-      } else {
-        chunk.light[index] = calcCurrent(chunk, x, y, z, index);
-        if (chunk.state === CHUNK_STATUS_LOADED) {
-          chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
-        }
-      }
-      if (((chunk.light[index] & mask)) !== lightTmp) {
-        calcNear(chunk, x, y, z, limit - 1, index, lightTmp);
-      }
-    } else if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
-      chunk.light[index] &= reversedMask;
-    } else {
-      chunk.light[index] = calcCurrent(chunk, x, y, z, index);
-      if (chunk.state === CHUNK_STATUS_LOADED) {
-        chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
-      }
-      const lightTmp = (chunk.light[index] & mask) - dec;
-      calcNear(chunk, x, y, z, limit - 1, index, lightTmp);
-    }
-  };
-  return calcRecursionInternal;
-};
-
-const calcRecursionRedRemove = calcRecursion(0xF000, 0x0FFF, 0x1000, 0);
-const calcRecursionGreenRemove = calcRecursion(0x0F00, 0xF0FF, 0x0100, 0);
-const calcRecursionBlueRemove = calcRecursion(0x00F0, 0xFF0F, 0x0010, 0);
-const calcRecursionGlobalRemove = calcRecursion(0x000F, 0xFFF0, 0x0001, 0);
-
-const calcRecursionRed = calcRecursion(0xF000, 0x0FFF, 0x1000, 1);
-const calcRecursionGreen = calcRecursion(0x0F00, 0xF0FF, 0x0100, 1);
-const calcRecursionBlue = calcRecursion(0x00F0, 0xFF0F, 0x0010, 1);
-const calcRecursionGlobal = calcRecursion(0x000F, 0xFFF0, 0x0001, 1);
-
 const addDefaultVertex = (i, j, k, u, v) => ([
   j + (i ? v : k ? u : (j < 0 ? 1 : 0)),
   ((j || k) ? (v - 1) : (i < 0 ? -1 : 0)),
   k + ((i || j) ? u : (k < 0 ? 1 : 0)),
 ]);
 
-const addPlane = (i: number, j: number, k: number) => [
+const addPlane = (i: number, j: number, k: number): number[][] => [
   addDefaultVertex(i, j, k, 0, 0),
   addDefaultVertex(i, j, k, 0, 1),
   addDefaultVertex(i, j, k, 1, 0),
@@ -222,7 +122,7 @@ const basePlanes = [
   addPlane(0, 0, 1),
 ];
 
-const addVertex = (i, j, k, u, v, ii, jj, kk, light, buffer, color, chunk) => {
+const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, buffer, color, chunk) => {
   let c = 0;
   let cf = 0;
   let s1f = 0;
@@ -257,6 +157,74 @@ const addVertex = (i, j, k, u, v, ii, jj, kk, light, buffer, color, chunk) => {
   buffer.globalColorBuffer.push(vGlobal * color);
 };
 
+const addVertexTL = addVertex(-1, -1);
+const addVertexTR = addVertex(-1, 1);
+const addVertexBL = addVertex(1, -1);
+const addVertexBR = addVertex(1, 1);
+
+const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i, j, k, buffers) => {
+  const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, chunk);
+  const indexNear = getIndex(jNear, i + ii, kNear);
+  const blockNear = chunkNear.blocks[indexNear];
+
+  if (!(chunk.blocksFlags[blockNear][1]) || (chunk.blocksFlags[block][4] && (block === blockNear))) {
+    return;
+  }
+  const buffer = buffers[bufferInfo[block][planeIndex]];
+  const light = chunkNear.light[indexNear];
+  const iVertex = i + ii;
+  const jVertex = j + jj;
+  const kVertex = k + kk;
+
+  addVertexTL(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
+  addVertexTR(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
+  addVertexBL(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
+  addVertexBR(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
+
+  const plane = planes[planeIndex];
+  buffer.vertexBuffer.push(
+    plane[0] + j,
+    plane[1] + i,
+    plane[2] + k,
+
+    plane[3] + j,
+    plane[4] + i,
+    plane[5] + k,
+
+    plane[6] + j,
+    plane[7] + i,
+    plane[8] + k,
+
+    plane[9] + j,
+    plane[10] + i,
+    plane[11] + k,
+  );
+  const textureU = chunk.blocksTextureInfo[block][planeIndex] / 16;
+  const textureV = Math.floor(textureU) / 16;
+
+  buffer.texCoordBuffer.push(
+    textureU, textureV,
+    textureU, textureV + (1 / 16),
+    textureU + (1 / 16), textureV,
+    textureU + (1 / 16), textureV + (1 / 16),
+  );
+
+  buffer.blockDataBuffer.push(block, block, block, block);
+  // TODO: create one index buffer per all chunks
+  const b = [
+    buffer.vertexCount,
+    buffer.vertexCount + 1,
+    buffer.vertexCount + 3,
+    buffer.vertexCount,
+    buffer.vertexCount + 3,
+    buffer.vertexCount + 2,
+  ];
+  buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0)
+    ? b
+    : b.reverse());
+  buffer.vertexCount += 4;
+};
+
 const chunkProvider = (store) => {
   class Chunk extends ChunkWithData<Chunk, Terrain> {
     blocks: Uint8Array;
@@ -277,6 +245,18 @@ const chunkProvider = (store) => {
       this.light = new Uint16Array(this.lightData);
       this.minimapBuffer = new ArrayBuffer(256 * 3);
       this.minimap = new Uint8Array(this.minimapBuffer);
+
+      const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
+        x + this.x,
+        y,
+        z + this.z,
+      ])));
+      this.createTopPlane = createPlane(this, planes, 1, 0, 0, 0, 1);
+      this.createBottomPlane = createPlane(this, planes, -1, 0, 0, 1, 0.5);
+      this.createNorthPlane = createPlane(this, planes, 0, -1, 0, 2, 0.6);
+      this.createSouthPlane = createPlane(this, planes, 0, 1, 0, 3, 0.6);
+      this.createWestPlane = createPlane(this, planes, 0, 0, -1, 4, 0.8);
+      this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
     }
 
     calcRecursionRed(x: number, y: number, z: number) {
@@ -312,100 +292,8 @@ const chunkProvider = (store) => {
     }
 
     calcVBO() {
-      const buffers = [{
-        vertexBuffer: [],
-        indexBuffer: [],
-        texCoordBuffer: [],
-        colorBuffer: [],
-        globalColorBuffer: [],
-        blockDataBuffer: [],
-        vertexCount: 0,
-      }, {
-        vertexBuffer: [],
-        indexBuffer: [],
-        texCoordBuffer: [],
-        colorBuffer: [],
-        globalColorBuffer: [],
-        blockDataBuffer: [],
-        vertexCount: 0,
-      }, {
-        vertexBuffer: [],
-        indexBuffer: [],
-        texCoordBuffer: [],
-        colorBuffer: [],
-        globalColorBuffer: [],
-        blockDataBuffer: [],
-        vertexCount: 0,
-      }];
+      const buffers = [createBuffers(), createBuffers(), createBuffers()];
 
-      const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
-        x + this.x,
-        y,
-        z + this.z,
-      ])));
-
-      const createPlane = (block, i, j, k, ii, jj, kk, planeIndex, color) => {
-        const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, this);
-        const indexNear = getIndex(jNear, i + ii, kNear);
-        const blockNear = chunkNear.blocks[indexNear];
-
-        if (!(this.blocksFlags[blockNear][1]) || (this.blocksFlags[block][4] && (block === blockNear))) {
-          return;
-        }
-        const buffer = buffers[bufferInfo[block][planeIndex]];
-        const light = chunkNear.light[indexNear];
-        const iVertex = i + ii;
-        const jVertex = j + jj;
-        const kVertex = k + kk;
-
-        addVertex(iVertex, jVertex, kVertex, -1, -1, ii, jj, kk, light, buffer, color, this);
-        addVertex(iVertex, jVertex, kVertex, -1, 1, ii, jj, kk, light, buffer, color, this);
-        addVertex(iVertex, jVertex, kVertex, 1, -1, ii, jj, kk, light, buffer, color, this);
-        addVertex(iVertex, jVertex, kVertex, 1, 1, ii, jj, kk, light, buffer, color, this);
-
-        const plane = planes[planeIndex];
-        buffer.vertexBuffer.push(
-          plane[0] + j,
-          plane[1] + i,
-          plane[2] + k,
-
-          plane[3] + j,
-          plane[4] + i,
-          plane[5] + k,
-
-          plane[6] + j,
-          plane[7] + i,
-          plane[8] + k,
-
-          plane[9] + j,
-          plane[10] + i,
-          plane[11] + k,
-        );
-        const textureU = this.blocksTextureInfo[block][planeIndex] / 16;
-        const textureV = Math.floor(textureU) / 16;
-
-        buffer.texCoordBuffer.push(
-          textureU, textureV,
-          textureU, textureV + (1 / 16),
-          textureU + (1 / 16), textureV,
-          textureU + (1 / 16), textureV + (1 / 16),
-        );
-
-        buffer.blockDataBuffer.push(block, block, block, block);
-        // TODO: create one index buffer per all chunks
-        const b = [
-          buffer.vertexCount,
-          buffer.vertexCount + 1,
-          buffer.vertexCount + 3,
-          buffer.vertexCount,
-          buffer.vertexCount + 3,
-          buffer.vertexCount + 2
-        ]
-        buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0)
-          ? b
-          : b.reverse());
-        buffer.vertexCount += 4;
-      };
       for (let i = 1; i < this.height; i += 1) {
         for (let j = 0; j < 16; j += 1) {
           for (let k = 0; k < 16; k += 1) {
@@ -413,17 +301,14 @@ const chunkProvider = (store) => {
             if (this.blocks[index]) {
               const block = this.blocks[index];
               if (!blocksFlags[block][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
-                // top plane
-                createPlane(block, i, j, k, 1, 0, 0, 0, 1);
-                // bottom plane
-                createPlane(block, i, j, k, -1, 0, 0, 1, 0.5);
-                // north plane
-                createPlane(block, i, j, k, 0, -1, 0, 2, 0.6);
-                createPlane(block, i, j, k, 0, 1, 0, 3, 0.6);
-                createPlane(block, i, j, k, 0, 0, -1, 4, 0.8);
-                createPlane(block, i, j, k, 0, 0, 1, 5, 0.8);
+                this.createTopPlane(block, i, j, k, buffers);
+                this.createBottomPlane(block, i, j, k, buffers);
+                this.createNorthPlane(block, i, j, k, buffers);
+                this.createSouthPlane(block, i, j, k, buffers);
+                this.createWestPlane(block, i, j, k, buffers);
+                this.createEastPlane(block, i, j, k, buffers);
               } else {
-                buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block][2].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]].texCoordBuffer, buffers[bufferInfo[block][0]].vertexBuffer, buffers[bufferInfo[block][0]].indexBuffer, buffers[bufferInfo[block][0]].colorBuffer, buffers[bufferInfo[block][0]].globalColorBuffer, buffers[bufferInfo[block][0]].blockDataBuffer, buffers[bufferInfo[block][0]].vertexCount);
+                buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block][2].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
               }
             }
           }
@@ -461,7 +346,7 @@ const chunkProvider = (store) => {
         colorBuffer: prev.colorBuffer.concat(curr.colorBuffer),
         globalColorBuffer: prev.globalColorBuffer.concat(curr.globalColorBuffer),
         blockDataBuffer: prev.blockDataBuffer.concat(curr.blockDataBuffer),
-      }));
+      }), createBuffers());
       buffersData.texCoordBuffer = new Float32Array(buffersData.texCoordBuffer).buffer;
       buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
       buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;

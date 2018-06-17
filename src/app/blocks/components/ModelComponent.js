@@ -17,29 +17,31 @@ const ModelComponent = () => ({
     x: number,
     y: number,
     z: number,
-    vertexTextureCoords,
-    vertexPositions,
-    indicesData,
-    colorData,
-    globalColorData,
-    blockData,
-    vertexCount,
+    {
+      texCoordBuffer,
+      vertexBuffer,
+      indexBuffer,
+      colorBuffer,
+      globalColorBuffer,
+      blockDataBuffer,
+      vertexCount
+    },
   ) {
     const [r, g, b, sunlight] = getLight(chunk, x, y, z);
 
     for (let i = 0; i < this.model.vertexPositions.length / 3; i += 1) {
-      vertexPositions.push(
+      vertexBuffer.push(
         this.model.vertexPositions[i * 3] + x + chunk.x,
         this.model.vertexPositions[i * 3 + 1] + y - 1,
         this.model.vertexPositions[i * 3 + 2] + z + chunk.z
       );
-      colorData.push(r, g, b);
-      globalColorData.push(sunlight);
-      blockData.push(this.id);
+      colorBuffer.push(r, g, b);
+      globalColorBuffer.push(sunlight);
+      blockDataBuffer.push(this.id);
     }
-    vertexTextureCoords.push(...this.model.vertexTextureCoords);
+    texCoordBuffer.push(...this.model.vertexTextureCoords);
     for (let i = 0; i < this.model.indices.length; i += 1) {
-      indicesData.push(this.model.indices[i] + vertexCount);
+      indexBuffer.push(this.model.indices[i] + vertexCount);
     }
     return vertexCount + (this.model.vertexPositions.length / 3);
   },
