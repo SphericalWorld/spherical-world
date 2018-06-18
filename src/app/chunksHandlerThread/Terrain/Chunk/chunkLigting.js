@@ -25,15 +25,15 @@ const calcRecursion = (
     y: number,
     z: number,
     index,
-  ): number => (chunk.light[index] & reversedMask) | (Math.max(
+  ): number => (chunk.light[index] & reversedMask) | ((Math.max(
     (type ? 0 : (chunk.light[index] & mask)) + dec,
-    ((z < 15) ? (chunk.light[index + ROW]) : (chunk.eastChunk.light[index - ROW_NESTED_CHUNK])) & mask,
-    ((z > 0) ? (chunk.light[index - ROW]) : (chunk.westChunk.light[index + ROW_NESTED_CHUNK])) & mask,
-    ((x < 15) ? (chunk.light[index + COLUMN]) : (chunk.southChunk.light[index - COLUMN_NESTED_CHUNK])) & mask,
-    ((x > 0) ? (chunk.light[index - COLUMN]) : (chunk.northChunk.light[index + COLUMN_NESTED_CHUNK])) & mask,
-    chunk.light[index + SLICE] & mask,
-    chunk.light[index - SLICE] & mask,
-  ) - dec);
+    ((z < 15) ? chunk.light[index + ROW] : chunk.eastChunk.light[index - ROW_NESTED_CHUNK]),
+    ((z > 0) ? chunk.light[index - ROW] : chunk.westChunk.light[index + ROW_NESTED_CHUNK]),
+    ((x < 15) ? chunk.light[index + COLUMN] : chunk.southChunk.light[index - COLUMN_NESTED_CHUNK]),
+    ((x > 0) ? chunk.light[index - COLUMN] : chunk.northChunk.light[index + COLUMN_NESTED_CHUNK]),
+    chunk.light[index + SLICE],
+    chunk.light[index - SLICE],
+  ) & mask) - dec);
 
   const updateIfLight = (
     index,
@@ -111,7 +111,7 @@ const calcRecursion = (
         }
       }
       if (((chunk.light[index] & mask)) !== lightTmp) {
-        calcNear(chunk, x, y, z, limit - 1, index, lightTmp);
+        calcNear(chunk, x, y, z, limit - 1, index, chunk.light[index] & mask);
       }
     } else if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
       chunk.light[index] &= reversedMask;

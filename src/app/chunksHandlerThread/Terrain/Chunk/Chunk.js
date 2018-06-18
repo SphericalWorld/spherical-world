@@ -398,8 +398,8 @@ const chunkProvider = (store) => {
           let y = this.height - 1;
           while ((y > 0) && (this.blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
             y -= 1;
+            this.calcGlobalRecursion(x, y + 1, z);
           }
-          this.calcGlobalRecursion(x, y + 1, z);
         }
       }
       for (let x = 0; x < 16; x += 1) {
