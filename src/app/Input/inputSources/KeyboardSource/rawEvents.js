@@ -25,6 +25,7 @@ export const KEY_W: 'KeyW' = 'KeyW';
 export const KEY_X: 'KeyX' = 'KeyX';
 export const KEY_Y: 'KeyY' = 'KeyY';
 export const KEY_Z: 'KeyZ' = 'KeyZ';
+export const KEY_ESCAPE: 'Escape' = 'Escape';
 export const KEY_SPACE: 'Space' = 'Space';
 export const KEY_ARROW_RIGHT: 'ArrowRight' = 'ArrowRight';
 export const KEY_ARROW_LEFT: 'ArrowLeft' = 'ArrowLeft';

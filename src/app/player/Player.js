@@ -166,7 +166,13 @@ import { World } from '../ecs';
 import { Transform, Camera, Physics, Velocity, Gravity, Raytracer } from '../components';
 import { MaterialLibrary } from '../engine/MaterialLibrary';
 
-const playerProvider = (ecs: World, materialLibrary: MaterialLibrary, BlockRemover, BlockPicker, Inventory) => (data: Object): Entity => {
+const playerProvider = (
+  ecs: World,
+  materialLibrary: MaterialLibrary,
+  BlockRemover,
+  BlockPicker,
+  Inventory,
+) => (data: Object): Entity => {
   const model = Model.createPrimitive(CUBE, 1.001);
   const material = materialLibrary.get('blockRemover'); // 'player'
   const object = new GlObject({ model, material });
