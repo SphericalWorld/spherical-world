@@ -1,10 +1,10 @@
 // @flow
-const Terrain = require('./terrain/Terrain');
-const StaticLoader = require('./staticLoader');
-const WebSocketServer = require('ws').Server;
-const WebSocket = require('ws');
-const Player = require('./player');
-const SocketHandlers = require('./socketHandlers');
+import WebSocket, { Server as WebSocketServer } from 'ws';
+import Terrain from './terrain/Terrain';
+import StaticLoader from './staticLoader';
+// import WebSocket = require('ws');
+import Player from './player';
+import SocketHandlers from './socketHandlers';
 
 function socketPostMessage(message, data, callback) {
   if (this.readyState === WebSocket.OPEN) {

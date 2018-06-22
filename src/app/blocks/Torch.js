@@ -15,7 +15,7 @@ const Torch = () => Object.assign(
 
     torches[0] = model.vertexPositions;
     torches[1] = model.vertexPositions;
-    for (let i = 0; i < model.vertexPositions.length / 3; i++) {
+    for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
       vec[0] = model.vertexPositions[i * 3] - 0.5;
       vec[1] = model.vertexPositions[i * 3 + 1] - 0.5;
       vec[2] = model.vertexPositions[i * 3 + 2] - 0.5;

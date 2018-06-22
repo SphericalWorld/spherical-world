@@ -3,7 +3,7 @@ import Chunk from './Chunk';
 import ChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 
-class Terrain {
+export default class Terrain {
   locationName: string;
   chunkGenerator: ChunkGenerator;
   seed: number;
@@ -80,26 +80,16 @@ class Terrain {
 
     const data = await chunk.getCompressedData();
     player.socket.send(data);
-    player.socket.postMessage('loadChunk', { x, z });
-  }
-
-  removeBlockHandler({
-    geoId, x, y, z,
-  }) {
-    const chunk = this.chunks.get(geoId);
-    chunk.data[x + z * 16 + y * 256] = 0;
-    if (chunk.changesCount < 15) {
-      chunk.changesCount += 1;
-    } else {
-      chunk.changesCount = 0;
-      chunk.save();
-    }
+    player.socket.postMessage('loadChunk', { x, z, rainfall: chunk.rainfall.data, temperature: chunk.temperature.data });
   }
 
   putBlockHandler({
     geoId, x, y, z, blockId,
   }) {
     const chunk = this.chunks.get(geoId);
+    if (!chunk) {
+      return;
+    }
     chunk.data[x + z * 16 + y * 256] = blockId;
     if (chunk.changesCount < 15) {
       chunk.changesCount += 1;
@@ -108,7 +98,8 @@ class Terrain {
       chunk.save();
     }
   }
+
+  removeBlockHandler(params) {
+    this.putBlockHandler({ ...params, blockId: 0 });
+  }
 }
-
-
-module.exports = Terrain;

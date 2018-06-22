@@ -19,3 +19,5 @@ Latest NodeJS, Latest Chrome/Firefox
 Source code provided under [MIT license](LICENSE)
 
 It also use textures created by David Stridh Andersson, under [CC BY license](https://creativecommons.org/licenses/by/2.0/) https://www.planetminecraft.com/texture_pack/davids-drawn-64x64-texturepack/
+It also use textures created by Soar49, under [Public domain](https://soartex.net/license/)
+http://dl.soartex.net/q7ui6

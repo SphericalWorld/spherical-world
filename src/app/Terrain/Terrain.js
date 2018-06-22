@@ -33,7 +33,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       network.route('loadChunk', (data, binaryData) => {
         let chunk = this.chunks.get(getGeoId(data.x, data.z));
         if (!chunk) {
-          chunk = this.addChunk(new Chunk(this, data.x, data.z));
+          chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
         }
         chunk.generateFoliageTexture();
         this.loadChunk({

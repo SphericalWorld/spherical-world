@@ -32,16 +32,21 @@ const chunkProvider = (store) => {
   class Chunk extends ChunkBase<Chunk, Terrain> {
     frustum: Frustum;
     foliageTexture: WebGLTexture = null;
+    rainfallData: Uint8Array;
+    temperatureData: Uint8Array;
 
-    constructor(terrain: Terrain, x: number, z: number) {
+    constructor(
+      terrain: Terrain,
+      x: number,
+      z: number,
+      temperatureData: number[],
+      rainfallData: number[],
+    ) {
       super(terrain, x, z);
-
       this.terrainMipMap = null;
 
-      this.rainfallDataBuffer = new ArrayBuffer(256);
-      this.rainfallData = new Uint8Array(this.rainfallDataBuffer);
-      this.temperatureDataBuffer = new ArrayBuffer(256);
-      this.temperatureData = new Uint8Array(this.temperatureDataBuffer);
+      this.rainfallData = new Uint8Array(rainfallData);
+      this.temperatureData = new Uint8Array(temperatureData);
 
       this.frustum = new Frustum([[this.x, 0, this.z], [this.x + 16, 256, this.z + 16]]);
       this.minimap = null;
@@ -50,13 +55,18 @@ const chunkProvider = (store) => {
     generateFoliageTexture() {
       const dataArray = [];
       for (let i = 0; i < 256; i += 1) {
-        this.rainfallData[i] = this.x + 64;
-        this.temperatureData[i] = 64 + this.z;
-        dataArray.push(this.terrain.foliageColorMap[this.rainfallData[i] * 256 + this.temperatureData[i] * 4], this.terrain.foliageColorMap[this.rainfallData[i] * 256 + this.temperatureData[i] * 4 + 1], this.terrain.foliageColorMap[this.rainfallData[i] * 256 + this.temperatureData[i] * 4 + 2]);
+        const rainfall = 255 - this.rainfallData[i];
+        const temperature = 255 - this.temperatureData[i];
+        const index = ((256 * rainfall) + Math.floor((temperature * rainfall) / 256)) * 4;
+        dataArray.push(
+          this.terrain.foliageColorMap[index],
+          this.terrain.foliageColorMap[index + 1],
+          this.terrain.foliageColorMap[index + 2],
+        );
       }
       const texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 16, 16, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array(dataArray));
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);

@@ -24,8 +24,8 @@ void main(void) {
 
   vec4 position = vec4(aVertexPosition, 1.0);
   vTextureCoord = aTextureCoord;
-  float x = aVertexPosition[0]/16.0 + 0.0009765625; //to prevent cases when texture coords between 2 pixels
-  float z = aVertexPosition[2]/16.0 + 0.0009765625;
+  float x = aVertexPosition[0]/16.0;
+  float z = aVertexPosition[2]/16.0;
 
   vFoliageGrassTextureCoord = vec2(x, z);
   vGlobalColor = aVertexGlobalColor;
