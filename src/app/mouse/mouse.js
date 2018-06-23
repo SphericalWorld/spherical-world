@@ -18,11 +18,6 @@ const mouseProvider = () => {
       document.addEventListener('mousedown', this.mouseDown.bind(this), false);
       document.addEventListener('mouseup', this.mouseUp.bind(this), false);
       document.addEventListener('wheel', this.mouseWheel.bind(this), false);
-      document.addEventListener('contextmenu', this.onContextMenu.bind(this), false);
-    }
-    // eslint-disable-next-line class-methods-use-this
-    onContextMenu(e: MouseEvent): void {
-      e.preventDefault();
     }
 
     mouseDown(e: MouseEvent) {

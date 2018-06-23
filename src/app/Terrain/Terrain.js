@@ -22,6 +22,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
     loadChunk: typeof loadChunk;
     loadTerrainMipmap: typeof loadTerrainMipmap;
     material: Material;
+    foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
 
     constructor() {
       super();
@@ -29,7 +30,6 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       this.halfSize = 8;
 
       this.texture = null;
-      this.foliageColorMap = [];
       network.route('loadChunk', (data, binaryData) => {
         let chunk = this.chunks.get(getGeoId(data.x, data.z));
         if (!chunk) {
@@ -167,11 +167,9 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       const fb = gl.createFramebuffer();
       gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
       gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-      const pixels = new Uint8Array(256 * 256 * 4);
       if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) {
-        gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+        gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, this.foliageColorMap);
       }
-      this.foliageColorMap = pixels;
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 

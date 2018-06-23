@@ -20,11 +20,6 @@ const initialState = {
   locked: false,
 };
 
-const onMouseMoved = (state, payload) => ({
-  ...state,
-  ...payload,
-});
-
 const onMousePress = (state, payload) => ({
   ...state,
   buttons: {
@@ -42,7 +37,6 @@ const onMouseRelease = (state, payload) => ({
 });
 
 export default createReducer(initialState, {
-  [MOUSE_MOVED]: onMouseMoved,
   [MOUSE_BUTTON_PRESSED]: onMousePress,
   [MOUSE_BUTTON_RELEASED]: onMouseRelease,
 });

@@ -63,14 +63,14 @@ const engineProvider = (
       await this.resourceLoader.loadAddons();
       this.skyBox = Skybox();
       await network.start();
-      requestAnimationFrame(this.gameCycle.bind(this));
+      requestAnimationFrame(this.gameCycle);
     }
 
-    gameCycle(time: number): void {
+    gameCycle = (time: number): void => {
       const delta: number = time - this.lastTime;
       this.lastTime = time;
       this.ecs.update(delta);
-      requestAnimationFrame(this.gameCycle.bind(this));
+      requestAnimationFrame(this.gameCycle);
     }
 
     static initKeyboardActions() {

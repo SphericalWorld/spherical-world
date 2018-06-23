@@ -164,8 +164,8 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   world.registerSystem(...[
     new BlockRemove(),
     new DayNightCycle(),
-    new Draw(),
     new CameraSystem(),
+    new Draw(),
     new HudSystem(),
   ]);
 

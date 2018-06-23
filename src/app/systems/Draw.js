@@ -42,8 +42,8 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
     update(currentTime: number): void {
       const { camera } = this.camera[0];
       this.mvMatrix = camera.mvMatrix;
+      this.pMatrix = camera.viewport.pMatrix;
 
-      this.resize();
       gl.clear(gl.DEPTH_BUFFER_BIT);
       // terrain.material.shader.use()
       this.useShader(terrain.material.shader);
@@ -105,17 +105,6 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
           continue;
         }
         draw(transform, visual);
-      }
-    }
-
-    resize(): void {
-      const width = gl.canvas.clientWidth;
-      const height = gl.canvas.clientHeight;
-      if (gl.canvas.width !== width || gl.canvas.height !== height) {
-        gl.canvas.width = width;
-        gl.canvas.height = height;
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        this.pMatrix = mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0);  // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
       }
     }
 

@@ -7,6 +7,7 @@ import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
 import UserControlled from '../../components/UserControlled';
+import Camera from '../../components/Camera';
 import { getGeoId } from '../../../../common/chunk';
 
 type Plane = 0 | 1 | 2 | 3 | 4 | 5;
@@ -74,7 +75,10 @@ const raytraceProvider = (ecs: World, Chunk) => {
       transform: Transform,
       raytracer: Raytracer,
     }[] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
-    userControlled: { transform: Transform }[] = ecs.createSelector([Transform, UserControlled]);
+    userControlled: {
+      transform: Transform,
+      camera: Camera,
+    }[] = ecs.createSelector([Transform, UserControlled, Camera]);
 
     mvMatrix: number[];
     pMatrix: number[];
@@ -88,23 +92,12 @@ const raytraceProvider = (ecs: World, Chunk) => {
     emptyBlock: Vec3 = vec3.create();
     emptyBlockInChunk = { x: 0, y: 0, z: 0 };
 
-    update(delta: number): Array {
+    update(): Array {
       const result = [];
       for (const { id, transform } of this.components) {
-        const userTransform = this.userControlled[0].transform;
-        const v = vec3.fromValues(0, 1, 0);
-        vec3.transformQuat(v, v, userTransform.rotation);
-
-        const v2 = vec3.fromValues(1, 0, 0);
-        vec3.transformQuat(v2, v2, userTransform.rotation);
-
-        const v3 = vec3.fromValues(0, 0, 1);
-        vec3.transformQuat(v3, v3, userTransform.rotation);
-
-        this.trace(userTransform.translation, [-v2[2], -v[2], -v3[2]]);
-        transform.translation[0] = this.block[0];
-        transform.translation[1] = this.block[1];
-        transform.translation[2] = this.block[2];
+        const { camera } = this.userControlled[0];
+        this.trace(camera.worldPosition, camera.sight);
+        vec3.copy(transform.translation, this.block);
         result.push([id, transform]);
       }
 

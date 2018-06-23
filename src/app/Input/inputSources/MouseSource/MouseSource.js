@@ -31,6 +31,7 @@ export default class MouseSource implements InputSource {
     document.addEventListener('pointerlockchange', this.changeTracking.bind(this), false);
     document.addEventListener('mozpointerlockchange', this.changeTracking.bind(this), false);
     document.addEventListener('webkitpointerlockchange', this.changeTracking.bind(this), false);
+    document.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault(), false);
   }
 
   onMove(e: MouseEvent) {

@@ -486,29 +486,31 @@ const chunkProvider = (store) => {
     updateState() {
       // TODO: remove unnesesary checks for chunk existance
       const updateState = (chunk) => {
-        if (chunk && chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL) {
+        if (chunk !== this && chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL) {
           chunk.updateState();
         }
       };
-      if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
-        this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
+      const updateNested = () => {
         updateState(this.westChunk);
         updateState(this.eastChunk);
-
-        if ((this.southChunk !== this) && (this.southChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) {
-          this.southChunk.updateState();
+        updateState(this.southChunk);
+        updateState(this.northChunk);
+      };
+      if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
+        this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
+        updateNested();
+        if (this.southChunk !== this) {
           updateState(this.southChunk.westChunk);
           updateState(this.southChunk.eastChunk);
         }
-        if ((this.northChunk !== this) && (this.northChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) {
-          this.northChunk.updateState();
+        if (this.northChunk !== this) {
           updateState(this.northChunk.westChunk);
           updateState(this.northChunk.eastChunk);
         }
         this.updateState();
       } else if (this.state === CHUNK_STATUS_NEED_LOAD_LIGHT) {
-        // this.state=CHUNK_STATUS_NEED_LOAD_VBO;
-        if (this.haveSurroundingChunks && ((this.westChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
+        if (this.haveSurroundingChunks &&
+          ((this.westChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
           ((this.eastChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
           ((this.southChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
           ((this.northChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
@@ -519,26 +521,20 @@ const chunkProvider = (store) => {
           this.state = CHUNK_STATUS_NEED_LOAD_VBO;
           this.calcGlobalLight();
 
-          updateState(this.westChunk);
-          updateState(this.eastChunk);
-          updateState(this.southChunk);
-          updateState(this.northChunk);
+          updateNested();
 
           this.updateState();
         }
       } else if (this.state === CHUNK_STATUS_NEED_LOAD_VBO) {
         if (this.haveNestedChunks &&
-          ((this.westChunk.state === CHUNK_STATUS_NEED_LOAD_VBO || this.westChunk.state === CHUNK_STATUS_LOADED)) &&
-          ((this.eastChunk.state === CHUNK_STATUS_NEED_LOAD_VBO || this.eastChunk.state === CHUNK_STATUS_LOADED)) &&
-          ((this.southChunk.state === CHUNK_STATUS_NEED_LOAD_VBO || this.southChunk.state === CHUNK_STATUS_LOADED)) &&
-          ((this.northChunk.state === CHUNK_STATUS_NEED_LOAD_VBO || this.northChunk.state === CHUNK_STATUS_LOADED))) {
+          (this.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
+          (this.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
+          (this.southChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
+          (this.northChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) {
           this.calcVBO();
           this.state = CHUNK_STATUS_LOADED;
 
-          updateState(this.westChunk);
-          updateState(this.eastChunk);
-          updateState(this.southChunk);
-          updateState(this.northChunk);
+          updateNested();
         }
       }
     }

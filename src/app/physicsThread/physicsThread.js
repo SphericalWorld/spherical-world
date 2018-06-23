@@ -23,6 +23,7 @@ import Gravity from '../components/Gravity';
 import Velocity from '../components/Velocity';
 import Physics from '../components/Physics';
 import UserControlled from '../components/UserControlled';
+import Camera from '../components/Camera';
 
 import { World } from '../ecs';
 import { THREAD_MAIN } from '../Thread/threadConstants';
@@ -65,6 +66,7 @@ class PhysicsThread {
       Physics,
       Velocity,
       UserControlled,
+      Camera,
     );
     world.registerThread(THREAD_MAIN, self);
     world.registerSystem(new Raytrace(this.terrain));
