@@ -6,7 +6,6 @@ module.exports = function override(config, env) {
   getBabelLoader(config.module.rules).options.presets = [];
   getBabelLoader(config.module.rules).include = [getBabelLoader(config.module.rules).include, path.resolve(__dirname, 'common')];
   // throw 1;
-  config = injectBabelPlugin('babel-plugin-transform-decorators-legacy', config);
   config = injectBabelPlugin('transform-do-expressions', config);
   config.resolve.plugins.splice(
     config.resolve.plugins.indexOf(config.resolve.plugins.find(el => el.constructor.name === 'ModuleScopePlugin')),

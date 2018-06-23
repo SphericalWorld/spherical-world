@@ -11,7 +11,7 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('addons'),
+  document.getElementById('addon-debug'),
 );
 
 // (function () {
