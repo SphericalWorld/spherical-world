@@ -17,7 +17,6 @@ const mapActions = () => ({
 });
 
 const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase) => {
-  @connect(null, mapActions, store)
   class Terrain extends TerrainBase {
     loadChunk: typeof loadChunk;
     loadTerrainMipmap: typeof loadTerrainMipmap;
@@ -197,7 +196,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       }
     }
   }
-  return Terrain;
+  return connect(null, mapActions, store)(Terrain);
 };
 
 /* ::

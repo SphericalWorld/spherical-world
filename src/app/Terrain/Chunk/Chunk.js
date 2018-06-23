@@ -28,7 +28,6 @@ const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
 };
 
 const chunkProvider = (store) => {
-  @connect(mapState, null, store)
   class Chunk extends ChunkBase<Chunk, Terrain> {
     frustum: Frustum;
     foliageTexture: WebGLTexture = null;
@@ -135,8 +134,7 @@ const chunkProvider = (store) => {
       }
     }
   }
-
-  return Chunk;
+  return connect(mapState, null, store)(Chunk);
 };
 
 /* ::

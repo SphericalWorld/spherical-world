@@ -34,7 +34,6 @@ const engineProvider = (
   ecs: World,
   Skybox,
 ) => {
-  @connect(mapState, null, store)
   class Engine {
     ecs: World = ecs;
     lastTime: number = 0;
@@ -127,7 +126,7 @@ const engineProvider = (
       // }
     }
   }
-  return Engine;
+  return connect(mapState, null, store)(Engine);
 };
 
 

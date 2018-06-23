@@ -22,11 +22,11 @@ const resizeViewport = (viewport: Viewport): Viewport => {
     return {
       viewportWidth: gl.drawingBufferWidth,
       viewportHeight: gl.drawingBufferHeight,
-      pMatrix: mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0),  // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
-    }
+      pMatrix: mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0), // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
+    };
   }
   return viewport;
-}
+};
 
 const cameraProvider = (world: World) => {
   class CameraSystem implements System {
@@ -73,7 +73,6 @@ const cameraProvider = (world: World) => {
       // console.log(rotation)
       mat4.fromQuat(camera.mvMatrix, rotation);
       mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - 0.6, -translation[2]]);
-      // console.log(camera.mvMatrix);
       this.cameraMovements.clear();
 
       const sight = vec3.create();

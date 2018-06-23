@@ -14,7 +14,6 @@
     "transform-do-expressions",
     "transform-react-jsx",
     "transform-class-properties",
-    "babel-plugin-transform-decorators-legacy",
     "transform-object-rest-spread"
   ],
 	"only": [".**", "!/node_modules/**"]

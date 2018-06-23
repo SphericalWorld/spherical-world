@@ -14,7 +14,6 @@ const mapState = (state) => {
 };
 
 const terrainProvider = (store, Chunk, TerrainBase) => {
-  @connect(mapState, null, store)
   class Terrain extends TerrainBase {
     playerX: number;
     playerZ: number;
@@ -55,8 +54,7 @@ const terrainProvider = (store, Chunk, TerrainBase) => {
       }
     }
   }
-
-  return Terrain;
+  return connect(mapState, null, store)(Terrain);
 };
 
 /* ::
