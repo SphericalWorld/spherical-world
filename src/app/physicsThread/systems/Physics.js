@@ -1,5 +1,6 @@
 // @flow
 import type { Entity } from '../../ecs/Entity';
+import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
 import Velocity from '../../components/Velocity';
@@ -22,7 +23,8 @@ const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChun
     blockX = blockX >= 0 ? blockX : blockX + 16;
     blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
 
-    if (chunk.getBlock(blockX, Math.floor(translation[1]), blockZ) || 0) {
+    const block = chunk.getBlock(blockX, Math.floor(translation[1]), blockZ);
+    if (block && blocksFlags[block][HAS_PHYSICS_MODEL]) {
       translation[1] = Math.floor(translation[1] + 1);
       velocity.linear[1] = 0;
       return;

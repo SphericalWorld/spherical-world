@@ -28,7 +28,6 @@ const timeProvider = () => {
       this.dayLightLevel = Math.sin(((time % MILLISECONDS_IN_DAY) / MILLISECONDS_IN_DAY) * 2 * Math.PI);
     }
   }
-
   return Time;
 };
 

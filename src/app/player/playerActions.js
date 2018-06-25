@@ -23,20 +23,6 @@ type Direction =
   | typeof DIRECTION_LEFT
   | typeof DIRECTION_RIGHT;
 
-let oldDate = Date.now();
-
-export const movePlayerServer = ({ x, y, z }) => (dispatch) => {
-  const newDate = new Date().getTime();
-  if (newDate > oldDate + 200) {
-    oldDate = newDate;
-    dispatch({
-      type: PLAYER_CHANGE_POSITION,
-      payload: { x, y, z },
-      meta: { api: true },
-    });
-  }
-};
-
 export const loadPlayer = (playerData: Object, mainPlayer: boolean) => ({
   type: PLAYER_LOADED,
   payload: { playerData, mainPlayer },

@@ -127,7 +127,7 @@ const calcRecursion = (
     x: number,
     y: number,
     z: number,
-    limit: number,
+    limit?: number,
   ) => {
     if (!limit) {
       return;

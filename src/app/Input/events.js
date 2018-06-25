@@ -20,6 +20,16 @@ export const INPUT_TYPE_STATE: 1 = 1;
 export const INPUT_TYPE_RANGE: 2 = 2;
 // TODO: move events to separate files
 
+export const CAMERA_MOVED_EVENT = {
+  type: INPUT_TYPE_RANGE,
+  gameEvent: CAMERA_MOVED,
+};
+
+export const CAMERA_UNLOCKED_EVENT = {
+  type: INPUT_TYPE_ACTION,
+  gameEvent: CAMERA_UNLOCKED,
+};
+
 export const PLAYER_MOVE_FORWARD_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_MOVED,

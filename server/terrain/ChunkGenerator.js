@@ -42,7 +42,8 @@ declare class IChunkGenerator {
   static (): IChunkGenerator;
   +seed: number;
   +structures: IGenerator[];
-  +simplexHeightMap: Simplex2D;
+  +simplexHeightMapHills: Simplex2D;
+  +simplexHeightMapMountains: Simplex2D;
   +simplexTemperature: Simplex2D;
   +simplexRainfall: Simplex2D;
   +simplexFoliage: Simplex2D;
@@ -54,21 +55,26 @@ declare class IChunkGenerator {
 
 const ChunkGenerator = ((seed: number) => ({
   seed,
-  simplexHeightMap: createSimplex2D(seed, 128),
-  simplexTemperature: createSimplex2D(seed + 1, BIOME_SIZE),
-  simplexRainfall: createSimplex2D(seed + 2, BIOME_SIZE),
-  simplexFoliage: createSimplex2D(seed + 3),
-  simplexFoliageReeds: createSimplex2D(seed + 3, 64),
-  simplexResourcesCoal: createSimplex3D(seed + 4, 8),
-  simplexResourcesIron: createSimplex3D(seed + 5, 8),
-  simplexResourcesClay: createSimplex2D(seed + 6, 8),
-  simplexCaves: createSimplex3D(seed + 7, 16),
-  generateTree: generateTree(seed + 8),
-  structures: [generateTreasury(seed + 9)],
+  simplexHeightMapHills: createSimplex2D(seed, 128),
+  simplexHeightMapMountains: createSimplex2D(seed + 1, 256),
+  simplexTemperature: createSimplex2D(seed + 2, BIOME_SIZE),
+  simplexRainfall: createSimplex2D(seed + 3, BIOME_SIZE),
+  simplexFoliage: createSimplex2D(seed + 4),
+  simplexFoliageReeds: createSimplex2D(seed + 5, 64),
+  simplexResourcesCoal: createSimplex3D(seed + 6, 8),
+  simplexResourcesIron: createSimplex3D(seed + 7, 8),
+  simplexResourcesClay: createSimplex2D(seed + 8, 8),
+  simplexCaves: createSimplex3D(seed + 9, 16),
+  generateTree: generateTree(seed + 10),
+  structures: [generateTreasury(seed + 11)],
 }): Class<IChunkGenerator>);
 
-const generateHeightMap = (simplex: Simplex2D, x: number, z: number) => (el, i, j) =>
-  Math.floor(62 + (simplex(x + j, z + i) * 12));
+const generateHeightMap = (hills: Simplex2D, mountains: Simplex2D, x: number, z: number) =>
+  (el, i, j) =>
+    Math.max(
+      Math.floor(62 + (hills(x + j, z + i) * 12)),
+      Math.floor((62 + (((Math.abs(mountains(x + j, z + i)) ** 4)) * 60)) - 12),
+    );
 
 const generateRainfall = (simplex: Simplex2D, x: number, z: number) => (el, i, j) =>
   Math.floor(128 + (simplex(x + j, z + i) * 128));
@@ -196,7 +202,12 @@ const generateStructures = (generator: ChunkGenerator) =>
 export const generate = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> => {
   const { x, z } = chunk;
   const data = ChunkMap.of(0);
-  const heightMap = data.map(generateHeightMap(generator.simplexHeightMap, x, z));
+  const heightMap = data.map(generateHeightMap(
+    generator.simplexHeightMapHills,
+    generator.simplexHeightMapMountains,
+    x,
+    z,
+  ));
   const rainfall = data.map(generateRainfall(generator.simplexRainfall, x, z));
   const temperature = data.map(generateTemperature(generator.simplexTemperature, x, z));
   return pipeMonadic(

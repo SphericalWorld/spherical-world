@@ -24,6 +24,7 @@ import { drawProvider } from './app/systems';
 import dayNightCycleProvider from './app/systems/DayNightCycle';
 import cameraSystemProvider from './app/systems/Camera';
 import hudSystemProvider from './app/systems/Hud';
+import networkProvider from './app/systems/Network';
 
 import timeProvider from './app/Time/Time';
 import { World } from './app/ecs';
@@ -151,7 +152,7 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const DayNightCycle = dayNightCycleProvider(world, time);
   const CameraSystem = cameraSystemProvider(world);
   const HudSystem = hudSystemProvider(world, store);
-
+  const NetworkSystem = networkProvider(world, network);
   const Chunk = chunkProvider(store);
   const TerrainBase = terrainBaseProvider(Chunk);
   const terrain = getTerrain(store, Chunk, network, textureLibrary, materialLibrary, TerrainBase);
@@ -168,6 +169,7 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
     new CameraSystem(),
     new Draw(),
     new HudSystem(),
+    new NetworkSystem(),
   ]);
 
   return Main(store, network, Player, ResourceLoader, SocketHandlers, world, Skybox);

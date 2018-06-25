@@ -31,3 +31,4 @@ export const KEY_ARROW_RIGHT: 'ArrowRight' = 'ArrowRight';
 export const KEY_ARROW_LEFT: 'ArrowLeft' = 'ArrowLeft';
 export const KEY_ARROW_DOWN: 'ArrowDown' = 'ArrowDown';
 export const KEY_ARROW_UP: 'ArrowUp' = 'ArrowUp';
+export const KEY_SHIFT_LEFT: 'ShiftLeft' = 'ShiftLeft';

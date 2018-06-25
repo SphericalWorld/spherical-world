@@ -1,7 +1,7 @@
 // @flow
 // import GlObject from '../engine/glObject';
 // import { connect } from '../util';
-// import { loadPlayer, movePlayerServer } from './playerActions';
+// import { loadPlayer } from './playerActions';
 // import { gl } from '../engine/glEngine';
 //
 // // import BlockPicker from './BlockPicker';
@@ -17,14 +17,12 @@
 //
 // const mapActions = () => ({
 //   loadPlayer,
-//   movePlayerServer,
 // });
 //
 // const playerProvider = (store, BlockRemover, BlockPicker, Inventory) => {
 //   @connect(mapState, mapActions, store)
 //   class Player {
 //     loadPlayer: typeof loadPlayer;
-//     movePlayerServer: typeof movePlayerServer;
 //
 //     id: number;
 //     x: number = 0.0;
@@ -140,15 +138,6 @@
 //       clearInterval(this.removingInterval);
 //       clearTimeout(this.removingTimeout);
 //       delete this.constructor.instances[this.id];
-//     }
-//
-//     componentDidUpdate(prevState: Player) {
-//       this.movePlayerServer({
-//         x: this.x,
-//         y: this.y,
-//         z: this.z,
-//         id: this.id,
-//       });
 //     }
 //   }
 //
