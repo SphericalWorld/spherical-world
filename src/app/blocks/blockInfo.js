@@ -68,7 +68,7 @@ for (const block of blocks) {
   blocksFlags[block.id][4] = block.selfTransparent ? 1 : 0;
 
 
-  blocksInfo[block.id] = [block.fallSpeedCap, block.fallAcceleration, block]; // TODO remove block from array of number
+  blocksInfo[block.id] = block; // TODO remove block from array of number
 
   blocksTextureInfo[block.id][0] = block.textures.top;
   blocksTextureInfo[block.id][1] = block.textures.bottom;

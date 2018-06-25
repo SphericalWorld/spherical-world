@@ -6,7 +6,7 @@ type MapActions = () => {| [string]: Function |};
 export default function connect(mapState: ?Function, mapActions: ?MapActions, store: Object) {
   return function decorator(Target: Function) {
     if (!store) {
-      return Target;
+      throw new Error('store is mandatory parameter');
     }
     class Connected extends Target {
       constructor(...params) {

@@ -1,5 +1,4 @@
 // @flow
-import { mat4, vec3 } from 'gl-matrix';
 import { MOUSE_BUTTON_PRESSED, MOUSE_BUTTON_RELEASED } from './mouseConstants';
 import { playerChangeRotation } from '../player/playerActions';
 

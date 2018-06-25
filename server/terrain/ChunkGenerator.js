@@ -24,6 +24,7 @@ import {
   COAL_ORE,
   IRON_ORE,
   WATER,
+  TORCH,
   TALL_GRASS,
   FLOWER_YELLOW,
   FLOWER_RED,
@@ -157,7 +158,8 @@ const generateHillsBiome = (generator: ChunkGenerator): ChunkLiftIO => ({
     if (s < 0) AIR;
     else if (s < 0.9) TALL_GRASS;
     else if (s < 0.93) FLOWER_YELLOW;
-    else if (s < 0.99) FLOWER_RED;
+    else if (s < 0.95) FLOWER_RED;
+    else if (s < 0.99) TORCH;
     else AIR;
   });
   if (s > 0.99) generator.generateTree(chunk, j, height, i).run();

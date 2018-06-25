@@ -60,14 +60,22 @@ const mapState = (state, chunk) => {
   });
 };
 
+const getColorComponent = (light, c, cf, s1, s1f, s2, s2f, count, halfCount, shift) =>
+  0.8 ** (halfCount - (((
+    (light >>> shift) & 0xF) +
+    (s1f ? ((s1 >>> shift) & 0xF) : 0) +
+    (s2f ? ((s2 >>> shift) & 0xF) : 0) +
+    (cf ? ((c >>> shift) & 0xF) : 0)
+  ) / count));
+
 const getLightColor = (light, c, cf, s1, s1f, s2, s2f) => {
   const count = 1 + s1f + s2f + cf;
   const halfCount = 17 - (count / 2);
   return [
-    0.8 ** (halfCount - ((((light >>> 12) & 0xF) + (s1f ? ((s1 >>> 12) & 0xF) : 0) + (s2f ? ((s2 >>> 12) & 0xF) : 0) + (cf ? ((c >>> 12) & 0xF) : 0)) / count)),
-    0.8 ** (halfCount - ((((light >>> 8) & 0xF) + (s1f ? ((s1 >>> 8) & 0xF) : 0) + (s2f ? ((s2 >>> 8) & 0xF) : 0) + (cf ? ((c >>> 8) & 0xF) : 0)) / count)),
-    0.8 ** (halfCount - ((((light >>> 4) & 0xF) + (s1f ? ((s1 >>> 4) & 0xF) : 0) + (s2f ? ((s2 >>> 4) & 0xF) : 0) + (cf ? ((c >>> 4) & 0xF) : 0)) / count)),
-    0.8 ** (halfCount - (((light & 0xF) + (s1f ? (s1 & 0xF) : 0) + (s2f ? (s2 & 0xF) : 0) + (cf ? (c & 0xF) : 0)) / count)),
+    getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 12),
+    getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 8),
+    getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 4),
+    getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 0),
   ];
 };
 
@@ -227,7 +235,10 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
 
 const chunkProvider = (store) => {
   class Chunk extends ChunkWithData<Chunk, Terrain> {
-    blocks: Uint8Array;
+    blocks: Uint8Array = new Uint8Array(this.height * 16 * 16);
+    flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
+    light: Uint16Array = new Uint16Array(this.height * 16 * 16);
+
     blocksTextureInfo = blocksTextureInfo;
     blocksFlags = blocksFlags;
     blocksInfo = blocksInfo;
@@ -240,9 +251,6 @@ const chunkProvider = (store) => {
       this.rainfallData = new Uint8Array(256);
       this.temperatureData = new Uint8Array(256);
 
-      this.blocks = new Uint8Array(this.height * 16 * 16);
-      this.lightData = new ArrayBuffer(this.height * 16 * 16 * 2);
-      this.light = new Uint16Array(this.lightData);
       this.minimapBuffer = new ArrayBuffer(256 * 3);
       this.minimap = new Uint8Array(this.minimapBuffer);
 
@@ -260,19 +268,19 @@ const chunkProvider = (store) => {
     }
 
     calcRecursionRed(x: number, y: number, z: number) {
-      calcRecursionRed(this, x, y, z, 300);
+      calcRecursionRed(this, x, y, z);
     }
 
     calcRecursionGreen(x: number, y: number, z: number) {
-      calcRecursionGreen(this, x, y, z, 300);
+      calcRecursionGreen(this, x, y, z);
     }
 
     calcRecursionBlue(x: number, y: number, z: number) {
-      calcRecursionBlue(this, x, y, z, 300);
+      calcRecursionBlue(this, x, y, z);
     }
 
     calcGlobalRecursion(x: number, y: number, z: number) {
-      calcRecursionGlobal(this, x, y, z, 300);
+      calcRecursionGlobal(this, x, y, z);
     }
 
     calcRecursionRedRemove(x: number, y: number, z: number) {
@@ -294,23 +302,21 @@ const chunkProvider = (store) => {
     calcVBO() {
       const buffers = [createBuffers(), createBuffers(), createBuffers()];
 
-      for (let i = 1; i < this.height; i += 1) {
-        for (let j = 0; j < 16; j += 1) {
-          for (let k = 0; k < 16; k += 1) {
-            const index = getIndex(j, i, k);
-            if (this.blocks[index]) {
-              const block = this.blocks[index];
-              if (!blocksFlags[block][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
-                this.createTopPlane(block, i, j, k, buffers);
-                this.createBottomPlane(block, i, j, k, buffers);
-                this.createNorthPlane(block, i, j, k, buffers);
-                this.createSouthPlane(block, i, j, k, buffers);
-                this.createWestPlane(block, i, j, k, buffers);
-                this.createEastPlane(block, i, j, k, buffers);
-              } else {
-                buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block][2].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
-              }
-            }
+      for (let index = SLICE; index < this.height * SLICE; index += 1) {
+        const i = index >>> 8;
+        const j = index & 0xF;
+        const k = (index >>> 4) & 0xF;
+        const block = this.blocks[index];
+        if (block) {
+          if (!blocksFlags[block][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
+            this.createTopPlane(block, i, j, k, buffers);
+            this.createBottomPlane(block, i, j, k, buffers);
+            this.createNorthPlane(block, i, j, k, buffers);
+            this.createSouthPlane(block, i, j, k, buffers);
+            this.createWestPlane(block, i, j, k, buffers);
+            this.createEastPlane(block, i, j, k, buffers);
+          } else {
+            buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
           }
         }
       }
@@ -431,8 +437,8 @@ const chunkProvider = (store) => {
 
     putBlock(x: number, y: number, z: number, value: number, plane) {
       let placed = true;
-      if (this.blocksInfo[value][2]) {
-        placed = this.blocksInfo[value][2].putBlock(this, x, y, z, value, plane);
+      if (this.blocksInfo[value]) {
+        placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
       } else {
         this.blocks[x + z * 16 + y * 256] = value;
       }
@@ -530,7 +536,13 @@ const chunkProvider = (store) => {
           (this.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
           (this.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
           (this.southChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
-          (this.northChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) {
+          (this.northChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
+          //  &&
+          // ((this.southChunk.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
+          // ((this.southChunk.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
+          // ((this.northChunk.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
+          // ((this.northChunk.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO))
+        ) {
           this.calcVBO();
           this.state = CHUNK_STATUS_LOADED;
 
@@ -539,9 +551,10 @@ const chunkProvider = (store) => {
       }
     }
   }
-
-  return connect(mapState, null, store)(Chunk);
+  return Chunk;
+  // return connect(mapState, null, store)(Chunk);
 };
+
 
 /* ::
 export const Chunk = chunkProvider();

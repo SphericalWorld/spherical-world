@@ -24,7 +24,7 @@ const ModelComponent = () => ({
       colorBuffer,
       globalColorBuffer,
       blockDataBuffer,
-      vertexCount
+      vertexCount,
     },
   ) {
     const [r, g, b, sunlight] = getLight(chunk, x, y, z);

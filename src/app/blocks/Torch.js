@@ -1,13 +1,12 @@
 // @flow
 import { mat4, vec3 } from 'gl-matrix';
 import model from '../../models/torch.json';
-import ModelComponent, { getLight } from './components/ModelComponent';
+import { getLight } from './components/ModelComponent';
 import BasePropertiesComponent from './components/BasePropertiesComponent';
 
 const Torch = () => Object.assign(
   {},
   BasePropertiesComponent(),
-  ModelComponent(),
   (() => {
     const torches = [[], [], [], [], [], []];
     const vec = [0.0, 0.0, 0.0];
@@ -74,7 +73,7 @@ const Torch = () => Object.assign(
         colorBuffer,
         globalColorBuffer,
         blockDataBuffer,
-        vertexCount
+        vertexCount,
       },
     ) {
       const [r, g, b, sunlight] = getLight(chunk, x, y, z);
@@ -98,7 +97,7 @@ const Torch = () => Object.assign(
     },
 
     putBlock(chunk, x, y, z, value, plane) {
-      chunk.flags[x + z * 16 + y * 256] = this.getFlags(plane);
+      chunk.blocksFlags[x + z * 16 + y * 256] = this.getFlags(plane);
       chunk.blocks[x + z * 16 + y * 256] = value;
       return true;
     },

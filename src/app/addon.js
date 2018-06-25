@@ -9,7 +9,6 @@ const addonProvider = store => class Addon {
     this.mainNode.setAttribute('id', `addon-${this.name}`);
 
     this.scriptsNode = document.createElement('div');
-    this.scriptsNode.setAttribute('id', `addon-scripts-${this.name}`);
 
     this.mainNode.appendChild(this.scriptsNode);
 

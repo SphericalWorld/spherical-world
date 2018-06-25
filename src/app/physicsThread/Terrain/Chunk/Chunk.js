@@ -74,8 +74,8 @@ const chunkProvider = (store) => {
 
     putBlock(x: number, y: number, z: number, value: number, plane: number) {
       let placed = true;
-      if (this.blocksInfo[value][2]) {
-        placed = this.blocksInfo[value][2].putBlock(this, x, y, z, value, plane);
+      if (this.blocksInfo[value]) {
+        placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
       } else {
         this.blocks[x + z * 16 + y * 256] = value;
       }
@@ -90,8 +90,8 @@ const chunkProvider = (store) => {
       this.state = CHUNK_STATUS_NEED_LOAD_VBO;
     }
   }
-
-  return connect(mapState, null, store)(Chunk);
+  return Chunk;
+  // return connect(mapState, null, store)(Chunk);
 };
 
 /* ::

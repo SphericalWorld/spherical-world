@@ -62,32 +62,26 @@ class GlTextureLibrary {
     return makeTexture(this.textureCanvas, gl.TEXTURE_2D, 'RGBA');
   }
 
-  makeTextureAtlas(): Texture {
+  makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {
     const tileSize = 64;
     this.textureCanvas.width = 1024;
     this.textureCanvas.height = 1024;
     this.ctx.fillStyle = '#FFF0';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (const texture of this.textures.values()) {
-      if (typeof texture.atlasId === 'number') {
+      if (predicate(texture)) {
         drawImage(this.ctx, texture.image, ((texture.atlasId % 16) * tileSize), tileSize * (Math.floor(texture.atlasId / 16)), 64, 64, 0, false, true);
       }
     }
-    return Texture.createFromCanvas({ canvas: this.textureCanvas, name: 'terrain' });
+    return Texture.createFromCanvas({ canvas: this.textureCanvas, name });
+  }
+
+  makeTextureAtlas(): Texture {
+    return this.makeTextureAtlasBase('terrain', texture => typeof texture.atlasId === 'number');
   }
 
   makeTextureAtlasOverlay(): Texture {
-    const tileSize = 64;
-    this.textureCanvas.width = 1024;
-    this.textureCanvas.height = 1024;
-    this.ctx.fillStyle = '#FFF0';
-    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    for (const texture of this.textures.values()) {
-      if (typeof texture.atlasId === 'number' && texture.meta && texture.meta.overlay) {
-        drawImage(this.ctx, texture.image, ((texture.atlasId % 16) * tileSize), tileSize * (Math.floor(texture.atlasId / 16)), 64, 64, 0, false, true);
-      }
-    }
-    return Texture.createFromCanvas({ canvas: this.textureCanvas, name: 'terrainOverlay' });
+    return this.makeTextureAtlasBase('terrainOverlay', texture => typeof texture.atlasId === 'number' && texture.meta && texture.meta.overlay);
   }
 
   makeChunkMinimap(data) {
@@ -172,8 +166,9 @@ class GlTextureLibrary {
     }
     console.log(atlas);
 
+    return Texture.createFromCanvas({ canvas: this.textureCanvas, name: 'animatedTexture' });
     // terrainAnimated
-    return atlas;
+    // return atlas;
   }
 
   get(textureName: string): Texture {

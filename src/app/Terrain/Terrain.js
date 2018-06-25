@@ -63,11 +63,11 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 
       gl.activeTexture(gl.TEXTURE3);
-      gl.bindTexture(gl.TEXTURE_2D, this.overlayTexture); // TODO remove
+      // gl.bindTexture(gl.TEXTURE_2D, this.overlayTexture); // TODO remove
 
-      // gl.bindTexture(gl.TEXTURE_2D, this.app.glTextureLibrary.textures.get('terrainAnimated').glTexture.textures[0]);
+      gl.bindTexture(gl.TEXTURE_2D, this.animatedTexture);
 
-      gl.bindTexture(gl.TEXTURE_2D, this.texture);
+      // gl.bindTexture(gl.TEXTURE_2D, this.texture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 

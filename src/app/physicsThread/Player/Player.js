@@ -76,9 +76,9 @@ const playerProvider = (store, Chunk, Inventory) => {
       }
       let fall = !chunk.blocksFlags[chunk.getBlock(blockX, Math.floor(this.y) - direction, blockZ)][2];
 
-      const [fallSpeedCap, acceleration] = chunk.blocksInfo[chunk.getBlock(blockX, Math.floor(this.y), blockZ)];
+      const { fallSpeedCap, acceleration } = chunk.blocksInfo[chunk.getBlock(blockX, Math.floor(this.y), blockZ)];
 
-      const testFall = (x, y, z) => !chunk.blocksInfo[chunk.at(x, y, z)][2];
+      const testFall = (x, y, z) => !chunk.blocksInfo[chunk.at(x, y, z)];
 
       if (xInBlock >= 0.8) {
         fall = fall && testFall(blockX + 1, Math.floor(this.y) - direction, blockZ);

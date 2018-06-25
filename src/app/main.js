@@ -1,7 +1,7 @@
 // @flow
 import { initWebGL } from './engine/glEngine';
 import Model from './engine/Model';
-import HUD from './hud/hud';
+import HUD from './hud/HudApi';
 import { connect } from './util';
 // import playerModel from '../models/player.json';
 import {

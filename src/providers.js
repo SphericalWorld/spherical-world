@@ -102,6 +102,7 @@ const getTerrain = (store, Chunk, network, textureLibrary, materialLibrary, Terr
   const terrain = new Terrain();
   terrain.texture = textureLibrary.get('terrain').glTexture;
   terrain.overlayTexture = textureLibrary.get('terrainOverlay').glTexture;
+  terrain.animatedTexture = textureLibrary.get('animatedTexture').glTexture;
 
   terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
   terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());

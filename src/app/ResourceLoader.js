@@ -27,16 +27,16 @@ const resourceLoaderProvider = Addon => class ResourceLoader {
     return Promise.all(addonsToLoad.map(el => this.loadAddon(el)));
   }
 
-  async loadAddonScripts(addonName: string, scripts, tag) {
-    const indexFile = await (await fetch(`${this.network.addonServerInfo.host}/addons/${addonName}/${scripts}`)).text();
+  async loadAddonScripts(addonName: string, bundlePath: string, tag) {
+    const scriptBundle = await (await fetch(`${this.network.addonServerInfo.host}/addons/${addonName}/${bundlePath}`)).text();
     return new Promise((resolve) => {
       const s = document.createElement('script');
       s.type = 'text/javascript';
       s.id = addonName;
-      const script = URL.createObjectURL(new Blob([`${indexFile}//@ sourceURL=${s.id}`], { type: 'text/javascript' }));
+      const script = URL.createObjectURL(new Blob([`${scriptBundle}//@ sourceURL=${s.id}`], { type: 'text/javascript' }));
       s.onload = function onload() {
         URL.revokeObjectURL(script);
-        resolve(indexFile);
+        resolve(scriptBundle);
       };
       s.src = script;
       tag.appendChild(s);

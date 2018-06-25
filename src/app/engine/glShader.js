@@ -53,6 +53,8 @@ class GlShaderProgram {
   vertexShader: GlVertexShader;
   fragmentShader: GlFragmentShader;
   program: WebGLProgram;
+  uPMatrix: WebGLUniformLocation;
+  uMVMatrix: WebGLUniformLocation;
 
   constructor() {
     this.program = gl.createProgram();

@@ -35,7 +35,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
     mvMatrixStack = [];
     mvMatrix: Mat4;
     pMatrix: Mat4;
-    currentShader: WebGLProgram;
+    currentShader: GlShaderProgram;
     skyColorGradient: Gradient = new Gradient([[0, 0x8cd3ff], [33, 0xffe899], [53, 0xff8b56], [87, 0x1C1C7C], [100, 0x1a1a1a]]);
     lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
 
@@ -54,12 +54,10 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       skyColor = [((skyColor & 0xFF0000) >> 16) / 256, ((skyColor & 0xFF00) >> 8) / 256, (skyColor & 0xFF) / 256, (time.dayLightLevel + 1) / 2];
 
       this.setMatrixUniforms();
-      this.dayTime = Math.asin(-1);
 
-      const dayLightLevel = (Math.sin(this.dayTime) + 1) * 50;
-      const color = Math.floor(this.lightColorGradient.getAtPosition(dayLightLevel));
+      const color = Math.floor(this.lightColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
       const globalColor = [((color & 0xFF0000) >> 16) / 256, ((color & 0xFF00) >> 8) / 256, (color & 0xFF) / 256, 1];
-
+      // console.log(globalColor)s
       terrain.draw(skyColor, globalColor, this.pMatrix, this.mvMatrix);
       const draw = (position: Transform, visual: Visual): void => {
         this.useShader(visual.glObject.material.shader);
@@ -127,9 +125,9 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
     }
 
     useShader(shader: GlShaderProgram) {
-      // if (this.currentShader === shader) {
-      //   return;
-      // }
+      if (this.currentShader === shader) {
+        return;
+      }
       // console.log(shader.program)
       gl.useProgram(shader.program);
       this.currentShader = shader;

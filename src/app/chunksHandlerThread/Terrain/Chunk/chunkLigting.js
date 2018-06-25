@@ -12,48 +12,68 @@ import {
   CHUNK_STATUS_NEED_LOAD_VBO,
   CHUNK_STATUS_LOADED,
 } from '../../../Terrain/Chunk/chunkConstants';
+import { Chunk } from './Chunk';
 
 const calcRecursion = (
   mask: number,
   reversedMask: number,
   dec: number,
-  type: number, // TODO boolean?
+  mode: number, // TODO boolean?
 ) => {
   const calcCurrent = (
-    chunk,
+    chunk: Chunk,
     x: number,
     y: number,
     z: number,
     index,
   ): number => (chunk.light[index] & reversedMask) | ((Math.max(
-    (type ? 0 : (chunk.light[index] & mask)) + dec,
-    ((z < 15) ? chunk.light[index + ROW] : chunk.eastChunk.light[index - ROW_NESTED_CHUNK]),
-    ((z > 0) ? chunk.light[index - ROW] : chunk.westChunk.light[index + ROW_NESTED_CHUNK]),
-    ((x < 15) ? chunk.light[index + COLUMN] : chunk.southChunk.light[index - COLUMN_NESTED_CHUNK]),
-    ((x > 0) ? chunk.light[index - COLUMN] : chunk.northChunk.light[index + COLUMN_NESTED_CHUNK]),
-    chunk.light[index + SLICE],
-    chunk.light[index - SLICE],
-  ) & mask) - dec);
+    dec,
+    ((z < 15) ? chunk.light[index + ROW] : chunk.eastChunk.light[index - ROW_NESTED_CHUNK]) & mask,
+    ((z > 0) ? chunk.light[index - ROW] : chunk.westChunk.light[index + ROW_NESTED_CHUNK]) & mask,
+    ((x < 15) ? chunk.light[index + COLUMN] : chunk.southChunk.light[index - COLUMN_NESTED_CHUNK]) & mask,
+    ((x > 0) ? chunk.light[index - COLUMN] : chunk.northChunk.light[index + COLUMN_NESTED_CHUNK]) & mask,
+    chunk.light[index + SLICE] & mask,
+    chunk.light[index - SLICE] & mask,
+  )) - dec);
 
-  const updateIfLight = (
+  const updateIfLightAdd = (
     index,
     lightTmp,
-    chunk,
+    chunk: Chunk,
     ...params
   ) => {
     if (lightTmp > (chunk.light[index] & mask)) {
+      if (chunk.state === CHUNK_STATUS_LOADED) {
+        chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
+      }
+      chunk.light[index] = (chunk.light[index] & reversedMask) | lightTmp;
       calcRecursionInternal(chunk, ...params);
     }
   };
 
+  const updateIfLightRemove = (
+    index,
+    lightTmp,
+    chunk: Chunk,
+    ...params
+  ) => {
+    if (lightTmp > (chunk.light[index] & mask)) {
+      calcRecursionRemoveInternal(chunk, ...params);
+    }
+  };
+
+  const updateIfLight = mode
+    ? updateIfLightAdd
+    : updateIfLightRemove;
+
   const calcNear = (
-    chunk,
+    chunk: Chunk,
     x: number,
     y: number,
     z: number,
-    limit: number,
     index,
     lightTmp,
+    limit: number,
   ) => {
     if (z < 15) {
       updateIfLight(index + ROW, lightTmp, chunk, x, y, z + 1, limit);
@@ -89,7 +109,21 @@ const calcRecursion = (
   };
 
   const calcRecursionInternal = (
-    chunk,
+    chunk: Chunk,
+    x: number,
+    y: number,
+    z: number,
+  ) => {
+    const index = getIndex(x, y, z);
+    if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+      chunk.light[index] &= reversedMask;
+    } else {
+      calcNear(chunk, x, y, z, index, (chunk.light[index] & mask) - dec);
+    }
+  };
+
+  const calcRecursionRemoveInternal = (
+    chunk: Chunk,
     x: number,
     y: number,
     z: number,
@@ -99,32 +133,23 @@ const calcRecursion = (
       return;
     }
     const index = getIndex(x, y, z);
-
-    if (type) {
-      const lightTmp = (chunk.light[index] & mask);
-      if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
-        chunk.light[index] &= reversedMask;
-      } else {
-        chunk.light[index] = calcCurrent(chunk, x, y, z, index);
-        if (chunk.state === CHUNK_STATUS_LOADED) {
-          chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
-        }
-      }
-      if (((chunk.light[index] & mask)) !== lightTmp) {
-        calcNear(chunk, x, y, z, limit - 1, index, chunk.light[index] & mask);
-      }
-    } else if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+    const lightTmp = chunk.light[index];
+    if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
       chunk.light[index] &= reversedMask;
     } else {
       chunk.light[index] = calcCurrent(chunk, x, y, z, index);
       if (chunk.state === CHUNK_STATUS_LOADED) {
         chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
       }
-      const lightTmp = (chunk.light[index] & mask) - dec;
-      calcNear(chunk, x, y, z, limit - 1, index, lightTmp);
+    }
+    if (chunk.light[index] !== lightTmp) {
+      calcNear(chunk, x, y, z, index, chunk.light[index] & mask, limit - 1);
     }
   };
-  return calcRecursionInternal;
+
+  return mode
+    ? calcRecursionInternal
+    : calcRecursionRemoveInternal;
 };
 
 export const calcRecursionRedRemove = calcRecursion(0xF000, 0x0FFF, 0x1000, 0);
