@@ -233,6 +233,8 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
   buffer.vertexCount += 4;
 };
 
+type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
+
 const chunkProvider = (store) => {
   class Chunk extends ChunkWithData<Chunk, Terrain> {
     blocks: Uint8Array = new Uint8Array(this.height * 16 * 16);
@@ -242,6 +244,13 @@ const chunkProvider = (store) => {
     blocksTextureInfo = blocksTextureInfo;
     blocksFlags = blocksFlags;
     blocksInfo = blocksInfo;
+
+    createTopPlane: CreatePlane;
+    createBottomPlane: CreatePlane;
+    createNorthPlane: CreatePlane;
+    createSouthPlane: CreatePlane;
+    createWestPlane: CreatePlane;
+    createEastPlane: CreatePlane;
 
     constructor(terrain: Terrain, x: number, z: number) {
       super(terrain, x, z);
@@ -308,15 +317,15 @@ const chunkProvider = (store) => {
         const k = (index >>> 4) & 0xF;
         const block = this.blocks[index];
         if (block) {
-          if (!blocksFlags[block][HAS_GRAPHICS_MODEL]) { // TODO: MODEL
+          if (typeof this.blocksInfo[block].renderToChunk === 'function') { // TODO: MODEL
+            buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
+          } else {
             this.createTopPlane(block, i, j, k, buffers);
             this.createBottomPlane(block, i, j, k, buffers);
             this.createNorthPlane(block, i, j, k, buffers);
             this.createSouthPlane(block, i, j, k, buffers);
             this.createWestPlane(block, i, j, k, buffers);
             this.createEastPlane(block, i, j, k, buffers);
-          } else {
-            buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
           }
         }
       }

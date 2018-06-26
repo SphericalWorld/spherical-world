@@ -44,7 +44,7 @@ const blocks = [
 const blocksTextureInfo = createArray(256, () => (new Uint8Array(6)));
 const blocksFlags = createArray(256, () => (new Uint8Array(5)));
 const bufferInfo = createArray(256, () => createArray(6, 0));
-const blocksInfo = createArray(256, () => createArray(3, 0));
+const blocksInfo = createArray(256, {});
 
 export const LIGHT_TRANSPARENT: 0 = 0;
 export const SIGHT_TRANSPARENT: 1 = 1;
@@ -68,7 +68,7 @@ for (const block of blocks) {
   blocksFlags[block.id][4] = block.selfTransparent ? 1 : 0;
 
 
-  blocksInfo[block.id] = block; // TODO remove block from array of number
+  blocksInfo[block.id] = block;
 
   blocksTextureInfo[block.id][0] = block.textures.top;
   blocksTextureInfo[block.id][1] = block.textures.bottom;
