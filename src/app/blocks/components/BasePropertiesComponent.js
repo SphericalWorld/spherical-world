@@ -1,5 +1,15 @@
 // @flow
 import { getIndex } from '../../../../common/chunk';
+import identity from '../../../../common/fp/identity';
+import { SLICE } from '../../Terrain/Chunk/ChunkBase';
+
+const putBlock = (chunk, x: number, y: number, z: number, value: number, plane: number) => {
+  const index = getIndex(x, y, z);
+  chunk.flags[index] = this.getFlags(plane);
+  if ((y !== 0) && (chunk.blocks[index - SLICE] !== 128)) {
+    chunk.blocks[index] = value;
+  }
+};
 
 const BasePropertiesComponent = () => ({
   fallSpeedCap: 0,
@@ -20,17 +30,8 @@ const BasePropertiesComponent = () => ({
     west: 0,
     east: 0,
   },
-
-  putBlock(chunk, x, y, z, value, plane) {
-    chunk.flags[getIndex(x, y, z)] = this.getFlags(plane);
-    if ((y !== 0) && (chunk.blocks[x + z * 16 + (y - 1) * 256] !== 128)) {
-      chunk.blocks[x + z * 16 + y * 256] = value;
-    }
-  },
-
-  getFlags(plane) {
-    return plane;
-  },
+  putBlock,
+  getFlags: identity,
 });
 
 export default BasePropertiesComponent;

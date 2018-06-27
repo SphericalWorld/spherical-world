@@ -1,6 +1,6 @@
 // @flow
 import Material from '../engine/Material';
-import TextureLibrary from '../engine/TextureLibrary';
+import type TextureLibrary from '../engine/TextureLibrary';
 
 const skyboxProvider = (textureLibrary: TextureLibrary, shaderLibrary) =>
   new Material({

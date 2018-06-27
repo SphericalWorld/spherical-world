@@ -237,7 +237,7 @@ type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, 
 
 const chunkProvider = (store) => {
   class Chunk extends ChunkWithData<Chunk, Terrain> {
-    blocks: Uint8Array = new Uint8Array(this.height * 16 * 16);
+    blocks: Uint8Array;
     flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
     light: Uint16Array = new Uint16Array(this.height * 16 * 16);
 
@@ -449,13 +449,11 @@ const chunkProvider = (store) => {
       if (this.blocksInfo[value]) {
         placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
       } else {
-        this.blocks[x + z * 16 + y * 256] = value;
+        this.blocks[getIndex(x, y, z)] = value;
       }
       if (placed) {
-        if (!this.blocksFlags[this.blocks[x + z * 16 + y * 256]][0]) {
-          this.calcGlobalRecursionRemove(x, y, z);
-          y -= 1;
-          while ((y > -1) && (!this.blocks[x + z * 16 + y * 256])) {
+        if (!this.blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
+          while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
             this.calcGlobalRecursionRemove(x, y, z);
             y -= 1;
           }

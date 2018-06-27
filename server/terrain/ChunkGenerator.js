@@ -87,7 +87,7 @@ type ChunkLiftIO = ({ chunk: Chunk, i: number, j: number, height: number }) => I
 const generateCaves = (generator: ChunkGenerator): ChunkLiftIO => ({
   chunk, i, j, height, chunk: { x, z },
 }) => rangeIO(0, height, (k) => {
-  chunk.setAt(j, k, i, do {
+  chunk.setUnsafe(j, k, i, do {
     if (generator.simplexCaves(x + j, z + i, k) > 0.6) AIR;
     else STONE;
   });
@@ -107,7 +107,7 @@ const generateBiomeData: ChunkLiftIO = ({
 
 const generateWater: ChunkLiftIO = ({
   chunk, i, j, height,
-}) => rangeIO(height + 1, WATER_LEVEL, k => chunk.setAt(j, k, i, WATER));
+}) => rangeIO(height + 1, WATER_LEVEL, k => chunk.setUnsafe(j, k, i, WATER));
 
 const generateResources = (generator: ChunkGenerator): ChunkLiftIO => ({
   chunk, i, j, height, chunk: { data, x, z },
@@ -122,7 +122,7 @@ const generateResources = (generator: ChunkGenerator): ChunkLiftIO => ({
     });
   });
   if (height < WATER_LEVEL) {
-    chunk.setAt(j, height, i, do {
+    chunk.setUnsafe(j, height, i, do {
       if (height < 62 && generator.simplexResourcesClay(x + j, z + i) > 0.8) CLAY;
       else SAND;
     });
@@ -136,9 +136,9 @@ const generateReeds = ({
   (chunk.at(j, height, i + 1) === WATER) ||
   (chunk.at(j - 1, height, i) === WATER) ||
   (chunk.at(j + 1, height, i) === WATER)) {
-    chunk.setAt(j, height + 1, i, REEDS);
-    chunk.setAt(j, height + 2, i, REEDS);
-    chunk.setAt(j, height + 3, i, REEDS);
+    chunk.setUnsafe(j, height + 1, i, REEDS);
+    chunk.setUnsafe(j, height + 2, i, REEDS);
+    chunk.setUnsafe(j, height + 3, i, REEDS);
   }
 });
 
@@ -149,18 +149,16 @@ const getBiomeType = ({ temperature, rainfall }, x: number, z: number) => do {
 
 const generateDesertBiome = (generator: ChunkGenerator): ChunkLiftIO => ({
   chunk, i, j, height, chunk: { x, z },
-}) => IO.from(() => {
-  chunk.setAt(j, height, i, do {
-    if (generator.simplexFoliage(x + j, z + i) > 0.94) DEAD_BUSH;
-    else AIR;
-  });
+}) => chunk.setAt(j, height, i, do {
+  if (generator.simplexFoliage(x + j, z + i) > 0.94) DEAD_BUSH;
+  else AIR;
 });
 
 const generateHillsBiome = (generator: ChunkGenerator): ChunkLiftIO => ({
   chunk, i, j, height, chunk: { x, z },
 }) => IO.from(() => {
   const s = generator.simplexFoliage((x + j), (z + i));
-  chunk.setAt(j, height, i, do {
+  chunk.setUnsafe(j, height, i, do {
     if (s < 0) AIR;
     else if (s < 0.9) TALL_GRASS;
     else if (s < 0.93) FLOWER_YELLOW;

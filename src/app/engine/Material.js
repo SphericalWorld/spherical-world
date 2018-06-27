@@ -20,7 +20,7 @@ type BlendingMode =
 
 type MaterialOptions = {
   name: string,
-  diffuse: Texture,
+  diffuse?: Texture,
   blendingMode?: BlendingMode,
   shader: GlShaderProgram,
 };
@@ -47,7 +47,9 @@ class Material {
       throw new Error('Shader name should be provided');
     }
     this.name = name;
-    this.diffuse = diffuse;
+    if (diffuse) {
+      this.diffuse = diffuse;
+    }
     this.shader = shader;
   }
 

@@ -39,16 +39,16 @@ const generateRoom = (generator, chunk: Chunk) => {
     for (let j = xStart; j < xEnd; j += 1) {
       for (let k = zStart; k < zEnd; k += 1) {
         if (j === 0 || j === 8 || k === 0 || k === 8) {
-          chunk.setAt(j, i, k, 16);
+          chunk.setUnsafe(j, i, k, 16);
         } else {
-          chunk.setAt(j, i, k, 0);
+          chunk.setUnsafe(j, i, k, 0);
         }
       }
     }
   }
   for (let i = xStart; i < xEnd; i += 1) {
     for (let j = zStart; j < zEnd; j += 1) {
-      chunk.setAt(i, y - generator.height, j, 16);
+      chunk.setUnsafe(i, y - generator.height, j, 16);
     }
   }
 };

@@ -27,7 +27,7 @@ const resourceLoaderProvider = Addon => class ResourceLoader {
     return Promise.all(addonsToLoad.map(el => this.loadAddon(el)));
   }
 
-  async loadAddonScripts(addonName: string, bundlePath: string, tag) {
+  async loadAddonScripts(addonName: string, bundlePath: string, tag: HTMLElement) {
     const scriptBundle = await (await fetch(`${this.network.addonServerInfo.host}/addons/${addonName}/${bundlePath}`)).text();
     return new Promise((resolve) => {
       const s = document.createElement('script');

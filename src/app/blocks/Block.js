@@ -1,4 +1,6 @@
 // @flow
+import identity from '../../../common/fp/identity';
+
 class Block {
   fallSpeedCap = 0;
   fallAcceleration = 0.00002;
@@ -21,9 +23,7 @@ class Block {
     east: 0,
   };
 
-  getFlags(plane) {
-    return plane;
-  }
+  getFlags = identity;
 }
 
 export default Block;

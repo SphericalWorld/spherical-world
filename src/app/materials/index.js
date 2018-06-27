@@ -1,6 +1,6 @@
 // @flow
-import TextureLibrary from '../engine/TextureLibrary';
-import { ShaderLibrary } from '../engine/ShaderLibrary';
+import type TextureLibrary from '../engine/TextureLibrary';
+import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 import blockPickerProvider from './BlockPicker';
 import blockRemoverProvider from './BlockRemover';

@@ -1,4 +1,5 @@
 // @flow
+import type { ShaderLibrary } from './app/engine/ShaderLibrary';
 import { menuToggledObservable } from './app/hud/events';
 import { MENU_TOGGLED } from './app/hud/hudConstants';
 import Main from './app/main';
@@ -112,30 +113,26 @@ const getTerrain = (store, Chunk, network, textureLibrary, materialLibrary, Terr
   return terrain;
 };
 
-const getShaders = () => {
-  const ShaderLibrary = shaderLibraryProvider();
-  const shaderLibrary = new ShaderLibrary();
+const getShaders = (): ShaderLibrary => {
   const shaders = shadersProvider();
-  shaderLibrary.add(...shaders);
-  return shaderLibrary;
+  return new (shaderLibraryProvider())()
+    .add(...shaders);
 };
 
 const getTextures = async () => {
   const textures = await texturesProvider();
   const textureLibrary = new GlTextureLibrary();
-  textureLibrary.add(...textures);
-  textureLibrary.add(textureLibrary.makeTextureAtlasOverlay());
-  textureLibrary.add(textureLibrary.makeTextureAtlas());
-  textureLibrary.add(textureLibrary.makeAnimatedTextureAtlas());
-  return textureLibrary;
+  return textureLibrary
+    .add(...textures)
+    .add(textureLibrary.makeTextureAtlasOverlay())
+    .add(textureLibrary.makeTextureAtlas())
+    .add(textureLibrary.makeAnimatedTextureAtlas());
 };
 
-const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: GlTextureLibrary) => {
-  const MaterialLibrary = materialLibraryProvider();
-  const materialLibrary = new MaterialLibrary();
+const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: ShaderLibrary) => {
   const materials = materialsProvider(textureLibrary, shaderLibrary);
-  materialLibrary.add(...materials);
-  return materialLibrary;
+  return new (materialLibraryProvider())()
+    .add(...materials);
 };
 
 const mainProvider = async (store, network, physicsThread: Worker, chunksHandlerThread: Worker) => {
@@ -143,7 +140,6 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const shaderLibrary = getShaders();
   const materialLibrary = getMaterials(textureLibrary, shaderLibrary);
   const world = createECS(physicsThread, chunksHandlerThread);
-
 
   const BlockRemover = blockRemoverProvider(world, materialLibrary);
   const BlockPicker = blockPickerProvider(world, materialLibrary);

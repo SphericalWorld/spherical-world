@@ -7,7 +7,8 @@ export const CUBE: 'cube' = 'cube';
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
 
-const createCube = (model, size, halfSize, isReversed) => {
+const createCube = (model, size, isReversed) => {
+  const halfSize = size / 2;
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
   const vertices = [
     // Front face
@@ -62,7 +63,7 @@ const createCube = (model, size, halfSize, isReversed) => {
     cubeVertexIndices.reverse();
   }
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-  model.indexBuffer.numItems = 36;
+  model.elementsCount = 36;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, model.texCoordBuffer);
   const textureCoords = [
@@ -105,7 +106,8 @@ const createCube = (model, size, halfSize, isReversed) => {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
 };
 
-const createBillboard = (model, halfSize) => {
+const createBillboard = (model, size) => {
+  const halfSize = size / 2;
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
   const vertices = [
     -halfSize, -halfSize, 0,
@@ -121,7 +123,7 @@ const createBillboard = (model, halfSize) => {
     0, 1, 2, 0, 2, 3,
   ];
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
-  model.indexBuffer.numItems = 6;
+  model.elementsCount = 6;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, model.texCoordBuffer);
   const textureCoords = [
@@ -137,6 +139,8 @@ class Model {
   vertexBuffer: WebGLBuffer = gl.createBuffer();
   indexBuffer: WebGLBuffer = gl.createBuffer();
   texCoordBuffer: WebGLBuffer = gl.createBuffer();
+  elementsCount: number;
+
   vao: WebGLVertexArrayObject;
   // TODO: add vertex count, index count etc
   constructor(model?: Object, scale?: number) {
@@ -164,16 +168,16 @@ class Model {
 
   draw(shader) {
     gl.bindVertexArray(this.vao);
-    gl.drawElements(gl.TRIANGLES, this.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
+    gl.drawElements(gl.TRIANGLES, this.elementsCount, gl.UNSIGNED_SHORT, 0);
     gl.bindVertexArray(null);
   }
 
-  loadFromJson(model, scale: number) {
+  loadFromJson(model, scale?: number = 1) {
     // var min = Math.min.apply(this, model.vertexPositions);
     // for (var i = 0; i < model.vertexPositions.length; i++) {
     //  model.vertexPositions[i]-=min;
     // };
-    const size = Math.max.apply(this, model.vertexPositions);
+    const size = Math.max(...model.vertexPositions);
     model.vertexPositions = model.vertexPositions.map(el => el / size);
     if (scale) {
       model.vertexPositions = model.vertexPositions.map(el => el * scale);
@@ -184,7 +188,7 @@ class Model {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model.indices), gl.STATIC_DRAW);
-    this.indexBuffer.numItems = model.indices.length;
+    this.elementsCount = model.indices.length;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.vertexTextureCoords), gl.STATIC_DRAW);
@@ -192,13 +196,12 @@ class Model {
 
   static createPrimitive(type: string, size: number, isReversed: boolean = false) {
     const model = new this();
-    const halfSize = size / 2;
     switch (type) {
       case 'cube':
-        createCube(model, size, halfSize, isReversed);
+        createCube(model, size, isReversed);
         break;
       case 'billboard':
-        createBillboard(model, halfSize);
+        createBillboard(model, size);
         break;
       default:
         throw new Error('unknown type');

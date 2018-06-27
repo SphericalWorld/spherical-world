@@ -38,10 +38,7 @@ const chunkProvider = (store) => {
       this.bufferInfo = bufferInfo;
       this.blocksInfo = blocksInfo;
 
-      this.blocksData = new ArrayBuffer(this.height * 16 * 16);
-      this.blocks = new Uint8Array(this.blocksData);
-      this.lightData = new ArrayBuffer(this.height * 16 * 16 * 2);
-      this.light = new Uint16Array(this.lightData);
+      this.light = new Uint16Array(this.height * 16 * 16);
     }
 
     getBlock(x, y, z) {

@@ -9,10 +9,11 @@ const materialLibraryProvider = () => {
       return this.materials.get(materialName);
     }
 
-    add(...materials: Material[]) {
+    add(...materials: Material[]): this {
       for (const material of materials) {
         this.materials.set(material.name, material);
       }
+      return this;
     }
   }
   return MaterialLibrary;

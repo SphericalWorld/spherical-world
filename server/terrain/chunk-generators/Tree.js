@@ -23,7 +23,7 @@ const leaves = (
   }
   const runRecursion = (vector: Vector) => {
     if (!chunk.at(...vector)) {
-      chunk.setAt(...vector, 5);
+      chunk.setUnsafe(...vector, 5);
       leaves(chunk, vector, lengthRemain - 1);
     }
   };
@@ -52,7 +52,7 @@ const branch = (
     leaves(chunk, newPosition, 3);
   };
   if (length) {
-    chunk.setAt(...position.round(), 4);
+    chunk.setUnsafe(...position.round(), 4);
   }
   if (branchLengthRemain) {
     const newDirection = direction;
@@ -87,7 +87,7 @@ const generateTree = (seed: number) => {
   ): IO<Chunk> => IO.from(() => {
     const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
     for (let i = 0; i < length; i += 1) {
-      chunk.setAt(x, y + i, z, 4);
+      chunk.setUnsafe(x, y + i, z, 4);
     }
     branch(chunk, new Vector(x, y + length, z), new Vector(0, 1, 0).unit(), length + 4, 1.9, 0);
     return chunk;

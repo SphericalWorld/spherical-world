@@ -49,9 +49,13 @@ class GlTextureLibrary {
 
   makeTextureFromText(textToWrite: string, textSize: number = 56) {
     this.ctx.font = `bold ${textSize}px monospace`;
-    this.textureCanvas.width = Math.pow(2, Math.ceil(Math.log(this.ctx.measureText(textToWrite).width) / Math.log(2)));
-    this.textureCanvas.height = Math.pow(2, Math.ceil(Math.log(2 * textSize) / Math.log(2)));
-    (this.textureCanvas.width > this.textureCanvas.height) ? this.textureCanvas.height = this.textureCanvas.width : this.textureCanvas.width = this.textureCanvas.height;
+    this.textureCanvas.width = 2 ** Math.ceil(Math.log(this.ctx.measureText(textToWrite).width) / Math.log(2));
+    this.textureCanvas.height = 2 ** Math.ceil(Math.log(2 * textSize) / Math.log(2));
+    if (this.textureCanvas.width > this.textureCanvas.height) {
+      this.textureCanvas.height = this.textureCanvas.width;
+    } else {
+      this.textureCanvas.width = this.textureCanvas.height;
+    }
     this.ctx.fillStyle = '#FFF0';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = '#FFF';
@@ -81,10 +85,10 @@ class GlTextureLibrary {
   }
 
   makeTextureAtlasOverlay(): Texture {
-    return this.makeTextureAtlasBase('terrainOverlay', texture => typeof texture.atlasId === 'number' && texture.meta && texture.meta.overlay);
+    return this.makeTextureAtlasBase('terrainOverlay', texture => (typeof texture.atlasId === 'number') && texture.meta && texture.meta.overlay);
   }
 
-  makeChunkMinimap(data) {
+  makeChunkMinimap(data: Uint8Array): ImageData {
     this.textureCanvas.width = 16;
     this.textureCanvas.height = 16;
 
@@ -128,8 +132,8 @@ class GlTextureLibrary {
     }
     const pixelData = this.ctx.getImageData(0, 0, 16, 16);
     const atlas = [];
-    for (let i = 0; i < pixelData.data.length / 4; i++) {
-      atlas.push([pixelData.data[i * 4], pixelData.data[i * 4 + 1], pixelData.data[i * 4 + 2]]);
+    for (let i = 0; i < pixelData.data.length / 4; i += 1) {
+      atlas.push([pixelData.data[i * 4], pixelData.data[(i * 4) + 1], pixelData.data[(i * 4) + 2]]);
     }
     // atlas.reverse();
     // console.log(atlas)
@@ -175,10 +179,11 @@ class GlTextureLibrary {
     return this.textures.get(textureName);
   }
 
-  add(...textures: Texture[]) {
+  add(...textures: Texture[]): this {
     for (const texture of textures) {
       this.textures.set(texture.name, texture);
     }
+    return this;
   }
 }
 

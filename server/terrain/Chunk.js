@@ -170,7 +170,7 @@ class Chunk {
     return this;
   }
 
-  setAt(x: number, y: number, z: number, block: number): void {
+  setUnsafe(x: number, y: number, z: number, block: number): void {
     let chunk = this;
     if (x < 0) {
       chunk = chunk.northChunk;
@@ -187,6 +187,28 @@ class Chunk {
       z -= 16;
     }
     chunk.data[x + (z << 4) + (y << 8)] = block;
+  }
+
+  setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
+    let chunk = this;
+    if (x < 0) {
+      chunk = chunk.northChunk;
+      x += 16;
+    } else if (x > 15) {
+      chunk = chunk.southChunk;
+      x -= 16;
+    }
+    if (z < 0) {
+      chunk = chunk.westChunk;
+      z += 16;
+    } else if (z > 15) {
+      chunk = chunk.eastChunk;
+      z -= 16;
+    }
+    return IO.from(() => {
+      chunk.data[x + (z << 4) + (y << 8)] = block;
+      return chunk;
+    });
   }
 
   setAtIndex(index: number, block: number): void {

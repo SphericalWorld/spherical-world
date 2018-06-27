@@ -1,5 +1,6 @@
 // @flow
 import { mat4, vec3 } from 'gl-matrix';
+import { getIndex } from '../../../common/chunk';
 import model from '../../models/torch.json';
 import { getLight } from './components/ModelComponent';
 import BasePropertiesComponent from './components/BasePropertiesComponent';
@@ -96,9 +97,10 @@ const Torch = () => Object.assign(
       return vertexCount + (this.model.vertexPositions.length / 3);
     },
 
-    putBlock(chunk, x, y, z, value, plane) {
-      chunk.blocksFlags[x + z * 16 + y * 256] = this.getFlags(plane);
-      chunk.blocks[x + z * 16 + y * 256] = value;
+    putBlock(chunk, x: number, y: number, z: number, value: number, plane: number) {
+      const index = getIndex(x, y, z);
+      chunk.blocksFlags[index] = this.getFlags(plane);
+      chunk.blocks[index] = value;
       return true;
     },
   },

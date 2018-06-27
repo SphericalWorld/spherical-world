@@ -9,10 +9,11 @@ const shaderLibraryProvider = () => {
       return this.shaders.get(name);
     }
 
-    add(...shaders: GlShaderProgram[]) {
+    add(...shaders: GlShaderProgram[]): this {
       for (const shader of shaders) {
         this.shaders.set(shader.name, shader);
       }
+      return this;
     }
   }
   return ShaderLibrary;

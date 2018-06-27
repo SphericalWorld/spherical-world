@@ -15,7 +15,7 @@ class ChunksHandlerThread extends ThreadProvider {
       chunk.bindVBO(data.data);
     });
 
-    this.registerMessageHandler('CHUNK_LOADED_MINIMAP', data => {
+    this.registerMessageHandler('CHUNK_LOADED_MINIMAP', (data) => {
       this.terrain.chunks.get(data.data.geoId).minimap = this.glTextureLibrary.makeChunkMinimap(data.data.minimap);
       this.terrain.generateMinimap();
     });
