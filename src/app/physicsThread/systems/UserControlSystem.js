@@ -6,7 +6,6 @@ import {
   playerMovedObservable,
   playerJumpedObservable,
   PLAYER_MOVED,
-  PLAYER_STOPED_MOVE,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
@@ -33,6 +32,21 @@ const getAngle = (x: number, z: number): number => do {
   }
 } | 0;
 
+const setMove = (userControls: UserControlled, direction, value: boolean): UserControlled => {
+  switch (direction) {
+    case DIRECTION_FORWARD: userControls.movingForward = value;
+      break;
+    case DIRECTION_BACK: userControls.movingBackward = value;
+      break;
+    case DIRECTION_LEFT: userControls.movingLeft = value;
+      break;
+    case DIRECTION_RIGHT: userControls.movingRight = value;
+      break;
+    default:
+  }
+  return userControls;
+};
+
 export default (ecs: World) => {
   class UserControlSystem implements System {
     world: World;
@@ -42,7 +56,9 @@ export default (ecs: World) => {
       velocity: Velocity,
       userControlled: UserControlled,
     }[] = ecs.createSelector([Transform, Velocity, UserControlled]);
-    userActions: GameEventQueue = new GameEventQueue(playerMovedObservable, playerJumpedObservable);
+
+    moveEvents: GameEventQueue = new GameEventQueue(playerMovedObservable);
+    jumpEvents: GameEventQueue = new GameEventQueue(playerJumpedObservable);
 
     update(delta: number): Array {
       const result = [];
@@ -50,40 +66,10 @@ export default (ecs: World) => {
         id, transform, velocity, userControlled: userControls,
       }] = this.components;
 
-      this.userActions.events.reduce((userControls, { type, data }) => {
-        if (type === PLAYER_MOVED) {
-          const { direction } = data;
-          switch (direction) {
-            case DIRECTION_FORWARD: userControls.movingForward = true;
-              break;
-            case DIRECTION_BACK: userControls.movingBackward = true;
-              break;
-            case DIRECTION_LEFT: userControls.movingLeft = true;
-              break;
-            case DIRECTION_RIGHT: userControls.movingRight = true;
-              break;
-            default:
-          }
-        }
-        if (type === PLAYER_STOPED_MOVE) {
-          const { direction } = data;
-          switch (direction) {
-            case DIRECTION_FORWARD: userControls.movingForward = false;
-              break;
-            case DIRECTION_BACK: userControls.movingBackward = false;
-              break;
-            case DIRECTION_LEFT: userControls.movingLeft = false;
-              break;
-            case DIRECTION_RIGHT: userControls.movingRight = false;
-              break;
-            default:
-          }
-        }
-        if (type === PLAYER_JUMPED) {
-          vec3.add(velocity.linear, velocity.linear, [0, 1, 0]);
-        }
-        return userControls;
-      }, userControls);
+      this.moveEvents.events.reduce((controls, { type, data: { direction } }) =>
+        setMove(controls, direction, type === PLAYER_MOVED), userControls);
+
+      this.jumpEvents.events.reduce(() => vec3.add(velocity.linear, velocity.linear, [0, 1, 0]), null);
 
       const movingX = userControls.movingForward - userControls.movingBackward;
       const movingZ = userControls.movingLeft - userControls.movingRight;
@@ -122,7 +108,9 @@ export default (ecs: World) => {
         vec3.set(velocity.linear, 0, 0, 0);
       }
 
-      this.userActions.clear();
+      this.moveEvents.clear();
+      this.jumpEvents.clear();
+
       return [[id, userControls]];
     }
   }

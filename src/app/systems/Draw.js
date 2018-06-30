@@ -78,20 +78,16 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         draw(transform, visual);
       }
 
-      for (const { transform, visual } of this.skybox) {
+      for (const { transform, visual, skybox } of this.skybox) {
         this.useShader(visual.glObject.material.shader);
         visual.glObject.material.use();
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         gl.uniform4f(this.currentShader.uLighting, ...skyColor);
-        gl.uniform1f(this.currentShader.time, time.currentTime / 50000000);
-
-        gl.uniform2f(this.currentShader.resolution, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        // gl.uniform2f(this.currentShader.mouse, this.player.horizontalRotate * 0.5, -this.player.verticalRotate * 0.5);
+        gl.uniform3f(this.currentShader.uSunPosition, ...skybox.sunPosition);
 
         this.mvPushMatrix();
-        // mat4.translate(this.mvMatrix, this.mvMatrix, [transform.x + this.player.x, transform.y + this.player.y, transform.z + this.player.z]);
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();
