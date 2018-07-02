@@ -1,10 +1,11 @@
 // @flow
 import zlib from 'pako';
+import HashMap from '../../common/fp/data-structures/Map';
 
 class Network {
   latency: number = 0;
   router = {};
-  requests: Map<number, {resolve: Function}> = new Map();
+  requests: HashMap<number, {resolve: Function}> = new HashMap();
   connection: WebSocket;
   connected = false;
   pingDescriptor: IntervalID;
@@ -29,19 +30,17 @@ class Network {
   }
 
   processResponseToRequest(message: MessageEvent) {
-    const request = this.requests.get(message.id);
-    if (!request) {
-      console.warn(`Not found callback handler for request id=${message.id}`);
-      return;
-    }
-    const { resolve, reject } = request;
-    if (this.requestBinaryData) {
-      resolve([message.data, this.requestBinaryData]);
-      this.requestBinaryData = null;
-    } else {
-      resolve(message.data);
-    }
-    this.requests.delete(message.id);
+    this.requests.get(message.id)
+      .map((request) => {
+        const { resolve, reject } = request;
+        if (this.requestBinaryData) {
+          resolve([message.data, this.requestBinaryData]);
+          this.requestBinaryData = null;
+        } else {
+          resolve(message.data);
+        }
+        return this.requests.delete(message.id);
+      });
   }
 
   processAction(message: MessageEvent) {
@@ -124,7 +123,8 @@ class Network {
 
   emit(type: string, data?: any): void {
     if (!this.connected) {
-      return console.log('socket disconnected');
+      console.log('socket disconnected');
+      return;
     }
     this.connection.send(JSON.stringify({ type, data }));
   }

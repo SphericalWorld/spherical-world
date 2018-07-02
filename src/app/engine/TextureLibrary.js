@@ -42,7 +42,7 @@ class GlTextureLibrary {
     this.animTexCount = 0;
     for (const texture of this.textures.values()) {
       if (texture.animation && texture.animation.atlas) {
-        this.animTexCount++;
+        this.animTexCount += 1;
       }
     }
   }

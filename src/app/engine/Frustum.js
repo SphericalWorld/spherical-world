@@ -15,17 +15,17 @@ class Frustum {
     let i = 0;
     let j = 0;
     let k = 0;
-    let qx,
-      qy,
-      qz;
+    let qx;
+    let qy;
+    let qz;
     let w;
     let x;
 
-    for (i = 0; i < 2; ++i) {
+    for (i = 0; i < 2; i += 1) {
       qx = this.boundingBox[i][0];
-      for (j = 0; j < 2; ++j) {
+      for (j = 0; j < 2; j += 1) {
         qy = this.boundingBox[j][1];
-        for (k = 0; k < 2; ++k) {
+        for (k = 0; k < 2; k += 1) {
           qz = this.boundingBox[k][2];
           w = qx * m[3] + qy * m[7] + qz * m[11] + m[15];
           x = qx * m[0] + qy * m[4] + qz * m[8] + m[12];

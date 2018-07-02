@@ -19,7 +19,7 @@ class Player {
     this.name = `Unnamed Player ${id}`;
     this.linkedPlayers = [];
     this.party = [];
-    id++;
+    id += 1
   }
 
   changeCoord(x, y, z, callback) {
@@ -30,20 +30,20 @@ class Player {
       const chunkX = Math.floor(this.x / 16) * 16;
       const chunkZ = Math.floor(this.z / 16) * 16;
       if (chunkXold > chunkX) {
-        for (let i = -8; i < 8; i++) {
+        for (let i = -8; i < 8; i += 1) {
           this.terrain.sendChunk(this, chunkX + (8 * 16), chunkZ + (i * 16));
         }
       } else if (chunkXold < chunkX) {
-        for (let i = -8; i < 8; i++) {
+        for (let i = -8; i < 8; i += 1) {
           this.terrain.sendChunk(this, chunkX - (8 * 16), chunkZ + (i * 16));
         }
       }
       if (chunkZold > chunkZ) {
-        for (let i = -8; i < 8; i++) {
+        for (let i = -8; i < 8; i += 1) {
           this.terrain.sendChunk(this, chunkX + (i * 16), chunkZ + (8 * 16));
         }
       } else if (chunkZold < chunkZ) {
-        for (let i = -8; i < 8; i++) {
+        for (let i = -8; i < 8; i += 1) {
           this.terrain.sendChunk(this, chunkX + (i * 16), chunkZ - (8 * 16));
         }
       }
@@ -89,14 +89,14 @@ class Player {
   }
 
   broadcastToLinked(message, data) {
-    for (let i = 0; i < this.linkedPlayers.length; i++) {
+    for (let i = 0; i < this.linkedPlayers.length; i += 1) {
       this.linkedPlayers[i].socket.postMessage(message, data);
     }
   }
 
   destroy() {
     this.broadcastToLinked('OTHER_PLAYER_DISCONNECT', { id: this.id });
-    for (let i = 0; i < this.linkedPlayers.length; i++) {
+    for (let i = 0; i < this.linkedPlayers.length; i += 1) {
       this.deleteLink(this.linkedPlayers[i]);
     }
   }

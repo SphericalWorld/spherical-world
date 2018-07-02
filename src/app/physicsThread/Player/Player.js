@@ -130,7 +130,7 @@ const playerProvider = (store, Chunk, Inventory) => {
       }
 
       /** player height == 2 cubes, so we calculate twice */
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; i += 1) {
         if (deltaX > 0) {
           if (chunk.blocksFlags[chunk.at(blockX + 1, Math.floor(this.y) + i, blockZ)][2]) {
             if (xInBlock + deltaX >= 0.8) {
@@ -173,7 +173,7 @@ const playerProvider = (store, Chunk, Inventory) => {
 
     putBlock(geoId, x, y, z, plane) {
       if (this.selectedItem.count > 0) {
-        this.selectedItem.count--;
+        this.selectedItem.count -= 1;
         if (this.selectedItem.count === 0) {
           delete this.selectedItem;
         }

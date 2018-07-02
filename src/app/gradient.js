@@ -1,13 +1,13 @@
 class Gradient {
   constructor(points) {
     this.points = [];
-    for (let i = 0; i < points.length; i++) {
+    for (let i = 0; i < points.length; i += 1) {
       this.points.push([points[i][0], (points[i][1] & 0xFF0000) >> 16, (points[i][1] & 0xFF00) >> 8, points[i][1] & 0xFF]);
     }
   }
 
   getAtPosition(pos) {
-    for (let i = 1; i < this.points.length; i++) {
+    for (let i = 1; i < this.points.length; i += 1) {
       if (this.points[i][0] > pos) {
         const posStart = pos - this.points[i - 1][0];
         const deltaPos = this.points[i][0] - this.points[i - 1][0];

@@ -41,7 +41,7 @@ const mouseProvider = () => {
     }
 
     mouseWheel(e: WheelEvent) {
-      for (let i = 0; i < this.wheelHandlers.length; i++) {
+      for (let i = 0; i < this.wheelHandlers.length; i += 1) {
         this.wheelHandlers[i](e.wheelDelta);
       }
       e.preventDefault();

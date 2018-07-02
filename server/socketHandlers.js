@@ -12,14 +12,8 @@ class SocketHandlers {
     console.log('socketHandlers loaded');
   }
 
-  route(message: string, handler) {
-    this.router[message] = handler;
-  }
-
-  ping(ws, callback) {
-    if (typeof (callback) === 'function') {
-      callback(true);
-    }
+  route(message: string, handler: Function, needAuth: boolean = true) {
+    this.router[message] = { handler, needAuth };
   }
 
   putBlock(ws, data) {
@@ -33,42 +27,38 @@ class SocketHandlers {
   }
 
   playerChangePosition(ws, data, callback) {
-    if (ws.player) {
-      ws.player.changeCoord(data.x, data.y, data.z, (result) => {
-        if (!callback) {
-          return;
-        }
-        if (result) {
-          callback(true);
-          ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_POSITION', {
-            id: ws.player.id, x: ws.player.x, y: ws.player.y, z: ws.player.z,
-          });
-        } else {
-          callback(false, {
-            x: ws.player.x, y: ws.player.y, z: ws.player.z,
-          });
-        }
-      });
-    }
+    ws.player.changeCoord(data.x, data.y, data.z, (result) => {
+      if (!callback) {
+        return;
+      }
+      if (result) {
+        callback(true);
+        ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_POSITION', {
+          id: ws.player.id, x: ws.player.x, y: ws.player.y, z: ws.player.z,
+        });
+      } else {
+        callback(false, {
+          x: ws.player.x, y: ws.player.y, z: ws.player.z,
+        });
+      }
+    });
   }
 
   playerChangeRotation(ws, data) {
-    if (ws.player) {
-      ws.player.changeRotation(data.v, data.h, (result) => {
-        if (result) {
-          ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, v: ws.player.verticalRotate, h: ws.player.horizontalRotate });
-        } else {
-          callback(false, {
-            x: ws.player.x, y: ws.player.y, z: ws.player.z,
-          });
-        }
-      });
-    }
+    ws.player.changeRotation(data.v, data.h, (result) => {
+      if (result) {
+        ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, v: ws.player.verticalRotate, h: ws.player.horizontalRotate });
+      } else {
+        callback(false, {
+          x: ws.player.x, y: ws.player.y, z: ws.player.z,
+        });
+      }
+    });
   }
 
   loadGameData(ws, data, callback) {
-    for (let i = -8; i < 8; i++) {
-      for (let j = -8; j < 8; j++) {
+    for (let i = -8; i < 8; i += 1) {
+      for (let j = -8; j < 8; j += 1) {
         this.terrain.sendChunk(ws.player, i * 16, j * 16);
       }
     }
@@ -82,7 +72,7 @@ class SocketHandlers {
     player.socket = ws;
     ws.player = player;
 
-    for (var i = 0; i < this.server.players.length; i++) {
+    for (let i = 0; i < this.server.players.length; i += 1) {
       ws.player.addLink(this.server.players[i]);
     }
 
@@ -92,7 +82,7 @@ class SocketHandlers {
       id: player.id, name: player.name, x: player.x, y: player.y, z: player.z,
     });
 
-    for (var i = 0; i < ws.player.linkedPlayers.length; i++) {
+    for (let i = 0; i < ws.player.linkedPlayers.length; i += 1) {
       ws.postMessage('LOAD_OTHER_PLAYER', {
         id: ws.player.linkedPlayers[i].id, name: ws.player.linkedPlayers[i].name, x: ws.player.linkedPlayers[i].x, y: ws.player.linkedPlayers[i].y, z: ws.player.linkedPlayers[i].z,
       });

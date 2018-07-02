@@ -27,7 +27,7 @@ const socketHandlersProvider = Player => class SocketHandlers {
     const deltaZ = data.z - Player.instances[data.id].z;
 
     let iters = 0;
-    var interval = setInterval(() => {
+    const interval = setInterval(() => {
       if (!Player.instances[data.id]) {
         clearInterval(interval);
       } else {
@@ -35,7 +35,7 @@ const socketHandlersProvider = Player => class SocketHandlers {
         Player.instances[data.id].x += deltaX / 6;
         Player.instances[data.id].y += deltaY / 6;
         Player.instances[data.id].z += deltaZ / 6;
-        iters++;
+        iters += 1;
         if (iters >= 6) {
           clearInterval(interval);
         }
@@ -48,12 +48,12 @@ const socketHandlersProvider = Player => class SocketHandlers {
     // window.Player.instances[data.id].glObject.horizontalRotate = data.h+3.14159265/2;
     const delta = data.h + 3.14159265 / 2 - Player.instances[data.id].glObject.horizontalRotate;
     let iters = 0;
-    var interval = setInterval(() => {
+    const interval = setInterval(() => {
       if (!Player.instances[data.id]) {
         clearInterval(interval);
       } else {
         Player.instances[data.id].glObject.horizontalRotate += delta / 6;
-        iters++;
+        iters += 1;
         if (iters >= 6) {
           clearInterval(interval);
         }
