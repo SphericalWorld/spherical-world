@@ -16,6 +16,7 @@ export default class ChunkProgram extends GlShaderProgram {
       GRAPHIC_LEVEL_ULTRA: 4,
     },
   });
+
   fragmentShader = new GlFragmentShader(fragmentShaderData, {
     constants: {
       GRAPHIC_LEVEL_CURRENT: 1,

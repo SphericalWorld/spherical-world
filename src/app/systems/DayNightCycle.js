@@ -22,7 +22,8 @@ const dayNightCycleProvider = (world: World, time: Time) => {
       time.update(Date.now());
       const { day, hour, minute } = time;
       const [{ id, skybox }] = this.skybox;
-      vec3.set(skybox.sunPosition, Math.cos(time.dayPercent * 2 * Math.PI - Math.PI), Math.sin(time.dayPercent * 2 * Math.PI- Math.PI), 0);
+      const sunPositionOnCircle = time.dayPercent * 2 * Math.PI - Math.PI;
+      vec3.set(skybox.sunPosition, Math.cos(sunPositionOnCircle), Math.sin(sunPositionOnCircle), 0);
       // console.log(sunPos)
       // console.log(day, hour, minute, delta)
       // for (const [id, position, visual] of this.components) {

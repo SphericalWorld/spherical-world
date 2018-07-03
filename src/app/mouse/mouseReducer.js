@@ -2,7 +2,6 @@
 import { createReducer } from '../../common/utils/reducerUtils';
 
 import {
-  MOUSE_MOVED,
   MOUSE_BUTTON_PRESSED,
   MOUSE_BUTTON_RELEASED,
   MOUSE_BUTTON_LEFT,

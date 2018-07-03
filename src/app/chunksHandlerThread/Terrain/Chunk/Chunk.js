@@ -259,9 +259,7 @@ const chunkProvider = (store) => {
 
       this.rainfallData = new Uint8Array(256);
       this.temperatureData = new Uint8Array(256);
-
-      this.minimapBuffer = new ArrayBuffer(256 * 3);
-      this.minimap = new Uint8Array(this.minimapBuffer);
+      this.minimap = new Uint8Array(256 * 3);
 
       const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
         x + this.x,
@@ -497,63 +495,29 @@ const chunkProvider = (store) => {
     }
 
     updateState() {
-      // TODO: remove unnesesary checks for chunk existance
-      const updateState = (chunk) => {
-        if (chunk !== this && chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL) {
-          chunk.updateState();
-        }
-      };
-      const updateNested = () => {
-        updateState(this.westChunk);
-        updateState(this.eastChunk);
-        updateState(this.southChunk);
-        updateState(this.northChunk);
-      };
+      const updateState = chunk => (chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL
+        ? chunk.updateState()
+        : null);
       if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
         this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
-        updateNested();
-        if (this.southChunk !== this) {
-          updateState(this.southChunk.westChunk);
-          updateState(this.southChunk.eastChunk);
-        }
-        if (this.northChunk !== this) {
-          updateState(this.northChunk.westChunk);
-          updateState(this.northChunk.eastChunk);
-        }
+        this.surroundingChunks.forEach(updateState);
         this.updateState();
       } else if (this.state === CHUNK_STATUS_NEED_LOAD_LIGHT) {
-        if (this.haveSurroundingChunks &&
-          ((this.westChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.eastChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.southChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.northChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.southChunk.westChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.southChunk.eastChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.northChunk.westChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)) &&
-          ((this.northChunk.eastChunk.state !== CHUNK_STATUS_NEED_LOAD_ALL))) {
+        if (this.hasSurroundingChunks
+          && this.surroundingChunks.every(chunk => chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)
+        ) {
           this.state = CHUNK_STATUS_NEED_LOAD_VBO;
           this.calcGlobalLight();
-
-          updateNested();
-
+          this.nestedChunks.forEach(updateState);
           this.updateState();
         }
       } else if (this.state === CHUNK_STATUS_NEED_LOAD_VBO) {
-        if (this.haveNestedChunks &&
-          (this.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
-          (this.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
-          (this.southChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO) &&
-          (this.northChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
-          //  &&
-          // ((this.southChunk.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
-          // ((this.southChunk.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
-          // ((this.northChunk.westChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)) &&
-          // ((this.northChunk.eastChunk.state >= CHUNK_STATUS_NEED_LOAD_VBO))
+        if (this.hasNestedChunks
+          && this.nestedChunks.every(chunk => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
         ) {
           this.calcVBO();
           this.state = CHUNK_STATUS_LOADED;
-
-          updateNested();
+          this.nestedChunks.forEach(updateState);
         }
       }
     }

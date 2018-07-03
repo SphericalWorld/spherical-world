@@ -8,7 +8,7 @@ export const moveMouse = ({
 }: {
   movementX: number,
   movementY: number,
-}) => dispatch => {
+}) => (dispatch) => {
   dispatch(playerChangeRotation(movementX, movementY));
 };
 

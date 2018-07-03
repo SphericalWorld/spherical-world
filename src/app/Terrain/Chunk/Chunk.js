@@ -3,6 +3,7 @@ import { connect } from '../../util';
 import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
+import type ChunkProgram from '../../../shaders/Chunk/Chunk';
 import type { Terrain } from '../Terrain';
 
 import Frustum from '../../engine/Frustum';
@@ -27,12 +28,23 @@ const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
   return buffer;
 };
 
+type GLBuffers = {
+  vertexBuffer: WebGLBuffer,
+  indexBuffer: WebGLBuffer,
+  texCoordBuffer: WebGLBuffer,
+  colorBuffer: WebGLBuffer,
+  globalColorBuffer: WebGLBuffer,
+  blockDataBuffer: WebGLBuffer,
+  vao: null,
+};
+
 const chunkProvider = (store) => {
   class Chunk extends ChunkBase<Chunk, Terrain> {
     frustum: Frustum;
     foliageTexture: WebGLTexture = null;
     rainfallData: Uint8Array;
     temperatureData: Uint8Array;
+    buffers: GLBuffers;
 
     constructor(
       terrain: Terrain,

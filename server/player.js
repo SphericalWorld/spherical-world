@@ -19,7 +19,7 @@ class Player {
     this.name = `Unnamed Player ${id}`;
     this.linkedPlayers = [];
     this.party = [];
-    id += 1
+    id += 1;
   }
 
   changeCoord(x, y, z, callback) {

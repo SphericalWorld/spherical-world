@@ -35,6 +35,7 @@ const cameraProvider = (world: World) => {
       transform: Transform,
       camera: Camera,
     }[] = world.createSelector([Transform, Camera]);
+
     cameraMovements: GameEventQueue = new GameEventQueue(cameraMovedObservable);
     bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
 

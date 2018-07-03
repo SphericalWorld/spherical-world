@@ -12,6 +12,8 @@ export default class BillboardProgram extends GlShaderProgram {
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting'];
 
+  uTexture: WebGLUniformLocation;
+
   constructor() {
     super();
     this.link();

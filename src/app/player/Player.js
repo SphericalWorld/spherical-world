@@ -152,7 +152,9 @@ import UserControlled from '../components/UserControlled';
 import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
-import { Transform, Camera, Physics, Velocity, Gravity, Raytracer } from '../components';
+import {
+  Transform, Camera, Physics, Velocity, Gravity, Raytracer
+} from '../components';
 import { MaterialLibrary } from '../engine/MaterialLibrary';
 
 const playerProvider = (

@@ -4,7 +4,7 @@ import { CHUNK_STATUS_NEED_LOAD_ALL } from './chunkConstants';
 import { getGeoId } from '../../../../common/chunk';
 // north direction - decreasing of X
 
-class ChunkBase<TChunk, TTerrain> {
+class ChunkBase<TChunk: ChunkBase, TTerrain> {
   x: number;
   z: number;
   height: number;
@@ -15,8 +15,10 @@ class ChunkBase<TChunk, TTerrain> {
   northChunk: TChunk = this;
   state: ChunkState = CHUNK_STATUS_NEED_LOAD_ALL;
   terrain: TTerrain;
-  haveNestedChunks: boolean = false;
-  haveSurroundingChunks: boolean = false;
+  nestedChunks: TChunk[] = [];
+  hasNestedChunks: boolean = false;
+  surroundingChunks: TChunk[] = [];
+  hasSurroundingChunks: boolean = false;
 
   static BUFFERS_COUNT: number = 3;
 
@@ -29,15 +31,20 @@ class ChunkBase<TChunk, TTerrain> {
   }
 
   checkNestedChunks() {
-    this.haveNestedChunks = this !== this.northChunk
-      && this !== this.westChunk
-      && this !== this.southChunk
-      && this !== this.eastChunk;
-    this.haveSurroundingChunks = this.haveNestedChunks
-      && this !== this.northChunk.eastChunk
-      && this !== this.northChunk.westChunk
-      && this !== this.southChunk.eastChunk
-      && this !== this.southChunk.westChunk;
+    this.nestedChunks = [
+      this.northChunk,
+      this.westChunk,
+      this.southChunk,
+      this.eastChunk,
+    ].filter(chunk => chunk !== this);
+    this.hasNestedChunks = this.nestedChunks.length === 4;
+    this.surroundingChunks = [
+      this.northChunk.eastChunk,
+      this.northChunk.westChunk,
+      this.southChunk.eastChunk,
+      this.southChunk.westChunk,
+    ].filter(chunk => chunk !== this).concat(this.nestedChunks);
+    this.hasSurroundingChunks = this.surroundingChunks.length === 8;
   }
 
   setNorthChunk(chunk: TChunk) {

@@ -11,6 +11,8 @@ export default class ModelCommonProgram extends GlShaderProgram {
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting'];
 
+  uTexture: WebGLUniformLocation;
+
   constructor() {
     super();
     this.link();

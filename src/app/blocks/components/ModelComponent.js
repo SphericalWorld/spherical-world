@@ -33,7 +33,7 @@ const ModelComponent = () => ({
       vertexBuffer.push(
         this.model.vertexPositions[i * 3] + x + chunk.x,
         this.model.vertexPositions[i * 3 + 1] + y - 1,
-        this.model.vertexPositions[i * 3 + 2] + z + chunk.z
+        this.model.vertexPositions[i * 3 + 2] + z + chunk.z,
       );
       colorBuffer.push(r, g, b);
       globalColorBuffer.push(sunlight);

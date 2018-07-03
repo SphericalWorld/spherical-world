@@ -7,13 +7,13 @@ class GlShader {
   shader: WebGLShader;
   version: string = '300';
 
-  constructor(source: string, constants) {
+  constructor(source: string, constants: Object) {
     this.source = source;
     this.shader = null;
     this.setConstants(constants);
   }
 
-  setConstants(constants) {
+  setConstants(constants: Object) {
     for (const i in constants) {
       this.source = `#define ${i} ${constants[i]} \n${this.source}`;
     }

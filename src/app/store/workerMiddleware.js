@@ -16,7 +16,7 @@ const createWorkerMiddleware = (worker: Worker) => {
       worker.onMessage(resultAction);
     };
 
-    return next => {
+    return (next) => {
       if (!next) {
         throw new Error('Worker middleware received no `next` action. Check your chain of middlewares.');
       }

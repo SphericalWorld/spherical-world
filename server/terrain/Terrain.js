@@ -80,7 +80,9 @@ export default class Terrain {
 
     const data = await chunk.getCompressedData();
     player.socket.sendSerialized(data);
-    player.socket.postMessage('loadChunk', { x, z, rainfall: chunk.rainfall.data, temperature: chunk.temperature.data });
+    player.socket.postMessage('loadChunk', {
+      x, z, rainfall: chunk.rainfall.data, temperature: chunk.temperature.data,
+    });
   }
 
   putBlockHandler({
