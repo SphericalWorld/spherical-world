@@ -11,6 +11,7 @@ import {
   KEY_ARROW_DOWN,
   KEY_ARROW_LEFT,
   KEY_ARROW_RIGHT,
+  KEY_SHIFT_LEFT,
 } from '../inputSources/KeyboardSource/rawEvents';
 import {
   MOUSE_MOVE,
@@ -27,6 +28,7 @@ import {
   TOGGLE_MENU_EVENT,
   CAMERA_UNLOCKED_EVENT,
   CAMERA_MOVED_EVENT,
+  PLAYER_RUN_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
@@ -43,6 +45,7 @@ export default class GameplayMainContext extends InputContext {
     this.events.set(KEY_ARROW_LEFT, PLAYER_MOVE_LEFT_EVENT);
     this.events.set(KEY_ARROW_RIGHT, PLAYER_MOVE_RIGHT_EVENT);
 
+    this.events.set(KEY_SHIFT_LEFT, PLAYER_RUN_EVENT);
     this.events.set(KEY_SPACE, PLAYER_JUMP_EVENT);
     this.events.set(KEY_ESCAPE, TOGGLE_MENU_EVENT);
   }

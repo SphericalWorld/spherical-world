@@ -12,6 +12,8 @@ import {
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
   PLAYER_JUMPED,
+  PLAYER_RUN,
+  PLAYER_STOPED_RUN,
 } from '../player/events';
 
 export type INPUT_TYPE = 0 | 1 | 2;
@@ -69,6 +71,12 @@ export const PLAYER_MOVE_RIGHT_EVENT = {
 export const PLAYER_JUMP_EVENT = {
   type: INPUT_TYPE_ACTION,
   gameEvent: PLAYER_JUMPED,
+};
+
+export const PLAYER_RUN_EVENT = {
+  type: INPUT_TYPE_STATE,
+  onEnd: PLAYER_STOPED_RUN,
+  gameEvent: PLAYER_RUN,
 };
 
 export const CAMERA_LOCK_EVENT = {

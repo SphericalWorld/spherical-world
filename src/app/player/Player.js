@@ -174,7 +174,7 @@ const playerProvider = (
     new Camera(),
     new Physics(),
     new Velocity(),
-    // new Gravity(),
+    new Gravity(),
     new UserControlled(),
     // new Visual(object),
     new Raytracer(),

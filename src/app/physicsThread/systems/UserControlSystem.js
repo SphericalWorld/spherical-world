@@ -5,12 +5,13 @@ import GameEventQueue from '../../GameEvent/GameEventQueue';
 import {
   playerMovedObservable,
   playerJumpedObservable,
+  playerRunObservable,
   PLAYER_MOVED,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
-  PLAYER_JUMPED,
+  PLAYER_RUN,
 } from '../../player/events';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
@@ -47,7 +48,7 @@ const setMove = (userControls: UserControlled, direction, value: boolean): UserC
   return userControls;
 };
 
-export default (ecs: World) => {
+export default (ecs: World, terrain: Terrain) => {
   class UserControlSystem implements System {
     world: World;
     components: {
@@ -59,6 +60,7 @@ export default (ecs: World) => {
 
     moveEvents: GameEventQueue = new GameEventQueue(playerMovedObservable);
     jumpEvents: GameEventQueue = new GameEventQueue(playerJumpedObservable);
+    runEvents: GameEventQueue = new GameEventQueue(playerRunObservable);
 
     update(delta: number): Array {
       const result = [];
@@ -68,8 +70,11 @@ export default (ecs: World) => {
 
       this.moveEvents.events.reduce((controls, { type, data: { direction } }) =>
         setMove(controls, direction, type === PLAYER_MOVED), userControls);
-
-      this.jumpEvents.events.reduce(() => vec3.add(velocity.linear, velocity.linear, [0, 1, 0]), null);
+      this.runEvents.events.reduce((controls, { type }) => {
+        controls.isRunning = type === PLAYER_RUN;
+        return controls;
+      }, userControls);
+      this.jumpEvents.events.reduce(() => vec3.add(velocity.linear, velocity.linear, [0, 5, 0]), null);
 
       const movingX = userControls.movingForward - userControls.movingBackward;
       const movingZ = userControls.movingLeft - userControls.movingRight;
@@ -97,21 +102,17 @@ export default (ecs: World) => {
         const v3 = vec3.fromValues(0, 0, 1);
         vec3.transformQuat(v3, v3, rotation);
 
-        // console.log(v)
-        // this.vector = [-v2[2], -v[2], -v3[2]];
-        vec3.add(velocity.linear, velocity.linear, [-v[2], -v2[2], -v3[2]]);
-
-        vec3.scale(velocity.linear, velocity.linear, 0.01);
-        // console.log(transform.translation)
+        userControls.velocity = [-v[2], -v2[2], -v3[2]];
+        vec3.scale(userControls.velocity, userControls.velocity, 10 * (userControls.isRunning ? 2 : 1));
         result.push([id, velocity]);
       } else {
-        vec3.set(velocity.linear, 0, 0, 0);
+        vec3.set(userControls.velocity, 0, 0, 0);
       }
 
       this.moveEvents.clear();
       this.jumpEvents.clear();
-
-      return [[id, userControls]];
+      this.runEvents.clear();
+      return [[id, userControls, velocity]];
     }
   }
 

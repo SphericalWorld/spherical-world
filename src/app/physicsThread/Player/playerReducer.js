@@ -8,8 +8,6 @@ import {
   PLAYER_STOPED_JUMPING,
   PLAYER_MOVED,
   PLAYER_STOPED_MOVING,
-  PLAYER_RUN,
-  PLAYER_STOPED_RUNING,
 } from './playerConstants';
 
 const initialState = {
@@ -94,28 +92,6 @@ const onPlayerStopedJumping = (state, { id }) => ({
   },
 });
 
-const onPlayerRun = (state, { id }) => ({
-  ...state,
-  instances: {
-    ...state.instances,
-    [id]: {
-      ...state.instances[id],
-      running: true,
-    },
-  },
-});
-
-const onPlayerStopedRun = (state, { id }) => ({
-  ...state,
-  instances: {
-    ...state.instances,
-    [id]: {
-      ...state.instances[id],
-      running: false,
-    },
-  },
-});
-
 const onPlayerStartedRemoveBlock = (state, { id, removingBlock }) => ({
   ...state,
   instances: {
@@ -145,8 +121,6 @@ export default createReducer(initialState, {
   [PLAYER_STOPED_MOVING]: onPlayerStopedMoving,
   [PLAYER_JUMPED]: onPlayerJumped,
   [PLAYER_STOPED_JUMPING]: onPlayerStopedJumping,
-  [PLAYER_RUN]: onPlayerRun,
-  [PLAYER_STOPED_RUNING]: onPlayerStopedRun,
   // [PLAYER_STARTED_REMOVE_BLOCK]: onPlayerStartedRemoveBlock,
   // [PLAYER_STOPED_REMOVE_BLOCK]: onPlayerStopedRemoveBlock,
 });

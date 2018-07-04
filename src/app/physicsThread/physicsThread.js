@@ -5,6 +5,9 @@ import {
   PLAYER_JUMPED,
   playerJumpedObservable,
   PLAYER_STOPED_MOVE,
+  PLAYER_RUN,
+  PLAYER_STOPED_RUN,
+  playerRunObservable,
 } from '../player/events';
 import configureStore from './store/configureStore';
 import terrainBaseProvider from '../Terrain/TerrainBase';
@@ -43,7 +46,7 @@ const Raytrace = raytraceProvider(world, Chunk);
 const GravitySystem = gravitySystemProvider(world);
 const VelocitySystem = velocitySystemProvider(world);
 const PhysicsSystem = physicsSystemProvider(world, terrain, Chunk);
-const UserControlSystem = userControlSystemProvider(world);
+const UserControlSystem = userControlSystemProvider(world, terrain);
 // throw add direction to move event and rename observables
 world.subscribe((event) => {
   if (event.type === PLAYER_MOVED || event.type === PLAYER_STOPED_MOVE) {
@@ -51,6 +54,9 @@ world.subscribe((event) => {
   }
   if (event.type === PLAYER_JUMPED) {
     playerJumpedObservable.emit(event);
+  }
+  if (event.type === PLAYER_RUN || event.type === PLAYER_STOPED_RUN) {
+    playerRunObservable.emit(event);
   }
 });
 

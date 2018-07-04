@@ -1,5 +1,5 @@
 // @flow
-export default function shallowEqual(objA, objB) {
+export default function shallowEqual(objA: Object, objB: Object): boolean {
   if (objA === objB) {
     return true;
   }

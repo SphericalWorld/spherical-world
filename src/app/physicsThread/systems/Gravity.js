@@ -17,7 +17,7 @@ const gravitySystemProvider = (ecs: World) => {
     update(delta: number): [Entity, ?Velocity][] {
       const result = [];
       for (const { id, velocity } of this.components) {
-        velocity.linear[1] -= (0.0002 * delta);
+        velocity.linear[1] -= (9.81 * delta);
         result.push([id, velocity]);
       }
 

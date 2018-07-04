@@ -11,9 +11,12 @@ export const DIRECTION_BACK: 'DIRECTION_BACK' = 'DIRECTION_BACK';
 export const DIRECTION_LEFT: 'DIRECTION_LEFT' = 'DIRECTION_LEFT';
 export const DIRECTION_RIGHT: 'DIRECTION_RIGHT' = 'DIRECTION_RIGHT';
 export const PLAYER_JUMPED: 'PLAYER_JUMPED' = 'PLAYER_JUMPED';
+export const PLAYER_RUN: 'PLAYER_RUN' = 'PLAYER_RUN';
+export const PLAYER_STOPED_RUN: 'PLAYER_STOPED_RUN' = 'PLAYER_STOPED_RUN';
 
 export const cameraMovedObservable = new GameEventObservable();
 export const cameraLockedObservable = new GameEventObservable();
 export const cameraUnlockedObservable = new GameEventObservable();
 export const playerMovedObservable = new GameEventObservable();
 export const playerJumpedObservable = new GameEventObservable();
+export const playerRunObservable = new GameEventObservable();

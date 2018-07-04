@@ -46,7 +46,7 @@ export default class World {
   update(delta: number): void {
     const changedData = new Map();
     for (const system of this.systems) {
-      const changedComponents = system.update(delta);
+      const changedComponents = system.update(delta / 1000);
       if (changedComponents) {
         for (const [id, ...components] of changedComponents) {
           for (const component of components) {
