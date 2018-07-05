@@ -1,8 +1,6 @@
-
+// @flow
 class Thread {
   constructor() {
-    // eslint-disable-next-line
-    self.inThread = true;
     // eslint-disable-next-line
     self.__router__ = {
 
@@ -29,11 +27,3 @@ class Thread {
 }
 
 export default Thread;
-
-export interface IThread {
-  postMessage(message: any): void;
-}
-
-export const THREAD_MAIN: 0 = 0;
-export const THREAD_PHYSICS: 1 = 1;
-export const THREAD_CHUNK_HANDLER: 2 = 2;

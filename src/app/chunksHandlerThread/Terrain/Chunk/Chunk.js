@@ -240,6 +240,7 @@ const chunkProvider = (store) => {
     blocks: Uint8Array;
     flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
     light: Uint16Array = new Uint16Array(this.height * 16 * 16);
+    minimap: Uint8Array = new Uint8Array(256 * 3);
 
     blocksTextureInfo = blocksTextureInfo;
     blocksFlags = blocksFlags;
@@ -259,7 +260,6 @@ const chunkProvider = (store) => {
 
       this.rainfallData = new Uint8Array(256);
       this.temperatureData = new Uint8Array(256);
-      this.minimap = new Uint8Array(256 * 3);
 
       const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
         x + this.x,

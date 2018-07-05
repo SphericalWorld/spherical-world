@@ -1,10 +1,12 @@
 // @flow
+import type { Maybe } from '../../../common/fp/monads/maybe';
 import type { TChunkBase } from './Chunk/ChunkBase';
 import { getGeoId } from '../../../common/chunk';
+import HashMap from '../../../common/fp/data-structures/Map';
 
 const terrainBaseProvider = (Chunk: TChunkBase) => {
   class Terrain {
-    chunks: Map<string, Chunk> = new Map();
+    chunks: HashMap<string, Chunk> = new HashMap();
     size: number;
     halfSize: number;
     playerX: number;
@@ -15,28 +17,25 @@ const terrainBaseProvider = (Chunk: TChunkBase) => {
       this.halfSize = 8;
     }
 
-    addChunk(chunk: Chunk) {
+    addChunk(chunk: Chunk): Chunk {
       this.chunks.set(chunk.geoId, chunk);
-      const northChunk = this.chunks.get(getGeoId(chunk.x - 16, chunk.z));
-      const southChunk = this.chunks.get(getGeoId(chunk.x + 16, chunk.z));
-      const westChunk = this.chunks.get(getGeoId(chunk.x, chunk.z - 16));
-      const eastChunk = this.chunks.get(getGeoId(chunk.x, chunk.z + 16));
-      if (northChunk) {
+      this.chunks.get(getGeoId(chunk.x - 16, chunk.z)).map((northChunk) => {
         chunk.setNorthChunk(northChunk);
         northChunk.setSouthChunk(chunk);
-      }
-      if (southChunk) {
+      });
+      this.chunks.get(getGeoId(chunk.x + 16, chunk.z)).map((southChunk) => {
         chunk.setSouthChunk(southChunk);
         southChunk.setNorthChunk(chunk);
-      }
-      if (westChunk) {
+      });
+      this.chunks.get(getGeoId(chunk.x, chunk.z - 16)).map((westChunk) => {
         chunk.setWestChunk(westChunk);
         westChunk.setEastChunk(chunk);
-      }
-      if (eastChunk) {
+      });
+      this.chunks.get(getGeoId(chunk.x, chunk.z + 16)).map((eastChunk) => {
         chunk.setEastChunk(eastChunk);
         eastChunk.setWestChunk(chunk);
-      }
+      });
+
       if (this.terrainMipMap) {
         chunk.terrainMipMap = this.terrainMipMap;
       }
@@ -44,7 +43,7 @@ const terrainBaseProvider = (Chunk: TChunkBase) => {
       return chunk;
     }
 
-    getChunk(x: number, z: number) {
+    getChunk(x: number, z: number): Maybe<Chunk> {
       return this.chunks.get(getGeoId(x, z));
     }
   }

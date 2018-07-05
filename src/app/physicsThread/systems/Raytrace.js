@@ -3,6 +3,7 @@ import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../ecs/Entity';
 import type World from '../../ecs/World';
+import { Nothing } from '../../../../common/fp/monads/maybe';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
@@ -37,11 +38,14 @@ const getPlane = (block, emptyBlock): Plane => {
 };
 
 const calc = (raytrace, x, y, z) => {
-  const emptyBlock = [x, y, z];
-  const chunk = raytrace.terrain.chunks.get(getGeoId(Math.floor(x / 16) * 16, Math.floor(z / 16) * 16));
-  if (!chunk) {
+  let chunk = raytrace.terrain.chunks.get(getGeoId(Math.floor(x / 16) * 16, Math.floor(z / 16) * 16));
+  if (chunk === Nothing) {
     return false;
   }
+  chunk = chunk.extract();
+
+  const emptyBlock = [x, y, z];
+
   x = x >= 0
     ? x % 16
     : 15 + ((x + 1) % 16);
@@ -75,6 +79,7 @@ const raytraceProvider = (ecs: World, Chunk) => {
       transform: Transform,
       raytracer: Raytracer,
     }[] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
+
     userControlled: {
       transform: Transform,
       camera: Camera,

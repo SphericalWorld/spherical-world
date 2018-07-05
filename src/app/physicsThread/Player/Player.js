@@ -1,6 +1,7 @@
 // @flow
 import { getGeoId } from '../../../../common/chunk';
 
+import { Nothing } from '../../../../common/fp/monads/maybe';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
 const playerProvider = (store, Chunk, Inventory) => {
@@ -37,7 +38,7 @@ const playerProvider = (store, Chunk, Inventory) => {
         this.fallSpeed = -0.007;
       }
       const chunk = this.terrain.chunks.get(getGeoId(Math.floor(this.x / 16) * 16, Math.floor(this.z / 16) * 16));
-      if (!chunk || chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
+      if (chunk === Nothing || chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
         return;
       }
 

@@ -52,67 +52,35 @@ const calcRecursion = (
   };
 
   const updateIfLightRemove = (
-    index,
-    lightTmp,
-    chunk: Chunk,
-    ...params
-  ) => {
-    if (lightTmp > (chunk.light[index] & mask)) {
-      calcRecursionRemoveInternal(chunk, ...params);
-    }
-  };
+    index, lightTmp, chunk: Chunk, ...params
+  ) => ((lightTmp > (chunk.light[index] & mask))
+    ? calcRecursionRemoveInternal(chunk, ...params)
+    : null);
 
   const updateIfLight = mode
     ? updateIfLightAdd
     : updateIfLightRemove;
 
   const calcNear = (
-    chunk: Chunk,
-    x: number,
-    y: number,
-    z: number,
-    index,
-    lightTmp,
-    limit: number,
-  ) => {
-    if (z < 15) {
-      updateIfLight(index + ROW, lightTmp, chunk, x, y, z + 1, limit);
-    } else {
-      updateIfLight(index - ROW_NESTED_CHUNK, lightTmp, chunk.eastChunk, x, y, 0, limit);
-    }
-
-    if (z > 0) {
-      updateIfLight(index - ROW, lightTmp, chunk, x, y, z - 1, limit);
-    } else {
-      updateIfLight(index + ROW_NESTED_CHUNK, lightTmp, chunk.westChunk, x, y, 15, limit);
-    }
-
-    if (x < 15) {
-      updateIfLight(index + COLUMN, lightTmp, chunk, x + 1, y, z, limit);
-    } else {
-      updateIfLight(index - COLUMN_NESTED_CHUNK, lightTmp, chunk.southChunk, 0, y, z, limit);
-    }
-
-    if (x > 0) {
-      updateIfLight(index - COLUMN, lightTmp, chunk, x - 1, y, z, limit);
-    } else {
-      updateIfLight(index + COLUMN_NESTED_CHUNK, lightTmp, chunk.northChunk, 15, y, z, limit);
-    }
-
-    if (y < 255) {
-      updateIfLight(index + SLICE, lightTmp, chunk, x, y + 1, z, limit);
-    }
-
-    if (y > 0) {
-      updateIfLight(index - SLICE, lightTmp, chunk, x, y - 1, z, limit);
-    }
-  };
+    chunk: Chunk, x: number, y: number, z: number, index: number, lightTmp: number, limit: number,
+  ) => (
+    ((z < 15)
+      ? updateIfLight(index + ROW, lightTmp, chunk, x, y, z + 1, limit)
+      : updateIfLight(index - ROW_NESTED_CHUNK, lightTmp, chunk.eastChunk, x, y, 0, limit)),
+    ((z > 0)
+      ? updateIfLight(index - ROW, lightTmp, chunk, x, y, z - 1, limit)
+      : updateIfLight(index + ROW_NESTED_CHUNK, lightTmp, chunk.westChunk, x, y, 15, limit)),
+    ((x < 15)
+      ? updateIfLight(index + COLUMN, lightTmp, chunk, x + 1, y, z, limit)
+      : updateIfLight(index - COLUMN_NESTED_CHUNK, lightTmp, chunk.southChunk, 0, y, z, limit)),
+    ((x > 0)
+      ? updateIfLight(index - COLUMN, lightTmp, chunk, x - 1, y, z, limit)
+      : updateIfLight(index + COLUMN_NESTED_CHUNK, lightTmp, chunk.northChunk, 15, y, z, limit)),
+    ((y < 255) && updateIfLight(index + SLICE, lightTmp, chunk, x, y + 1, z, limit)),
+    ((y > 0) && updateIfLight(index - SLICE, lightTmp, chunk, x, y - 1, z, limit)));
 
   const calcRecursionInternal = (
-    chunk: Chunk,
-    x: number,
-    y: number,
-    z: number,
+    chunk: Chunk, x: number, y: number, z: number,
   ) => {
     const index = getIndex(x, y, z);
     if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {

@@ -4,6 +4,7 @@ import type { Mat4 } from 'gl-matrix';
 
 import type Material from '../engine/Material';
 import { getGeoId } from '../../../common/chunk';
+import { Nothing } from '../../../common/fp/monads/maybe';
 import { connect } from '../util';
 import { loadChunk, loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
@@ -30,9 +31,11 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
 
       this.texture = null;
       network.route('loadChunk', (data, binaryData) => {
-        let chunk = this.chunks.get(getGeoId(data.x, data.z));
-        if (!chunk) {
+        let chunk = this.getChunk(data.x, data.z);
+        if (!chunk.isJust) {
           chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
+        } else {
+          chunk = chunk.extract();
         }
         chunk.generateFoliageTexture();
         this.loadChunk({

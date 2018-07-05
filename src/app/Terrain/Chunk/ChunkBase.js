@@ -4,7 +4,7 @@ import { CHUNK_STATUS_NEED_LOAD_ALL } from './chunkConstants';
 import { getGeoId } from '../../../../common/chunk';
 // north direction - decreasing of X
 
-class ChunkBase<TChunk: ChunkBase, TTerrain> {
+class ChunkBase<TChunk, TTerrain> {
   x: number;
   z: number;
   height: number;

@@ -18,5 +18,6 @@ module.exports = {
     "no-unused-expressions": "off",
     "implicit-arrow-linebreak": "off",
     "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
+    "array-callback-return": "off", // unfortunately this rule is broken in eslint with lots false-positives
   },
 };

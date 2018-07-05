@@ -69,7 +69,7 @@ export const PLAYER_MOVE_RIGHT_EVENT = {
 };
 
 export const PLAYER_JUMP_EVENT = {
-  type: INPUT_TYPE_ACTION,
+  type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_JUMPED,
 };
 

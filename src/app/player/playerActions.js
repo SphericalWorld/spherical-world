@@ -2,10 +2,6 @@
 import {
   PLAYER_LOADED,
   PLAYER_CHANGED_ROTATION,
-  PLAYER_JUMPED,
-  PLAYER_STOPED_JUMPING,
-  PLAYER_RUN,
-  PLAYER_STOPED_RUNING,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
@@ -55,30 +51,6 @@ export const playerChangeRotation = (movementX: number, movementY: number) => (d
     });
   }
 };
-
-export const playerJump = (id: number) => ({
-  type: PLAYER_JUMPED,
-  payload: { id },
-  meta: { worker: true },
-});
-
-export const playerStopJumping = (id: number) => ({
-  type: PLAYER_STOPED_JUMPING,
-  payload: { id },
-  meta: { worker: true },
-});
-
-export const playerRun = (id: number) => ({
-  type: PLAYER_RUN,
-  payload: { id },
-  meta: { worker: true },
-});
-
-export const playerStopRun = (id: number) => ({
-  type: PLAYER_STOPED_RUNING,
-  payload: { id },
-  meta: { worker: true },
-});
 
 export const playerStartRemoveBlock = (id: number) => (dispatch, getState) => {
   dispatch({

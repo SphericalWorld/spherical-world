@@ -132,10 +132,10 @@ const generateResources = (generator: ChunkGenerator): ChunkLiftIO => ({
 const generateReeds = ({
   chunk, i, j, height,
 }) => IO.from(() => {
-  if ((chunk.at(j, height, i - 1) === WATER) ||
-  (chunk.at(j, height, i + 1) === WATER) ||
-  (chunk.at(j - 1, height, i) === WATER) ||
-  (chunk.at(j + 1, height, i) === WATER)) {
+  if ((chunk.at(j, height, i - 1) === WATER)
+  || (chunk.at(j, height, i + 1) === WATER)
+  || (chunk.at(j - 1, height, i) === WATER)
+  || (chunk.at(j + 1, height, i) === WATER)) {
     chunk.setUnsafe(j, height + 1, i, REEDS);
     chunk.setUnsafe(j, height + 2, i, REEDS);
     chunk.setUnsafe(j, height + 3, i, REEDS);

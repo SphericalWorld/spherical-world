@@ -9,27 +9,26 @@ import Physics from '../../components/Physics';
 import { Terrain } from '../Terrain';
 import { Chunk as IChunk } from '../Terrain/Chunk';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
-import { getGeoId } from '../../../../common/chunk';
 
 const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
   const calculateMovement = ({ translation }: Transform, velocity: Velocity) => {
-    const chunk = terrain.chunks.get(getGeoId(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16));
-    if (!chunk || chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
-      return;
-    }
+    terrain.getChunk(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16).map((chunk) => {
+      if (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
+        return;
+      }
 
-    let blockX = Math.floor(translation[0] % 16);
-    let blockZ = Math.floor(translation[2] % 16);
-    blockX = blockX >= 0 ? blockX : blockX + 16;
-    blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
+      let blockX = Math.floor(translation[0] % 16);
+      let blockZ = Math.floor(translation[2] % 16);
+      blockX = blockX >= 0 ? blockX : blockX + 16;
+      blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
 
-    const block = chunk.getBlock(blockX, Math.floor(translation[1]), blockZ);
-    if (block && blocksFlags[block][HAS_PHYSICS_MODEL]) {
-      translation[1] = Math.floor(translation[1] + 1);
-      velocity.linear[1] = 0;
-      return;
-    }
-
+      const block = chunk.getBlock(blockX, Math.floor(translation[1]), blockZ);
+      if (block && blocksFlags[block][HAS_PHYSICS_MODEL]) {
+        translation[1] = Math.floor(translation[1] + 1);
+        velocity.linear[1] = 0;
+        return;
+      }
+    });
     // translation[1] += velocity.linear[1];
   };
 

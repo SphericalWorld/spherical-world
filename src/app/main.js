@@ -6,8 +6,6 @@ import { connect } from './util';
 // import playerModel from '../models/player.json';
 import {
   playerStopJumping, // TODO: needs only for swimming
-  playerRun,
-  playerStopRun,
 } from './player/playerActions';
 
 import { World } from './ecs';
@@ -19,11 +17,6 @@ setInterval(() => {
     tex = 0;
   }
 }, 100);
-
-const mapState = state => ({
-  // mvMatrix: state.camera.mvMatrix,
-  // pMatrix: state.camera.pMatrix,
-});
 
 const engineProvider = (
   store,
@@ -66,14 +59,13 @@ const engineProvider = (
     }
 
     gameCycle = (time: number): void => {
-      const delta: number = time - this.lastTime;
+      const delta = time - this.lastTime;
       this.lastTime = time;
       this.ecs.update(delta);
       requestAnimationFrame(this.gameCycle);
     }
 
     static initKeyboardActions() {
-      // this.keyboard.registerAction('run', playerRun(this.player.id), playerStopRun(this.player.id));
       // this.keyboard.registerAction({
       //   name: 'showDebugInfo',
       //   onKeyDown() {
@@ -126,7 +118,7 @@ const engineProvider = (
       // }
     }
   }
-  return connect(mapState, null, store)(Engine);
+  return Engine;
 };
 
 

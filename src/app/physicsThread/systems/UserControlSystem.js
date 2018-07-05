@@ -74,7 +74,10 @@ export default (ecs: World, terrain: Terrain) => {
         controls.isRunning = type === PLAYER_RUN;
         return controls;
       }, userControls);
-      this.jumpEvents.events.reduce(() => vec3.add(velocity.linear, velocity.linear, [0, 5, 0]), null);
+      this.jumpEvents.events.reduce(() => (velocity.linear[1] === 0
+        ? vec3.add(velocity.linear, velocity.linear, [0, 5, 0])
+        : velocity.linear),
+      null);
 
       const movingX = userControls.movingForward - userControls.movingBackward;
       const movingZ = userControls.movingLeft - userControls.movingRight;
