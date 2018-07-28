@@ -18,6 +18,7 @@ class Water extends Block {
     west: 2,
     east: 2,
   };
+
   textures = {
     top: GRASS,
     bottom: GRASS,

@@ -1,35 +1,86 @@
 // @flow
+import type { Vec3 } from 'gl-matrix';
+import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../ecs/Entity';
+import { Just, Nothing } from '../../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
+import Collider from '../../components/Collider';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
 import Velocity from '../../components/Velocity';
 import Transform from '../../components/Transform';
 import Physics from '../../components/Physics';
+import { createAABB } from '../physics/colliders/AABB';
+import { collide, testCollision, move } from '../physics/Collider';
 import { Terrain } from '../Terrain';
 import { Chunk as IChunk } from '../Terrain/Chunk';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
-const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
-  const calculateMovement = ({ translation }: Transform, velocity: Velocity) => {
-    terrain.getChunk(Math.floor(translation[0] / 16) * 16, Math.floor(translation[2] / 16) * 16).map((chunk) => {
-      if (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL) {
-        return;
-      }
+const halfVector = vec3.fromValues(0.5, 0.5, 0.5);
+const oneVector = vec3.fromValues(1, 1, 1);
 
-      let blockX = Math.floor(translation[0] % 16);
-      let blockZ = Math.floor(translation[2] % 16);
+const getChunkIfLoaded = chunk => (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL
+  ? Nothing
+  : Just(chunk));
+
+const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
+  const calculateMovement = (
+    { translation }: Transform, velocity: Velocity, blockPosition: Vec3, collider: Collider,
+  ) => terrain
+    .getChunk(Math.floor(blockPosition[0] / 16) * 16, Math.floor(blockPosition[2] / 16) * 16)
+    .chain(getChunkIfLoaded)
+    .map((chunk) => {
+      let blockX = Math.floor(blockPosition[0] % 16);
+      let blockZ = Math.floor(blockPosition[2] % 16);
       blockX = blockX >= 0 ? blockX : blockX + 16;
       blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
-
-      const block = chunk.getBlock(blockX, Math.floor(translation[1]), blockZ);
-      if (block && blocksFlags[block][HAS_PHYSICS_MODEL]) {
-        translation[1] = Math.floor(translation[1] + 1);
-        velocity.linear[1] = 0;
+      const block = chunk.getBlock(blockX, Math.floor(blockPosition[1]), blockZ);
+      if (!block || !blocksFlags[block][HAS_PHYSICS_MODEL]) {
         return;
       }
+      const blockPositionNormalized = vec3.add(vec3.create(), blockPosition, halfVector);
+      const blockAABB = createAABB(
+        blockPositionNormalized,
+        oneVector,
+      );
+
+      if (testCollision(collider.shape, blockAABB)) {
+        const manifold = collide({
+          shape: collider.shape,
+        }, {
+          shape: blockAABB,
+        });
+        vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
+        move(collider.shape, translation);
+        velocity.linear[manifold.normal.find(el => el)] = 0;
+      }
     });
-    // translation[1] += velocity.linear[1];
+
+  const collideWithTerrain = (transform, velocity, collider) => {
+    const fromX = Math.floor(collider.shape.min[0]);
+    const fromY = Math.floor(collider.shape.min[1]);
+    const fromZ = Math.floor(collider.shape.min[2]);
+    const toX = Math.floor(collider.shape.max[0]);
+    const toY = Math.floor(collider.shape.max[1]);
+    const toZ = Math.floor(collider.shape.max[2]);
+    for (let x = fromX; x <= toX; x += 1) {
+      for (let z = fromZ; z <= toZ; z += 1) {
+        calculateMovement(transform, velocity, vec3.fromValues(x, fromY, z), collider);
+        calculateMovement(transform, velocity, vec3.fromValues(x, toY, z), collider);
+      }
+    }
+    for (let x = fromX; x <= toX; x += 1) {
+      for (let y = fromY; y <= toY; y += 1) {
+        calculateMovement(transform, velocity, vec3.fromValues(x, y, fromZ), collider);
+        calculateMovement(transform, velocity, vec3.fromValues(x, y, toZ), collider);
+      }
+    }
+    for (let z = fromZ; z <= toZ; z += 1) {
+      for (let y = fromY; y <= toY; y += 1) {
+        calculateMovement(transform, velocity, vec3.fromValues(fromX, y, z), collider);
+        calculateMovement(transform, velocity, vec3.fromValues(toX, y, z), collider);
+      }
+    }
   };
 
   class PhysicsSystem implements System {
@@ -38,14 +89,16 @@ const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChun
       id: Entity,
       transform: Transform,
       velocity: Velocity,
-    }[] = ecs.createSelector([Transform, Velocity, Physics]);
+      collider: Collider,
+    }[] = ecs.createSelector([Transform, Velocity, Physics, Collider]);
 
     update(delta: number): Array {
       const result = [];
-      for (const { id, transform, velocity } of this.components) {
-        calculateMovement(transform, velocity);
-        result.push([id, transform, velocity]);
-        // console.log(transform)
+      for (const {
+        transform, velocity, collider,
+      } of this.components) {
+        move(collider.shape, transform.translation);
+        collideWithTerrain(transform, velocity, collider);
       }
       return result;
     }

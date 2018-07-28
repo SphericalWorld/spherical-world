@@ -146,8 +146,9 @@
 //
 // export default playerProvider;
 
-
+import { vec3 } from 'gl-matrix';
 import type { Entity } from '../ecs/Entity';
+import Collider from '../components/Collider';
 import UserControlled from '../components/UserControlled';
 import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
@@ -156,6 +157,7 @@ import {
   Transform, Camera, Physics, Velocity, Gravity, Raytracer
 } from '../components';
 import { MaterialLibrary } from '../engine/MaterialLibrary';
+import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
 const playerProvider = (
   ecs: World,
@@ -172,6 +174,7 @@ const playerProvider = (
     data.id,
     new Transform(data.x, data.y, data.z),
     new Camera(),
+    new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8)), // 1.8
     new Physics(),
     new Velocity(),
     new Gravity(),

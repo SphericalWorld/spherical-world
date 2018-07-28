@@ -1,5 +1,6 @@
 // @flow
 import type { ShaderLibrary } from './app/engine/ShaderLibrary';
+import Collider from './app/components/Collider';
 import { menuToggledObservable } from './app/hud/events';
 import { MENU_TOGGLED } from './app/hud/hudConstants';
 import Main from './app/main';
@@ -39,7 +40,7 @@ import Velocity from './app/components/Velocity';
 import Gravity from './app/components/Gravity';
 import UserControlled from './app/components/UserControlled';
 
-import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER } from './app/Thread/threadConstants';
+import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './app/Thread/threadConstants';
 
 import inputProvider from './app/Input/inputProvider';
 import inputSourcesProvider from './app/Input/inputSources/inputSourcesProvider';
@@ -56,7 +57,7 @@ import {
 } from './app/player/events';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
-  const world = new World();
+  const world = new World(THREAD_MAIN);
   world.registerThread(THREAD_PHYSICS, physicsThread);
   world.registerThread(THREAD_CHUNK_HANDLER, chunksHandlerThread);
   world.registerComponentTypes(
@@ -69,6 +70,7 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
     Velocity,
     Gravity,
     UserControlled,
+    Collider,
   );
   physicsThread.onMessage = ({ type, payload }) => {
     if (type === 'UPDATE_COMPONENTS') {

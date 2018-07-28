@@ -27,11 +27,12 @@ import Velocity from '../components/Velocity';
 import Physics from '../components/Physics';
 import UserControlled from '../components/UserControlled';
 import Camera from '../components/Camera';
+import Collider from '../components/Collider';
 
 import { World } from '../ecs';
-import { THREAD_MAIN } from '../Thread/threadConstants';
+import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
-const world = new World();
+const world = new World(THREAD_PHYSICS);
 
 const store = configureStore();
 
@@ -70,17 +71,18 @@ class PhysicsThread {
       Raytracer,
       Gravity,
       Physics,
+      Collider,
       Velocity,
       UserControlled,
       Camera,
     );
     world.registerThread(THREAD_MAIN, self);
-    world.registerSystem(new Raytrace(this.terrain));
     world.registerSystem(
       new UserControlSystem(),
       new GravitySystem(),
       new VelocitySystem(),
       new PhysicsSystem(),
+      new Raytrace(this.terrain),
     );
 
     self.onMessage = ({ type, payload }) => {
@@ -108,9 +110,6 @@ class PhysicsThread {
     // for (const [id, player] of this.players.entries()) {
     //   player.calcPhysics(elapsed);
     //   players[id] = {
-    //     x: player.x,
-    //     y: player.y,
-    //     z: player.z,
     //     blockInDown: player.blockInDown,
     //     blockInUp: player.blockInUp,
     //   };

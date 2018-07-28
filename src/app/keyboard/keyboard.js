@@ -2,7 +2,6 @@
 
 const keyboardProvider = store => class Keyboard {
   keyHandlers: Map<number, string> = new Map();
-  actions: Map<string, {| onKeyUp?: Function, onKeyDown?: Function |}> = new Map();
 
   constructor() {
     this.setKeys();
@@ -11,7 +10,6 @@ const keyboardProvider = store => class Keyboard {
   setKeys() {
     this.setPrimaryKeyForAction('showDebugInfo', 'f2');
     this.setPrimaryKeyForAction('enterFullscreen', 'f9');
-    this.setPrimaryKeyForAction('run', 'shift');
   }
 
   setPrimaryKeyForAction(actionName: string, key: number | string) {

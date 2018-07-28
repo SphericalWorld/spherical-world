@@ -5,6 +5,7 @@ declare type Just<T> = {
   value: T,
   static (value: T): Just<T>,
   map<G>(T => G): Just<G>,
+  chain<T, G>(fn: T => Maybe<G>): Maybe<G>,
   extract(): T,
   isJust: true,
 }
@@ -16,6 +17,9 @@ const proto = {
   },
   extract() {
     return this.value;
+  },
+  chain<T, G>(fn: T => Maybe<G>): Maybe<G> {
+    return fn(this.value);
   },
 };
 
@@ -30,6 +34,7 @@ declare type TNothing<T> = {
   value: T,
   static (value: T): TNothing<T>,
   map<G>(T => G): TNothing<T>,
+  chain<T, G>(fn: T => Maybe<G>): TNothing<G>,
   extract(): T,
   isJust: false,
 }
@@ -43,6 +48,10 @@ class TNothing implements Monad<*> {
 
   extract(): * {
     throw new Error('Unable to extract from Nothing');
+  }
+
+  chain<T, G>(fn: T => Maybe<G>): Maybe<G> {
+    return this;
   }
 }
 

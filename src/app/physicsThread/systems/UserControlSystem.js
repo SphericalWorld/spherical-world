@@ -99,13 +99,13 @@ export default (ecs: World, terrain: Terrain) => {
         const v = vec3.fromValues(1, 0, 0);
         vec3.transformQuat(v, v, rotation);
 
-        const v2 = vec3.fromValues(0, 1, 0);
-        vec3.transformQuat(v2, v2, rotation);
+        // const v2 = vec3.fromValues(0, 1, 0);
+        // vec3.transformQuat(v2, v2, rotation);
 
         const v3 = vec3.fromValues(0, 0, 1);
         vec3.transformQuat(v3, v3, rotation);
 
-        userControls.velocity = [-v[2], -v2[2], -v3[2]];
+        userControls.velocity = [-v[2], 0, -v3[2]];
         vec3.scale(userControls.velocity, userControls.velocity, 10 * (userControls.isRunning ? 2 : 1));
         result.push([id, velocity]);
       } else {

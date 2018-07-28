@@ -1,6 +1,7 @@
 // @flow
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
+import chain from '../../common/fp/chain.type';
 import { IGenerator } from './chunk-generators/Generator.types';
 import IO from '../../common/fp/monads/io';
 import range from '../../common/range';
@@ -192,7 +193,7 @@ const iterateChunk = funcToIterate => (chunk: Chunk): IO<Chunk> => chunk.heightM
   .map((height, i, j) => funcToIterate({
     chunk, i, j, height,
   }))
-  .reduce((f, g) => g.chain(() => f));
+  .reduce((f, g) => chain(() => f)(g));
 
 const generateStructures = (generator: ChunkGenerator) =>
   pipeMonadic(...generator.structures);

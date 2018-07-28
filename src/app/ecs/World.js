@@ -1,6 +1,7 @@
 // @flow
 import type GameEvent from '../GameEvent/GameEvent';
 import type { Input } from '../Input/Input';
+import type { THREAD_ID } from '../Thread/threadConstants';
 import type { Entity } from './Entity';
 import type { System } from '../systems/System';
 import { Component } from '../components/Component';
@@ -15,6 +16,11 @@ export default class World {
   input: Input;
   events: GameEvent[] = [];
   listeners: Array<GameEvent => void> = [];
+  thread: THREAD_ID;
+
+  constructor(thread: THREAD_ID) {
+    this.thread = thread;
+  }
 
   registerThread(id: number, thread: Worker) {
     this.threads.set(id, thread);
@@ -112,7 +118,12 @@ export default class World {
 
   addExistedEntity(id: Entity, ...components: Component[]): void {
     for (const component of components) {
-      component.data = Object.assign(Reflect.construct(this.componentTypes.get(component.type), []), component.data);
+      const constructor = this.componentTypes.get(component.type);
+      component.data = Object.assign(Reflect.construct(constructor, []), component.data);
+      const threadConstructor = constructor.threadsConstructors && constructor.threadsConstructors[this.thread];
+      if (threadConstructor) {
+        threadConstructor(component.data);
+      }
     }
     this.registerEntity(id, components);
   }
