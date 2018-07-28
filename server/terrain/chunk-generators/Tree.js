@@ -63,7 +63,7 @@ const branch = (
     const newDirection = direction.randomize(0.8);
     const newPosition = position.add(newDirection);
     runRecursion(newPosition, newDirection, BRANCH_LENGTH);
-    const newDirection2 = newDirection.subtract(direction.multiply(2 * newDirection.dot(direction))).negative();
+    const newDirection2 = newDirection.subtract(direction.scale(2 * newDirection.dot(direction))).negative();
     const newPosition2 = position.add(newDirection2);
     runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
     if (branches === 3) {

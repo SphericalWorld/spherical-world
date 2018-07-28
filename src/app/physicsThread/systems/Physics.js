@@ -13,7 +13,7 @@ import Physics from '../../components/Physics';
 import { createAABB } from '../physics/colliders/AABB';
 import { collide, testCollision, move } from '../physics/Collider';
 import { Terrain } from '../Terrain';
-import { Chunk as IChunk } from '../Terrain/Chunk';
+import type { Chunk as IChunk } from '../Terrain/Chunk';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
 const halfVector = vec3.fromValues(0.5, 0.5, 0.5);
@@ -23,7 +23,7 @@ const getChunkIfLoaded = chunk => (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL
   ? Nothing
   : Just(chunk));
 
-const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: typeof IChunk) => {
+const physicsSystemProvider = (ecs: World, terrain: Terrain, Chunk: IChunk) => {
   const calculateMovement = (
     { translation }: Transform, velocity: Velocity, blockPosition: Vec3, collider: Collider,
   ) => terrain

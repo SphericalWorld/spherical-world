@@ -1,6 +1,8 @@
 // @flow
 import type { Mat4 } from 'gl-matrix';
-import { mat4, quat, vec3 } from 'gl-matrix';
+import {
+  mat4, quat, vec3, vec4,
+} from 'gl-matrix';
 import type { World } from '../ecs';
 import type { Entity } from '../ecs/Entity';
 import type { Viewport } from '../components/Camera';
@@ -27,6 +29,19 @@ const resizeViewport = (viewport: Viewport): Viewport => {
   }
   return viewport;
 };
+
+const getWorldPosition = (distance: number) =>
+  (width: number, height: number, pMatrix: Mat4, mvMatrix: Mat4) =>
+    vec3.unproject(
+      width / 2,
+      height / 2,
+      distance,
+      mat4.multiply(mat4.create(), pMatrix, mvMatrix),
+      vec4.fromValues(0, 0, width, height),
+    );
+
+const getWorldPositionNear = getWorldPosition(0);
+const getWorldPositionFar = getWorldPosition(1);
 
 const cameraProvider = (world: World) => {
   class CameraSystem implements System {
@@ -81,8 +96,8 @@ const cameraProvider = (world: World) => {
         viewport: { viewportWidth, viewportHeight, pMatrix },
         mvMatrix,
       } = camera;
-      const worldPosition = vec3.unproject(viewportWidth / 2, viewportHeight / 2, 1, mat4.multiply([], pMatrix, mvMatrix), [0, 0, viewportWidth, viewportHeight]);
-      const worldPositionNear = vec3.unproject(viewportWidth / 2, viewportHeight / 2, 0, mat4.multiply([], pMatrix, mvMatrix), [0, 0, viewportWidth, viewportHeight]);
+      const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
+      const worldPositionNear = getWorldPositionNear(viewportWidth, viewportHeight, pMatrix, mvMatrix);
       vec3.subtract(sight, worldPosition, worldPositionNear);
       vec3.normalize(sight, sight);
 

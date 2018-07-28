@@ -91,8 +91,6 @@ const chunkProvider = (store) => {
   // return connect(mapState, null, store)(Chunk);
 };
 
-/* ::
-export const Chunk = chunkProvider();
-*/
+export type Chunk = $Call<typeof chunkProvider>;
 
 export default chunkProvider;

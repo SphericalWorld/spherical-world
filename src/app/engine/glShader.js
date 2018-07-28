@@ -1,21 +1,23 @@
 // @flow
 import { gl } from './glEngine';
 
+type Constants = { [string]: string | number };
+
 class GlShader {
   source: string;
   type: number;
   shader: WebGLShader;
   version: string = '300';
 
-  constructor(source: string, constants: Object) {
+  constructor(source: string, constants: Constants) {
     this.source = source;
     this.shader = null;
     this.setConstants(constants);
   }
 
-  setConstants(constants: Object) {
-    for (const i in constants) {
-      this.source = `#define ${i} ${constants[i]} \n${this.source}`;
+  setConstants(constants: Constants) {
+    for (const [key, value] of Object.entries(constants)) {
+      this.source = `#define ${key} ${value} \n${this.source}`;
     }
     this.source = `#version ${this.version} es\n${this.source}`;
   }
@@ -25,7 +27,7 @@ class GlShader {
     gl.shaderSource(this.shader, this.source);
     gl.compileShader(this.shader);
     if (!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS)) {
-      throw new Error(`Shader compilation error: ${gl.getShaderInfoLog(this.shader)}`);
+      throw new Error(`Shader compilation error: ${String(gl.getShaderInfoLog(this.shader))}`);
     }
   }
 }

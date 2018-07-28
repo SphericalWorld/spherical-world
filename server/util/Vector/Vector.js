@@ -1,4 +1,5 @@
 // @flow
+const PI2 = Math.PI * 2;
 
 class Vector {
   x: number;
@@ -15,24 +16,24 @@ class Vector {
     return new Vector(-this.x, -this.y, -this.z);
   }
 
-  add(v: Vector | number): Vector {
-    if (v instanceof Vector) return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
-    return new Vector(this.x + v, this.y + v, this.z + v);
+  add(v: Vector): Vector {
+    return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
   }
 
-  subtract(v: Vector | number): Vector {
-    if (v instanceof Vector) return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
-    return new Vector(this.x - v, this.y - v, this.z - v);
+  subtract(v: Vector): Vector {
+    return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
   }
 
-  multiply(v: Vector | number): Vector {
-    if (v instanceof Vector) return new Vector(this.x * v.x, this.y * v.y, this.z * v.z);
-    return new Vector(this.x * v, this.y * v, this.z * v);
+  multiply(v: Vector): Vector {
+    return new Vector(this.x * v.x, this.y * v.y, this.z * v.z);
   }
 
-  divide(v: Vector | number): Vector {
-    if (v instanceof Vector) return new Vector(this.x / v.x, this.y / v.y, this.z / v.z);
-    return new Vector(this.x / v, this.y / v, this.z / v);
+  divide(v: Vector): Vector {
+    return new Vector(this.x / v.x, this.y / v.y, this.z / v.z);
+  }
+
+  scale(size: number): Vector {
+    return new Vector(this.x * size, this.y * size, this.z * size);
   }
 
   equals(v: Vector): boolean {
@@ -56,7 +57,7 @@ class Vector {
   }
 
   unit(): Vector {
-    return this.divide(this.length());
+    return this.scale(1 / this.length());
   }
 
   min(): number {
@@ -89,70 +90,78 @@ class Vector {
   randomize(factor: number): Vector {
     const u = new Vector(this.z, this.x, this.y).unit();
     const v = this.cross(u).unit();
-    const rad = Math.random() * Math.PI * 2;
+    const rad = Math.random() * PI2;
     const multiplierU = Math.cos(rad);
     const multiplierV = Math.sin(rad);
-    return this.add(u.multiply(multiplierU * factor * Math.random())).add(v.multiply(multiplierV * factor * Math.random())).unit();
+    return this
+      .add(u.scale(multiplierU * factor * Math.random()))
+      .add(v.scale(multiplierV * factor * Math.random()))
+      .unit();
   }
 
   round(): Vector {
     return new Vector(Math.round(this.x), Math.round(this.y), Math.round(this.z));
   }
 
-  static add(a, b, c) {
-    if (b instanceof Vector) { c.x = a.x + b.x; c.y = a.y + b.y; c.z = a.z + b.z; } else { c.x = a.x + b; c.y = a.y + b; c.z = a.z + b; }
-    return c;
+  static add(a: Vector, b: Vector, out: Vector): Vector {
+    out.x = a.x + b.x; // eslint-disable-line no-param-reassign
+    out.y = a.y + b.y; // eslint-disable-line no-param-reassign
+    out.z = a.z + b.z; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static subtract(a, b, c) {
-    if (b instanceof Vector) { c.x = a.x - b.x; c.y = a.y - b.y; c.z = a.z - b.z; } else { c.x = a.x - b; c.y = a.y - b; c.z = a.z - b; }
-    return c;
+  static subtract(a: Vector, b: Vector, out: Vector): Vector {
+    out.x = a.x - b.x; // eslint-disable-line no-param-reassign
+    out.y = a.y - b.y; // eslint-disable-line no-param-reassign
+    out.z = a.z - b.z; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static multiply(a, b, c) {
-    if (b instanceof Vector) { c.x = a.x * b.x; c.y = a.y * b.y; c.z = a.z * b.z; } else { c.x = a.x * b; c.y = a.y * b; c.z = a.z * b; }
-    return c;
+  static multiply(a: Vector, b: Vector, out: Vector): Vector {
+    out.x = a.x * b.x; // eslint-disable-line no-param-reassign
+    out.y = a.y * b.y; // eslint-disable-line no-param-reassign
+    out.z = a.z * b.z; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static divide(a, b, c) {
-    if (b instanceof Vector) { c.x = a.x / b.x; c.y = a.y / b.y; c.z = a.z / b.z; } else { c.x = a.x / b; c.y = a.y / b; c.z = a.z / b; }
-    return c;
+  static divide(a: Vector, b: Vector, out: Vector): Vector {
+    out.x = a.x / b.x; // eslint-disable-line no-param-reassign
+    out.y = a.y / b.y; // eslint-disable-line no-param-reassign
+    out.z = a.z / b.z; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static cross(a, b, c) {
-    c.x = a.y * b.z - a.z * b.y;
-    c.y = a.z * b.x - a.x * b.z;
-    c.z = a.x * b.y - a.y * b.x;
-    return c;
+  static scale(a: Vector, size: number, out: Vector): Vector {
+    out.x = a.x * size; // eslint-disable-line no-param-reassign
+    out.y = a.y * size; // eslint-disable-line no-param-reassign
+    out.z = a.z * size; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static fromAngles(theta, phi) {
-    return new Vector(Math.cos(theta) * Math.cos(phi), Math.sin(phi), Math.sin(theta) * Math.cos(phi));
+  static cross(a: Vector, b: Vector, out: Vector): Vector {
+    out.x = a.y * b.z - a.z * b.y; // eslint-disable-line no-param-reassign
+    out.y = a.z * b.x - a.x * b.z; // eslint-disable-line no-param-reassign
+    out.z = a.x * b.y - a.y * b.x; // eslint-disable-line no-param-reassign
+    return out;
   }
 
-  static randomDirection() {
-    return Vector.fromAngles(Math.random() * Math.PI * 2, Math.asin(Math.random() * 2 - 1));
-  }
+  static fromAngles = (theta: number, phi: number) =>
+    new Vector(Math.cos(theta) * Math.cos(phi), Math.sin(phi), Math.sin(theta) * Math.cos(phi));
 
-  static min(a, b) {
-    return new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
-  }
+  static randomDirection = () =>
+    Vector.fromAngles(Math.random() * PI2, Math.asin(Math.random() * 2 - 1));
 
-  static max(a, b) {
-    return new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
-  }
+  static min = (a: Vector, b: Vector) =>
+    new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
 
-  static lerp(a, b, fraction) {
-    return b.subtract(a).multiply(fraction).add(a);
-  }
+  static max = (a: Vector, b: Vector) =>
+    new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
 
-  static fromArray(a) {
-    return new Vector(a[0], a[1], a[2]);
-  }
+  static lerp = (a: Vector, b: Vector, fraction: number) => b.subtract(a).scale(fraction).add(a);
 
-  static angleBetween(a, b) {
-    return a.angleTo(b);
-  }
+  static fromArray = (a: number[]) => new Vector(a[0], a[1], a[2]);
+
+  static angleBetween = (a: Vector, b: Vector) => a.angleTo(b);
 
   * [Symbol.iterator]() {
     yield this.x;
