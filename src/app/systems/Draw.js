@@ -7,9 +7,11 @@ import type { System } from './System';
 
 import { gl } from '../engine/glEngine';
 import { GlShaderProgram } from '../engine/glShader';
-import { Transform, Visual, Skybox, Camera } from '../components';
+import {
+  Transform, Visual, Skybox, Camera,
+} from '../components';
 import { connect } from '../util';
-import { Time } from '../Time/Time';
+import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
 import { Terrain } from '../Terrain/Terrain';
 
@@ -21,12 +23,14 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       transform: Transform,
       visual: Visual,
     }[] = world.createSelector([Transform, Visual], [Skybox]);
+
     skybox: {
       id: Entity,
       transform: Transform,
       visual: Visual,
       skybox: Skybox,
     }[] = world.createSelector([Transform, Visual, Skybox]);
+
     camera: {
       id: Entity,
       camera: Camera,

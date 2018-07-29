@@ -154,7 +154,7 @@ import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import {
-  Transform, Camera, Physics, Velocity, Gravity, Raytracer
+  Transform, Camera, Physics, Velocity, Gravity, Raytracer,
 } from '../components';
 import { MaterialLibrary } from '../engine/MaterialLibrary';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';

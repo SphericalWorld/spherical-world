@@ -5,15 +5,9 @@ const playerProvider = () => {
     x: number = 0.0;
     y: number = 0.0;
     z: number = 0.0;
-    movingForward: boolean = false;
-    movingBack: boolean = false;
-    movingLeft: boolean = false;
-    movingRight: boolean = false;
-    running: boolean = false;
 
     constructor(params, terrain) {
       this.terrain = terrain;
-      this.jumping = false;
       this.blockInDown = 0;
       this.blockInUp = 0;
 
@@ -42,9 +36,6 @@ const playerProvider = () => {
         } else if (this.fallSpeed > 0) {
           this.y = Math.floor(this.y) + 0.1;
           this.fallSpeed = 0;
-          if (this.jumping) {
-            this.fallSpeed = -0.007;
-          }
         }
       } else {
         fall = fall || ((this.y - Math.floor(this.y) - (this.fallSpeed + delta * 0.00002) * delta) < 0.3);

@@ -20,6 +20,7 @@ export default class Camera {
     viewportHeight: 0,
     pMatrix: mat4.identity(mat4.create()),
   };
+
   mvMatrix: Mat4 = mat4.identity(mat4.create());
   sight: Vec3 = vec3.create();
   worldPosition: Vec3 = vec3.create();

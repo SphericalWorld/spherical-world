@@ -1,7 +1,6 @@
 // @flow
 import type Server from './server';
-
-const Player = require('./player.js');
+import Player from './player';
 
 class SocketHandlers {
   server: Server;

@@ -16,6 +16,7 @@ class IronOre extends Block {
     west: 0,
     east: 0,
   };
+
   textures = {
     top: IRON_ORE,
     bottom: IRON_ORE,

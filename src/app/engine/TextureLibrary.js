@@ -63,7 +63,7 @@ class GlTextureLibrary {
     this.ctx.textBaseline = 'middle';
     this.ctx.font = `bold ${textSize}px monospace`;
     this.ctx.fillText(textToWrite, this.textureCanvas.width / 2, this.textureCanvas.height / 2);
-    return makeTexture(this.textureCanvas, gl.TEXTURE_2D, 'RGBA');
+    return makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA);
   }
 
   makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {
@@ -162,7 +162,7 @@ class GlTextureLibrary {
         animTextures.push(this.textures[i]);
 
         this.ctx.drawImage(this.textures[i].textureImage, 0, 0);
-        const tex = makeTexture(this.textureCanvas, gl.TEXTURE_2D, 'RGBA');
+        const tex = makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA);
 
         // console.log(this.textureCanvas.toDataURL())
         atlas.textures.push(tex);

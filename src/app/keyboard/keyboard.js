@@ -1,6 +1,6 @@
 // @flow
 
-const keyboardProvider = store => class Keyboard {
+const keyboardProvider = () => class Keyboard {
   keyHandlers: Map<number, string> = new Map();
 
   constructor() {

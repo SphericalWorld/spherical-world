@@ -2,7 +2,7 @@
 
 let id = 1;
 
-class Player {
+export default class Player {
   constructor(x, y, z) {
     this.id = id;
     this.x = 0;
@@ -113,5 +113,3 @@ class Player {
     ws.player.broadcastToLinked('OTHER_PLAYER_STOP_REMOVE_BLOCK', { id: ws.player.id });
   }
 }
-
-module.exports = Player;

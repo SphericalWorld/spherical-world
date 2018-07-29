@@ -1,5 +1,5 @@
 // @flow
-import type { Vec3 } from 'gl-matrix';
+import type { Vec3, Mat4 } from 'gl-matrix';
 
 type BoundingBox = [Vec3, Vec3];
 
@@ -10,8 +10,8 @@ class Frustum {
     this.boundingBox = boundingBox;
   }
 
-  boxInFrustum(m) {
-    let in_p = 0;
+  boxInFrustum(m: Mat4) {
+    let inP = 0;
     let i = 0;
     let j = 0;
     let k = 0;
@@ -30,32 +30,32 @@ class Frustum {
           w = qx * m[3] + qy * m[7] + qz * m[11] + m[15];
           x = qx * m[0] + qy * m[4] + qz * m[8] + m[12];
           if (x <= w) {
-            in_p |= 1;
+            inP |= 1;
           }
           if (x >= -w) {
-            in_p |= 2;
+            inP |= 2;
           }
-          if (in_p === 63) {
+          if (inP === 63) {
             return true;
           }
           x = qx * m[1] + qy * m[5] + qz * m[9] + m[13];
           if (x <= w) {
-            in_p |= 4;
+            inP |= 4;
           }
           if (x >= -w) {
-            in_p |= 8;
+            inP |= 8;
           }
-          if (in_p === 63) {
+          if (inP === 63) {
             return true;
           }
           x = qx * m[2] + qy * m[6] + qz * m[10] + m[14];
           if (x <= w) {
-            in_p |= 16;
+            inP |= 16;
           }
           if (x >= 0) {
-            in_p |= 32;
+            inP |= 32;
           }
-          if (in_p === 63) {
+          if (inP === 63) {
             return true;
           }
         }

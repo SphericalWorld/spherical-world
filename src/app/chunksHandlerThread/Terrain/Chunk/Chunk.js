@@ -6,11 +6,8 @@ import {
   blocksFlags,
   bufferInfo,
   blocksInfo,
-  HAS_GRAPHICS_MODEL,
   LIGHT_TRANSPARENT,
-  SIGHT_TRANSPARENT,
 } from '../../../blocks/blockInfo';
-import { connect } from '../../../util';
 import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
 import { SLICE } from '../../../Terrain/Chunk/ChunkBase';
 
@@ -51,21 +48,12 @@ const createBuffers = (): ChunkBuffers => ({
   vertexCount: 0,
 });
 
-const mapState = (state, chunk) => {
-  if (!state.chunks.instances[chunk.geoId]) {
-    return {};
-  }
-  return ({
-    buffers: state.chunks.instances[chunk.geoId].buffers,
-  });
-};
-
 const getColorComponent = (light, c, cf, s1, s1f, s2, s2f, count, halfCount, shift) =>
   0.8 ** (halfCount - (((
-    (light >>> shift) & 0xF) +
-    (s1f ? ((s1 >>> shift) & 0xF) : 0) +
-    (s2f ? ((s2 >>> shift) & 0xF) : 0) +
-    (cf ? ((c >>> shift) & 0xF) : 0)
+    (light >>> shift) & 0xF)
+    + (s1f ? ((s1 >>> shift) & 0xF) : 0)
+    + (s2f ? ((s2 >>> shift) & 0xF) : 0)
+    + (cf ? ((c >>> shift) & 0xF) : 0)
   ) / count));
 
 const getLightColor = (light, c, cf, s1, s1f, s2, s2f) => {
@@ -523,7 +511,6 @@ const chunkProvider = (store) => {
     }
   }
   return Chunk;
-  // return connect(mapState, null, store)(Chunk);
 };
 
 

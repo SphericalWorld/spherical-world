@@ -16,6 +16,7 @@ class Grass extends Block {
     west: 1,
     east: 1,
   };
+
   textures = {
     top: GRASS,
     bottom: DIRT,

@@ -16,6 +16,7 @@ class Sand extends Block {
     west: 0,
     east: 0,
   };
+
   textures = {
     top: SAND,
     bottom: SAND,

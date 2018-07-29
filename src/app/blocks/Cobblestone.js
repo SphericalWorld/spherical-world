@@ -16,6 +16,7 @@ class Cobblestone extends Block {
     west: 0,
     east: 0,
   };
+
   textures = {
     top: COBBLESTONE,
     bottom: COBBLESTONE,

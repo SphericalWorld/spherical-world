@@ -4,12 +4,12 @@ import { gl } from './glEngine';
 export const makeTexture = (
   textureImage: HTMLImageElement | HTMLCanvasElement,
   target: number,
-  type: string = 'RGBA',
+  type: number = gl.RGBA,
 ): WebGLTexture => {
   const texture: WebGLTexture = gl.createTexture();
   // gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
   gl.bindTexture(target, texture);
-  gl.texImage2D(target, 0, gl[type], gl[type], gl.UNSIGNED_BYTE, textureImage);
+  gl.texImage2D(target, 0, type, type, gl.UNSIGNED_BYTE, textureImage);
   gl.generateMipmap(target);
   gl.texParameteri(target, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(target, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -49,7 +49,7 @@ export default class Texture {
     gl.bindTexture(this.target, this.glTexture);
   }
 
-  static makeAnimatedTexture(textureImage: HTMLImageElement | HTMLCanvasElement, target: number, type: string = 'RGBA'): WebGLTexture {
+  static makeAnimatedTexture(textureImage: HTMLImageElement | HTMLCanvasElement, target: number, type: number = gl.RGBA): WebGLTexture {
     const texture: WebGLTexture = gl.createTexture();
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
     gl.bindTexture(target, texture);
@@ -57,12 +57,12 @@ export default class Texture {
     gl.texImage3D(
       target,
       0,
-      gl[type],
+      type,
       textureImage.width,
       textureImage.width,
       textureImage.height / textureImage.width,
       0,
-      gl[type],
+      type,
       gl.UNSIGNED_BYTE,
       textureImage,
     );

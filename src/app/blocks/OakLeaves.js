@@ -16,6 +16,7 @@ class OakLeaves extends Block {
     west: 1,
     east: 1,
   };
+
   textures = {
     top: OAK_LEAVES,
     bottom: OAK_LEAVES,

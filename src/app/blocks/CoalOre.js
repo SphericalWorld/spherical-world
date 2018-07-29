@@ -16,6 +16,7 @@ class CoalOre extends Block {
     west: 0,
     east: 0,
   };
+
   textures = {
     top: COAL_ORE,
     bottom: COAL_ORE,

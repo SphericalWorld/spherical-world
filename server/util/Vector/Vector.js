@@ -61,11 +61,11 @@ class Vector {
   }
 
   min(): number {
-    return Math.min(Math.min(this.x, this.y), this.z);
+    return Math.min(this.x, this.y, this.z);
   }
 
   max(): number {
-    return Math.max(Math.max(this.x, this.y), this.z);
+    return Math.max(this.x, this.y, this.z);
   }
 
   toAngles() {
