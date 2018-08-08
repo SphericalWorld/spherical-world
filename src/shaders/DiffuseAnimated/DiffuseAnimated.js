@@ -10,14 +10,20 @@ export default class DiffuseAnimatedProgram extends GlShaderProgram {
   fragmentShader = new GlFragmentShader(fragmentShaderData);
 
   attributes = ['aVertexPosition', 'aTextureCoord'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting'];
+  uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting', 'uFrame'];
 
   uTexture: WebGLUniformLocation;
+  uFrame: WebGLUniformLocation;
 
   constructor() {
     super();
     this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);
+    this.animate(0);
+  }
+
+  animate(frame: number): void {
+    gl.uniform1ui(this.uFrame, frame);
   }
 }

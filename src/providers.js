@@ -1,10 +1,9 @@
 // @flow
 import type { ShaderLibrary } from './app/engine/ShaderLibrary';
-import Collider from './app/components/Collider';
 import { menuToggledObservable } from './app/hud/events';
 import { MENU_TOGGLED } from './app/hud/hudConstants';
 import Main from './app/main';
-import BlockRemove from './app/systems/BlockRemove';
+import blockRemoverSystemProvider from './app/systems/BlockRemove';
 import socketHandlers from './app/socketHandlers';
 import playerProvider from './app/player/Player';
 import GlTextureLibrary from './app/engine/TextureLibrary';
@@ -39,6 +38,8 @@ import Physics from './app/components/Physics';
 import Velocity from './app/components/Velocity';
 import Gravity from './app/components/Gravity';
 import UserControlled from './app/components/UserControlled';
+import Collider from './app/components/Collider';
+import BlockRemover from './app/components/BlockRemover';
 
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './app/Thread/threadConstants';
 
@@ -71,6 +72,7 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
     Gravity,
     UserControlled,
     Collider,
+    BlockRemover,
   );
   physicsThread.onMessage = ({ type, payload }) => {
     if (type === 'UPDATE_COMPONENTS') {
@@ -133,20 +135,20 @@ const getTextures = async () => {
 
 const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: ShaderLibrary) => {
   const materials = materialsProvider(textureLibrary, shaderLibrary);
-  return new (materialLibraryProvider())()
-    .add(...materials);
+  return [new (materialLibraryProvider())()
+    .add(...Object.values(materials)), materials];
 };
 
 const mainProvider = async (store, network, physicsThread: Worker, chunksHandlerThread: Worker) => {
   const textureLibrary = await getTextures();
   const shaderLibrary = getShaders();
-  const materialLibrary = getMaterials(textureLibrary, shaderLibrary);
+  const [materialLibrary, materials] = getMaterials(textureLibrary, shaderLibrary);
   const world = createECS(physicsThread, chunksHandlerThread);
-
-  const BlockRemover = blockRemoverProvider(world, materialLibrary);
-  const BlockPicker = blockPickerProvider(world, materialLibrary);
+  const BlockRemover = blockRemoverProvider(world, materials.BlockRemover);
+  const BlockPicker = blockPickerProvider(world, materialLibrary, BlockRemover);
   const Skybox = skyboxProvider(world, materialLibrary);
-  const time = new (timeProvider())(0);
+  const time = new (timeProvider())(Date.now());
+  const BlockRemove = blockRemoverSystemProvider(world, time);
   const DayNightCycle = dayNightCycleProvider(world, time);
   const CameraSystem = cameraSystemProvider(world);
   const HudSystem = hudSystemProvider(world, store);
@@ -157,7 +159,7 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
   const Inventory = inventoryProvider(store);
-  const Player = playerProvider(world, materialLibrary, BlockRemover, BlockPicker, Inventory);
+  const Player = playerProvider(world, materialLibrary, BlockPicker, Inventory);
   const SocketHandlers = socketHandlers(Player);
   const Draw = drawProvider(store, world, terrain, time);
   // const SkyboxSystem = skyboxSystemProvider(store);

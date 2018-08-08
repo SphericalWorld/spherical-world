@@ -31,6 +31,7 @@ class Material {
   blendingMode: BlendingMode;
   shader: GlShaderProgram;
   transparent = false;
+  frame = 0;
 
   constructor({
     name,
@@ -56,6 +57,9 @@ class Material {
   use(): void {
     if (this.diffuse) {
       this.diffuse.use();
+      if (this.diffuse.animated) {
+        this.shader.animate(this.frame % this.diffuse.frames);
+      }
     }
     if (this.blendingMode === BLENDING_ADDITIVE) {
       gl.enable(gl.BLEND);
@@ -72,5 +76,7 @@ class Material {
     // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 }
+
+export type MaterialFactory = () => Material;
 
 export default Material;

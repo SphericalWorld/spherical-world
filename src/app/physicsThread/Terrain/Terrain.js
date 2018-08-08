@@ -40,6 +40,7 @@ const terrainProvider = (store, Chunk, TerrainBase) => {
       //   // this.filterFarChunks();
       // }
       // TODO: create helper
+
       if (Object.keys(prevState.chunksData).length !== Object.keys(this.chunksData).length) {
         for (const key of Object.keys(this.chunksData)) {
           if (typeof prevState.chunksData[key] === 'undefined') {

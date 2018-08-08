@@ -32,7 +32,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       this.texture = null;
       network.route('loadChunk', (data, binaryData) => {
         let chunk = this.getChunk(data.x, data.z);
-        if (!chunk.isJust) {
+        if (chunk.isJust === false) {
           chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
         } else {
           chunk = chunk.extract();

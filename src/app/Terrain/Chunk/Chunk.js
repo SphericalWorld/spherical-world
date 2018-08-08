@@ -55,7 +55,6 @@ const chunkProvider = (store) => {
     ) {
       super(terrain, x, z);
       this.terrainMipMap = null;
-
       this.rainfallData = new Uint8Array(rainfallData);
       this.temperatureData = new Uint8Array(temperatureData);
 

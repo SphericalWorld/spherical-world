@@ -9,10 +9,12 @@ import { MaterialLibrary } from '../engine/MaterialLibrary';
 const blockPickerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
+  BlockRemover,
 ) => (id: Entity): Entity => {
   const model = Model.createPrimitive(CUBE, 1.001);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });
+  const blockRemover = BlockRemover();
 
   return ecs.createEntity(
     id,

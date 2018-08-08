@@ -162,12 +162,11 @@ import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 const playerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
-  BlockRemover,
   BlockPicker,
   Inventory,
 ) => (data: Object): Entity => {
   const model = Model.createPrimitive(CUBE, 1.001);
-  const material = materialLibrary.get('blockRemover'); // 'player'
+  const material = materialLibrary.get('blockSelector'); // 'player'
   const object = new GlObject({ model, material });
   const blockPicker = BlockPicker();
   return ecs.createEntity(

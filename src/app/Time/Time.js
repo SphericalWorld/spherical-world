@@ -11,18 +11,22 @@ const MILLISECONDS_IN_MINUTE: number = SECONDS_IN_MINUTE * MILLISECONDS_IN_SECON
 const timeProvider = () => {
   class Time {
     currentTime: number = 0;
+    currentTimeFromStart: number = 0;
     day: number = 0;
     hour: number = 0;
     minute: number = 0;
     dayLightLevel: number = 0;
     dayPercent: number = 0;
+    startingTime: number = 0;
 
     constructor(startingTime: number) {
       this.currentTime = startingTime;
+      this.startingTime = startingTime;
     }
 
     update(time: number): void {
       this.currentTime = time;
+      this.currentTimeFromStart = time - this.startingTime;
       this.day = Math.floor(time / MILLISECONDS_IN_DAY);
       this.hour = Math.floor((time / MILLISECONDS_IN_HOUR) % HOURS_IN_DAY);
       this.minute = Math.floor((time / MILLISECONDS_IN_MINUTE) % MINUTES_IN_HOUR);

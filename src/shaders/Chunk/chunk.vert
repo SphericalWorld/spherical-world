@@ -43,8 +43,7 @@ void main(void) {
     float speed = 0.5;
 
     float magnitude = sin((uTime * pi / (28.0)) + position.x + position.z) * 0.1 + 0.1;
-      magnitude *= grassWeight * 0.5;
-      magnitude *= 1.0;
+    magnitude *= grassWeight * 0.5;
     float d0 = sin(uTime * pi / (122.0 * speed)) * 3.0 - 1.5 + position.z;
     float d1 = sin(uTime * pi / (152.0 * speed)) * 3.0 - 1.5 + position.x;
     float d2 = cos(uTime * pi / (122.0 * speed)) * 3.0 - 1.5 + position.x;

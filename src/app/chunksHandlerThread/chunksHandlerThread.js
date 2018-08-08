@@ -14,7 +14,7 @@ const terrain = new Terrain();
 // eslint-disable-next-line
 self.registerMessageHandler('CHUNK_LOADED', ({ payload: data }) => {
   let chunk = terrain.getChunk(data.x, data.z);
-  if (!chunk.isJust) {
+  if (chunk.isJust === false) {
     chunk = terrain.addChunk(new Chunk(terrain, data.x, data.z));
   } else {
     chunk = chunk.extract();

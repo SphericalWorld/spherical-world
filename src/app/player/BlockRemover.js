@@ -34,12 +34,9 @@
 //     visible: boolean = false;
 //     textureIndex: number;
 //     textureFramesCount = 10;
-//     intervalDescriptor: number;
 //
 //     constructor(id: number, app) {
-//       super({ material: 'qwe'});
 //       this.id = id;
-//       this.model = Model.createPrimitive('cube', 1.001);
 //       this.app = app;
 //     }
 //
@@ -70,7 +67,6 @@
 //
 //     stopRemoveBlock() {
 //       this.visible = false;
-//       clearInterval(this.intervalDescriptor);
 //     }
 //
 //     componentDidUpdate(prevState: BlockRemover) {
@@ -93,24 +89,26 @@
 // };
 
 import type { Entity } from '../ecs/Entity';
+import type { MaterialFactory } from '../engine/Material';
+import BlockRemover from '../components/BlockRemover';
 import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import { Transform, Visual, Raytracer } from '../components';
-import { MaterialLibrary } from '../engine/MaterialLibrary';
 
 const blockRemoverProvider = (
   ecs: World,
-  materialLibrary: MaterialLibrary,
+  BlockRemoverMaterial: MaterialFactory,
 ) => (id: Entity): Entity => {
   const model = Model.createPrimitive(CUBE, 1.001);
-  const material = materialLibrary.get('blockRemover');
+  const material = BlockRemoverMaterial();
   const object = new GlObject({ model, material });
   return ecs.createEntity(
     id,
     new Transform(0, 64, 0),
     new Visual(object),
     new Raytracer(),
+    new BlockRemover(),
   );
 };
 

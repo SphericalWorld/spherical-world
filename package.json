@@ -46,7 +46,7 @@
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-react": "^7.10.0",
-    "flow-bin": "^0.77.0",
+    "flow-bin": "^0.78.0",
     "node-sass": "^4.9.2",
     "raw-loader": "^0.5.1",
     "react-app-rewired": "^1.5.2",

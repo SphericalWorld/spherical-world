@@ -2,6 +2,7 @@
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
 import chain from '../../common/fp/chain.type';
+import { clamp } from '../../common/utils/numberUtils';
 import { IGenerator } from './chunk-generators/Generator.types';
 import IO from '../../common/fp/monads/io';
 import range from '../../common/range';
@@ -77,11 +78,13 @@ const generateHeightMap = (hills: Simplex2D, mountains: Simplex2D, x: number, z:
       Math.floor((62 + (((Math.abs(mountains(x + j, z + i)) ** 4)) * 60)) - 12),
     );
 
+const clamp256 = clamp(0, 255);
+
 const generateRainfall = (simplex: Simplex2D, x: number, z: number) => (el, i, j) =>
-  Math.floor(128 + (simplex(x + j, z + i) * 128));
+  Math.floor(clamp256(128 + (simplex(x + j, z + i) * 128 * 2)));
 
 const generateTemperature = (simplex: Simplex2D, x: number, z: number) => (el, i, j) =>
-  Math.floor(128 + (simplex(x + j, z + i) * 128));
+  Math.floor(clamp256(128 + (simplex(x + j, z + i) * 128 * 2)));
 
 type ChunkLiftIO = ({ chunk: Chunk, i: number, j: number, height: number }) => IO<Chunk>;
 

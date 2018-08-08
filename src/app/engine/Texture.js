@@ -35,6 +35,8 @@ export default class Texture {
   name: string;
   target: number;
   meta: ?Object;
+  animated: boolean = false;
+  frames: number = 0;
 
   constructor(image: HTMLImageElement, glTexture: WebGLTexture, meta?: Object, atlasId?: number) {
     this.image = image;
@@ -91,6 +93,10 @@ export default class Texture {
       : makeTexture(image, target, params.type);
     const texture = new this(image, glTexture, params.meta, params.atlasId);
     texture.name = params.name;
+    texture.animated = params.animated;
+    if (params.animated) {
+      texture.frames = image.height / image.width;
+    }
     texture.target = target;
     return texture;
   }

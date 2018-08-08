@@ -1,71 +1,62 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
+import type { BlockFace } from '../../../../common/block';
+import type { Maybe } from '../../../../common/fp/monads/maybe';
+import type { BlockDetails } from '../../components/Raytracer';
 import type { Entity } from '../../ecs/Entity';
 import type World from '../../ecs/World';
+import type { Terrain } from '../Terrain/Terrain';
 import { Nothing } from '../../../../common/fp/monads/maybe';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
 import UserControlled from '../../components/UserControlled';
 import Camera from '../../components/Camera';
-import { getGeoId } from '../../../../common/chunk';
 
-type Plane = 0 | 1 | 2 | 3 | 4 | 5;
+type RaytraceInfo = {|
+  +block: BlockDetails;
+  +emptyBlock?: BlockDetails;
+  +face?: BlockFace;
+|};
 
-const getPlane = (block, emptyBlock): Plane => {
-  let plane = 0;
-  // top
+const getFace = (block: Vec3, emptyBlock: Vec3): BlockFace => {
+  let face = 0;
   if (block[1] < emptyBlock[1]) {
-    plane = 0;
-    // bottom
+    face = 0; // top
   } else if (block[1] > emptyBlock[1]) {
-    plane = 1;
-    // north
+    face = 1; // bottom
   } else if (block[0] > emptyBlock[0]) {
-    plane = 2;
-    // south
+    face = 2; // north
   } else if (block[0] < emptyBlock[0]) {
-    plane = 3;
-    // east
+    face = 3; // south
   } else if (block[2] > emptyBlock[2]) {
-    plane = 4;
-    // west
+    face = 4; // east
   } else if (block[2] < emptyBlock[2]) {
-    plane = 5;
+    face = 5; // west
   }
-  return plane;
+  return face;
 };
 
-const calc = (raytrace, x, y, z) => {
-  let chunk = raytrace.terrain.chunks.get(getGeoId(Math.floor(x / 16) * 16, Math.floor(z / 16) * 16));
-  if (chunk === Nothing) {
-    return false;
-  }
-  chunk = chunk.extract();
+const getBlockDetails = (raytrace, x, y, z): Maybe<BlockDetails> => raytrace.terrain
+  .getChunk(Math.floor(x / 16) * 16, Math.floor(z / 16) * 16)
+  .map((chunk) => {
+    const position = vec3.fromValues(x, y, z);
+    x = x >= 0
+      ? x % 16
+      : 15 + ((x + 1) % 16);
 
-  const emptyBlock = [x, y, z];
+    z = z >= 0
+      ? z % 16
+      : 15 + ((z + 1) % 16);
 
-  x = x >= 0
-    ? x % 16
-    : 15 + ((x + 1) % 16);
-
-  z = z >= 0
-    ? z % 16
-    : 15 + ((z + 1) % 16);
-
-  if (chunk.getBlock(x, y + 1, z)) {
-    raytrace.geoId = chunk.geoId;
-    raytrace.blockInChunk = { x, y: y + 1, z };
-    return true;
-  }
-  raytrace.emptyBlockChunkId = chunk.geoId;
-  raytrace.emptyBlockInChunk = { x, y: y + 1, z };
-  raytrace.emptyBlock = emptyBlock;
-
-  raytrace.geoId = null;
-  return false;
-};
+    return {
+      block: chunk.getBlock(x, y + 1, z),
+      position,
+      geoId: chunk.geoId,
+      positionInChunk: { x, y: y + 1, z },
+    };
+  });
 
 const calcMax = (position: number, delta: number, step: number): number =>
   delta * (1 - (((position >= 0 && step >= 0) || (position < 0 && step < 0))
@@ -88,22 +79,20 @@ const raytraceProvider = (ecs: World, Chunk) => {
     mvMatrix: number[];
     pMatrix: number[];
     currentShader: WebGLProgram;
-
-    plane: Plane = 0;
-    geoId = '';
-    block: Vec3 = vec3.create();
-    blockInChunk = { x: 0, y: 0, z: 0 };
-    emptyBlockChunkId = 0;
-    emptyBlock: Vec3 = vec3.create();
-    emptyBlockInChunk = { x: 0, y: 0, z: 0 };
+    terrain: Terrain;
 
     update(): Array {
       const result = [];
-      for (const { id, transform } of this.components) {
+      for (const { id, transform, raytracer } of this.components) {
         const { camera } = this.userControlled[0];
-        this.trace(camera.worldPosition, camera.sight);
-        vec3.copy(transform.translation, this.block);
-        result.push([id, transform]);
+        this.trace(camera.worldPosition, camera.sight)
+          .map((traceResult) => {
+            raytracer.block = traceResult.block;
+            raytracer.emptyBlock = traceResult.emptyBlock;
+
+            vec3.copy(transform.translation, traceResult.block.position);
+            result.push([id, transform, raytracer]);
+          });
       }
 
       return result;
@@ -113,7 +102,7 @@ const raytraceProvider = (ecs: World, Chunk) => {
       this.terrain = terrain;
     }
 
-    trace(position: Vec3, sight: Vec3) {
+    trace(position: Vec3, sight: Vec3): Maybe<RaytraceInfo> {
       const stepX = sight[0] < 0 ? -1 : 1;
       const stepY = sight[1] < 0 ? -1 : 1;
       const stepZ = sight[2] < 0 ? -1 : 1;
@@ -129,6 +118,9 @@ const raytraceProvider = (ecs: World, Chunk) => {
       let tMaxX = calcMax(position[0], tDeltaX, stepX);
       let tMaxY = calcMax(position[1], tDeltaY, stepY);
       let tMaxZ = calcMax(position[2], tDeltaZ, stepZ);
+
+      let blockDetails = Nothing;
+      let emptyBlockDetails = Nothing;
 
       for (let i = 0; i < 5; i += 1) {
         if (tMaxX < tMaxZ) {
@@ -146,15 +138,19 @@ const raytraceProvider = (ecs: World, Chunk) => {
           tMaxY += tDeltaY;
           y += stepY;
         }
-        if (calc(this, x, y, z)) {
+        emptyBlockDetails = blockDetails;
+        blockDetails = getBlockDetails(this, x, y, z);
+        if (blockDetails.isJust === true && blockDetails.extract().block) {
           break;
         }
       }
-      if (this.geoId === null) {
-        this.emptyBlockChunkId = null;
-      }
-      this.block = [x, y, z];
-      this.plane = getPlane(this.block, this.emptyBlock);
+      return blockDetails.map(block => (emptyBlockDetails.isJust === true
+        ? {
+          block,
+          emptyBlock: emptyBlockDetails.extract(),
+          face: getFace(block.position, emptyBlockDetails.extract().position),
+        }
+        : { block }));
     }
   }
 

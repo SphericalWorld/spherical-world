@@ -51,8 +51,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       gl.clear(gl.DEPTH_BUFFER_BIT);
       // terrain.material.shader.use()
       this.useShader(terrain.material.shader);
-
-      gl.uniform1f(terrain.material.shader.uTime, 1000); // TODO remove
+      gl.uniform1f(terrain.material.shader.uTime, time.currentTimeFromStart / 1000); // TODO remove
 
       let skyColor = Math.floor(this.skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
       skyColor = [((skyColor & 0xFF0000) >> 16) / 256, ((skyColor & 0xFF00) >> 8) / 256, (skyColor & 0xFF) / 256, (time.dayLightLevel + 1) / 2];
@@ -76,7 +75,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       };
 
       for (const { transform, visual } of this.components) {
-        if (visual.glObject.material.transparent) {
+        if (visual.glObject.material.transparent || !visual.enabled) {
           continue;
         }
         draw(transform, visual);
@@ -99,7 +98,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       // console.log(this.components);
 
       for (const { transform, visual } of this.components) {
-        if (!visual.glObject.material.transparent) {
+        if (!visual.glObject.material.transparent || !visual.enabled) {
           continue;
         }
         draw(transform, visual);
