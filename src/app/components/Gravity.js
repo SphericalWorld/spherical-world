@@ -1,7 +1,8 @@
 // @flow
+import type { Component } from './Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
-export default class Gravity {
+export default class Gravity implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName = 'gravity';
 }

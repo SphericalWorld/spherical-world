@@ -14,6 +14,8 @@ import {
   PLAYER_JUMPED,
   PLAYER_RUN,
   PLAYER_STOPED_RUN,
+  PLAYER_ATTACKED,
+  PLAYER_STOPED_ATTACK,
 } from '../player/events';
 
 export type INPUT_TYPE = 0 | 1 | 2;
@@ -75,8 +77,8 @@ export const PLAYER_JUMP_EVENT = {
 
 export const PLAYER_RUN_EVENT = {
   type: INPUT_TYPE_STATE,
-  onEnd: PLAYER_STOPED_RUN,
   gameEvent: PLAYER_RUN,
+  onEnd: PLAYER_STOPED_RUN,
 };
 
 export const CAMERA_LOCK_EVENT = {
@@ -87,4 +89,10 @@ export const CAMERA_LOCK_EVENT = {
 export const TOGGLE_MENU_EVENT = {
   type: INPUT_TYPE_ACTION,
   gameEvent: MENU_TOGGLED,
+};
+
+export const PLAYER_ATTACK_EVENT = {
+  type: INPUT_TYPE_STATE,
+  gameEvent: PLAYER_ATTACKED,
+  onEnd: PLAYER_STOPED_ATTACK,
 };

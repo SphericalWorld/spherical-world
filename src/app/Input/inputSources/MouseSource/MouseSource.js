@@ -19,38 +19,47 @@ const keys = [
 
 export default class MouseSource implements InputSource {
   onEvent: (event: InputEvent) => any;
+  canvas: HTMLElement;
 
   constructor() {
     const canvas = document.getElementById('glcanvas');
     if (!canvas) {
       throw new Error('canvas element not found');
     }
-    canvas.addEventListener('mousedown', (e: MouseEvent) => this.onMouseDown(e), false);
-    canvas.addEventListener('mouseup', (e: MouseEvent) => this.onMouseUp(e), false);
-    document.addEventListener('mousemove', (e: MouseEvent) => this.onMove(e), false);
-    document.addEventListener('pointerlockchange', this.changeTracking.bind(this), false);
-    document.addEventListener('mozpointerlockchange', this.changeTracking.bind(this), false);
-    document.addEventListener('webkitpointerlockchange', this.changeTracking.bind(this), false);
+    this.canvas = canvas;
+    this.setClickHandlers(document, this.canvas);
+    document.addEventListener('mousemove', this.onMove, false);
+    document.addEventListener('pointerlockchange', this.changeTracking, false);
+    document.addEventListener('mozpointerlockchange', this.changeTracking, false);
+    document.addEventListener('webkitpointerlockchange', this.changeTracking, false);
     document.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault(), false);
   }
 
-  onMove(e: MouseEvent) {
+  onMove = (e: MouseEvent) => {
     this.onEvent(new RangeInputEvent(MOUSE_MOVE, e.movementX, e.movementY));
   }
 
-  onMouseDown(e: MouseEvent) {
+  onMouseDown = (e: MouseEvent) => {
     this.onEvent(new StateInputEvent(keys[e.button], STATE_DOWN));
   }
 
-  onMouseUp(e: MouseEvent) {
+  onMouseUp = (e: MouseEvent) => {
     this.onEvent(new StateInputEvent(keys[e.button], STATE_UP));
   }
 
-  changeTracking() {
-    if (!document.pointerLockElement) {
+  setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget) => {
+    oldTarget.removeEventListener('mousedown', this.onMouseDown);
+    oldTarget.removeEventListener('mouseup', this.onMouseUp);
+    newTarget.addEventListener('mousedown', this.onMouseDown, false);
+    newTarget.addEventListener('mouseup', this.onMouseUp, false);
+  }
+
+  changeTracking = () => {
+    if (document.pointerLockElement) {
+      this.setClickHandlers(this.canvas, document);
+    } else {
+      this.setClickHandlers(document, this.canvas);
       this.onEvent(new StateInputEvent(MOUSE_POINTER_UNLOCKED));
     }
-
-    // console.log(11, document.pointerLockElement)
   }
 }

@@ -1,9 +1,11 @@
 // @flow
+import type { Component } from './Component';
 import { THREAD_MAIN } from '../Thread/threadConstants';
 
-export default class BlockRemover {
+export default class BlockRemover implements Component {
   static threads = [THREAD_MAIN];
   static componentName = 'blockRemover';
 
-  removedPart = 0.0;
+  removing: boolean = false;
+  removedPart: number = 0.0;
 }

@@ -1,7 +1,9 @@
 // @flow
+import type { Setoid } from '../../../common/fp/algebraicDataTypes/Setoid.type';
+
 const PI2 = Math.PI * 2;
 
-class Vector {
+class Vector implements Setoid<this> {
   x: number;
   y: number;
   z: number;

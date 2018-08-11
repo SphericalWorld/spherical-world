@@ -1,5 +1,5 @@
 // @flow
-import type { Monad } from './monad.type';
+import type { Monad } from '../algebraicDataTypes/Monad.type';
 
 class IOMonad<R> implements Monad<R> {
   fn: () => R;

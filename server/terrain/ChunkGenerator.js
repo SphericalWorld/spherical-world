@@ -1,7 +1,7 @@
 // @flow
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
-import chain from '../../common/fp/chain.type';
+import chain from '../../common/fp/algebraicDataTypes/Chain.type';
 import { clamp } from '../../common/utils/numberUtils';
 import { IGenerator } from './chunk-generators/Generator.types';
 import IO from '../../common/fp/monads/io';

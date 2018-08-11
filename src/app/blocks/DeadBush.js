@@ -6,14 +6,13 @@ import BasePropertiesComponent from './components/BasePropertiesComponent';
 const DeadBush = () => Object.assign(
   {},
   BasePropertiesComponent(),
-  ModelComponent(),
+  ModelComponent(model),
   {
     id: 132,
     lightTransparent: true,
     sightTransparent: true,
     selfTransparent: false,
     needPhysics: false,
-    model,
   },
 );
 

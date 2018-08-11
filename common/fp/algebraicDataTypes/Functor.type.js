@@ -1,5 +1,4 @@
 // @flow
-
 export interface Functor<T> {
   map<U>(fn: T => U): Functor<U>
 }

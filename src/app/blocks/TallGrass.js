@@ -6,7 +6,7 @@ import BasePropertiesComponent from './components/BasePropertiesComponent';
 const TallGrass = () => Object.assign(
   {},
   BasePropertiesComponent(),
-  ModelComponent(),
+  ModelComponent(model),
   {
     id: 129,
     lightTransparent: true,
@@ -16,7 +16,6 @@ const TallGrass = () => Object.assign(
     buffer: {
       top: 1,
     },
-    model,
   },
 );
 

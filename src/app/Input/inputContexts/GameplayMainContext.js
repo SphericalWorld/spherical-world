@@ -29,11 +29,13 @@ import {
   CAMERA_UNLOCKED_EVENT,
   CAMERA_MOVED_EVENT,
   PLAYER_RUN_EVENT,
+  PLAYER_ATTACK_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
   constructor() {
     super();
+    this.events.set(MOUSE_LEFT_BUTTON, PLAYER_ATTACK_EVENT);
     this.events.set(MOUSE_MOVE, CAMERA_MOVED_EVENT);
     this.events.set(MOUSE_POINTER_UNLOCKED, CAMERA_UNLOCKED_EVENT);
     this.events.set(KEY_W, PLAYER_MOVE_FORWARD_EVENT);

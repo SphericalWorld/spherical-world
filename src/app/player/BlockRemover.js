@@ -40,12 +40,6 @@
 //       this.app = app;
 //     }
 //
-//     draw() {
-//       this.material = materialLibrary.get('blockRemover');
-//       this.material.use();
-//       super.draw()
-//     }
-//
 //     startRemoveBlock(blockRemovingSpeed: number): void {
 //       this.visible = true;
 //       this.textureIndex = 0;

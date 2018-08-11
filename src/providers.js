@@ -52,9 +52,12 @@ import {
   cameraMovedObservable,
   cameraLockedObservable,
   cameraUnlockedObservable,
+  playerAttackObservable,
   CAMERA_MOVED,
   CAMERA_LOCKED,
   CAMERA_UNLOCKED,
+  PLAYER_ATTACKED,
+  PLAYER_STOPED_ATTACK,
 } from './app/player/events';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
@@ -92,6 +95,9 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
     }
     if (event.type === MENU_TOGGLED) {
       menuToggledObservable.emit(event);
+    }
+    if (event.type === PLAYER_ATTACKED || event.type === PLAYER_STOPED_ATTACK) {
+      playerAttackObservable.emit(event);
     }
   });
 

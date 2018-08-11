@@ -1,6 +1,8 @@
 // @flow
 import type { Mat4, Vec3 } from 'gl-matrix';
 import { mat4, vec3 } from 'gl-matrix';
+import type { Component } from './Component';
+
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export type Viewport = {|
@@ -9,7 +11,7 @@ export type Viewport = {|
   +pMatrix: Mat4;
 |};
 
-export default class Camera {
+export default class Camera implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName = 'camera';
 
@@ -24,5 +26,4 @@ export default class Camera {
   mvMatrix: Mat4 = mat4.identity(mat4.create());
   sight: Vec3 = vec3.create();
   worldPosition: Vec3 = vec3.create();
-  sight: Vec3 = vec3.create();
 }

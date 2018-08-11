@@ -8,10 +8,9 @@ const FlowerRed = () => Object.assign(
   {},
   {
     id: 131,
-    model,
   },
   BasePropertiesComponent(),
-  ModelComponent(),
+  ModelComponent(model),
   Flower(),
 );
 

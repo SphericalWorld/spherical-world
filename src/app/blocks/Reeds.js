@@ -6,14 +6,13 @@ import BasePropertiesComponent from './components/BasePropertiesComponent';
 const Reeds = () => Object.assign(
   {},
   BasePropertiesComponent(),
-  ModelComponent(),
+  ModelComponent(model),
   {
     id: 133,
     lightTransparent: true,
     sightTransparent: true,
     selfTransparent: false,
     needPhysics: false,
-    model,
   },
 );
 

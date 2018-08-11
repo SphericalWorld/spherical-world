@@ -22,11 +22,9 @@ const inputProvider = (inputContexts: InputContext[]) => {
 
     onEvent(event: InputEvent): void {
       for (let i = 0; i < this.activeContexts.length; i += 1) {
-        const gameEvent: ?GameEvent = this.activeContexts[i].getMappedInputEvent(event);
-        if (gameEvent) {
-          // console.log(gameEvent)
-          this.dispatch(gameEvent);
-        }
+        this.activeContexts[i]
+          .getMappedInputEvent(event)
+          .map(this.dispatch);
       }
     }
 
@@ -52,7 +50,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
       }
     }
 
-    dispatch(event: GameEvent): void {
+    dispatch = (event: GameEvent): void => {
       this.dispatchHandler(event);
     }
 

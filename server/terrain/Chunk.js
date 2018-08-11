@@ -16,9 +16,9 @@ const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation
 const {
   readFile,
   outputFile,
-} : {
-  readFile: (string) => Promise<Buffer>, /** stupid eslint */ // eslint-disable-line
-  outputFile: (string, Buffer | string) => Promise<void>, /** stupid eslint  */ // eslint-disable-line
+}: {
+  readFile: (string) => Promise<Buffer>,
+  outputFile: (string, Buffer | string) => Promise<void>,
 } = fs;
 
 const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);

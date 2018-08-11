@@ -80,6 +80,7 @@ export default class World {
         },
       });
     }
+    // TODO: clear events queues in systems automatically after system updates
     this.events = [];
   }
 

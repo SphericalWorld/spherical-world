@@ -11,7 +11,7 @@ const calcLightLevels = (light: number) => [
 export const getLight = (chunk, x: number, y: number, z: number) =>
   calcLightLevels(chunk.light[getIndex(x, y, z)]);
 
-const ModelComponent = () => ({
+const ModelComponent = (model: Object) => ({
   renderToChunk(
     chunk,
     x: number,
@@ -29,21 +29,21 @@ const ModelComponent = () => ({
   ) {
     const [r, g, b, sunlight] = getLight(chunk, x, y, z);
 
-    for (let i = 0; i < this.model.vertexPositions.length / 3; i += 1) {
+    for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
       vertexBuffer.push(
-        this.model.vertexPositions[i * 3] + x + chunk.x,
-        this.model.vertexPositions[i * 3 + 1] + y - 1,
-        this.model.vertexPositions[i * 3 + 2] + z + chunk.z,
+        model.vertexPositions[i * 3] + x + chunk.x,
+        model.vertexPositions[i * 3 + 1] + y - 1,
+        model.vertexPositions[i * 3 + 2] + z + chunk.z,
       );
       colorBuffer.push(r, g, b);
       globalColorBuffer.push(sunlight);
       blockDataBuffer.push(this.id);
     }
-    texCoordBuffer.push(...this.model.vertexTextureCoords);
-    for (let i = 0; i < this.model.indices.length; i += 1) {
-      indexBuffer.push(this.model.indices[i] + vertexCount);
+    texCoordBuffer.push(...model.vertexTextureCoords);
+    for (let i = 0; i < model.indices.length; i += 1) {
+      indexBuffer.push(model.indices[i] + vertexCount);
     }
-    return vertexCount + (this.model.vertexPositions.length / 3);
+    return vertexCount + (model.vertexPositions.length / 3);
   },
 });
 
