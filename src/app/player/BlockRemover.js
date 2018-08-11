@@ -5,24 +5,6 @@
 // import { terrainRemoveBlock } from '../Terrain/terrainActions';
 // import { MOUSE_BUTTON_LEFT } from '../mouse/mouseConstants';
 // import { Position } from '../components';
-
-// const mapState = (state, blockRemover) => {
-//   const {
-//     block: { x, y, z },
-//     geoId,
-//     blockInChunk,
-//   } = state.raytracer;
-//   const {
-//     removingBlock,
-//   } = state.players.instances[blockRemover.id];
-//   const {
-//     [MOUSE_BUTTON_LEFT]: mouseLeftPressed,
-//   } = state.mouse.buttons;
-//   return {
-//     geoId, x, y, z, removingBlock, blockInChunk, mouseLeftPressed,
-//   };
-// };
-//
 // const mapActions = () => ({
 //   terrainRemoveBlock,
 // });
@@ -32,8 +14,6 @@
 //   class BlockRemover extends GlObject {
 //     id: number;
 //     visible: boolean = false;
-//     textureIndex: number;
-//     textureFramesCount = 10;
 //
 //     constructor(id: number, app) {
 //       this.id = id;
@@ -42,15 +22,9 @@
 //
 //     startRemoveBlock(blockRemovingSpeed: number): void {
 //       this.visible = true;
-//       this.textureIndex = 0;
 //
-//       const timeToRemove = 1000 / blockRemovingSpeed;
-//       const intervalSize = timeToRemove / this.textureFramesCount;
-//       let intervalsLeft = this.textureFramesCount;
 //       this.intervalDescriptor = setInterval(() => {
-//         this.textureIndex += 1;
 //         intervalsLeft -= 1;
-//         // this.texture = this.app.textures.blockDamage.glTexture[this.textureIndex];
 //
 //         if (!intervalsLeft) {
 //           clearInterval(this.intervalDescriptor);

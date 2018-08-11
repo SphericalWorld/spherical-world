@@ -1,29 +1,13 @@
 // @flow
-import identity from '../../../common/fp/identity';
+import BasePropertiesComponent from './components/BasePropertiesComponent';
 
-class Block {
-  fallSpeedCap = 0;
-  fallAcceleration = 0.00002;
+type BaseData = $Call<typeof BasePropertiesComponent>;
 
-  textures = {
-    top: 0,
-    bottom: 0,
-    north: 0,
-    south: 0,
-    west: 0,
-    east: 0,
-  };
-
-  buffer = {
-    top: 0,
-    bottom: 0,
-    north: 0,
-    south: 0,
-    west: 0,
-    east: 0,
-  };
-
-  getFlags = identity;
-}
+const Block = <T>(...components: T[]): $Call<Object$Assign, BaseData, T> =>
+  Object.assign(
+    {},
+    BasePropertiesComponent(),
+    ...components,
+  );
 
 export default Block;

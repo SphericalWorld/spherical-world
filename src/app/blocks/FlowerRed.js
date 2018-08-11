@@ -1,15 +1,13 @@
 // @flow
 import model from '../../models/flowerRed.json';
+import Block from './Block';
 import Flower from './Flower';
 import ModelComponent from './components/ModelComponent';
-import BasePropertiesComponent from './components/BasePropertiesComponent';
 
-const FlowerRed = () => Object.assign(
-  {},
+const FlowerRed = () => Block(
   {
     id: 131,
   },
-  BasePropertiesComponent(),
   ModelComponent(model),
   Flower(),
 );

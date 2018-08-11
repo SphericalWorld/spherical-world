@@ -1,6 +1,8 @@
 // @flow
 import type World from '../ecs/World';
 import type { Entity } from '../ecs/Entity';
+import { clamp } from '../../../common/utils/numberUtils';
+import { blocksInfo } from '../blocks/blockInfo';
 import GameEventQueue from '../GameEvent/GameEventQueue';
 import type { System } from './System';
 import Transform from '../components/Transform';
@@ -8,6 +10,8 @@ import BlockRemover from '../components/BlockRemover';
 import Visual from '../components/Visual';
 import Raytracer from '../components/Raytracer';
 import { playerAttackObservable, PLAYER_ATTACKED } from '../player/events';
+
+const clampAnimation = clamp(0, 0.99);
 
 const blockRemoverProvider = (world: World) => {
   class BlockRemove implements System {
@@ -32,9 +36,8 @@ const blockRemoverProvider = (world: World) => {
         const maxFrames = visual.glObject.material.diffuse.frames;
         if (raytracer.block.block && blockRemover.removing) {
           visual.enabled = true;
-          blockRemover.removedPart += 0.01;
-          if (blockRemover.removedPart >= 1) {
-            blockRemover.removedPart = 0;
+          if (blockRemover.removedPart < 1) {
+            blockRemover.removedPart = clampAnimation(blockRemover.removedPart + (1 / blocksInfo[raytracer.block.block].baseRemoveTime) * delta);
           }
         } else {
           visual.enabled = false;

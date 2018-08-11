@@ -2,8 +2,8 @@
 import { mat4, vec3 } from 'gl-matrix';
 import { getIndex } from '../../../common/chunk';
 import model from '../../models/torch.json';
+import Block from './Block';
 import { getLight } from './components/ModelComponent';
-import BasePropertiesComponent from './components/BasePropertiesComponent';
 
 const getRotatedTourches = () => {
   const torches = [[], [], [], [], [], []];
@@ -20,33 +20,25 @@ const getRotatedTourches = () => {
     let rMatr = mat4.create();
     mat4.rotateZ(rMatr, rMatr, 1.570796327 / 3);
     vec3.transformMat4(vecTmp, vec, rMatr);
-    vecTmp[0] += 0.75;
-    vecTmp[1] += 0.7;
-    vecTmp[2] += 0.5;
+    vec3.add(vecTmp, vecTmp, vec3.fromValues(0.75, 0.7, 0.5));
     torches[2].push(vecTmp[0], vecTmp[1], vecTmp[2]);
 
     rMatr = mat4.create();
     mat4.rotateZ(rMatr, rMatr, -1.570796327 / 3);
     vec3.transformMat4(vecTmp, vec, rMatr);
-    vecTmp[0] += 0.25;
-    vecTmp[1] += 0.7;
-    vecTmp[2] += 0.5;
+    vec3.add(vecTmp, vecTmp, vec3.fromValues(0.25, 0.7, 0.5));
     torches[3].push(vecTmp[0], vecTmp[1], vecTmp[2]);
 
     rMatr = mat4.create();
     mat4.rotateX(rMatr, rMatr, -1.570796327 / 3);
     vec3.transformMat4(vecTmp, vec, rMatr);
-    vecTmp[0] += 0.5;
-    vecTmp[1] += 0.7;
-    vecTmp[2] += 0.75;
+    vec3.add(vecTmp, vecTmp, vec3.fromValues(0.5, 0.7, 0.75));
     torches[4].push(vecTmp[0], vecTmp[1], vecTmp[2]);
 
     rMatr = mat4.create();
     mat4.rotateX(rMatr, rMatr, 1.570796327 / 3);
     vec3.transformMat4(vecTmp, vec, rMatr);
-    vecTmp[0] += 0.5;
-    vecTmp[1] += 0.7;
-    vecTmp[2] += 0.25;
+    vec3.add(vecTmp, vecTmp, vec3.fromValues(0.5, 0.7, 0.25));
     torches[5].push(vecTmp[0], vecTmp[1], vecTmp[2]);
   }
   return torches;
@@ -54,9 +46,7 @@ const getRotatedTourches = () => {
 
 const Torch = () => {
   const torches = getRotatedTourches();
-  return Object.assign(
-    {},
-    BasePropertiesComponent(),
+  return Block(
     {
       id: 128,
       lightTransparent: true,

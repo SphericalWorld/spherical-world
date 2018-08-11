@@ -12,8 +12,14 @@ const putBlock = (chunk, x: number, y: number, z: number, value: number, plane: 
 };
 
 const BasePropertiesComponent = () => ({
+  id: 0,
   fallSpeedCap: 0,
   fallAcceleration: 0.00002,
+  lightTransparent: true,
+  sightTransparent: true,
+  selfTransparent: false,
+  needPhysics: false,
+  baseRemoveTime: 1,
   textures: {
     top: 0,
     bottom: 0,
@@ -32,6 +38,7 @@ const BasePropertiesComponent = () => ({
   },
   putBlock,
   getFlags: identity,
+  renderToChunk: null,
 });
 
 export default BasePropertiesComponent;

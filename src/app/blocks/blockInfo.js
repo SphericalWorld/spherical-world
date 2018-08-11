@@ -2,6 +2,7 @@
 import { createArray } from '../util/array';
 
 import Air from './Air';
+import Block from './Block';
 import Clay from './Clay';
 import CoalOre from './CoalOre';
 import Cobblestone from './Cobblestone';
@@ -21,30 +22,30 @@ import Torch from './Torch';
 import Water from './Water';
 
 const blocks = [
-  new Air(),
-  new Grass(),
-  new Sand(),
-  new Stone(),
-  new Oak(),
-  new OakLeaves(),
-  new Dirt(),
-  new Clay(),
-  new CoalOre(),
-  new IronOre(),
-  new Water(),
+  Air(),
+  Grass(),
+  Sand(),
+  Stone(),
+  Oak(),
+  OakLeaves(),
+  Dirt(),
+  Clay(),
+  CoalOre(),
+  IronOre(),
+  Water(),
   Torch(),
   TallGrass(),
   FlowerYellow(),
   FlowerRed(),
   DeadBush(),
   Reeds(),
-  new Cobblestone(),
+  Cobblestone(),
 ];
 
 const blocksTextureInfo = createArray(256, () => (new Uint8Array(6)));
 const blocksFlags = createArray(256, () => (new Uint8Array(5)));
 const bufferInfo = createArray(256, () => createArray(6, 0));
-const blocksInfo = createArray(256, {});
+const blocksInfo = createArray(256, Block());
 
 export const LIGHT_TRANSPARENT: 0 = 0;
 export const SIGHT_TRANSPARENT: 1 = 1;

@@ -1,12 +1,9 @@
 // @flow
 import model from '../../models/deadBush.json';
+import Block from './Block';
 import ModelComponent from './components/ModelComponent';
-import BasePropertiesComponent from './components/BasePropertiesComponent';
 
-const DeadBush = () => Object.assign(
-  {},
-  BasePropertiesComponent(),
-  ModelComponent(model),
+const DeadBush = () => Block(
   {
     id: 132,
     lightTransparent: true,
@@ -14,6 +11,7 @@ const DeadBush = () => Object.assign(
     selfTransparent: false,
     needPhysics: false,
   },
+  ModelComponent(model),
 );
 
 export default DeadBush;

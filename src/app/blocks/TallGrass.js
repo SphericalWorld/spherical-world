@@ -1,12 +1,9 @@
 // @flow
 import model from '../../models/tallgrass.json';
+import Block from './Block';
 import ModelComponent from './components/ModelComponent';
-import BasePropertiesComponent from './components/BasePropertiesComponent';
 
-const TallGrass = () => Object.assign(
-  {},
-  BasePropertiesComponent(),
-  ModelComponent(model),
+const TallGrass = () => Block(
   {
     id: 129,
     lightTransparent: true,
@@ -15,8 +12,14 @@ const TallGrass = () => Object.assign(
     needPhysics: false,
     buffer: {
       top: 1,
+      bottom: 1,
+      north: 1,
+      south: 1,
+      west: 1,
+      east: 1,
     },
   },
+  ModelComponent(model),
 );
 
 export default TallGrass;
