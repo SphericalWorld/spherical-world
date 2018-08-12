@@ -1,7 +1,8 @@
 // @flow
+import type { Input } from './Input';
 import type { InputSource } from './InputSource';
 import InputContext from './InputContext';
-import inputProvider, { Input } from './Input';
+import inputProvider from './Input';
 
 export default (inputSources: InputSource[], inputContexts: InputContext[]): Input => {
   const InputClass = inputProvider(inputContexts);

@@ -156,7 +156,7 @@ import { World } from '../ecs';
 import {
   Transform, Camera, Physics, Velocity, Gravity, Raytracer,
 } from '../components';
-import { MaterialLibrary } from '../engine/MaterialLibrary';
+import type { MaterialLibrary } from '../engine/MaterialLibrary';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
 const playerProvider = (

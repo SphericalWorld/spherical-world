@@ -1,7 +1,7 @@
 // @flow
 import Material, { BLENDING_TRANSPARENT } from '../engine/Material';
 import TextureLibrary from '../engine/TextureLibrary';
-import { ShaderLibrary } from '../engine/ShaderLibrary';
+import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 const blockPickerProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) =>
   new Material({

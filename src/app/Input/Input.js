@@ -62,8 +62,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
   return Input;
 };
 
-/* ::
-export const Input = inputProvider([]);
-*/
+declare var tmp: $Call<typeof inputProvider, InputContext[]>;
+export type Input = tmp;
 
 export default inputProvider;

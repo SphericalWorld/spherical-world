@@ -4,7 +4,7 @@ import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import { Transform, Visual, Skybox } from '../components';
-import { MaterialLibrary } from '../engine/MaterialLibrary';
+import type { MaterialLibrary } from '../engine/MaterialLibrary';
 
 const skyboxProvider = (ecs: World, materialLibrary: MaterialLibrary) => (id: Entity): Entity => {
   const model = Model.createPrimitive(CUBE, 1000, true);

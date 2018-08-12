@@ -167,7 +167,7 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const Inventory = inventoryProvider(store);
   const Player = playerProvider(world, materialLibrary, BlockPicker, Inventory);
   const SocketHandlers = socketHandlers(Player);
-  const Draw = drawProvider(store, world, terrain, time);
+  const Draw = drawProvider(world, terrain, time);
   // const SkyboxSystem = skyboxSystemProvider(store);
   world.registerSystem(...[
     new BlockRemove(),

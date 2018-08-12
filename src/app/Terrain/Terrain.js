@@ -47,13 +47,13 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       network.route('REMOVE_BLOCK', this.onServerBlockRemoved.bind(this));
     }
 
-    draw(skyColor, globalColor, pMatrix: Mat4, mvMatrix: Mat4): void {
+    draw(skyColor, globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
       const { shader } = (this.material: { shader: ChunkProgram });
       const m = mat4.create();
       mat4.multiply(m, pMatrix, mvMatrix);
 
       const chunksToRender = [...this.chunks.values()]
-        .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m));
+        .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m)); // TODO cache loaded chunks array
 
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, this.texture);
@@ -74,7 +74,7 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 
-      gl.uniform4f(shader.uFogColor, skyColor[0], skyColor[1], skyColor[2], globalColor[3]);
+      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
       // TODO: underwater fog goes here
       // if (((this.app.player.blockInDown === 127) && (this.app.player.y - Math.floor(this.app.player.y) < 0.45)) || ((this.app.player.blockInUp === 127) && (this.app.player.y - Math.floor(this.app.player.y) > 0.45))) {
       //   gl.uniform1f(shader.uFogDensity, 0.09);
@@ -82,11 +82,11 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       //   gl.uniform1i(shader.uFogType, 1);
       // } else {
       gl.uniform1f(shader.uFogDensity, 0.007);
-      gl.uniform4f(shader.uFogColor, skyColor[0], skyColor[1], skyColor[2], globalColor[3]);
+      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
       gl.uniform1i(shader.uFogType, 0);
       // }
 
-      gl.uniform4f(shader.uGlobalColor, globalColor[0], globalColor[1], globalColor[2], globalColor[3]);
+      gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
       gl.disable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

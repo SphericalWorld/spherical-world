@@ -10,12 +10,11 @@ import { GlShaderProgram } from '../engine/glShader';
 import {
   Transform, Visual, Skybox, Camera,
 } from '../components';
-import { connect } from '../util';
 import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
 import { Terrain } from '../Terrain/Terrain';
 
-const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
+const drawProvider = (world: World, terrain: Terrain, time: Time) => {
   class Draw implements System {
     world: World;
     components: {
@@ -43,7 +42,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
     skyColorGradient: Gradient = new Gradient([[0, 0x8cd3ff], [33, 0xffe899], [53, 0xff8b56], [87, 0x1C1C7C], [100, 0x1a1a1a]]);
     lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
 
-    update(currentTime: number): void {
+    update(): void {
       const { camera } = this.camera[0];
       this.mvMatrix = camera.mvMatrix;
       this.pMatrix = camera.viewport.pMatrix;
@@ -71,7 +70,6 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();
-        // console.log(position.translation);
       };
 
       for (const { transform, visual } of this.components) {
@@ -132,7 +130,7 @@ const drawProvider = (store, world: World, terrain: Terrain, time: Time) => {
       this.currentShader = shader;
     }
   }
-  return connect(null, null, store)(Draw);
+  return Draw;
 };
 
 export default drawProvider;

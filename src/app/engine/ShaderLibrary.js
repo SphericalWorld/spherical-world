@@ -19,8 +19,7 @@ const shaderLibraryProvider = () => {
   return ShaderLibrary;
 };
 
-/* ::
-export const ShaderLibrary = shaderLibraryProvider();
-*/
+declare var tmp: $Call<typeof shaderLibraryProvider>;
+export type ShaderLibrary = tmp;
 
 export default shaderLibraryProvider;

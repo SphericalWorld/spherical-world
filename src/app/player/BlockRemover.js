@@ -1,10 +1,6 @@
 // @flow
-// import GlObject from '../engine/glObject';
-// import Model from '../engine/Model';
 // import { connect } from '../util';
 // import { terrainRemoveBlock } from '../Terrain/terrainActions';
-// import { MOUSE_BUTTON_LEFT } from '../mouse/mouseConstants';
-// import { Position } from '../components';
 // const mapActions = () => ({
 //   terrainRemoveBlock,
 // });
@@ -21,8 +17,6 @@
 //     }
 //
 //     startRemoveBlock(blockRemovingSpeed: number): void {
-//       this.visible = true;
-//
 //       this.intervalDescriptor = setInterval(() => {
 //         intervalsLeft -= 1;
 //

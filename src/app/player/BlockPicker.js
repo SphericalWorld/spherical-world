@@ -4,7 +4,7 @@ import GlObject from '../engine/glObject';
 import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import { Transform, Visual, Raytracer } from '../components';
-import { MaterialLibrary } from '../engine/MaterialLibrary';
+import type { MaterialLibrary } from '../engine/MaterialLibrary';
 
 const blockPickerProvider = (
   ecs: World,

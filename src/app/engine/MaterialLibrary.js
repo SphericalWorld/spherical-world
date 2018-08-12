@@ -19,8 +19,7 @@ const materialLibraryProvider = () => {
   return MaterialLibrary;
 };
 
-/* ::
-export const MaterialLibrary = materialLibraryProvider();
-*/
+declare var tmp: $Call<typeof materialLibraryProvider>;
+export type MaterialLibrary = tmp;
 
 export default materialLibraryProvider;
