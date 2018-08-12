@@ -1,9 +1,9 @@
 // @flow
 import type { Entity } from '../ecs/Entity';
 import GlObject from '../engine/glObject';
-import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import { Transform, Visual, Raytracer } from '../components';
+import { createCube } from '../engine/Model';
 import type { MaterialLibrary } from '../engine/MaterialLibrary';
 
 const blockPickerProvider = (
@@ -11,7 +11,7 @@ const blockPickerProvider = (
   materialLibrary: MaterialLibrary,
   BlockRemover,
 ) => (id: Entity): Entity => {
-  const model = Model.createPrimitive(CUBE, 1.001);
+  const model = createCube(1.001);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });
   const blockRemover = BlockRemover();

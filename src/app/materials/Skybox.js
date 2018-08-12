@@ -7,6 +7,7 @@ const skyboxProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLib
   new Material({
     name: 'skybox',
     shader: shaderLibrary.get('skybox'),
+    diffuse: textureLibrary.get('skybox'),
   });
 
 export default skyboxProvider;

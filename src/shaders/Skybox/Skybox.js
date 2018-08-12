@@ -8,8 +8,8 @@ export default class SkyboxProgram extends GlShaderProgram {
   vertexShader = new GlVertexShader(vertexShaderData);
   fragmentShader = new GlFragmentShader(fragmentShaderData);
 
-  attributes = ['aVertexPosition'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'time', 'uLighting', 'uSunPosition'];
+  attributes = ['aVertexPosition', 'aTextureCoord'];
+  uniforms = ['uPMatrix', 'uMVMatrix', 'uTime', 'uLighting', 'uTexture', 'uSunPosition'];
 
   constructor() {
     super();

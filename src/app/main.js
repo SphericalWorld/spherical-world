@@ -1,6 +1,6 @@
 // @flow
 import { initWebGL } from './engine/glEngine';
-import Model from './engine/Model';
+import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
 import { connect } from './util';
 // import playerModel from '../models/player.json';
@@ -42,7 +42,7 @@ const engineProvider = (
       this.resourceLoader = new ResourceLoader(network);
       initWebGL();
 
-      Player.hudBillboardModel = Model.createPrimitive('billboard', 2.0);
+      Player.hudBillboardModel = createBillboard(2.0);
 
       this.player = await network.request('LOGIN', { cookie: 12345 });
 

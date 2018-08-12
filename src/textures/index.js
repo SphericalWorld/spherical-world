@@ -30,7 +30,9 @@ import blockDamage from './block_damage.png';
 import foliageColorMap from './colormap/foliage.png';
 import grassColorMap from './colormap/grass.png';
 
-const materialsProvider = async () => Promise.all([
+import skybox from './skybox.png';
+
+const texturesProvider = async () => Promise.all([
   Texture.create(grass, { name: 'grass', atlasId: 0, meta: { overlay: true } }),
   Texture.create(sand, { name: 'sand', atlasId: 1 }),
   Texture.create(stone, { name: 'stone', atlasId: 2 }),
@@ -65,28 +67,13 @@ const materialsProvider = async () => Promise.all([
   // Texture.create(terrainOverlay, { name: 'terrainOverlay' }),
   Texture.create(blockSelector, { name: 'blockSelector' }),
   Texture.create(blockDamage, { name: 'blockDamaged', animated: true }),
-
-
-  // blockDamage: {
-  //   image: [
-  //     import('../../textures/destroy_stage_0.png'),
-  //     import('../../textures/destroy_stage_1.png'),
-  //     import('../../textures/destroy_stage_2.png'),
-  //     import('../../textures/destroy_stage_3.png'),
-  //     import('../../textures/destroy_stage_4.png'),
-  //     import('../../textures/destroy_stage_5.png'),
-  //     import('../../textures/destroy_stage_6.png'),
-  //     import('../../textures/destroy_stage_7.png'),
-  //     import('../../textures/destroy_stage_8.png'),
-  //     import('../../textures/destroy_stage_9.png'),
-  //   ],
-  // },
-
   Texture.create(foliageColorMap, { name: 'foliageColorMap' }),
   Texture.create(grassColorMap, { name: 'grassColorMap' }),
+  Texture.create(skybox, { name: 'skybox' }),
+
   // Texture.create(player, { player: 'grass' }),
   // terrain: {},
   // terrainAnimated: {}
 ]);
 
-export default materialsProvider;
+export default texturesProvider;

@@ -85,10 +85,13 @@ const drawProvider = (world: World, terrain: Terrain, time: Time) => {
 
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+        gl.uniform1f(this.currentShader.uTime, time.dayPercent);
         gl.uniform4f(this.currentShader.uLighting, ...skyColor);
         gl.uniform3f(this.currentShader.uSunPosition, ...skybox.sunPosition);
 
         this.mvPushMatrix();
+        // mat4.translate(this.mvMatrix, this.mvMatrix, transform.translation);
+
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();

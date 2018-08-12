@@ -151,12 +151,12 @@ import type { Entity } from '../ecs/Entity';
 import Collider from '../components/Collider';
 import UserControlled from '../components/UserControlled';
 import GlObject from '../engine/glObject';
-import Model, { CUBE } from '../engine/Model';
 import { World } from '../ecs';
 import {
   Transform, Camera, Physics, Velocity, Gravity, Raytracer,
 } from '../components';
 import type { MaterialLibrary } from '../engine/MaterialLibrary';
+import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
 const playerProvider = (
@@ -165,7 +165,7 @@ const playerProvider = (
   BlockPicker,
   Inventory,
 ) => (data: Object): Entity => {
-  const model = Model.createPrimitive(CUBE, 1.001);
+  const model = createCube(1.001);
   const material = materialLibrary.get('blockSelector'); // 'player'
   const object = new GlObject({ model, material });
   const blockPicker = BlockPicker();
