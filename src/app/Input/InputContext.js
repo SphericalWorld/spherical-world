@@ -1,10 +1,9 @@
 // @flow
 import type { Maybe } from '../../../common/fp/monads/maybe';
-import type { GAME_EVENT_TYPE } from '../GameEvent/GameEvent';
+import type { GAME_EVENT_TYPE, GameEvent } from '../GameEvent/GameEvent';
 import type { INPUT_TYPE } from './events';
 import HashMap from '../../../common/fp/data-structures/Map';
 import { Just, Nothing } from '../../../common/fp/monads/maybe';
-import GameEvent from '../GameEvent/GameEvent';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './events';
 import InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
@@ -12,7 +11,7 @@ import { STATE_DOWN } from './StateInputEvent';
 type MappedEvent = {|
   +type: INPUT_TYPE,
   +gameEvent: GAME_EVENT_TYPE,
-  +data?: Object,
+  +data?: InputEvent => Object,
   +onEnd?: GAME_EVENT_TYPE,
 |};
 
@@ -23,20 +22,23 @@ export default class InputContext {
   getMappedInputEvent(inputEvent: InputEvent): Maybe<GameEvent> {
     return this.events
       .get(inputEvent.name)
-      .chain((mappedEvent) => {
-        switch (mappedEvent.type) {
+      .chain(({
+        type, data, gameEvent, onEnd,
+      }: MappedEvent) => {
+        const payload = data && data(inputEvent);
+        switch (type) {
           case INPUT_TYPE_ACTION:
             if (inputEvent.status === STATE_DOWN) {
-              return Just(new GameEvent(mappedEvent.gameEvent, inputEvent, mappedEvent.data));
+              return Just({ type: gameEvent, payload });
             }
             return Nothing;
           case INPUT_TYPE_STATE:
             if (inputEvent.status === STATE_DOWN) {
-              return Just(new GameEvent(mappedEvent.gameEvent, inputEvent, mappedEvent.data));
+              return Just({ type: gameEvent, payload });
             }
-            return Just(new GameEvent(mappedEvent.onEnd, inputEvent, mappedEvent.data));
+            return Just({ type: onEnd, payload });
           case INPUT_TYPE_RANGE:
-            return Just(new GameEvent(mappedEvent.gameEvent, inputEvent, mappedEvent.data));
+            return Just({ type: gameEvent, payload });
           default:
             return Nothing;
         }

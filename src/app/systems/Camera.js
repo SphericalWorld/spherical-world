@@ -7,12 +7,12 @@ import type { World } from '../ecs';
 import type { Entity } from '../ecs/Entity';
 import type { Viewport } from '../components/Camera';
 import { gl } from '../engine/glEngine';
-import GameEventQueue from '../GameEvent/GameEventQueue';
+import type EventQueue from '../GameEvent/EventQueue';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
 import { System } from './System';
 import { Transform, Camera } from '../components';
-import { cameraMovedObservable, cameraLockedObservable, cameraUnlockedObservable } from '../player/events';
+import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 
 const resizeViewport = (viewport: Viewport): Viewport => {
   const width = gl.canvas.clientWidth;
@@ -51,26 +51,33 @@ const cameraProvider = (world: World) => {
       camera: Camera,
     }[] = world.createSelector([Transform, Camera]);
 
-    cameraMovements: GameEventQueue = new GameEventQueue(cameraMovedObservable);
     bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
 
     mvMatrix: Mat4;
     pMatrix: Mat4;
 
-    constructor() {
-      cameraLockedObservable.subscribe(() => {
+    cameraMovements: EventQueue = world.events
+      .filter(el => el.type === CAMERA_MOVED)
+      .subscribeQueue();
+
+    cameraLockedObserver = world.events
+      .filter(el => el.type === CAMERA_LOCKED)
+      .subscribe(() => {
         world.input.deactivateContext(GameplayMenuContext);
         world.input.activateContext(GameplayMainContext);
         this.bodyElement.requestPointerLock();
       });
-      cameraUnlockedObservable.subscribe(() => {
+
+    cameraUnlockedObservable = world.events
+      .filter(el => el.type === CAMERA_UNLOCKED)
+      .subscribe(() => {
         world.input.deactivateContext(GameplayMainContext);
         world.input.activateContext(GameplayMenuContext);
+        this.bodyElement.requestPointerLock();
       });
-    }
 
     update(delta: number): void {
-      const movement = this.cameraMovements.events.reduce(([x, y], { inputEvent }) => ([x + inputEvent.x, y + inputEvent.y]), [0, 0]);
+      const movement = this.cameraMovements.events.reduce(([x, y], { payload }) => ([x + payload.x, y + payload.y]), [0, 0]);
       const [{ id, transform, camera }] = this.camera;
       camera.viewport = resizeViewport(camera.viewport);
 

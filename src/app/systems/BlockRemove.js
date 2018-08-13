@@ -3,13 +3,16 @@ import type World from '../ecs/World';
 import type { Entity } from '../ecs/Entity';
 import { clamp } from '../../../common/utils/numberUtils';
 import { blocksInfo } from '../blocks/blockInfo';
-import GameEventQueue from '../GameEvent/GameEventQueue';
 import type { System } from './System';
 import Transform from '../components/Transform';
 import BlockRemover from '../components/BlockRemover';
 import Visual from '../components/Visual';
 import Raytracer from '../components/Raytracer';
-import { playerAttackObservable, PLAYER_ATTACKED } from '../player/events';
+import {
+  PLAYER_ATTACKED,
+  PLAYER_STARTED_DESTROYING_BLOCK,
+  PLAYER_STOPED_ATTACK,
+} from '../player/events';
 
 const clampAnimation = clamp(0, 0.99);
 
@@ -22,16 +25,27 @@ const blockRemoverProvider = (world: World) => {
       raytracer: Raytracer
     }[] = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
 
-    moveEvents: GameEventQueue = new GameEventQueue(playerAttackObservable);
+    playerAttackEvents = world.events
+      .filter(el => el.type === PLAYER_ATTACKED || el.type === PLAYER_STOPED_ATTACK)
+      .map(el => el.type === PLAYER_ATTACKED)
+      .subscribeQueue();
 
     update(delta: number): void {
       for (const {
         visual, blockRemover, raytracer, id,
       } of this.removers) {
         if (id === id) { // TODO: main player ID
-          this.moveEvents.events.map((event) => {
-            blockRemover.removing = event.type === PLAYER_ATTACKED;
+          const { removing } = blockRemover;
+          this.playerAttackEvents.events.forEach((possibleRemoving) => {
+            blockRemover.removing = possibleRemoving;
           });
+          if (removing !== blockRemover.removing) {
+            world.dispatch({
+              type: PLAYER_STARTED_DESTROYING_BLOCK,
+              payload: raytracer.block.position,
+              network: true,
+            });
+          }
         }
         const maxFrames = visual.glObject.material.diffuse.frames;
         if (raytracer.block.block && blockRemover.removing) {
@@ -45,7 +59,7 @@ const blockRemoverProvider = (world: World) => {
         }
         visual.glObject.material.frame = Math.floor(maxFrames * blockRemover.removedPart);
       }
-      this.moveEvents.clear();
+      this.playerAttackEvents.clear();
     }
   }
 

@@ -3,7 +3,7 @@ import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type { System } from './System';
 import { Transform, UserControlled } from '../components';
-import { menuToggledObservable } from '../hud/events';
+import { MENU_TOGGLED } from '../hud/hudConstants';
 import { connect } from '../util';
 import { updateHudData, toggleMenu } from '../hud/hudActions';
 
@@ -25,11 +25,11 @@ const hudProvider = (world: World, store) => {
       transform: Transform,
     }[] = world.createSelector([Transform, UserControlled]);
 
-    constructor() {
-      menuToggledObservable.subscribe(() => {
+    menuToggledObservable = world.events
+      .filter(el => el.type === MENU_TOGGLED)
+      .subscribe((event) => {
         this.toggleMenu(!this.states.mainMenuToggled);
       });
-    }
 
     update(delta: number): void {
       this.updateHudData({

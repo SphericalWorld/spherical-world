@@ -1,17 +1,17 @@
 // @flow
 import { vec3, quat } from 'gl-matrix';
 import type { Entity } from '../../ecs/Entity';
-import GameEventQueue from '../../GameEvent/GameEventQueue';
+import EventQueue from '../../GameEvent/EventQueue';
 import {
-  playerMovedObservable,
-  playerJumpedObservable,
-  playerRunObservable,
   PLAYER_MOVED,
+  PLAYER_STOPED_MOVE,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
   PLAYER_RUN,
+  PLAYER_STOPED_RUN,
+  PLAYER_JUMPED,
 } from '../../player/events';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
@@ -48,19 +48,27 @@ const setMove = (userControls: UserControlled, direction, value: boolean): UserC
   return userControls;
 };
 
-export default (ecs: World, terrain: Terrain) => {
+export default (world: World, terrain: Terrain) => {
   class UserControlSystem implements System {
-    world: World;
     components: {
       id: Entity,
       transform: Transform,
       velocity: Velocity,
       userControlled: UserControlled,
-    }[] = ecs.createSelector([Transform, Velocity, UserControlled]);
+    }[] = world.createSelector([Transform, Velocity, UserControlled]);
 
-    moveEvents: GameEventQueue = new GameEventQueue(playerMovedObservable);
-    jumpEvents: GameEventQueue = new GameEventQueue(playerJumpedObservable);
-    runEvents: GameEventQueue = new GameEventQueue(playerRunObservable);
+    moveEvents = world.events
+      .filter(el => el.type === PLAYER_MOVED || el.type === PLAYER_STOPED_MOVE)
+      .subscribeQueue();
+
+    jumpEvents = world.events
+      .filter(el => el.type === PLAYER_JUMPED)
+      .subscribeQueue();
+
+    runEvents = world.events
+      .filter(el => el.type === PLAYER_RUN || el.type === PLAYER_STOPED_RUN)
+      .map(el => el.type === PLAYER_RUN)
+      .subscribeQueue();
 
     update(delta: number): Array {
       const result = [];
@@ -68,10 +76,10 @@ export default (ecs: World, terrain: Terrain) => {
         id, transform, velocity, userControlled: userControls,
       }] = this.components;
 
-      this.moveEvents.events.reduce((controls, { type, data: { direction } }) =>
+      this.moveEvents.events.reduce((controls, { type, payload: { direction } }) =>
         setMove(controls, direction, type === PLAYER_MOVED), userControls);
-      this.runEvents.events.reduce((controls, { type }) => {
-        controls.isRunning = type === PLAYER_RUN;
+      this.runEvents.events.reduce((controls, isRunning) => {
+        controls.isRunning = isRunning;
         return controls;
       }, userControls);
       this.jumpEvents.events.reduce(() => (velocity.linear[1] === 0

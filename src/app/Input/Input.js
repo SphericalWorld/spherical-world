@@ -1,5 +1,5 @@
 // @flow
-import type GameEvent from '../GameEvent/GameEvent';
+import type { GameEvent } from '../GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import InputEvent from './InputEvent';
 import InputContext, { activate, deactivate } from './InputContext';

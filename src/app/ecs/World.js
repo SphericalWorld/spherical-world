@@ -1,10 +1,11 @@
 // @flow
-import type GameEvent from '../GameEvent/GameEvent';
+import type { GameEvent } from '../GameEvent/GameEvent';
 import type { Input } from '../Input/Input';
 import type { THREAD_ID } from '../Thread/threadConstants';
 import type { Entity } from './Entity';
 import type { System } from '../systems/System';
 import { Component } from '../components/Component';
+import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 
 export default class World {
@@ -14,7 +15,8 @@ export default class World {
   componentTypes: Map<string, Function> = new Map();
   selectors: EntitySelector[] = [];
   input: Input;
-  events: GameEvent[] = [];
+  eventsForThreads: GameEvent[] = [];
+  events: EventObservable<GameEvent> = new EventObservable();
   listeners: Array<GameEvent => void> = [];
   thread: THREAD_ID;
 
@@ -36,7 +38,6 @@ export default class World {
   registerSystem(...systems: System[]): void {
     for (const system of systems) {
       this.systems.push(system);
-      system.world = this;
     }
   }
 
@@ -76,12 +77,12 @@ export default class World {
         payload: {
           components: componentsToUpdate,
           delta,
-          events: this.events,
+          events: this.eventsForThreads,
         },
       });
     }
     // TODO: clear events queues in systems automatically after system updates
-    this.events = [];
+    this.eventsForThreads = [];
   }
 
   updateComponents(components) {
@@ -141,19 +142,13 @@ export default class World {
     return entityId;
   }
 
-  emitEvent(gameEvent: GameEvent) {
-    this.events.push(gameEvent);
-    for (const listener of this.listeners) {
-      listener(gameEvent);
-    }
+  dispatch(gameEvent: GameEvent) {
+    this.eventsForThreads.push(gameEvent);
+    this.events.emit(gameEvent);
   }
 
   setInput(input: Input) {
     this.input = input;
-    input.onDispatch((gameEvent: GameEvent) => this.emitEvent(gameEvent));
-  }
-
-  subscribe(listener: (GameEvent) => void) {
-    this.listeners.push(listener);
+    input.onDispatch((gameEvent: GameEvent) => this.dispatch(gameEvent));
   }
 }

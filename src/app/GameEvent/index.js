@@ -1,3 +1,3 @@
 // @flow
-export { default as GameEventObservable } from './GameEventObservable';
-export { default as GameEventQueue } from './GameEventQueue';
+export { default as EventObservable } from './EventObservable';
+export { default as EventQueue } from './EventQueue';

@@ -1,6 +1,4 @@
 // @flow
-import GameEventObservable from '../GameEvent/GameEventObservable';
-
 export const CAMERA_MOVED: 'CAMERA_MOVED' = 'CAMERA_MOVED';
 export const CAMERA_LOCKED: 'CAMERA_LOCKED' = 'CAMERA_LOCKED';
 export const CAMERA_UNLOCKED: 'CAMERA_UNLOCKED' = 'CAMERA_UNLOCKED';
@@ -15,12 +13,4 @@ export const PLAYER_RUN: 'PLAYER_RUN' = 'PLAYER_RUN';
 export const PLAYER_STOPED_RUN: 'PLAYER_STOPED_RUN' = 'PLAYER_STOPED_RUN';
 export const PLAYER_ATTACKED: 'PLAYER_ATTACKED' = 'PLAYER_ATTACKED';
 export const PLAYER_STOPED_ATTACK: 'PLAYER_STOPED_ATTACK' = 'PLAYER_STOPED_ATTACK';
-
-
-export const cameraMovedObservable = new GameEventObservable();
-export const cameraLockedObservable = new GameEventObservable();
-export const cameraUnlockedObservable = new GameEventObservable();
-export const playerMovedObservable = new GameEventObservable();
-export const playerJumpedObservable = new GameEventObservable();
-export const playerRunObservable = new GameEventObservable();
-export const playerAttackObservable = new GameEventObservable();
+export const PLAYER_STARTED_DESTROYING_BLOCK: 'PLAYER_STARTED_DESTROYING_BLOCK' = 'PLAYER_STARTED_DESTROYING_BLOCK';

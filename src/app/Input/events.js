@@ -1,5 +1,6 @@
 // @flow
 // keep constants in integers to be able to use shared memory for input sync in the future
+import RangeInputEvent from './RangeInputEvent';
 import { MENU_TOGGLED } from '../hud/hudConstants';
 import {
   CAMERA_MOVED,
@@ -27,6 +28,9 @@ export const INPUT_TYPE_RANGE: 2 = 2;
 export const CAMERA_MOVED_EVENT = {
   type: INPUT_TYPE_RANGE,
   gameEvent: CAMERA_MOVED,
+  data: ({ x, y, z }: RangeInputEvent) => ({
+    x, y, z,
+  }),
 };
 
 export const CAMERA_UNLOCKED_EVENT = {
@@ -38,36 +42,36 @@ export const PLAYER_MOVE_FORWARD_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_MOVED,
   onEnd: PLAYER_STOPED_MOVE,
-  data: {
+  data: () => ({
     direction: DIRECTION_FORWARD,
-  },
+  }),
 };
 
 export const PLAYER_MOVE_BACKWARD_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_MOVED,
   onEnd: PLAYER_STOPED_MOVE,
-  data: {
+  data: () => ({
     direction: DIRECTION_BACK,
-  },
+  }),
 };
 
 export const PLAYER_MOVE_LEFT_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_MOVED,
   onEnd: PLAYER_STOPED_MOVE,
-  data: {
+  data: () => ({
     direction: DIRECTION_LEFT,
-  },
+  }),
 };
 
 export const PLAYER_MOVE_RIGHT_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_MOVED,
   onEnd: PLAYER_STOPED_MOVE,
-  data: {
+  data: () => ({
     direction: DIRECTION_RIGHT,
-  },
+  }),
 };
 
 export const PLAYER_JUMP_EVENT = {

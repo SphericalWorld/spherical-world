@@ -1,14 +1,4 @@
 // @flow
-import {
-  playerMovedObservable,
-  PLAYER_MOVED,
-  PLAYER_JUMPED,
-  playerJumpedObservable,
-  PLAYER_STOPED_MOVE,
-  PLAYER_RUN,
-  PLAYER_STOPED_RUN,
-  playerRunObservable,
-} from '../player/events';
 import configureStore from './store/configureStore';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';
@@ -48,18 +38,6 @@ const GravitySystem = gravitySystemProvider(world);
 const VelocitySystem = velocitySystemProvider(world);
 const PhysicsSystem = physicsSystemProvider(world, terrain, Chunk);
 const UserControlSystem = userControlSystemProvider(world, terrain);
-// throw add direction to move event and rename observables
-world.subscribe((event) => {
-  if (event.type === PLAYER_MOVED || event.type === PLAYER_STOPED_MOVE) {
-    playerMovedObservable.emit(event);
-  }
-  if (event.type === PLAYER_JUMPED) {
-    playerJumpedObservable.emit(event);
-  }
-  if (event.type === PLAYER_RUN || event.type === PLAYER_STOPED_RUN) {
-    playerRunObservable.emit(event);
-  }
-});
 
 class PhysicsThread {
   lastTime: number = Date.now();
@@ -94,7 +72,7 @@ class PhysicsThread {
         world.update(payload.delta);
         if (payload.events && payload.events.length) {
           for (let i = 0; i < payload.events.length; i += 1) {
-            world.emitEvent(payload.events[i]);
+            world.dispatch(payload.events[i]);
           }
         }
       }

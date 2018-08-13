@@ -1,7 +1,5 @@
 // @flow
 import type { ShaderLibrary } from './app/engine/ShaderLibrary';
-import { menuToggledObservable } from './app/hud/events';
-import { MENU_TOGGLED } from './app/hud/hudConstants';
 import Main from './app/main';
 import blockRemoverSystemProvider from './app/systems/BlockRemove';
 import socketHandlers from './app/socketHandlers';
@@ -47,19 +45,6 @@ import inputProvider from './app/Input/inputProvider';
 import inputSourcesProvider from './app/Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './app/Input/inputContexts';
 
-
-import {
-  cameraMovedObservable,
-  cameraLockedObservable,
-  cameraUnlockedObservable,
-  playerAttackObservable,
-  CAMERA_MOVED,
-  CAMERA_LOCKED,
-  CAMERA_UNLOCKED,
-  PLAYER_ATTACKED,
-  PLAYER_STOPED_ATTACK,
-} from './app/player/events';
-
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   const world = new World(THREAD_MAIN);
   world.registerThread(THREAD_PHYSICS, physicsThread);
@@ -82,24 +67,6 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
       world.updateComponents(payload.components);
     }
   };
-
-  world.subscribe((event) => {
-    if (event.type === CAMERA_MOVED) {
-      cameraMovedObservable.emit(event);
-    }
-    if (event.type === CAMERA_LOCKED) {
-      cameraLockedObservable.emit(event);
-    }
-    if (event.type === CAMERA_UNLOCKED) {
-      cameraUnlockedObservable.emit(event);
-    }
-    if (event.type === MENU_TOGGLED) {
-      menuToggledObservable.emit(event);
-    }
-    if (event.type === PLAYER_ATTACKED || event.type === PLAYER_STOPED_ATTACK) {
-      playerAttackObservable.emit(event);
-    }
-  });
 
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
