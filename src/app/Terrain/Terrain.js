@@ -4,7 +4,6 @@ import type { Mat4 } from 'gl-matrix';
 
 import type Material from '../engine/Material';
 import { getGeoId } from '../../../common/chunk';
-import { Nothing } from '../../../common/fp/monads/maybe';
 import { connect } from '../util';
 import { loadChunk, loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';

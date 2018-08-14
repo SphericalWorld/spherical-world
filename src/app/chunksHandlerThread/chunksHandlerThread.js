@@ -31,6 +31,7 @@ self.registerMessageHandler('TERRAIN_REMOVED_BLOCK', ({
     x, y, z, geoId,
   },
 }) => terrain.chunks.get(geoId).map((chunk) => {
+  console.log(chunk)
   chunk.removeBlock(x, y, z);
   chunk.updateState();
 }));

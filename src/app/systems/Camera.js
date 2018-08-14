@@ -43,6 +43,10 @@ const getWorldPosition = (distance: number) =>
 const getWorldPositionNear = getWorldPosition(0);
 const getWorldPositionFar = getWorldPosition(1);
 
+const getCameraMovements = (world: World) => world.events
+  .filter(el => el.type === CAMERA_MOVED)
+  .subscribeQueue();
+
 const cameraProvider = (world: World) => {
   class CameraSystem implements System {
     camera: {
@@ -56,9 +60,7 @@ const cameraProvider = (world: World) => {
     mvMatrix: Mat4;
     pMatrix: Mat4;
 
-    cameraMovements: EventQueue = world.events
-      .filter(el => el.type === CAMERA_MOVED)
-      .subscribeQueue();
+    cameraMovements = getCameraMovements(world);
 
     cameraLockedObserver = world.events
       .filter(el => el.type === CAMERA_LOCKED)

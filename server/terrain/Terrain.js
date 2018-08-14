@@ -56,13 +56,14 @@ export default class Terrain {
 
   async sendChunk(player, x: number, z: number) {
     let chunk;
-    if (true) {
+    if (false) {
       chunk = await this.ensureChunk(x, z);
       await chunk.generateWithSurrounding(2);
     } else {
       chunk = this.chunks.get(getGeoId(x, z));
       if (!chunk) {
-        chunk = new Chunk(this, x, z);
+        console.log(1)
+        chunk = await this.ensureChunk(x, z);
         try {
           await chunk.load();
         } catch (e) {
@@ -70,10 +71,9 @@ export default class Terrain {
             console.error('unable to read chunk data:');
             console.error(e.stack);
           }
-          await chunk.generate();
+          await chunk.generateWithSurrounding(2);
           await chunk.save();
         }
-        this.addChunk(chunk);
       }
     }
     chunk.qwe = true;
@@ -92,6 +92,7 @@ export default class Terrain {
     if (!chunk) {
       return;
     }
+    console.log(blockId)
     chunk.data[x + z * 16 + y * 256] = blockId;
     if (chunk.changesCount < 15) {
       chunk.changesCount += 1;

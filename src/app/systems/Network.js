@@ -16,9 +16,7 @@ const networkProvider = (world: World, network: Network) =>
 
     events = world.events
       .filter(el => el.network === true)
-      .subscribe((event) => {
-        console.log(event);
-      });
+      .subscribeQueue();
 
     lastUpdate = Date.now();
     update(delta: number): void {
@@ -32,6 +30,10 @@ const networkProvider = (world: World, network: Network) =>
           id,
         });
       }
+      for (const event of this.events.events) {
+        network.emit(event.type, event.payload);
+      }
+      this.events.clear();
     }
   };
 

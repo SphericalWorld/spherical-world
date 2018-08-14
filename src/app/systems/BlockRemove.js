@@ -1,7 +1,6 @@
 // @flow
 import type World from '../ecs/World';
 import type { Entity } from '../ecs/Entity';
-import { clamp } from '../../../common/utils/numberUtils';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from './System';
 import Transform from '../components/Transform';
@@ -12,9 +11,13 @@ import {
   PLAYER_ATTACKED,
   PLAYER_STARTED_DESTROYING_BLOCK,
   PLAYER_STOPED_ATTACK,
+  PLAYER_DESTROYED_BLOCK,
 } from '../player/events';
 
-const clampAnimation = clamp(0, 0.99);
+const getPlayerAttackEvents = (world: World) => world.events
+  .filter(el => el.type === PLAYER_ATTACKED || el.type === PLAYER_STOPED_ATTACK)
+  .map(el => el.type === PLAYER_ATTACKED)
+  .subscribeQueue();
 
 const blockRemoverProvider = (world: World) => {
   class BlockRemove implements System {
@@ -25,10 +28,7 @@ const blockRemoverProvider = (world: World) => {
       raytracer: Raytracer
     }[] = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
 
-    playerAttackEvents = world.events
-      .filter(el => el.type === PLAYER_ATTACKED || el.type === PLAYER_STOPED_ATTACK)
-      .map(el => el.type === PLAYER_ATTACKED)
-      .subscribeQueue();
+    playerAttackEvents = getPlayerAttackEvents(world);
 
     update(delta: number): void {
       for (const {
@@ -51,7 +51,16 @@ const blockRemoverProvider = (world: World) => {
         if (raytracer.block.block && blockRemover.removing) {
           visual.enabled = true;
           if (blockRemover.removedPart < 1) {
-            blockRemover.removedPart = clampAnimation(blockRemover.removedPart + (1 / blocksInfo[raytracer.block.block].baseRemoveTime) * delta);
+            blockRemover.removedPart += (1 / blocksInfo[raytracer.block.block].baseRemoveTime) * delta;
+          } else {
+            blockRemover.removedPart = 0;
+            world.dispatch({
+              type: PLAYER_DESTROYED_BLOCK,
+              payload: {
+                geoId: raytracer.block.geoId, ...raytracer.block.positionInChunk
+              },
+              network: true,
+            });
           }
         } else {
           visual.enabled = false;
