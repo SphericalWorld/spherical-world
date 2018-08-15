@@ -7,12 +7,12 @@ import { Component } from '../components/Component';
 type SelectorFunction = (Entity) => boolean;
 
 export class EntitySelector<T> {
-  includeComponents: T;
+  includeComponents: T[];
   excludeComponents: Component[];
   selectorFunction: SelectorFunction;
   components: {id: Entity, data: T}[] = [];
 
-  constructor(world: World, includeComponents: T, excludeComponents: Component[] = []) {
+  constructor(world: World, includeComponents: T[], excludeComponents: Component[] = []) {
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;
   }

@@ -4,6 +4,7 @@ import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';
 import chunkProvider from './Terrain/Chunk';
 
+import terrainSystemProvider from './systems/Terrain';
 import raytraceProvider from './systems/Raytrace';
 import gravitySystemProvider from './systems/Gravity';
 import physicsSystemProvider from './systems/Physics';
@@ -33,16 +34,14 @@ const Terrain = terrainProvider(store, Chunk, TerrainBase);
 
 const terrain = new Terrain();
 
+const TerrainSystem = terrainSystemProvider(world, terrain);
 const Raytrace = raytraceProvider(world, Chunk);
 const GravitySystem = gravitySystemProvider(world);
 const VelocitySystem = velocitySystemProvider(world);
-const PhysicsSystem = physicsSystemProvider(world, terrain, Chunk);
+const PhysicsSystem = physicsSystemProvider(world, terrain);
 const UserControlSystem = userControlSystemProvider(world, terrain);
 
 class PhysicsThread {
-  lastTime: number = Date.now();
-  terrain: Terrain = terrain;
-
   constructor() {
     world.registerComponentTypes(
       Transform,
@@ -56,35 +55,16 @@ class PhysicsThread {
     );
     world.registerThread(THREAD_MAIN, self);
     world.registerSystem(
+      new TerrainSystem(),
       new UserControlSystem(),
       new GravitySystem(),
       new VelocitySystem(),
       new PhysicsSystem(),
-      new Raytrace(this.terrain),
+      new Raytrace(terrain),
     );
-
-    self.onMessage = ({ type, payload }) => {
-      if (type === 'CREATE_ENTITY') {
-        world.addExistedEntity(payload.id, ...payload.components);
-      }
-      if (type === 'UPDATE_COMPONENTS') {
-        world.updateComponents(payload.components);
-        world.update(payload.delta);
-        if (payload.events && payload.events.length) {
-          for (let i = 0; i < payload.events.length; i += 1) {
-            world.dispatch(payload.events[i]);
-          }
-        }
-      }
-    };
-    // setInterval(this.physicsLoop.bind(this), 1000 / 80);
   }
 
   physicsLoop() {
-    // const timeNow = Date.now();
-    // const elapsed = timeNow - this.lastTime;
-    //
-    // const players = {};
     // for (const [id, player] of this.players.entries()) {
     //   player.calcPhysics(elapsed);
     //   players[id] = {
@@ -92,20 +72,11 @@ class PhysicsThread {
     //     blockInUp: player.blockInUp,
     //   };
     // }
-    // this.lastTime = timeNow;
   }
 }
 
 export default new PhysicsThread();
 
-//
-// self.registerMessageHandler('TERRAIN_REMOVED_BLOCK', ({
-//   payload: {
-//     geoId, x, y, z,
-//   },
-// }) => {
-//   terrain.chunks.get(geoId).setBlock(x, y, z, 0);
-// });
 //
 // self.registerMessageHandler('TERRAIN_PLACED_BLOCK', ({
 //   payload: {

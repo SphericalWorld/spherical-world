@@ -11,9 +11,10 @@ import { EntityManager, EntitySelector } from './EntityManager';
 export default class World {
   components: Map<string, Map<string, Component>> = new Map();
   systems: System[] = [];
-  threads: Map<number, Worker> = new Map();
+  threads: { threadId: number, thread: Worker }[] = [];
+  threadsMap: Map<number, Worker> = new Map();
   componentTypes: Map<string, Function> = new Map();
-  selectors: EntitySelector[] = [];
+  selectors: EntitySelector<Component>[] = [];
   input: Input;
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
@@ -24,8 +25,24 @@ export default class World {
     this.thread = thread;
   }
 
-  registerThread(id: number, thread: Worker) {
-    this.threads.set(id, thread);
+  registerThread(threadId: number, thread: Worker) {
+    this.threads.push({ threadId, thread });
+    this.threadsMap.set(threadId, thread);
+    thread.onMessage = ({ type, payload }) => {
+      if (type === 'CREATE_ENTITY') {
+        this.addExistedEntity(payload.id, ...payload.components);
+      } else if (type === 'UPDATE_COMPONENTS') {
+        this.updateComponents(payload.components);
+        if (typeof window === 'undefined') {
+          this.update(payload.delta);
+        }
+        if (payload.events && payload.events.length) {
+          for (let i = 0; i < payload.events.length; i += 1) {
+            this.events.emit(payload.events[i]);
+          }
+        }
+      }
+    };
   }
 
   registerComponentTypes(...componentTypes: Function[]): void {
@@ -68,7 +85,7 @@ export default class World {
       }
     }
 
-    for (const [threadId, thread] of this.threads.entries()) {
+    for (const { threadId, thread } of this.threads) {
       const componentsToUpdate = [...changedData.entries()]
         .filter(([component]) => component.constructor.threads.includes(threadId))
         .map(([component, data]) => ({ type: component.constructor.name, data: [...data.entries()] }));
@@ -132,7 +149,7 @@ export default class World {
 
   createEntity(id: Entity | null, ...components: Component[]): Entity {
     const entityId = id || EntityManager.generateId();
-    for (const [threadId, thread] of this.threads.entries()) {
+    for (const { threadId, thread } of this.threads) {
       const componentsToAdd = components
         .filter(el => el.constructor.threads.includes(threadId))
         .map(el => ({ type: el.constructor.name, data: el }));

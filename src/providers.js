@@ -62,11 +62,11 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
     Collider,
     BlockRemover,
   );
-  physicsThread.onMessage = ({ type, payload }) => {
-    if (type === 'UPDATE_COMPONENTS') {
-      world.updateComponents(payload.components);
-    }
-  };
+  // physicsThread.onMessage = ({ type, payload }) => {
+  //   if (type === 'UPDATE_COMPONENTS') {
+  //     world.updateComponents(payload.components);
+  //   }
+  // };
 
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
