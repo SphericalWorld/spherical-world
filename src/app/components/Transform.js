@@ -5,7 +5,8 @@ import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Transform implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
-  static componentName = 'transform';
+  static componentName: 'transform' = 'transform';
+  static componentType: { 'transform': Transform };
 
   translation: Vec3 = [0, 0, 0];
   // TODO: quaternion

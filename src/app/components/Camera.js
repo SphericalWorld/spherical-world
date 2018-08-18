@@ -14,6 +14,7 @@ export type Viewport = {|
 export default class Camera implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName = 'camera';
+  static componentType: { 'camera': Camera };
 
   yaw: number = 0;
   pitch: number = 0;

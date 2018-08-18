@@ -1,19 +1,13 @@
 // @flow
-import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type Network from '../network';
 import { PLAYER_CHANGE_POSITION } from '../player/playerConstants';
 import { System } from './System';
 import { Transform, Camera } from '../components';
 
-const networkProvider = (world: World, network: Network) =>
+export default (world: World, network: Network) =>
   class NetworkSystem implements System {
-    player: {
-      id: Entity,
-      transform: Transform,
-      camera: Camera,
-    }[] = world.createSelector([Transform, Camera]);
-
+    player = world.createSelector([Transform, Camera]);
     events = world.events
       .filter(el => el.network === true)
       .subscribeQueue();
@@ -36,5 +30,3 @@ const networkProvider = (world: World, network: Network) =>
       this.events.clear();
     }
   };
-
-export default networkProvider;

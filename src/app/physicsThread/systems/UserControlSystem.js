@@ -1,7 +1,5 @@
 // @flow
 import { vec3, quat } from 'gl-matrix';
-import type { Entity } from '../../ecs/Entity';
-import EventQueue from '../../GameEvent/EventQueue';
 import {
   PLAYER_MOVED,
   PLAYER_STOPED_MOVE,
@@ -48,15 +46,9 @@ const setMove = (userControls: UserControlled, direction, value: boolean): UserC
   return userControls;
 };
 
-export default (world: World, terrain: Terrain) => {
+export default (world: World, terrain: Terrain) =>
   class UserControlSystem implements System {
-    components: {
-      id: Entity,
-      transform: Transform,
-      velocity: Velocity,
-      userControlled: UserControlled,
-    }[] = world.createSelector([Transform, Velocity, UserControlled]);
-
+    components = world.createSelector([Transform, Velocity, UserControlled]);
     moveEvents = world.events
       .filter(el => el.type === PLAYER_MOVED || el.type === PLAYER_STOPED_MOVE)
       .subscribeQueue();
@@ -125,7 +117,4 @@ export default (world: World, terrain: Terrain) => {
       this.runEvents.clear();
       return [[id, userControls, velocity]];
     }
-  }
-
-  return UserControlSystem;
-};
+  };

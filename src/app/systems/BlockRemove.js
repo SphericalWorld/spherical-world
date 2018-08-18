@@ -1,6 +1,5 @@
 // @flow
 import type World from '../ecs/World';
-import type { Entity } from '../ecs/Entity';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from './System';
 import Transform from '../components/Transform';
@@ -19,15 +18,9 @@ const getPlayerAttackEvents = (world: World) => world.events
   .map(el => el.type === PLAYER_ATTACKED)
   .subscribeQueue();
 
-const blockRemoverProvider = (world: World) => {
+export default (world: World) =>
   class BlockRemove implements System {
-    removers: {
-      id: Entity,
-      blockRemover: BlockRemover,
-      visual: Visual,
-      raytracer: Raytracer
-    }[] = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
-
+    removers = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
     playerAttackEvents = getPlayerAttackEvents(world);
 
     update(delta: number): void {
@@ -70,9 +63,4 @@ const blockRemoverProvider = (world: World) => {
       }
       this.playerAttackEvents.clear();
     }
-  }
-
-  return BlockRemove;
-};
-
-export default blockRemoverProvider;
+  };

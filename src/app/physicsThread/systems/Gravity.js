@@ -5,14 +5,9 @@ import { World } from '../../ecs';
 import Gravity from '../../components/Gravity';
 import Velocity from '../../components/Velocity';
 
-const gravitySystemProvider = (ecs: World) => {
+export default (ecs: World) =>
   class GravitySystem implements System {
-    world: World;
-    components: {
-      id: Entity,
-      gravity: Gravity,
-      velocity: Velocity,
-    }[] = ecs.createSelector([Gravity, Velocity]);
+    components = ecs.createSelector([Gravity, Velocity]);
 
     update(delta: number): [Entity, ?Velocity][] {
       const result = [];
@@ -23,9 +18,4 @@ const gravitySystemProvider = (ecs: World) => {
 
       return result;
     }
-  }
-
-  return GravitySystem;
-};
-
-export default gravitySystemProvider;
+  };

@@ -1,22 +1,17 @@
 // @flow
 import { vec3 } from 'gl-matrix';
-import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type { Time } from '../Time/Time';
 import { System } from './System';
 import { Transform, Skybox } from '../components';
 
 
-const dayNightCycleProvider = (world: World, time: Time) => {
+export default (world: World, time: Time) =>
   class DayNightCycle implements System {
     mvMatrixStack = [];
     mvMatrix: number[];
     pMatrix: number[];
-    skybox: {
-      id: Entity,
-      transform: Transform,
-      skybox: Skybox,
-    }[] = world.createSelector([Transform, Skybox]);
+    skybox = world.createSelector([Transform, Skybox]);
 
     update(delta: number): void {
       time.update(Date.now());
@@ -34,9 +29,4 @@ const dayNightCycleProvider = (world: World, time: Time) => {
       // }
       return [[id, skybox]];
     }
-  }
-
-  return DayNightCycle;
-};
-
-export default dayNightCycleProvider;
+  };

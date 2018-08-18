@@ -4,10 +4,8 @@ import {
   mat4, quat, vec3, vec4,
 } from 'gl-matrix';
 import type { World } from '../ecs';
-import type { Entity } from '../ecs/Entity';
 import type { Viewport } from '../components/Camera';
 import { gl } from '../engine/glEngine';
-import type EventQueue from '../GameEvent/EventQueue';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
 import { System } from './System';
@@ -47,14 +45,9 @@ const getCameraMovements = (world: World) => world.events
   .filter(el => el.type === CAMERA_MOVED)
   .subscribeQueue();
 
-const cameraProvider = (world: World) => {
+export default (world: World) =>
   class CameraSystem implements System {
-    camera: {
-      id: Entity,
-      transform: Transform,
-      camera: Camera,
-    }[] = world.createSelector([Transform, Camera]);
-
+    camera = world.createSelector([Transform, Camera]);
     bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
 
     mvMatrix: Mat4;
@@ -114,9 +107,4 @@ const cameraProvider = (world: World) => {
       camera.sight = sight;
       return [[id, transform, camera]];
     }
-  }
-
-  return CameraSystem;
-};
-
-export default cameraProvider;
+  };

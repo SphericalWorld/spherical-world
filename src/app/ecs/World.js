@@ -4,6 +4,7 @@ import type { Input } from '../Input/Input';
 import type { THREAD_ID } from '../Thread/threadConstants';
 import type { Entity } from './Entity';
 import type { System } from '../systems/System';
+import type { transform } from './EntityManager';
 import { Component } from '../components/Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
@@ -58,10 +59,10 @@ export default class World {
     }
   }
 
-  createSelector(
-    includeComponents: Component[],
+  createSelector<T: Component[]>(
+    includeComponents: T,
     excludeComponents?: Component[],
-  ): (Object[]) {
+  ): $Call<transform, T>[] {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
     return selector.components;

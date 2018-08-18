@@ -1,5 +1,4 @@
 // @flow
-import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type { System } from './System';
 import { Transform, UserControlled } from '../components';
@@ -18,13 +17,9 @@ const mapState = ({
   states,
 });
 
-const hudProvider = (world: World, store) => {
+export default (world: World, store) => {
   class Hud implements System {
-    player: {
-      id: Entity,
-      transform: Transform,
-    }[] = world.createSelector([Transform, UserControlled]);
-
+    player = world.createSelector([Transform, UserControlled]);
     menuToggledObservable = world.events
       .filter(el => el.type === MENU_TOGGLED)
       .subscribe((event) => {
@@ -42,5 +37,3 @@ const hudProvider = (world: World, store) => {
 
   return connect(mapState, mapActions, store)(Hud);
 };
-
-export default hudProvider;

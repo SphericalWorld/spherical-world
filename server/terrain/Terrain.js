@@ -62,7 +62,6 @@ export default class Terrain {
     } else {
       chunk = this.chunks.get(getGeoId(x, z));
       if (!chunk) {
-        console.log(1)
         chunk = await this.ensureChunk(x, z);
         try {
           await chunk.load();

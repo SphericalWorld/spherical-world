@@ -1,7 +1,6 @@
 // @flow
 import type { Mat4 } from 'gl-matrix';
 import { mat4 } from 'gl-matrix';
-import type { Entity } from '../ecs/Entity';
 import type World from '../ecs/World';
 import type { System } from './System';
 
@@ -14,27 +13,11 @@ import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
 import { Terrain } from '../Terrain/Terrain';
 
-const drawProvider = (world: World, terrain: Terrain, time: Time) => {
+export default (world: World, terrain: Terrain, time: Time) =>
   class Draw implements System {
-    world: World;
-    components: {
-      id: Entity,
-      transform: Transform,
-      visual: Visual,
-    }[] = world.createSelector([Transform, Visual], [Skybox]);
-
-    skybox: {
-      id: Entity,
-      transform: Transform,
-      visual: Visual,
-      skybox: Skybox,
-    }[] = world.createSelector([Transform, Visual, Skybox]);
-
-    camera: {
-      id: Entity,
-      camera: Camera,
-    }[] = world.createSelector([Camera]);
-
+    components = world.createSelector([Transform, Visual], [Skybox]);
+    skybox = world.createSelector([Transform, Visual, Skybox]);
+    camera = world.createSelector([Camera]);
     mvMatrixStack = [];
     mvMatrix: Mat4;
     pMatrix: Mat4;
@@ -132,8 +115,4 @@ const drawProvider = (world: World, terrain: Terrain, time: Time) => {
       gl.useProgram(shader.program);
       this.currentShader = shader;
     }
-  }
-  return Draw;
-};
-
-export default drawProvider;
+  };

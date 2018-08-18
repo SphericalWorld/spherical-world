@@ -8,21 +8,10 @@ import Transform from '../../components/Transform';
 import UserControlled from '../../components/UserControlled';
 import Velocity from '../../components/Velocity';
 
-const velocitySystemProvider = (ecs: World) => {
+export default (ecs: World) =>
   class VelocitySystem implements System {
-    world: World;
-    components: {
-      id: Entity,
-      transform: Transform,
-      velocity: Velocity,
-    }[] = ecs.createSelector([Transform, Velocity], [UserControlled]);
-
-    controlledComponents: {
-      id: Entity,
-      transform: Transform,
-      velocity: Velocity,
-      userControlled: UserControlled,
-    }[] = ecs.createSelector([Transform, Velocity, UserControlled]);
+    components = ecs.createSelector([Transform, Velocity], [UserControlled]);
+    controlledComponents = ecs.createSelector([Transform, Velocity, UserControlled]);
 
     update(delta: number): (Entity | Component)[][] {
       const result = [];
@@ -40,9 +29,4 @@ const velocitySystemProvider = (ecs: World) => {
 
       return result;
     }
-  }
-
-  return VelocitySystem;
-};
-
-export default velocitySystemProvider;
+  };

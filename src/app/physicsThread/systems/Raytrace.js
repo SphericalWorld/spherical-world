@@ -4,7 +4,6 @@ import { vec3 } from 'gl-matrix';
 import type { BlockFace } from '../../../../common/block';
 import type { Maybe } from '../../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
-import type { Entity } from '../../ecs/Entity';
 import type World from '../../ecs/World';
 import type { Terrain } from '../Terrain/Terrain';
 import { Nothing } from '../../../../common/fp/monads/maybe';
@@ -63,18 +62,10 @@ const calcMax = (position: number, delta: number, step: number): number =>
     ? Math.abs(position) - Math.floor(Math.abs(position))
     : Math.ceil(Math.abs(position)) - Math.abs(position)));
 
-const raytraceProvider = (ecs: World, Chunk) => {
+export default (ecs: World, Chunk) =>
   class Raytrace implements System {
-    components: {
-      id: Entity,
-      transform: Transform,
-      raytracer: Raytracer,
-    }[] = ecs.createSelector([Transform, Raytracer], [UserControlled]);
-
-    userControlled: {
-      transform: Transform,
-      camera: Camera,
-    }[] = ecs.createSelector([Transform, UserControlled, Camera]);
+    components = ecs.createSelector([Transform, Raytracer], [UserControlled]);
+    userControlled = ecs.createSelector([Transform, UserControlled, Camera]);
 
     mvMatrix: number[];
     pMatrix: number[];
@@ -152,9 +143,4 @@ const raytraceProvider = (ecs: World, Chunk) => {
         }
         : { block }));
     }
-  }
-
-  return Raytrace;
-};
-
-export default raytraceProvider;
+  };
