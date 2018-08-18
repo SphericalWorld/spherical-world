@@ -3,7 +3,6 @@ import WebSocket, { Server as WebSocketServer } from 'ws';
 import HashMap from '../common/fp/data-structures/Map';
 import parseJson from '../common/utils/parseString';
 import Terrain from './terrain/Terrain';
-import StaticLoader from './staticLoader';
 import Player from './player';
 import SocketHandlers from './socketHandlers';
 
@@ -91,7 +90,6 @@ export default class Server {
       }
     }, 50000);
     this.players = [];
-    this.staticLoader = new StaticLoader(1337);
     this.router.terrain = this.terrain;
     this.router.route('loadGameData', this.router.loadGameData.bind(this.router));
     this.router.route('PING', () => {});

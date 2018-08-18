@@ -1,0 +1,47 @@
+{
+  "name": "spherical-world-server",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-app-rewired start",
+    "start-server": "babel-node app.js --no-babelrc --plugins @babel/plugin-transform-flow-strip-types,@babel/transform-modules-commonjs,@babel/plugin-proposal-class-properties,@babel/plugin-proposal-do-expressions,@babel/plugin-syntax-object-rest-spread",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject",
+    "flow": "./node_modules/flow-bin/cli.js",
+    "lint": "./node_modules/eslint/bin/eslint.js --ignore-pattern=node_modules --ignore-pattern=bundle.js src server"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "babel-eslint": "^8.2.6",
+    "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
+    "gl-matrix": "^2.7.1",
+    "pako": "^1.0.6",
+    "seedrandom": "^2.4.3",
+    "simplex-noise": "^2.4.0",
+    "uuid": "^3.3.2",
+    "ws": "^6.0.0",
+    "zlib": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-rc.1",
+    "@babel/node": "^7.0.0-rc.1",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-rc.1",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0-rc.1",
+    "@babel/plugin-syntax-flow": "^7.0.0-rc.1",
+    "@babel/plugin-syntax-object-rest-spread": "^7.0.0-rc.1",
+    "@babel/plugin-transform-modules-commonjs": "^7.0.0-rc.1",
+    "@babel/preset-env": "^7.0.0-rc.1",
+    "@babel/preset-flow": "^7.0.0-rc.1",
+    "eslint": "^5.2.0",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-react": "^7.10.0",
+    "flow-bin": "^0.78.0"
+  }
+}
