@@ -1,0 +1,16 @@
+version: '3.5'
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    ports:
+      - "1337:80"
+  server:
+    build:
+      context: .
+      dockerfile: docker/server/Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./:/usr/src/app/source

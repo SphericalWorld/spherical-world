@@ -1,7 +1,7 @@
 // @flow
 import type { Functor } from '../../common/fp/Functor.type';
 import type { Foldable } from '../../common/fp/Foldable.type';
-import { createArray } from '../../src/app/util/array';
+import { createArray } from '../../common/utils/array';
 
 // ((
 //   callbackfn: (

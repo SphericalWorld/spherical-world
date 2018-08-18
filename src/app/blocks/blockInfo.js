@@ -1,5 +1,5 @@
 // @flow
-import { createArray } from '../util/array';
+import { createArray } from '../../../common/utils/array';
 
 import Air from './Air';
 import Block from './Block';
