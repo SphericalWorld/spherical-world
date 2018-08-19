@@ -12,7 +12,7 @@ import {
   CHUNK_STATUS_NEED_LOAD_VBO,
   CHUNK_STATUS_LOADED,
 } from '../../../Terrain/Chunk/chunkConstants';
-import type { Chunk } from './Chunk';
+import type Chunk from './Chunk';
 
 const calcRecursion = (
   mask: number,

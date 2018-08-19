@@ -5,6 +5,7 @@ import type { Entity } from '../../ecs/Entity';
 import type { System } from '../../systems/System';
 import type { World } from '../../ecs';
 import { PLAYER_DESTROYED_BLOCK } from '../../player/events';
+import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
 
 
 const blockRemoveObserver = (ecs: World, terrain: Terrain) => ecs.events
@@ -16,9 +17,14 @@ const blockRemoveObserver = (ecs: World, terrain: Terrain) => ecs.events
     .get(geoId)
     .map(chunk => chunk.setBlock(x, y, z, 0)));
 
+const onChunkAdd = (ecs: World, terrain: Terrain) => ecs.events
+  .filter(el => el.type === CHUNK_LOADED)
+  .subscribe(({ payload: { x, z, data } }) => terrain.loadChunk(x, z, data));
+
 export default (ecs: World, terrain: Terrain) =>
   class TerrainSystem implements System {
     blockRemoveEvents = blockRemoveObserver(ecs, terrain)
+    onChunkAdd = onChunkAdd(ecs, terrain)
 
     update(delta: number): (Entity | Component)[][] {
       // console.log(delta)

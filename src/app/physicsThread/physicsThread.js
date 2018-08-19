@@ -1,8 +1,8 @@
 // @flow
-import configureStore from './store/configureStore';
+import Thread from '../Thread/Thread';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';
-import chunkProvider from './Terrain/Chunk';
+import Chunk from './Terrain/Chunk/Chunk';
 
 import terrainSystemProvider from './systems/Terrain';
 import raytraceProvider from './systems/Raytrace';
@@ -25,12 +25,8 @@ import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 const world = new World(THREAD_PHYSICS);
 
-const store = configureStore();
-
-const Chunk = chunkProvider(null);
-
 const TerrainBase = terrainBaseProvider(Chunk);
-const Terrain = terrainProvider(store, Chunk, TerrainBase);
+const Terrain = terrainProvider(TerrainBase);
 
 const terrain = new Terrain();
 
@@ -53,7 +49,7 @@ class PhysicsThread {
       UserControlled,
       Camera,
     );
-    world.registerThread(THREAD_MAIN, self);
+    world.registerThread(new Thread(THREAD_MAIN, self));
     world.registerSystem(
       new TerrainSystem(),
       new UserControlSystem(),

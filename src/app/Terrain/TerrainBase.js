@@ -1,6 +1,6 @@
 // @flow
 import type { Maybe } from '../../../common/fp/monads/maybe';
-import type { TChunkBase } from './Chunk/ChunkBase';
+import type TChunkBase from './Chunk/ChunkBase';
 import { getGeoId } from '../../../common/chunk';
 import HashMap from '../../../common/fp/data-structures/Map';
 

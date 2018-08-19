@@ -12,7 +12,6 @@ import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import type ChunkProgram from '../../shaders/Chunk/Chunk';
 
 const mapActions = () => ({
-  loadChunk,
   loadTerrainMipmap,
 });
 
@@ -29,21 +28,19 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
       this.halfSize = 8;
 
       this.texture = null;
-      network.route('loadChunk', (data, binaryData) => {
-        let chunk = this.getChunk(data.x, data.z);
-        if (chunk.isJust === false) {
-          chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
-        } else {
-          chunk = chunk.extract();
-        }
-        chunk.generateFoliageTexture();
-        this.loadChunk({
-          data: binaryData, x: data.x, z: data.z, geoId: chunk.geoId,
-        });
-      });
-
       network.route('PLACE_BLOCK', this.onServerBlockPlaced.bind(this));
       network.route('REMOVE_BLOCK', this.onServerBlockRemoved.bind(this));
+    }
+
+    loadChunk = (data) => {
+      // console.log(data)
+      let chunk = this.getChunk(data.x, data.z);
+      if (chunk.isJust === false) {
+        chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
+      } else {
+        chunk = chunk.extract();
+      }
+      chunk.generateFoliageTexture();
     }
 
     draw(skyColor, globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {

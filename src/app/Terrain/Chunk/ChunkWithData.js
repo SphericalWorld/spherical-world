@@ -1,5 +1,4 @@
 // @flow
-
 import ChunkBase from './ChunkBase';
 
 export default class ChunkWithData<TChunk, TTerrain> extends ChunkBase<TChunk, TTerrain> {

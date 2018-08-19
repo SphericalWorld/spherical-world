@@ -1,29 +1,42 @@
 // @flow
+import type { GameEvent } from '../GameEvent/GameEvent';
+
+import EventObservable from '../GameEvent/EventObservable';
 import terrainBaseProvider from '../Terrain/TerrainBase';
+import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';
 import terrainProvider from './Terrain';
 import Thread from '../Thread';
-import chunkProvider from './Terrain/Chunk';
+import Chunk from './Terrain/Chunk';
 
-new Thread();
+const thread = new Thread(THREAD_CHUNK_HANDLER, self);
 
-const Chunk = chunkProvider(null);
 const TerrainBase = terrainBaseProvider(Chunk);
-const Terrain = terrainProvider(null, Chunk, TerrainBase);
+const Terrain = terrainProvider(TerrainBase);
 const terrain = new Terrain();
 
-// eslint-disable-next-line
-self.registerMessageHandler('CHUNK_LOADED', ({ payload: data }) => {
-  let chunk = terrain.getChunk(data.x, data.z);
-  if (chunk.isJust === false) {
-    chunk = terrain.addChunk(new Chunk(terrain, data.x, data.z));
-  } else {
-    chunk = chunk.extract();
-  }
-  chunk.blocksData = data.data;
-  chunk.blocks = new Uint8Array(chunk.blocksData);
-  chunk.prepareLight();
-  chunk.updateState();
-});
+const events: EventObservable<GameEvent> = new EventObservable();
+
+thread.events
+  .filter(e => e.type === 'UPDATE_COMPONENTS' && e.payload.events)
+  .subscribe(({ payload: data }) => {
+    for (let i = 0; i < data.events.length; i += 1) {
+      events.emit(data.events[i]);
+    }
+  });
+
+events
+  .filter(e => e.type === 'CHUNK_LOADED')
+  .subscribe(({ payload: data }) => {
+    let chunk = terrain.getChunk(data.x, data.z);
+    if (chunk.isJust === false) {
+      chunk = terrain.addChunk(new Chunk(terrain, data.x, data.z));
+    } else {
+      chunk = chunk.extract();
+    }
+    chunk.blocks = new Uint8Array(data.data);
+    chunk.prepareLight();
+    chunk.updateState();
+  });
 
 // TODO: combine place and remove
 self.registerMessageHandler('TERRAIN_REMOVED_BLOCK', ({

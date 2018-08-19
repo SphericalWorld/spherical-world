@@ -5,14 +5,11 @@ import { reduceReducers } from '../../common/utils/reducerUtils';
 
 import playerReducer from '../player/playerReducer';
 import hudReducer from '../hud/hudReducer';
-import chunkReducer from '../Terrain/Chunk/chunkReducer';
 
 const combinedReducer = combineReducers({
   players: playerReducer,
   hudData: hudReducer,
-  chunks: chunkReducer,
 });
-
 
 const rootReducer = reduceReducers(combinedReducer,
   // entityCrudReducer,

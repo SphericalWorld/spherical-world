@@ -16,6 +16,7 @@ import {
   CHUNK_STATUS_NEED_LOAD_ALL,
   CHUNK_STATUS_NEED_LOAD_LIGHT,
   CHUNK_STATUS_NEED_LOAD_VBO,
+  CHUNK_VBO_LOADED,
 } from '../../../Terrain/Chunk/chunkConstants';
 import {
   calcRecursionRed,
@@ -223,299 +224,294 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
 
 type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
 
-const chunkProvider = (store) => {
-  class Chunk extends ChunkWithData<Chunk, Terrain> {
-    blocks: Uint8Array;
-    flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
-    light: Uint16Array = new Uint16Array(this.height * 16 * 16);
-    minimap: Uint8Array = new Uint8Array(256 * 3);
+export default class Chunk extends ChunkWithData<Chunk, Terrain> {
+  blocks: Uint8Array;
+  flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
+  light: Uint16Array = new Uint16Array(this.height * 16 * 16);
+  minimap: Uint8Array = new Uint8Array(256 * 3);
 
-    blocksTextureInfo = blocksTextureInfo;
-    blocksFlags = blocksFlags;
-    blocksInfo = blocksInfo;
+  blocksTextureInfo = blocksTextureInfo;
+  blocksFlags = blocksFlags;
+  blocksInfo = blocksInfo;
 
-    createTopPlane: CreatePlane;
-    createBottomPlane: CreatePlane;
-    createNorthPlane: CreatePlane;
-    createSouthPlane: CreatePlane;
-    createWestPlane: CreatePlane;
-    createEastPlane: CreatePlane;
+  createTopPlane: CreatePlane;
+  createBottomPlane: CreatePlane;
+  createNorthPlane: CreatePlane;
+  createSouthPlane: CreatePlane;
+  createWestPlane: CreatePlane;
+  createEastPlane: CreatePlane;
 
-    constructor(terrain: Terrain, x: number, z: number) {
-      super(terrain, x, z);
+  constructor(terrain: Terrain, x: number, z: number) {
+    super(terrain, x, z);
 
-      this.terrainMipMap = null;
+    this.terrainMipMap = null;
 
-      this.rainfallData = new Uint8Array(256);
-      this.temperatureData = new Uint8Array(256);
+    this.rainfallData = new Uint8Array(256);
+    this.temperatureData = new Uint8Array(256);
 
-      const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
-        x + this.x,
-        y,
-        z + this.z,
-      ])));
-      this.createTopPlane = createPlane(this, planes, 1, 0, 0, 0, 1);
-      this.createBottomPlane = createPlane(this, planes, -1, 0, 0, 1, 0.5);
-      this.createNorthPlane = createPlane(this, planes, 0, -1, 0, 2, 0.6);
-      this.createSouthPlane = createPlane(this, planes, 0, 1, 0, 3, 0.6);
-      this.createWestPlane = createPlane(this, planes, 0, 0, -1, 4, 0.8);
-      this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
-    }
+    const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
+      x + this.x,
+      y,
+      z + this.z,
+    ])));
+    this.createTopPlane = createPlane(this, planes, 1, 0, 0, 0, 1);
+    this.createBottomPlane = createPlane(this, planes, -1, 0, 0, 1, 0.5);
+    this.createNorthPlane = createPlane(this, planes, 0, -1, 0, 2, 0.6);
+    this.createSouthPlane = createPlane(this, planes, 0, 1, 0, 3, 0.6);
+    this.createWestPlane = createPlane(this, planes, 0, 0, -1, 4, 0.8);
+    this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
+  }
 
-    calcRecursionRed(x: number, y: number, z: number) {
-      calcRecursionRed(this, x, y, z);
-    }
+  calcRecursionRed(x: number, y: number, z: number) {
+    calcRecursionRed(this, x, y, z);
+  }
 
-    calcRecursionGreen(x: number, y: number, z: number) {
-      calcRecursionGreen(this, x, y, z);
-    }
+  calcRecursionGreen(x: number, y: number, z: number) {
+    calcRecursionGreen(this, x, y, z);
+  }
 
-    calcRecursionBlue(x: number, y: number, z: number) {
-      calcRecursionBlue(this, x, y, z);
-    }
+  calcRecursionBlue(x: number, y: number, z: number) {
+    calcRecursionBlue(this, x, y, z);
+  }
 
-    calcGlobalRecursion(x: number, y: number, z: number) {
-      calcRecursionGlobal(this, x, y, z);
-    }
+  calcGlobalRecursion(x: number, y: number, z: number) {
+    calcRecursionGlobal(this, x, y, z);
+  }
 
-    calcRecursionRedRemove(x: number, y: number, z: number) {
-      calcRecursionRedRemove(this, x, y, z, 300);
-    }
+  calcRecursionRedRemove(x: number, y: number, z: number) {
+    calcRecursionRedRemove(this, x, y, z, 300);
+  }
 
-    calcRecursionGreenRemove(x: number, y: number, z: number) {
-      calcRecursionGreenRemove(this, x, y, z, 300);
-    }
+  calcRecursionGreenRemove(x: number, y: number, z: number) {
+    calcRecursionGreenRemove(this, x, y, z, 300);
+  }
 
-    calcRecursionBlueRemove(x: number, y: number, z: number) {
-      calcRecursionBlueRemove(this, x, y, z, 300);
-    }
+  calcRecursionBlueRemove(x: number, y: number, z: number) {
+    calcRecursionBlueRemove(this, x, y, z, 300);
+  }
 
-    calcGlobalRecursionRemove(x: number, y: number, z: number) {
-      calcRecursionGlobalRemove(this, x, y, z, 300);
-    }
+  calcGlobalRecursionRemove(x: number, y: number, z: number) {
+    calcRecursionGlobalRemove(this, x, y, z, 300);
+  }
 
-    calcVBO() {
-      const buffers = [createBuffers(), createBuffers(), createBuffers()];
+  calcVBO() {
+    const buffers = [createBuffers(), createBuffers(), createBuffers()];
 
-      for (let index = SLICE; index < this.height * SLICE; index += 1) {
-        const i = index >>> 8;
-        const j = index & 0xF;
-        const k = (index >>> 4) & 0xF;
-        const block = this.blocks[index];
-        if (block) {
-          if (typeof this.blocksInfo[block].renderToChunk === 'function') { // TODO: MODEL
-            buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
-          } else {
-            this.createTopPlane(block, i, j, k, buffers);
-            this.createBottomPlane(block, i, j, k, buffers);
-            this.createNorthPlane(block, i, j, k, buffers);
-            this.createSouthPlane(block, i, j, k, buffers);
-            this.createWestPlane(block, i, j, k, buffers);
-            this.createEastPlane(block, i, j, k, buffers);
-          }
-        }
-      }
-
-      const buffersInfo = [{
-        indexCount: 0,
-        index: 0,
-        offset: 0,
-      }, {
-        indexCount: 0,
-        index: 1,
-        offset: 0,
-      }, {
-        indexCount: 0,
-        index: 2,
-        offset: 0,
-      }];
-      let offset = 0;
-      for (let i = 0; i < buffers.length; i += 1) {
-        buffersInfo[i].indexCount = buffers[i].indexBuffer.length;
-      }
-      for (let i = 1; i < buffers.length; i += 1) {
-        offset += buffers[i - 1].vertexCount;
-        for (let j = 0; j < buffers[i].indexBuffer.length; j += 1) {
-          buffers[i].indexBuffer[j] += offset;
-        }
-        buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
-      }
-      const buffersData = buffers.reduce((prev, curr) => ({
-        texCoordBuffer: prev.texCoordBuffer.concat(curr.texCoordBuffer),
-        vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
-        indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
-        colorBuffer: prev.colorBuffer.concat(curr.colorBuffer),
-        globalColorBuffer: prev.globalColorBuffer.concat(curr.globalColorBuffer),
-        blockDataBuffer: prev.blockDataBuffer.concat(curr.blockDataBuffer),
-      }), createBuffers());
-      buffersData.texCoordBuffer = new Float32Array(buffersData.texCoordBuffer).buffer;
-      buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
-      buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;
-      buffersData.colorBuffer = new Float32Array(buffersData.colorBuffer).buffer;
-      buffersData.globalColorBuffer = new Float32Array(buffersData.globalColorBuffer).buffer;
-      buffersData.blockDataBuffer = new Float32Array(buffersData.blockDataBuffer).buffer;
-
-      postMessage({
-        type: 'CHUNK_VBO_LOADED',
-        payload: {
-          geoId: this.geoId,
-          buffers: buffersData,
-          buffersInfo,
-        },
-      }, Object.values(buffersData));
-    }
-
-    prepareLight() {
-      for (let x = 0; x < 16; x += 1) {
-        for (let z = 0; z < 16; z += 1) {
-          let y = this.height - 1;
-          let lightLevel = 15;
-          while (y > 0) {
-            const index = getIndex(x, y, z);
-            if (!this.blocksFlags[this.blocks[index]][1]) {
-              lightLevel = 0;
-            } else if (!this.blocksFlags[this.blocks[index]][0]) {
-              lightLevel -= 1;
-            }
-            if (!lightLevel) {
-              break;
-            }
-            this.light[index] = lightLevel;
-            y -= 1;
-          }
-          const index = getIndex(x, y, z);
-
-          this.minimap[(x + z * 16) * 3] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][0];
-          this.minimap[(x + z * 16) * 3 + 1] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][1];
-          this.minimap[(x + z * 16) * 3 + 2] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][2];
-        }
-      }
-      postMessage({ type: 'CHUNK_LOADED_MINIMAP', data: { geoId: this.geoId, minimap: this.minimap } });
-    }
-
-    calcGlobalLight() {
-      for (let x = 0; x < 16; x += 1) {
-        for (let z = 0; z < 16; z += 1) {
-          let y = this.height - 1;
-          while ((y > 0) && (this.blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
-            y -= 1;
-            this.calcGlobalRecursion(x, y + 1, z);
-          }
-        }
-      }
-      for (let x = 0; x < 16; x += 1) {
-        for (let z = 0; z < 16; z += 1) {
-          let y = this.height - 1;
-          while (y > 0) {
-            const index = getIndex(x, y, z);
-            if (this.blocks[index] === 128) {
-              this.light[index] = (this.light[index] & 0x000F) | 0xFD20;
-              this.calcRecursionRed(x, y, z);
-              this.calcRecursionGreen(x, y, z);
-              this.calcRecursionBlue(x, y, z);
-            }
-
-            y -= 1;
-          }
-        }
-      }
-    }
-
-    getBlock(x: number, y: number, z: number) {
-      return this.blocks[getIndex(x, y, z)];
-    }
-
-    setBlock(x: number, y: number, z: number, value: number) {
-      this.blocks[getIndex(x, y, z)] = value;
-      this.state = CHUNK_STATUS_NEED_LOAD_VBO;
-    }
-
-    putBlock(x: number, y: number, z: number, value: number, plane) {
-      let placed = true;
-      if (this.blocksInfo[value]) {
-        placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
-      } else {
-        this.blocks[getIndex(x, y, z)] = value;
-      }
-      if (placed) {
-        if (!this.blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
-          while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
-            this.calcGlobalRecursionRemove(x, y, z);
-            y -= 1;
-          }
-        }
-        this.state = CHUNK_STATUS_NEED_LOAD_VBO;
-      }
-    }
-
-    removeBlock(x: number, y: number, z: number) {
-      const index = getIndex(x, y, z);
+    for (let index = SLICE; index < this.height * SLICE; index += 1) {
+      const i = index >>> 8;
+      const j = index & 0xF;
+      const k = (index >>> 4) & 0xF;
       const block = this.blocks[index];
-      this.blocks[index] = 0;
-      const ytmp = y;
-
-      if ((this.light[index + SLICE] & 0xF) === 15) {
-        const ytmp2 = y;
-        while ((y > -1) && (!this.blocks[index])) {
-          this.light[index] = (this.light[index] & 0xFFF0) | 0x000F;
-          y -= 1;
+      if (block) {
+        if (typeof this.blocksInfo[block].renderToChunk === 'function') { // TODO: MODEL
+          buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
+        } else {
+          this.createTopPlane(block, i, j, k, buffers);
+          this.createBottomPlane(block, i, j, k, buffers);
+          this.createNorthPlane(block, i, j, k, buffers);
+          this.createSouthPlane(block, i, j, k, buffers);
+          this.createWestPlane(block, i, j, k, buffers);
+          this.createEastPlane(block, i, j, k, buffers);
         }
-        y = ytmp2;
-        while ((y > -1) && (!this.blocks[index])) {
-          this.calcGlobalRecursion(x, y, z);
-          y -= 1;
-        }
-      } else {
-        // TODO - copy from addblock
-        this.calcGlobalRecursion(x, y, z);
       }
-      y = ytmp;
-      if (this.blocksFlags[block][0]) {
-        this.calcRecursionRedRemove(x, y, z);
-        this.calcRecursionGreenRemove(x, y, z);
-        this.calcRecursionBlueRemove(x, y, z);
-      } else {
-        this.calcRecursionRed(x, y, z);
-        this.calcRecursionGreen(x, y, z);
-        this.calcRecursionBlue(x, y, z);
-      }
-      this.state = CHUNK_STATUS_NEED_LOAD_VBO;
     }
 
-    updateState() {
-      const updateState = chunk => (chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL
-        ? chunk.updateState()
-        : null);
-      if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
-        this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
-        this.surroundingChunks.forEach(updateState);
-        this.updateState();
-      } else if (this.state === CHUNK_STATUS_NEED_LOAD_LIGHT) {
-        if (this.hasSurroundingChunks
-          && this.surroundingChunks.every(chunk => chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)
-        ) {
-          this.state = CHUNK_STATUS_NEED_LOAD_VBO;
-          this.calcGlobalLight();
-          this.nestedChunks.forEach(updateState);
-          this.updateState();
+    const buffersInfo = [{
+      indexCount: 0,
+      index: 0,
+      offset: 0,
+    }, {
+      indexCount: 0,
+      index: 1,
+      offset: 0,
+    }, {
+      indexCount: 0,
+      index: 2,
+      offset: 0,
+    }];
+    let offset = 0;
+    for (let i = 0; i < buffers.length; i += 1) {
+      buffersInfo[i].indexCount = buffers[i].indexBuffer.length;
+    }
+    for (let i = 1; i < buffers.length; i += 1) {
+      offset += buffers[i - 1].vertexCount;
+      for (let j = 0; j < buffers[i].indexBuffer.length; j += 1) {
+        buffers[i].indexBuffer[j] += offset;
+      }
+      buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
+    }
+    const buffersData = buffers.reduce((prev, curr) => ({
+      texCoordBuffer: prev.texCoordBuffer.concat(curr.texCoordBuffer),
+      vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
+      indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
+      colorBuffer: prev.colorBuffer.concat(curr.colorBuffer),
+      globalColorBuffer: prev.globalColorBuffer.concat(curr.globalColorBuffer),
+      blockDataBuffer: prev.blockDataBuffer.concat(curr.blockDataBuffer),
+    }), createBuffers());
+    buffersData.texCoordBuffer = new Float32Array(buffersData.texCoordBuffer).buffer;
+    buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
+    buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;
+    buffersData.colorBuffer = new Float32Array(buffersData.colorBuffer).buffer;
+    buffersData.globalColorBuffer = new Float32Array(buffersData.globalColorBuffer).buffer;
+    buffersData.blockDataBuffer = new Float32Array(buffersData.blockDataBuffer).buffer;
+
+    self.postMessage({
+      type: 'UPDATE_COMPONENTS',
+      payload: {
+        events: [{
+          type: CHUNK_VBO_LOADED,
+          payload: {
+            geoId: this.geoId,
+            buffers: buffersData,
+            buffersInfo,
+          }
+        }]
+      },
+    }, Object.values(buffersData));
+  }
+
+  prepareLight() {
+    for (let x = 0; x < 16; x += 1) {
+      for (let z = 0; z < 16; z += 1) {
+        let y = this.height - 1;
+        let lightLevel = 15;
+        while (y > 0) {
+          const index = getIndex(x, y, z);
+          if (!this.blocksFlags[this.blocks[index]][1]) {
+            lightLevel = 0;
+          } else if (!this.blocksFlags[this.blocks[index]][0]) {
+            lightLevel -= 1;
+          }
+          if (!lightLevel) {
+            break;
+          }
+          this.light[index] = lightLevel;
+          y -= 1;
         }
-      } else if (this.state === CHUNK_STATUS_NEED_LOAD_VBO) {
-        if (this.hasNestedChunks
-          && this.nestedChunks.every(chunk => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
-        ) {
-          this.calcVBO();
-          this.state = CHUNK_STATUS_LOADED;
-          this.nestedChunks.forEach(updateState);
+        const index = getIndex(x, y, z);
+
+        // this.minimap[(x + z * 16) * 3] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][0];
+        // this.minimap[(x + z * 16) * 3 + 1] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][1];
+        // this.minimap[(x + z * 16) * 3 + 2] = this.terrainMipMap[this.blocksTextureInfo[this.blocks[index]][0]][2];
+      }
+    }
+    postMessage({ type: 'CHUNK_LOADED_MINIMAP', data: { geoId: this.geoId, minimap: this.minimap } });
+  }
+
+  calcGlobalLight() {
+    for (let x = 0; x < 16; x += 1) {
+      for (let z = 0; z < 16; z += 1) {
+        let y = this.height - 1;
+        while ((y > 0) && (this.blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
+          y -= 1;
+          this.calcGlobalRecursion(x, y + 1, z);
+        }
+      }
+    }
+    for (let x = 0; x < 16; x += 1) {
+      for (let z = 0; z < 16; z += 1) {
+        let y = this.height - 1;
+        while (y > 0) {
+          const index = getIndex(x, y, z);
+          if (this.blocks[index] === 128) {
+            this.light[index] = (this.light[index] & 0x000F) | 0xFD20;
+            this.calcRecursionRed(x, y, z);
+            this.calcRecursionGreen(x, y, z);
+            this.calcRecursionBlue(x, y, z);
+          }
+
+          y -= 1;
         }
       }
     }
   }
-  return Chunk;
-};
 
+  getBlock(x: number, y: number, z: number) {
+    return this.blocks[getIndex(x, y, z)];
+  }
 
-/* ::
-export const Chunk = chunkProvider();
-*/
+  setBlock(x: number, y: number, z: number, value: number) {
+    this.blocks[getIndex(x, y, z)] = value;
+    this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+  }
 
-export default chunkProvider;
+  putBlock(x: number, y: number, z: number, value: number, plane) {
+    let placed = true;
+    if (this.blocksInfo[value]) {
+      placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
+    } else {
+      this.blocks[getIndex(x, y, z)] = value;
+    }
+    if (placed) {
+      if (!this.blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
+        while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
+          this.calcGlobalRecursionRemove(x, y, z);
+          y -= 1;
+        }
+      }
+      this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+    }
+  }
+
+  removeBlock(x: number, y: number, z: number) {
+    const index = getIndex(x, y, z);
+    const block = this.blocks[index];
+    this.blocks[index] = 0;
+    const ytmp = y;
+
+    if ((this.light[index + SLICE] & 0xF) === 15) {
+      const ytmp2 = y;
+      while ((y > -1) && (!this.blocks[index])) {
+        this.light[index] = (this.light[index] & 0xFFF0) | 0x000F;
+        y -= 1;
+      }
+      y = ytmp2;
+      while ((y > -1) && (!this.blocks[index])) {
+        this.calcGlobalRecursion(x, y, z);
+        y -= 1;
+      }
+    } else {
+      // TODO - copy from addblock
+      this.calcGlobalRecursion(x, y, z);
+    }
+    y = ytmp;
+    if (this.blocksFlags[block][0]) {
+      this.calcRecursionRedRemove(x, y, z);
+      this.calcRecursionGreenRemove(x, y, z);
+      this.calcRecursionBlueRemove(x, y, z);
+    } else {
+      this.calcRecursionRed(x, y, z);
+      this.calcRecursionGreen(x, y, z);
+      this.calcRecursionBlue(x, y, z);
+    }
+    this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+  }
+
+  updateState() {
+    const updateState = chunk => (chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL
+      ? chunk.updateState()
+      : null);
+    if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
+      this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
+      this.surroundingChunks.forEach(updateState);
+      this.updateState();
+    } else if (this.state === CHUNK_STATUS_NEED_LOAD_LIGHT) {
+      if (this.hasSurroundingChunks
+        && this.surroundingChunks.every(chunk => chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)
+      ) {
+        this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+        this.calcGlobalLight();
+        this.nestedChunks.forEach(updateState);
+        this.updateState();
+      }
+    } else if (this.state === CHUNK_STATUS_NEED_LOAD_VBO) {
+      if (this.hasNestedChunks
+        && this.nestedChunks.every(chunk => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
+      ) {
+        this.calcVBO();
+        this.state = CHUNK_STATUS_LOADED;
+        this.nestedChunks.forEach(updateState);
+      }
+    }
+  }
+}

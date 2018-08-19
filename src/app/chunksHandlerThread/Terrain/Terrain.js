@@ -2,7 +2,7 @@
 import { ITerrainBase } from '../../Terrain/TerrainBase';
 // import { loadChunk, loadTerrainMipmap } from './terrainActions';
 
-const terrainProvider = (store, Chunk, TerrainBase: typeof ITerrainBase) => {
+const terrainProvider = (TerrainBase: typeof ITerrainBase) => {
   class Terrain extends TerrainBase {
     constructor() {
       super();

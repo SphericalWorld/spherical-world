@@ -1,10 +1,12 @@
 // @flow
 import type { ShaderLibrary } from './app/engine/ShaderLibrary';
 import Main from './app/main';
+import terrainSystemProvider from './app/systems/Terrain';
 import blockRemoverSystemProvider from './app/systems/BlockRemove';
 import socketHandlers from './app/socketHandlers';
 import playerProvider from './app/player/Player';
 import GlTextureLibrary from './app/engine/TextureLibrary';
+import Thread from './app/Thread/Thread';
 import texturesProvider from './textures';
 import shaderLibraryProvider from './app/engine/ShaderLibrary';
 import materialLibraryProvider from './app/engine/MaterialLibrary';
@@ -47,8 +49,8 @@ import inputContextsProvider from './app/Input/inputContexts';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   const world = new World(THREAD_MAIN);
-  world.registerThread(THREAD_PHYSICS, physicsThread);
-  world.registerThread(THREAD_CHUNK_HANDLER, chunksHandlerThread);
+  world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
+  world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
   world.registerComponentTypes(
     Transform,
     Raytracer,
@@ -116,11 +118,6 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const BlockPicker = blockPickerProvider(world, materialLibrary, BlockRemover);
   const Skybox = skyboxProvider(world, materialLibrary);
   const time = new (timeProvider())(Date.now());
-  const BlockRemove = blockRemoverSystemProvider(world, time);
-  const DayNightCycle = dayNightCycleProvider(world, time);
-  const CameraSystem = cameraSystemProvider(world);
-  const HudSystem = hudSystemProvider(world, store);
-  const NetworkSystem = networkProvider(world, network);
   const Chunk = chunkProvider(store);
   const TerrainBase = terrainBaseProvider(Chunk);
   const terrain = getTerrain(store, Chunk, network, textureLibrary, materialLibrary, TerrainBase);
@@ -131,7 +128,16 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const SocketHandlers = socketHandlers(Player);
   const Draw = drawProvider(world, terrain, time);
   // const SkyboxSystem = skyboxSystemProvider(store);
+
+  const TerrainSystem = terrainSystemProvider(world, network, terrain);
+  const BlockRemove = blockRemoverSystemProvider(world, time);
+  const DayNightCycle = dayNightCycleProvider(world, time);
+  const CameraSystem = cameraSystemProvider(world);
+  const HudSystem = hudSystemProvider(world, store);
+  const NetworkSystem = networkProvider(world, network);
+
   world.registerSystem(...[
+    new TerrainSystem(),
     new BlockRemove(),
     new DayNightCycle(),
     new CameraSystem(),

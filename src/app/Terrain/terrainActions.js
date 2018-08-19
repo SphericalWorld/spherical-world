@@ -1,14 +1,9 @@
 // @flow
 import {
-  CHUNK_LOADED,
   TERRAIN_REMOVED_BLOCK,
   TERRAIN_PLACED_BLOCK,
   TERRAIN_MIPMAP_LOADED,
 } from './terrainConstants';
-
-export const loadChunk = ({ data, x, z, geoId }) => dispatch => {
-  dispatch({ type: CHUNK_LOADED, payload: { data, x, z, geoId }, meta: { worker: true, binary: [data] } });
-};
 
 export const loadTerrainMipmap = (mipmap) => dispatch => {
   dispatch({ type: TERRAIN_MIPMAP_LOADED, payload: { mipmap }, meta: { worker: true } });

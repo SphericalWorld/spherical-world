@@ -1,6 +1,7 @@
 // @flow
 import zlib from 'pako';
 import HashMap from '../../common/fp/data-structures/Map';
+import EventObservable from './GameEvent/EventObservable';
 
 class Network {
   latency: number = 0;
@@ -13,6 +14,7 @@ class Network {
   requestBinaryData: ?ArrayBuffer;
   host: string = `ws://${window.location.hostname}`;
   port: number = 8080;
+  events: EventObservable<any> = new EventObservable();
 
   constructor() {
     this.addonServerInfo = {
@@ -44,6 +46,7 @@ class Network {
   }
 
   processAction(message: MessageEvent) {
+    this.events.emit({ type: message.type, payload: { data: message.data, binaryData: this.requestBinaryData } })
     if (this.router[message.type]) {
       if (typeof message.id === 'number') {
         const callback = function (result) {

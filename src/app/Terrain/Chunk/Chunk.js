@@ -1,5 +1,4 @@
 // @flow
-import { connect } from '../../util';
 import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
@@ -7,16 +6,6 @@ import type ChunkProgram from '../../../shaders/Chunk/Chunk';
 import type { Terrain } from '../Terrain';
 
 import Frustum from '../../engine/Frustum';
-
-const mapState = (state, chunk) => {
-  if (!state.chunks.instances[chunk.geoId]) {
-    return {};
-  }
-  return ({
-    buffers: state.chunks.instances[chunk.geoId].buffers,
-    buffersInfo: state.chunks.instances[chunk.geoId].buffersInfo,
-  });
-};
 
 let timeOld;
 let chunksLoaded = 0;
@@ -107,6 +96,7 @@ const chunkProvider = (store) => {
         blockDataBuffer: null,
         vao: null,
       };
+      this.buffersInfo = buffersInfo;
       this.buffers.vao = gl.createVertexArray();
       gl.bindVertexArray(this.buffers.vao);
 
@@ -138,14 +128,8 @@ const chunkProvider = (store) => {
 
       this.state = CHUNK_STATUS_LOADED;
     }
-
-    componentDidUpdate(prevState) {
-      if (this.buffers && (prevState.buffers !== this.buffers)) {
-        this.bindVBO(this.buffers, this.buffersInfo);
-      }
-    }
   }
-  return connect(mapState, null, store)(Chunk);
+  return Chunk;
 };
 
 /* ::

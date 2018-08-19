@@ -1,6 +1,7 @@
 // @flow
 import type { GameEvent } from '../GameEvent/GameEvent';
 import type { Input } from '../Input/Input';
+import type Thread from '../Thread/Thread';
 import type { THREAD_ID } from '../Thread/threadConstants';
 import type { Entity } from './Entity';
 import type { System } from '../systems/System';
@@ -12,8 +13,8 @@ import { EntityManager, EntitySelector } from './EntityManager';
 export default class World {
   components: Map<string, Map<string, Component>> = new Map();
   systems: System[] = [];
-  threads: { threadId: number, thread: Worker }[] = [];
-  threadsMap: Map<number, Worker> = new Map();
+  threads: Thread[] = [];
+  threadsMap: Map<number, Thread> = new Map();
   componentTypes: Map<string, Function> = new Map();
   selectors: EntitySelector<Component>[] = [];
   input: Input;
@@ -26,14 +27,14 @@ export default class World {
     this.thread = thread;
   }
 
-  registerThread(threadId: number, thread: Worker) {
-    this.threads.push({ threadId, thread });
-    this.threadsMap.set(threadId, thread);
-    thread.onMessage = ({ type, payload }) => {
+  registerThread(thread: Thread) {
+    this.threads.push(thread);
+    this.threadsMap.set(thread.id, thread);
+    thread.events.subscribe(({ type, payload }) => {
       if (type === 'CREATE_ENTITY') {
         this.addExistedEntity(payload.id, ...payload.components);
       } else if (type === 'UPDATE_COMPONENTS') {
-        this.updateComponents(payload.components);
+        this.updateComponents(payload.components || []);
         if (typeof window === 'undefined') {
           this.update(payload.delta);
         }
@@ -43,7 +44,7 @@ export default class World {
           }
         }
       }
-    };
+    });
   }
 
   registerComponentTypes(...componentTypes: Function[]): void {
@@ -86,9 +87,9 @@ export default class World {
       }
     }
 
-    for (const { threadId, thread } of this.threads) {
+    for (const thread of this.threads) {
       const componentsToUpdate = [...changedData.entries()]
-        .filter(([component]) => component.constructor.threads.includes(threadId))
+        .filter(([component]) => component.constructor.threads.includes(thread.id))
         .map(([component, data]) => ({ type: component.constructor.name, data: [...data.entries()] }));
       thread.postMessage({
         type: 'UPDATE_COMPONENTS',
@@ -150,9 +151,9 @@ export default class World {
 
   createEntity(id: Entity | null, ...components: Component[]): Entity {
     const entityId = id || EntityManager.generateId();
-    for (const { threadId, thread } of this.threads) {
+    for (const thread of this.threads) {
       const componentsToAdd = components
-        .filter(el => el.constructor.threads.includes(threadId))
+        .filter(el => el.constructor.threads.includes(thread.id))
         .map(el => ({ type: el.constructor.name, data: el }));
       thread.postMessage({ type: 'CREATE_ENTITY', payload: { id: entityId, components: componentsToAdd } });
     }

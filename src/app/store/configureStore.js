@@ -1,14 +1,14 @@
+// @flow
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import thunk from 'redux-thunk';
 
-import createWorkerMiddleware from './workerMiddleware';
 import createWebsocketMiddleware from './websocketMiddleware';
 import rootReducer from '../reducers/rootReducer';
 
 
-export default function configureStore({ network, workers = [] }, preloadedState) {
-  const middlewares = [thunk, ...workers.map(el => createWorkerMiddleware(el)), createWebsocketMiddleware(network)];
+export default function configureStore({ network }, preloadedState) {
+  const middlewares = [thunk, createWebsocketMiddleware(network)];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
   const storeEnhancers = [middlewareEnhancer];
