@@ -2,7 +2,6 @@
 import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
-import { connect } from './util';
 // import playerModel from '../models/player.json';
 import {
   playerStopJumping, // TODO: needs only for swimming
@@ -23,7 +22,6 @@ const engineProvider = (
   network,
   Player,
   ResourceLoader,
-  SocketHandlers,
   ecs: World,
   Skybox,
 ) => {
@@ -33,7 +31,6 @@ const engineProvider = (
     resourceLoader: ResourceLoader;
 
     constructor() {
-      this.socketHandlers = new SocketHandlers(this, network);
       this.init().catch(console.error);
     }
 

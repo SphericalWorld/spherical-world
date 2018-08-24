@@ -1,10 +1,8 @@
 // @flow
-import type { Terrain } from '../Terrain';
 import { getIndex } from '../../../../../common/chunk';
 import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
 import {
   blocksFlags,
-  bufferInfo,
   blocksInfo,
 } from '../../../blocks/blockInfo';
 
@@ -12,18 +10,15 @@ import {
   CHUNK_STATUS_NEED_LOAD_VBO,
 } from '../../../Terrain/Chunk/chunkConstants';
 
-export default class Chunk extends ChunkWithData<Chunk, Terrain> {
+export default class Chunk extends ChunkWithData<Chunk> {
   flags: Uint8Array;
 
-  constructor(terrain: Terrain, x: number, z: number) {
-    super(terrain, x, z);
+  constructor(x: number, z: number) {
+    super(x, z);
 
     this.rainfallData = new Uint8Array(256);
     this.temperatureData = new Uint8Array(256);
-
     this.blocksFlags = blocksFlags;
-    this.bufferInfo = bufferInfo;
-    this.blocksInfo = blocksInfo;
 
     this.light = new Uint16Array(this.height * 16 * 16);
   }
@@ -58,8 +53,8 @@ export default class Chunk extends ChunkWithData<Chunk, Terrain> {
 
   putBlock(x: number, y: number, z: number, value: number, plane: number) {
     let placed = true;
-    if (this.blocksInfo[value]) {
-      placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
+    if (blocksInfo[value]) {
+      placed = blocksInfo[value].putBlock(this, x, y, z, value, plane);
     } else {
       this.blocks[x + z * 16 + y * 256] = value;
     }

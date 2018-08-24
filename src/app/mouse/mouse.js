@@ -1,6 +1,6 @@
 // @flow
 import { mousePress, mouseRelease } from './mouseActions';
-import { playerStartRemoveBlock, playerStopRemoveBlock, playerPlaceBlock } from '../player/playerActions';
+import { playerPlaceBlock } from '../player/playerActions';
 
 const mouseProvider = () => {
   class Mouse {

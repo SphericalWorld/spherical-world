@@ -1,11 +1,13 @@
 // @flow
+import type { Vec3 } from 'gl-matrix';
+import { vec3 } from 'gl-matrix';
 import type Network from '../network';
 import type { Terrain } from '../Terrain/Terrain';
-import type { Component } from '../components/Component';
-import type { Entity } from '../ecs/Entity';
 import type { System } from './System';
 import type { World } from '../ecs';
-
+import { filterFarChunks } from '../../../common/chunk';
+import Camera from '../components/Camera';
+import Transform from '../components/Transform';
 import { CHUNK_LOADED } from '../Terrain/terrainConstants';
 
 const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => network.events
@@ -18,18 +20,23 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => networ
 const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events
   .filter(e => e.type === 'CHUNK_VBO_LOADED')
   .map(e => e.payload)
-  .subscribe((e) => {
-    terrain.chunks.get(e.geoId).map((chunk) => {
+  .subscribe(e => terrain.chunks
+    .get(e.geoId)
+    .map((chunk) => {
       chunk.bindVBO(e.buffers, e.buffersInfo);
-    })
-  });
+    }));
 
 export default (ecs: World, network: Network, terrain: Terrain) =>
   class TerrainSystem implements System {
     onChunkLoaded = onChunkLoaded(ecs, network, terrain);
     onChunkVBOLoaded = onChunkVBOLoaded(ecs, terrain);
+    player = ecs.createSelector([Transform, Camera]);
 
-    update(delta: number): (Entity | Component)[][] {
-      // console.log(delta)
+    oldPosition: Vec3 = vec3.create();
+
+    update(delta: number): void {
+      const [{ transform }] = this.player;
+      // terrain.chunks = filterFarChunks(this.oldPosition, transform.translation, terrain.chunks);
+      vec3.copy(this.oldPosition, transform.translation);
     }
   };

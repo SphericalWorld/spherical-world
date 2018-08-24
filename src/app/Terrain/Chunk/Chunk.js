@@ -28,12 +28,13 @@ type GLBuffers = {
 };
 
 const chunkProvider = (store) => {
-  class Chunk extends ChunkBase<Chunk, Terrain> {
+  class Chunk extends ChunkBase<Chunk> {
     frustum: Frustum;
     foliageTexture: WebGLTexture = null;
     rainfallData: Uint8Array;
     temperatureData: Uint8Array;
     buffers: GLBuffers;
+    terrain: Terrain;
 
     constructor(
       terrain: Terrain,
@@ -42,7 +43,8 @@ const chunkProvider = (store) => {
       temperatureData: number[],
       rainfallData: number[],
     ) {
-      super(terrain, x, z);
+      super(x, z);
+      this.terrain = terrain;
       this.terrainMipMap = null;
       this.rainfallData = new Uint8Array(rainfallData);
       this.temperatureData = new Uint8Array(temperatureData);

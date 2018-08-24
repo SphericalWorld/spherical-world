@@ -4,7 +4,7 @@ import type { Functor } from '../../../common/fp/algebraicDataTypes/Functor.type
 
 import EventQueue from './EventQueue';
 
-const Empty = Symbol('Empty');
+export const Empty = Symbol('Empty');
 
 export default class EventObservable<T> implements Filterable<T>, Functor<T> {
   subscriptions: EventObservable<*>[] = [];
@@ -37,7 +37,7 @@ export default class EventObservable<T> implements Filterable<T>, Functor<T> {
     }
   }
 
-  filter(predicate: (value: T) => boolean): EventObservable<T> {
+  filter<U>(predicate: (value: T) => boolean | U): EventObservable<U> {
     const filtered = new EventObservable();
     filtered.subscriptions = this.subscriptions;
     filtered.pipeline = [...this.pipeline, (event: T) => (predicate(event) ? event : Empty)];

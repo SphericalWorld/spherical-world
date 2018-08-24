@@ -55,7 +55,7 @@ const calculateMovement = (terrain: Terrain) => (
 
 const collideWithTerrain = (terrain: Terrain) => {
   const calculate = calculateMovement(terrain);
-  return (transform, velocity, collider) => {
+  return (transform: Transform, velocity: Velocity, collider: Collider) => {
     const fromX = Math.floor(collider.shape.min[0]);
     const fromY = Math.floor(collider.shape.min[1]);
     const fromZ = Math.floor(collider.shape.min[2]);
@@ -81,7 +81,7 @@ const collideWithTerrain = (terrain: Terrain) => {
       }
     }
   };
-}
+};
 
 export default (ecs: World, terrain: Terrain) =>
   class PhysicsSystem implements System {

@@ -15,3 +15,16 @@ export const PLAYER_ATTACKED: 'PLAYER_ATTACKED' = 'PLAYER_ATTACKED';
 export const PLAYER_STOPED_ATTACK: 'PLAYER_STOPED_ATTACK' = 'PLAYER_STOPED_ATTACK';
 export const PLAYER_STARTED_DESTROYING_BLOCK: 'PLAYER_STARTED_DESTROYING_BLOCK' = 'PLAYER_STARTED_DESTROYING_BLOCK';
 export const PLAYER_DESTROYED_BLOCK: 'PLAYER_DESTROYED_BLOCK' = 'PLAYER_DESTROYED_BLOCK';
+export const PLAYER_PUT_BLOCK: 'PLAYER_PUT_BLOCK' = 'PLAYER_PUT_BLOCK';
+
+type Event<Type, Payload> = {
+  +type: Type,
+  +payload: Payload,
+}
+
+export type PLAYER_DESTROYED_BLOCK_TYPE = Event<typeof PLAYER_DESTROYED_BLOCK, {
+  +geoId: string,
+  +x: number,
+  +y: number,
+  +z: number,
+}>

@@ -17,14 +17,12 @@ const mapState = ({
   states,
 });
 
-export default (world: World, store) => {
+export default (ecs: World, store) => {
   class Hud implements System {
-    player = world.createSelector([Transform, UserControlled]);
-    menuToggledObservable = world.events
-      .filter(el => el.type === MENU_TOGGLED)
-      .subscribe((event) => {
-        this.toggleMenu(!this.states.mainMenuToggled);
-      });
+    player = ecs.createSelector([Transform, UserControlled]);
+    menuToggledObservable = ecs.events
+      .filter(e => e.type === MENU_TOGGLED)
+      .subscribe(() => this.toggleMenu(!this.states.mainMenuToggled));
 
     update(delta: number): void {
       this.updateHudData({

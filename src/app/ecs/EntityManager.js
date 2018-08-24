@@ -24,11 +24,11 @@ export type transform = typeof inner;
 
 export class EntitySelector<T> {
   includeComponents: T;
-  excludeComponents: Component[];
+  excludeComponents: (typeof Component)[];
   selectorFunction: SelectorFunction;
   components: $Call<transform, T>[] = [];
 
-  constructor(world: World, includeComponents: T, excludeComponents: Component[] = []) {
+  constructor(world: World, includeComponents: T, excludeComponents: (typeof Component)[] = []) {
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;
   }

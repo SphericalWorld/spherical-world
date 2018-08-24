@@ -17,6 +17,7 @@ import {
   MOUSE_MOVE,
   MOUSE_LEFT_BUTTON,
   MOUSE_POINTER_UNLOCKED,
+  MOUSE_RIGHT_BUTTON,
 } from '../inputSources/MouseSource/rawEvents';
 
 import {
@@ -30,12 +31,14 @@ import {
   CAMERA_MOVED_EVENT,
   PLAYER_RUN_EVENT,
   PLAYER_ATTACK_EVENT,
+  PLAYER_PUT_BLOCK_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
   constructor() {
     super();
     this.events.set(MOUSE_LEFT_BUTTON, PLAYER_ATTACK_EVENT);
+    this.events.set(MOUSE_RIGHT_BUTTON, PLAYER_PUT_BLOCK_EVENT);
     this.events.set(MOUSE_MOVE, CAMERA_MOVED_EVENT);
     this.events.set(MOUSE_POINTER_UNLOCKED, CAMERA_UNLOCKED_EVENT);
     this.events.set(KEY_W, PLAYER_MOVE_FORWARD_EVENT);

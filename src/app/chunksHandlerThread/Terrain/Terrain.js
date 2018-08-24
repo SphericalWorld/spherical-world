@@ -2,14 +2,8 @@
 import { ITerrainBase } from '../../Terrain/TerrainBase';
 // import { loadChunk, loadTerrainMipmap } from './terrainActions';
 
-const terrainProvider = (TerrainBase: typeof ITerrainBase) => {
+const terrainProvider = (TerrainBase: typeof ITerrainBase) =>
   class Terrain extends TerrainBase {
-    constructor() {
-      super();
-      this.size = 16;
-      this.halfSize = 8;
-    }
-
     makeMipMappedTextureAtlas(terrainMipMap) {
       this.terrainMipMap = terrainMipMap;
       for (const chunk of this.chunks.values()) {
@@ -33,12 +27,9 @@ const terrainProvider = (TerrainBase: typeof ITerrainBase) => {
         // this.filterFarChunks();
       }
     }
-  }
-  return Terrain;
-};
+  };
 
-/* ::
-export const Terrain = terrainProvider();
-*/
+declare var tmp: $Call<typeof terrainProvider, typeof ITerrainBase>;
+export type Terrain = tmp;
 
 export default terrainProvider;

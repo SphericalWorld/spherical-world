@@ -17,7 +17,7 @@ class GlShader {
 
   setConstants(constants: Constants) {
     for (const [key, value] of Object.entries(constants)) {
-      this.source = `#define ${key} ${value} \n${this.source}`;
+      this.source = `#define ${key} ${String(value)} \n${this.source}`;
     }
     this.source = `#version ${this.version} es\n${this.source}`;
   }

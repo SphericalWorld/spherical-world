@@ -62,7 +62,7 @@ const calcMax = (position: number, delta: number, step: number): number =>
     ? Math.abs(position) - Math.floor(Math.abs(position))
     : Math.ceil(Math.abs(position)) - Math.abs(position)));
 
-export default (ecs: World, Chunk) =>
+export default (ecs: World, terrain: Terrain) =>
   class Raytrace implements System {
     components = ecs.createSelector([Transform, Raytracer], [UserControlled]);
     userControlled = ecs.createSelector([Transform, UserControlled, Camera]);
@@ -89,7 +89,7 @@ export default (ecs: World, Chunk) =>
       return result;
     }
 
-    constructor(terrain) {
+    constructor() {
       this.terrain = terrain;
     }
 

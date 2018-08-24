@@ -1,3 +1,4 @@
+// @flow
 class Gradient {
   constructor(points) {
     this.points = [];

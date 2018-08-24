@@ -3,7 +3,7 @@ import { getIndex } from '../../../../common/chunk';
 import identity from '../../../../common/fp/identity';
 import { SLICE } from '../../Terrain/Chunk/ChunkBase';
 
-const putBlock = (chunk, x: number, y: number, z: number, value: number, plane: number) => {
+const putBlock = (chunk, x: number, y: number, z: number, value: number, plane: number): boolean => {
   const index = getIndex(x, y, z);
   chunk.flags[index] = this.getFlags(plane);
   if ((y !== 0) && (chunk.blocks[index - SLICE] !== 128)) {

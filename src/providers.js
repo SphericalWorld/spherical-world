@@ -1,9 +1,7 @@
 // @flow
 import type { ShaderLibrary } from './app/engine/ShaderLibrary';
+import type Network from './app/network';
 import Main from './app/main';
-import terrainSystemProvider from './app/systems/Terrain';
-import blockRemoverSystemProvider from './app/systems/BlockRemove';
-import socketHandlers from './app/socketHandlers';
 import playerProvider from './app/player/Player';
 import GlTextureLibrary from './app/engine/TextureLibrary';
 import Thread from './app/Thread/Thread';
@@ -21,11 +19,7 @@ import resourceLoader from './app/ResourceLoader';
 import addon from './app/addon';
 import terrainBaseProvider from './app/Terrain/TerrainBase';
 import terrainProvider from './app/Terrain';
-import { drawProvider } from './app/systems';
-import dayNightCycleProvider from './app/systems/DayNightCycle';
-import cameraSystemProvider from './app/systems/Camera';
-import hudSystemProvider from './app/systems/Hud';
-import networkProvider from './app/systems/Network';
+import systemsProvider from './app/systems';
 
 import timeProvider from './app/Time/Time';
 import { World } from './app/ecs';
@@ -73,8 +67,8 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   return world;
 };
 
-const getTerrain = (store, Chunk, network, textureLibrary, materialLibrary, TerrainBase) => {
-  const Terrain = terrainProvider(store, Chunk, network, TerrainBase);
+const getTerrain = (Chunk, network, textureLibrary, materialLibrary, TerrainBase) => {
+  const Terrain = terrainProvider(Chunk, network, TerrainBase);
   const terrain = new Terrain();
   terrain.texture = textureLibrary.get('terrain').glTexture;
   terrain.overlayTexture = textureLibrary.get('terrainOverlay').glTexture;
@@ -109,7 +103,7 @@ const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: ShaderLib
     .add(...Object.values(materials)), materials];
 };
 
-const mainProvider = async (store, network, physicsThread: Worker, chunksHandlerThread: Worker) => {
+const mainProvider = async (store, network: Network, physicsThread: Worker, chunksHandlerThread: Worker) => {
   const textureLibrary = await getTextures();
   const shaderLibrary = getShaders();
   const [materialLibrary, materials] = getMaterials(textureLibrary, shaderLibrary);
@@ -120,33 +114,15 @@ const mainProvider = async (store, network, physicsThread: Worker, chunksHandler
   const time = new (timeProvider())(Date.now());
   const Chunk = chunkProvider(store);
   const TerrainBase = terrainBaseProvider(Chunk);
-  const terrain = getTerrain(store, Chunk, network, textureLibrary, materialLibrary, TerrainBase);
+  const terrain = getTerrain(Chunk, network, textureLibrary, materialLibrary, TerrainBase);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
   const Inventory = inventoryProvider(store);
   const Player = playerProvider(world, materialLibrary, BlockPicker, Inventory);
-  const SocketHandlers = socketHandlers(Player);
-  const Draw = drawProvider(world, terrain, time);
-  // const SkyboxSystem = skyboxSystemProvider(store);
 
-  const TerrainSystem = terrainSystemProvider(world, network, terrain);
-  const BlockRemove = blockRemoverSystemProvider(world, time);
-  const DayNightCycle = dayNightCycleProvider(world, time);
-  const CameraSystem = cameraSystemProvider(world);
-  const HudSystem = hudSystemProvider(world, store);
-  const NetworkSystem = networkProvider(world, network);
+  world.registerSystem(...systemsProvider(world, terrain, network, time, store));
 
-  world.registerSystem(...[
-    new TerrainSystem(),
-    new BlockRemove(),
-    new DayNightCycle(),
-    new CameraSystem(),
-    new Draw(),
-    new HudSystem(),
-    new NetworkSystem(),
-  ]);
-
-  return Main(store, network, Player, ResourceLoader, SocketHandlers, world, Skybox);
+  return Main(store, network, Player, ResourceLoader, world, Skybox);
 };
 
 export default mainProvider;

@@ -1,5 +1,5 @@
 // @flow
-import type { GameEvent } from '../GameEvent/GameEvent';
+import type { GameEvent, GAME_EVENT_TYPE } from '../GameEvent/GameEvent';
 import type { Input } from '../Input/Input';
 import type Thread from '../Thread/Thread';
 import type { THREAD_ID } from '../Thread/threadConstants';
@@ -10,13 +10,18 @@ import { Component } from '../components/Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 
+type SerializedComponent = {
+  type: string;
+  data: Component;
+};
+
 export default class World {
   components: Map<string, Map<string, Component>> = new Map();
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
-  componentTypes: Map<string, Function> = new Map();
-  selectors: EntitySelector<Component>[] = [];
+  componentTypes: Map<string, typeof Component> = new Map();
+  selectors: EntitySelector<typeof Component[]>[] = [];
   input: Input;
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
@@ -62,7 +67,7 @@ export default class World {
 
   createSelector<T: Component[]>(
     includeComponents: T,
-    excludeComponents?: Component[],
+    excludeComponents?: (typeof Component)[],
   ): $Call<transform, T>[] {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
@@ -86,9 +91,9 @@ export default class World {
         }
       }
     }
-
+    const changedDataArray = [...changedData.entries()];
     for (const thread of this.threads) {
-      const componentsToUpdate = [...changedData.entries()]
+      const componentsToUpdate = changedDataArray
         .filter(([component]) => component.constructor.threads.includes(thread.id))
         .map(([component, data]) => ({ type: component.constructor.name, data: [...data.entries()] }));
       thread.postMessage({
@@ -113,31 +118,28 @@ export default class World {
     }
   }
 
-  registerEntity(entityId: Entity, components: Component[]): void {
+  registerEntity(entityId: Entity, components: SerializedComponent[]): void {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       componentRegistry.set(entityId, component.data);
     }
-    const componentMap = components.reduce((map, el) => {
-      map.set(el.type, el.data);
-      return map;
-    }, new Map());
+    const componentMap = new Map(components.map(({ type, data }) => [type, data]));
     for (const selector of this.selectors) {
       if (!selector.includeComponents.find(componentType => !componentMap.has(componentType.name))
         && !selector.excludeComponents.find(componentType => componentMap.has(componentType.name))) {
-        const components = {
+        const selectedComponents = {
           id: entityId,
         };
         for (let i = 0; i < selector.includeComponents.length; i += 1) {
           const component = componentMap.get(selector.includeComponents[i].name);
-          components[selector.includeComponents[i].componentName] = component;
+          selectedComponents[selector.includeComponents[i].componentName] = component;
         }
-        selector.components.push(components);
+        selector.components.push(selectedComponents);
       }
     }
   }
 
-  addExistedEntity(id: Entity, ...components: Component[]): void {
+  addExistedEntity(id: Entity, ...components: SerializedComponent[]): void {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
       component.data = Object.assign(Reflect.construct(constructor, []), component.data);
@@ -164,6 +166,10 @@ export default class World {
   dispatch(gameEvent: GameEvent) {
     this.eventsForThreads.push(gameEvent);
     this.events.emit(gameEvent);
+  }
+
+  createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean) {
+    this.dispatch({ type, payload, network });
   }
 
   setInput(input: Input) {

@@ -4,7 +4,7 @@ import shallowEqual from './shallowEqual';
 type MapActions = () => {| [string]: Function |};
 
 export default function connect(mapState: ?Function, mapActions: ?MapActions, store: Object) {
-  return function decorator(Target: Class<any>) {
+  return function decorator<T: Class<any>>(Target: T) {
     if (!store) {
       throw new Error('store is mandatory parameter');
     }

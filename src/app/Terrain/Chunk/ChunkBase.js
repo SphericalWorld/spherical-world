@@ -4,7 +4,7 @@ import { CHUNK_STATUS_NEED_LOAD_ALL } from './chunkConstants';
 import { getGeoId } from '../../../../common/chunk';
 // north direction - decreasing of X
 
-class ChunkBase<TChunk, TTerrain> {
+class ChunkBase<TChunk> {
   x: number;
   z: number;
   height: number;
@@ -14,7 +14,6 @@ class ChunkBase<TChunk, TTerrain> {
   southChunk: TChunk = this;
   northChunk: TChunk = this;
   state: ChunkState = CHUNK_STATUS_NEED_LOAD_ALL;
-  terrain: TTerrain;
   nestedChunks: TChunk[] = [];
   hasNestedChunks: boolean = false;
   surroundingChunks: TChunk[] = [];
@@ -22,12 +21,11 @@ class ChunkBase<TChunk, TTerrain> {
 
   static BUFFERS_COUNT: number = 3;
 
-  constructor(terrain: TTerrain, x: number, z: number) {
+  constructor(x: number, z: number) {
     this.x = x;
     this.z = z;
     this.height = 256;
     this.geoId = getGeoId(x, z);
-    this.terrain = terrain;
   }
 
   checkNestedChunks() {

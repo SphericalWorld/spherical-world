@@ -1,7 +1,7 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
-import type { Collider } from './Collider';
 import { vec3 } from 'gl-matrix';
+import type { Collider } from './Collider';
 
 export class RigidBody {
   translation: Vec3;

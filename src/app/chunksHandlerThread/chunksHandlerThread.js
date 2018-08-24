@@ -1,7 +1,7 @@
 // @flow
 import type { GameEvent } from '../GameEvent/GameEvent';
-
 import EventObservable from '../GameEvent/EventObservable';
+import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';
 import terrainProvider from './Terrain';
@@ -29,7 +29,7 @@ events
   .subscribe(({ payload: data }) => {
     let chunk = terrain.getChunk(data.x, data.z);
     if (chunk.isJust === false) {
-      chunk = terrain.addChunk(new Chunk(terrain, data.x, data.z));
+      chunk = terrain.addChunk(new Chunk(data.x, data.z));
     } else {
       chunk = chunk.extract();
     }
@@ -39,15 +39,30 @@ events
   });
 
 // TODO: combine place and remove
-self.registerMessageHandler('TERRAIN_REMOVED_BLOCK', ({
-  payload: {
-    x, y, z, geoId,
-  },
-}) => terrain.chunks.get(geoId).map((chunk) => {
-  console.log(chunk)
-  chunk.removeBlock(x, y, z);
-  chunk.updateState();
-}));
+events
+  .filter(e => e.type === PLAYER_DESTROYED_BLOCK && e)
+  .map(e => e.payload)
+  .subscribe(({
+    geoId, x, y, z,
+  }) => terrain.chunks
+    .get(geoId)
+    .map((chunk) => {
+      chunk.removeBlock(x, y, z);
+      chunk.updateState();
+    }));
+
+events
+  .filter(e => e.type === PLAYER_PUT_BLOCK)
+  .map(e => e.payload)
+  .subscribe(({
+    geoId, x, y, z,
+  }) => terrain.chunks
+    .get(geoId)
+    .map((chunk) => {
+      chunk.removeBlock(x, y, z);
+      chunk.updateState();
+    }));
+
 
 self.registerMessageHandler('TERRAIN_PLACED_BLOCK', ({
   payload: {

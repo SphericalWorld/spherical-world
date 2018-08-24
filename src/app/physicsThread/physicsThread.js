@@ -4,12 +4,7 @@ import terrainBaseProvider from '../Terrain/TerrainBase';
 import terrainProvider from './Terrain';
 import Chunk from './Terrain/Chunk/Chunk';
 
-import terrainSystemProvider from './systems/Terrain';
-import raytraceProvider from './systems/Raytrace';
-import gravitySystemProvider from './systems/Gravity';
-import physicsSystemProvider from './systems/Physics';
-import velocitySystemProvider from './systems/VelocitySystem';
-import userControlSystemProvider from './systems/UserControlSystem';
+import systemsProvider from './systems';
 
 import Transform from '../components/Transform';
 import Raytracer from '../components/Raytracer';
@@ -24,18 +19,10 @@ import { World } from '../ecs';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 const world = new World(THREAD_PHYSICS);
-
 const TerrainBase = terrainBaseProvider(Chunk);
 const Terrain = terrainProvider(TerrainBase);
 
 const terrain = new Terrain();
-
-const TerrainSystem = terrainSystemProvider(world, terrain);
-const Raytrace = raytraceProvider(world, Chunk);
-const GravitySystem = gravitySystemProvider(world);
-const VelocitySystem = velocitySystemProvider(world);
-const PhysicsSystem = physicsSystemProvider(world, terrain);
-const UserControlSystem = userControlSystemProvider(world, terrain);
 
 class PhysicsThread {
   constructor() {
@@ -50,14 +37,7 @@ class PhysicsThread {
       Camera,
     );
     world.registerThread(new Thread(THREAD_MAIN, self));
-    world.registerSystem(
-      new TerrainSystem(),
-      new UserControlSystem(),
-      new GravitySystem(),
-      new VelocitySystem(),
-      new PhysicsSystem(),
-      new Raytrace(terrain),
-    );
+    world.registerSystem(...systemsProvider(world, terrain));
   }
 
   physicsLoop() {

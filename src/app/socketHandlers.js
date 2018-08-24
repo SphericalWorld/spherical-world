@@ -5,12 +5,6 @@ const socketHandlersProvider = Player => class SocketHandlers {
   constructor(app, network) {
     this.app = app;
     this.network = network;
-    // this.network.route('LOAD_OTHER_PLAYER', this.loadOtherPlayer.bind(this));
-    // this.network.route('OTHER_PLAYER_CHANGE_POSITION', this.otherPlayerChangePosition.bind(this));
-    // this.network.route('OTHER_PLAYER_CHANGE_ROTATION', this.otherPlayerChangeRotation.bind(this));
-    // this.network.route('OTHER_PLAYER_DISCONNECT', this.otherPlayerDisconnect.bind(this));
-    // this.network.route('OTHER_PLAYER_START_REMOVE_BLOCK', this.otherPlayerStartRemoveBlock.bind(this));
-    // this.network.route('OTHER_PLAYER_STOP_REMOVE_BLOCK', this.otherPlayerStopRemoveBlock.bind(this));
   }
 
   loadOtherPlayer(data) {

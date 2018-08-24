@@ -7,7 +7,6 @@ class ChunksHandlerThread extends ThreadProvider {
   constructor(app) {
     super(Worker);
     this.app = app;
-    this.terrain = app.terrain;
     this.glTextureLibrary = app.glTextureLibrary;
 
     // this.registerMessageHandler('CHUNK_LOADED_MINIMAP', (data) => {

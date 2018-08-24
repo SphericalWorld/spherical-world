@@ -5,16 +5,16 @@ import { PLAYER_CHANGE_POSITION } from '../player/playerConstants';
 import { System } from './System';
 import { Transform, Camera } from '../components';
 
-export default (world: World, network: Network) =>
+export default (ecs: World, network: Network) =>
   class NetworkSystem implements System {
-    player = world.createSelector([Transform, Camera]);
-    events = world.events
+    player = ecs.createSelector([Transform, Camera]);
+    events = ecs.events
       .filter(el => el.network === true)
       .subscribeQueue();
 
     lastUpdate = Date.now();
     update(delta: number): void {
-      if (Date.now() > this.lastUpdate + 1000) { // TODO: replace Date.now() by global engine tick time
+      if (Date.now() > this.lastUpdate + 100) { // TODO: replace Date.now() by global engine tick time
         this.lastUpdate = Date.now();
         const [{ id, transform }] = this.player;
         network.emit(PLAYER_CHANGE_POSITION, {

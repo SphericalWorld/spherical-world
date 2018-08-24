@@ -4,30 +4,20 @@ import type { Mat4 } from 'gl-matrix';
 
 import type Material from '../engine/Material';
 import { getGeoId } from '../../../common/chunk';
-import { connect } from '../util';
-import { loadChunk, loadTerrainMipmap } from './terrainActions';
+import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import type ChunkProgram from '../../shaders/Chunk/Chunk';
 
-const mapActions = () => ({
-  loadTerrainMipmap,
-});
-
-const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase) => {
+const terrainProvider = (Chunk, network, TerrainBase: typeof ITerrainBase) =>
   class Terrain extends TerrainBase {
-    loadChunk: typeof loadChunk;
     loadTerrainMipmap: typeof loadTerrainMipmap;
     material: Material;
     foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
 
     constructor() {
       super();
-      this.size = 16;
-      this.halfSize = 8;
-
-      this.texture = null;
       network.route('PLACE_BLOCK', this.onServerBlockPlaced.bind(this));
       network.route('REMOVE_BLOCK', this.onServerBlockRemoved.bind(this));
     }
@@ -173,30 +163,13 @@ const terrainProvider = (store, Chunk, network, TerrainBase: typeof ITerrainBase
 
     makeMipMappedTextureAtlas(terrainMipMap) {
       this.terrainMipMap = terrainMipMap;
-      this.loadTerrainMipmap(this.terrainMipMap);
+      // this.loadTerrainMipmap(this.terrainMipMap);
     }
 
     generateMinimap() {
       this.minimap = this.app.glTextureLibrary.makeTerrainMinimap(this);
     }
-
-    componentDidUpdate(prevState) {
-      const chunkXold = Math.floor(prevState.playerX / 16) * 16;
-      const chunkZold = Math.floor(prevState.playerZ / 16) * 16;
-
-      const chunkX = Math.floor(this.playerX / 16) * 16;
-      const chunkZ = Math.floor(this.playerZ / 16) * 16;
-      if (chunkX !== chunkXold || chunkZ !== chunkZold) {
-        this.chunks = new Map([...this.chunks.entries()].filter(([key, value]) => (value.x > chunkX - (this.halfSize * 16))
-          && (value.x < chunkX + (this.halfSize * 16))
-          && (value.z > chunkZ - (this.halfSize * 16))
-          && (value.z < chunkZ + (this.halfSize * 16))));
-        // this.filterFarChunks();
-      }
-    }
-  }
-  return connect(null, mapActions, store)(Terrain);
-};
+  };
 
 /* ::
 export const Terrain = terrainProvider();

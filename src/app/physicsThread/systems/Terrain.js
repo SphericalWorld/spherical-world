@@ -9,7 +9,7 @@ import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
 
 
 const blockRemoveObserver = (ecs: World, terrain: Terrain) => ecs.events
-  .filter(el => el.type === PLAYER_DESTROYED_BLOCK)
+  .filter(el => el.type === PLAYER_DESTROYED_BLOCK && el)
   .map(el => el.payload)
   .subscribe(({
     geoId, x, y, z,
@@ -18,7 +18,7 @@ const blockRemoveObserver = (ecs: World, terrain: Terrain) => ecs.events
     .map(chunk => chunk.setBlock(x, y, z, 0)));
 
 const onChunkAdd = (ecs: World, terrain: Terrain) => ecs.events
-  .filter(el => el.type === CHUNK_LOADED)
+  .filter(el => el.type === CHUNK_LOADED && el)
   .subscribe(({ payload: { x, z, data } }) => terrain.loadChunk(x, z, data));
 
 export default (ecs: World, terrain: Terrain) =>

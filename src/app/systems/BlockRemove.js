@@ -1,4 +1,5 @@
 // @flow
+import { vec3 } from 'gl-matrix';
 import type World from '../ecs/World';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from './System';
@@ -14,8 +15,8 @@ import {
 } from '../player/events';
 
 const getPlayerAttackEvents = (world: World) => world.events
-  .filter(el => el.type === PLAYER_ATTACKED || el.type === PLAYER_STOPED_ATTACK)
-  .map(el => el.type === PLAYER_ATTACKED)
+  .filter(e => e.type === PLAYER_ATTACKED || e.type === PLAYER_STOPED_ATTACK)
+  .map(e => e.type === PLAYER_ATTACKED)
   .subscribeQueue();
 
 export default (world: World) =>
@@ -25,7 +26,7 @@ export default (world: World) =>
 
     update(delta: number): void {
       for (const {
-        visual, blockRemover, raytracer, id,
+        visual, blockRemover, raytracer: { block }, id,
       } of this.removers) {
         if (id === id) { // TODO: main player ID
           const { removing } = blockRemover;
@@ -33,32 +34,23 @@ export default (world: World) =>
             blockRemover.removing = possibleRemoving;
           });
           if (removing !== blockRemover.removing) {
-            world.dispatch({
-              type: PLAYER_STARTED_DESTROYING_BLOCK,
-              payload: raytracer.block.position,
-              network: true,
-            });
+            world.createEventAndDispatch(PLAYER_STARTED_DESTROYING_BLOCK, block.position, true);
           }
         }
-        const maxFrames = visual.glObject.material.diffuse.frames;
-        if (raytracer.block.block && blockRemover.removing) {
+        if (blockRemover.removing && block.block && vec3.exactEquals(block.position, blockRemover.position)) {
           visual.enabled = true;
-          if (blockRemover.removedPart < 1) {
-            blockRemover.removedPart += (1 / blocksInfo[raytracer.block.block].baseRemoveTime) * delta;
-          } else {
-            blockRemover.removedPart = 0;
-            world.dispatch({
-              type: PLAYER_DESTROYED_BLOCK,
-              payload: {
-                geoId: raytracer.block.geoId, ...raytracer.block.positionInChunk
-              },
-              network: true,
-            });
+          blockRemover.removedPart += (1 / blocksInfo[block.block].baseRemoveTime) * delta;
+          if (blockRemover.removedPart >= 1) {
+            world.createEventAndDispatch(PLAYER_DESTROYED_BLOCK, {
+              geoId: block.geoId, ...block.positionInChunk,
+            }, true);
           }
         } else {
           visual.enabled = false;
           blockRemover.removedPart = 0;
         }
+        blockRemover.position = block.position;
+        const maxFrames = visual.glObject.material.diffuse.frames;
         visual.glObject.material.frame = Math.floor(maxFrames * blockRemover.removedPart);
       }
       this.playerAttackEvents.clear();

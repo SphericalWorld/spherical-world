@@ -44,13 +44,13 @@ class Model {
 
   loadFromJson(model, scale?: number = 1) {
     const size = Math.max(...model.vertexPositions);
-    model.vertexPositions = model.vertexPositions.map(el => el / size);
+    let vertexPositions = model.vertexPositions.map(el => el / size);
     if (scale) {
-      model.vertexPositions = model.vertexPositions.map(el => el * scale);
+      vertexPositions = vertexPositions.map(el => el * scale);
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.vertexPositions), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model.indices), gl.STATIC_DRAW);

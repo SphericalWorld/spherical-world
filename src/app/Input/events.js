@@ -17,6 +17,7 @@ import {
   PLAYER_STOPED_RUN,
   PLAYER_ATTACKED,
   PLAYER_STOPED_ATTACK,
+  PLAYER_PUT_BLOCK,
 } from '../player/events';
 
 export type INPUT_TYPE = 0 | 1 | 2;
@@ -99,4 +100,9 @@ export const PLAYER_ATTACK_EVENT = {
   type: INPUT_TYPE_STATE,
   gameEvent: PLAYER_ATTACKED,
   onEnd: PLAYER_STOPED_ATTACK,
+};
+
+export const PLAYER_PUT_BLOCK_EVENT = {
+  type: INPUT_TYPE_ACTION,
+  gameEvent: PLAYER_PUT_BLOCK,
 };

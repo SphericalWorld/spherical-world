@@ -2,21 +2,9 @@
 import {
   PLAYER_LOADED,
   PLAYER_CHANGED_ROTATION,
-  DIRECTION_FORWARD,
-  DIRECTION_BACK,
-  DIRECTION_LEFT,
-  DIRECTION_RIGHT,
-  PLAYER_STARTED_REMOVE_BLOCK,
-  PLAYER_STOPED_REMOVE_BLOCK,
   PLAYER_PLACED_BLOCK,
 } from './playerConstants';
 import { terrainPlaceBlock } from '../Terrain/terrainActions';
-
-type Direction =
-  | typeof DIRECTION_FORWARD
-  | typeof DIRECTION_BACK
-  | typeof DIRECTION_LEFT
-  | typeof DIRECTION_RIGHT;
 
 export const loadPlayer = (playerData: Object, mainPlayer: boolean) => ({
   type: PLAYER_LOADED,
@@ -50,46 +38,6 @@ export const playerChangeRotation = (movementX: number, movementY: number) => (d
       meta: { api: true },
     });
   }
-};
-
-export const playerStartRemoveBlock = (id: number) => (dispatch, getState) => {
-  dispatch({
-    type: PLAYER_STARTED_REMOVE_BLOCK,
-    payload: { id, removingBlock: true },
-  });
-  const state = getState();
-  if (id !== state.players.mainPlayerId) {
-    return;
-  }
-  const {
-    block: { x, y, z },
-  } = state.raytracer;
-  dispatch({
-    type: PLAYER_STARTED_REMOVE_BLOCK,
-    payload: {
-      id,
-      x,
-      y,
-      z,
-    },
-    meta: { api: true },
-  });
-};
-
-export const playerStopRemoveBlock = (id: number) => (dispatch, getState) => {
-  dispatch({
-    type: PLAYER_STOPED_REMOVE_BLOCK,
-    payload: { id, removingBlock: false },
-  });
-  const state = getState();
-  if (id !== state.players.mainPlayerId) {
-    return;
-  }
-  dispatch({
-    type: PLAYER_STOPED_REMOVE_BLOCK,
-    payload: { id },
-    meta: { api: true },
-  });
 };
 
 export const playerPlaceBlock = (id: number) => (dispatch, getState) => {

@@ -1,5 +1,4 @@
 // @flow
-import type { Terrain } from '../Terrain';
 import { getIndex } from '../../../../../common/chunk';
 import {
   blocksTextureInfo,
@@ -224,7 +223,7 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
 
 type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
 
-export default class Chunk extends ChunkWithData<Chunk, Terrain> {
+export default class Chunk extends ChunkWithData<Chunk> {
   blocks: Uint8Array;
   flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
   light: Uint16Array = new Uint16Array(this.height * 16 * 16);
@@ -241,8 +240,8 @@ export default class Chunk extends ChunkWithData<Chunk, Terrain> {
   createWestPlane: CreatePlane;
   createEastPlane: CreatePlane;
 
-  constructor(terrain: Terrain, x: number, z: number) {
-    super(terrain, x, z);
+  constructor(x: number, z: number) {
+    super(x, z);
 
     this.terrainMipMap = null;
 
@@ -364,8 +363,8 @@ export default class Chunk extends ChunkWithData<Chunk, Terrain> {
             geoId: this.geoId,
             buffers: buffersData,
             buffersInfo,
-          }
-        }]
+          },
+        }],
       },
     }, Object.values(buffersData));
   }
