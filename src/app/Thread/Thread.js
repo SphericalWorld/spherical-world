@@ -14,14 +14,6 @@ class Thread {
     thread.onmessage = (e) => {
       this.events.emit(e.data);
     };
-
-    // eslint-disable-next-line
-    self.registerMessageHandler = function(message, handler){
-      if (typeof (handler) === 'function') {
-        // eslint-disable-next-line
-        self.__router__[message] = handler;
-      }
-    };
   }
 
   postMessage(message: any, ports?: any): void {

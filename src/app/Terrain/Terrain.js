@@ -19,7 +19,7 @@ const terrainProvider = (Chunk, network, TerrainBase: typeof ITerrainBase) =>
     constructor() {
       super();
       network.route('PLACE_BLOCK', this.onServerBlockPlaced.bind(this));
-      network.route('REMOVE_BLOCK', this.onServerBlockRemoved.bind(this));
+      network.route('TERRAIN_REMOVED_BLOCK', this.onServerBlockRemoved.bind(this));
     }
 
     loadChunk = (data) => {
@@ -143,6 +143,7 @@ const terrainProvider = (Chunk, network, TerrainBase: typeof ITerrainBase) =>
     }
 
     onServerBlockRemoved(data) {
+      console.log(data)
       const geoId = getGeoId(data.x, data.z);
       const payload = {
         type: 'REMOVE_BLOCK', geoId, x: data.x, y: data.y, z: data.z,

@@ -1,11 +1,11 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
-import type { BlockFace } from '../../../common/block';
+import type { BlockFace, Block } from '../../../common/block';
 import { Component } from './Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export type BlockDetails = {|
-  block: number;
+  block: Block;
   position: Vec3;
   geoId: string;
   positionInChunk: Vec3;
@@ -17,6 +17,7 @@ export default class Raytracer implements Component {
   static componentName = 'raytracer';
   static componentType: { 'raytracer': Raytracer };
 
+  face: BlockFace = 0;
   block: BlockDetails = {};
   emptyBlock: ?BlockDetails;
 }

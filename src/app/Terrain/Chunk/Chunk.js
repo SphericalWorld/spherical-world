@@ -1,4 +1,5 @@
 // @flow
+import type { Mat4 } from 'gl-matrix';
 import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
@@ -27,7 +28,7 @@ type GLBuffers = {
   vao: null,
 };
 
-const chunkProvider = (store) => {
+const chunkProvider = () => {
   class Chunk extends ChunkBase<Chunk> {
     frustum: Frustum;
     foliageTexture: WebGLTexture = null;
@@ -74,7 +75,7 @@ const chunkProvider = (store) => {
       this.foliageTexture = texture;
     }
 
-    inFrustum(m) {
+    inFrustum(m: Mat4) {
       return this.frustum.boxInFrustum(m);
     }
 

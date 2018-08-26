@@ -148,12 +148,16 @@
 
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../ecs/Entity';
-import Collider from '../components/Collider';
-import UserControlled from '../components/UserControlled';
 import GlObject from '../engine/glObject';
 import { World } from '../ecs';
 import {
-  Transform, Camera, Physics, Velocity, Gravity, Raytracer,
+  Transform,
+  Camera,
+  Collider,
+  Physics,
+  Velocity,
+  Gravity,
+  UserControlled,
 } from '../components';
 import type { MaterialLibrary } from '../engine/MaterialLibrary';
 import { createCube } from '../engine/Model';
@@ -179,7 +183,6 @@ const playerProvider = (
     new Gravity(),
     new UserControlled(),
     // new Visual(object),
-    new Raytracer(),
   );
 };
 

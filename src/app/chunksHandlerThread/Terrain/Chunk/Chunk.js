@@ -1,4 +1,6 @@
 // @flow
+import type {BlockFace} from '../../../../../common/block';
+
 import { getIndex } from '../../../../../common/chunk';
 import {
   blocksTextureInfo,
@@ -434,10 +436,10 @@ export default class Chunk extends ChunkWithData<Chunk> {
     this.state = CHUNK_STATUS_NEED_LOAD_VBO;
   }
 
-  putBlock(x: number, y: number, z: number, value: number, plane) {
+  putBlock(x: number, y: number, z: number, value: number, face: BlockFace) {
     let placed = true;
     if (this.blocksInfo[value]) {
-      placed = this.blocksInfo[value].putBlock(this, x, y, z, value, plane);
+      placed = this.blocksInfo[value].putBlock(this, x, y, z, value, face);
     } else {
       this.blocks[getIndex(x, y, z)] = value;
     }

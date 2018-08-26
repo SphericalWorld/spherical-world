@@ -55,30 +55,19 @@ events
   .filter(e => e.type === PLAYER_PUT_BLOCK)
   .map(e => e.payload)
   .subscribe(({
-    geoId, x, y, z,
+    geoId, x, y, z, blockId, face,
   }) => terrain.chunks
     .get(geoId)
     .map((chunk) => {
-      chunk.removeBlock(x, y, z);
+      chunk.putBlock(x, y, z, blockId, face);
+      chunk.light[x + z * 16 + y * 256] = chunk.light[x + z * 16 + y * 256] & 0x000F | 0xFD20;
+
+      chunk.calcRecursionRed(x, y, z);
+      chunk.calcRecursionGreen(x, y, z);
+      chunk.calcRecursionBlue(x, y, z);
+
       chunk.updateState();
     }));
-
-
-self.registerMessageHandler('TERRAIN_PLACED_BLOCK', ({
-  payload: {
-    geoId, x, y, z, blockId, plane,
-  },
-}) => terrain.chunks.get(geoId).map((chunk) => {
-  chunk.putBlock(x, y, z, blockId, plane);
-
-  chunk.light[x + z * 16 + y * 256] = chunk.light[x + z * 16 + y * 256] & 0x000F | 0xFD20;
-
-  chunk.calcRecursionRed(x, y, z);
-  chunk.calcRecursionGreen(x, y, z);
-  chunk.calcRecursionBlue(x, y, z);
-
-  chunk.updateState();
-}));
 
 // eslint-disable-next-line
 self.registerMessageHandler("TERRAIN_MIPMAP_LOADED", ({ payload }) => {

@@ -23,17 +23,8 @@ import systemsProvider from './app/systems';
 
 import timeProvider from './app/Time/Time';
 import { World } from './app/ecs';
-import Transform from './app/components/Transform';
-import Raytracer from './app/components/Raytracer';
-import Skybox from './app/components/Skybox';
-import Visual from './app/components/Visual';
-import Camera from './app/components/Camera';
-import Physics from './app/components/Physics';
-import Velocity from './app/components/Velocity';
-import Gravity from './app/components/Gravity';
-import UserControlled from './app/components/UserControlled';
-import Collider from './app/components/Collider';
-import BlockRemover from './app/components/BlockRemover';
+
+import * as componentsProvider from './app/components';
 
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './app/Thread/threadConstants';
 
@@ -45,19 +36,7 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   const world = new World(THREAD_MAIN);
   world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
   world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
-  world.registerComponentTypes(
-    Transform,
-    Raytracer,
-    Visual,
-    Skybox,
-    Camera,
-    Physics,
-    Velocity,
-    Gravity,
-    UserControlled,
-    Collider,
-    BlockRemover,
-  );
+  world.registerComponentTypes(...Object.values(componentsProvider));
 
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
@@ -112,7 +91,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const BlockPicker = blockPickerProvider(world, materialLibrary, BlockRemover);
   const Skybox = skyboxProvider(world, materialLibrary);
   const time = new (timeProvider())(Date.now());
-  const Chunk = chunkProvider(store);
+  const Chunk = chunkProvider();
   const TerrainBase = terrainBaseProvider(Chunk);
   const terrain = getTerrain(Chunk, network, textureLibrary, materialLibrary, TerrainBase);
   const Addon = addon(store);

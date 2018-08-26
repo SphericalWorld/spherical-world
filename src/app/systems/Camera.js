@@ -5,7 +5,7 @@ import {
 } from 'gl-matrix';
 import type { World } from '../ecs';
 import type { Viewport } from '../components/Camera';
-import { gl } from '../engine/glEngine';
+import { gl, unproject } from '../engine/glEngine';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
 import { System } from './System';
@@ -22,7 +22,13 @@ const resizeViewport = (viewport: Viewport): Viewport => {
     return {
       viewportWidth: gl.drawingBufferWidth,
       viewportHeight: gl.drawingBufferHeight,
-      pMatrix: mat4.perspective(mat4.create(), 1.04719755, gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1024.0), // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
+      pMatrix: mat4.perspective(
+        mat4.create(),
+        1.04719755,
+        gl.drawingBufferWidth / gl.drawingBufferHeight,
+        0.1,
+        1024.0,
+      ), // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
     };
   }
   return viewport;
@@ -30,7 +36,7 @@ const resizeViewport = (viewport: Viewport): Viewport => {
 
 const getWorldPosition = (distance: number) =>
   (width: number, height: number, pMatrix: Mat4, mvMatrix: Mat4) =>
-    vec3.unproject(
+    unproject(
       width / 2,
       height / 2,
       distance,

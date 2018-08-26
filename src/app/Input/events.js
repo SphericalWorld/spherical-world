@@ -17,13 +17,18 @@ import {
   PLAYER_STOPED_RUN,
   PLAYER_ATTACKED,
   PLAYER_STOPED_ATTACK,
-  PLAYER_PUT_BLOCK,
+  PLAYER_START_PUT_BLOCK,
 } from '../player/events';
 
-export type INPUT_TYPE = 0 | 1 | 2;
 export const INPUT_TYPE_ACTION: 0 = 0;
 export const INPUT_TYPE_STATE: 1 = 1;
 export const INPUT_TYPE_RANGE: 2 = 2;
+
+export type INPUT_TYPE =
+  | typeof INPUT_TYPE_ACTION
+  | typeof INPUT_TYPE_STATE
+  | typeof INPUT_TYPE_RANGE;
+
 // TODO: move events to separate files
 
 export const CAMERA_MOVED_EVENT = {
@@ -104,5 +109,5 @@ export const PLAYER_ATTACK_EVENT = {
 
 export const PLAYER_PUT_BLOCK_EVENT = {
   type: INPUT_TYPE_ACTION,
-  gameEvent: PLAYER_PUT_BLOCK,
+  gameEvent: PLAYER_START_PUT_BLOCK,
 };

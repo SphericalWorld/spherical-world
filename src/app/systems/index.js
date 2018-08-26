@@ -1,6 +1,7 @@
 // @flow
 import type World from '../ecs/World';
 import type Network from '../network';
+import type { Time } from '../Time/Time';
 import type { System } from './System';
 import type { Terrain } from '../Terrain/Terrain';
 import TerrainSystem from './Terrain';
@@ -11,7 +12,7 @@ import DrawSystem from './Draw';
 import HudSystem from './Hud';
 import NetworkSystem from './Network';
 
-export default (world: World, terrain: Terrain, network: Network, time, store): System[] => [
+export default (world: World, terrain: Terrain, network: Network, time: Time, store): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world),
   DayNightCycleSystem(world, time),

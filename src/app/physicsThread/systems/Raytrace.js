@@ -65,8 +65,8 @@ const calcMax = (position: number, delta: number, step: number): number =>
 
 export default (ecs: World, terrain: Terrain) =>
   class Raytrace implements System {
-    components = ecs.createSelector([Transform, Raytracer], [UserControlled]);
-    userControlled = ecs.createSelector([Transform, UserControlled, Camera]);
+    components = ecs.createSelector([Transform, Raytracer]);
+    cameras = ecs.createSelector([UserControlled, Camera]);
 
     mvMatrix: number[];
     pMatrix: number[];
@@ -76,12 +76,12 @@ export default (ecs: World, terrain: Terrain) =>
     update(): Array {
       const result = [];
       for (const { id, transform, raytracer } of this.components) {
-        const { camera } = this.userControlled[0];
+        const { camera } = this.cameras[0];
         this.trace(camera.worldPosition, camera.sight)
           .map((traceResult) => {
             raytracer.block = traceResult.block;
             raytracer.emptyBlock = traceResult.emptyBlock;
-
+            raytracer.face = traceResult.face;
             vec3.copy(transform.translation, traceResult.block.position);
             result.push([id, transform, raytracer]);
           });
@@ -136,7 +136,7 @@ export default (ecs: World, terrain: Terrain) =>
           break;
         }
       }
-      return blockDetails.map(block => (emptyBlockDetails.isJust === true
+      return blockDetails.map(block => (emptyBlockDetails.isJust === true && block.block
         ? {
           block,
           emptyBlock: emptyBlockDetails.extract(),

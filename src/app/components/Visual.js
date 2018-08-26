@@ -1,6 +1,6 @@
 // @flow
 import type { Component } from './Component';
-import GlObject from '../engine/glObject';
+import type GlObject from '../engine/glObject';
 import { THREAD_MAIN } from '../Thread/threadConstants';
 
 export default class Visual implements Component {

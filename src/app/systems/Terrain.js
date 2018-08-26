@@ -14,7 +14,7 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => networ
   .filter(e => e.type === 'loadChunk')
   .subscribe(({ type, payload }) => {
     terrain.loadChunk(payload.data);
-    ecs.dispatch({ type: CHUNK_LOADED, payload: { data: payload.binaryData, x: payload.data.x, z: payload.data.z } });
+    ecs.createEventAndDispatch(CHUNK_LOADED, { data: payload.binaryData, x: payload.data.x, z: payload.data.z });
   });
 
 const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events

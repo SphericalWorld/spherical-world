@@ -17,7 +17,7 @@ class SocketHandlers {
 
   putBlock(ws, data) {
     this.server.terrain.putBlockHandler(data);
-    ws.player.broadcastToLinked('TERRAIN_PLACED_BLOCK', data);
+    ws.player.broadcastToLinked('PLAYER_PUT_BLOCK', data);
   }
 
   removeBlock(ws, data) {

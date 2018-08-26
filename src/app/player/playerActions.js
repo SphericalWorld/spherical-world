@@ -2,9 +2,7 @@
 import {
   PLAYER_LOADED,
   PLAYER_CHANGED_ROTATION,
-  PLAYER_PLACED_BLOCK,
 } from './playerConstants';
-import { terrainPlaceBlock } from '../Terrain/terrainActions';
 
 export const loadPlayer = (playerData: Object, mainPlayer: boolean) => ({
   type: PLAYER_LOADED,
@@ -38,22 +36,4 @@ export const playerChangeRotation = (movementX: number, movementY: number) => (d
       meta: { api: true },
     });
   }
-};
-
-export const playerPlaceBlock = (id: number) => (dispatch, getState) => {
-  // TODO: dispatch(inventoryRemoveItem)
-  dispatch({
-    type: PLAYER_PLACED_BLOCK,
-    payload: { id, removingBlock: true },
-  });
-  const state = getState();
-  if (id !== state.players.mainPlayerId) {
-    return;
-  }
-  const {
-    emptyBlockInChunk: { x, y, z }, geoId, plane,
-  } = state.raytracer;
-  dispatch(terrainPlaceBlock({
-    geoId, x, y, z, plane, blockId: 128,
-  }));
 };

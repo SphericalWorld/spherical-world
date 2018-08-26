@@ -93,7 +93,7 @@ export default class Server {
     this.router.terrain = this.terrain;
     this.router.route('loadGameData', this.router.loadGameData.bind(this.router));
     this.router.route('PING', () => {});
-    this.router.route('TERRAIN_PLACED_BLOCK', this.router.putBlock.bind(this.router));
+    this.router.route('PLAYER_PUT_BLOCK', this.router.putBlock.bind(this.router));
     this.router.route('PLAYER_DESTROYED_BLOCK', this.router.removeBlock.bind(this.router));
     this.router.route('PLAYER_CHANGE_POSITION', this.router.playerChangePosition.bind(this.router));
     this.router.route('PLAYER_CHANGED_ROTATION', this.router.playerChangeRotation.bind(this.router));
