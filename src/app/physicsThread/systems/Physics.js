@@ -1,6 +1,7 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
+import { toChunkPosition, toPositionInChunk } from '../../../../common/chunk';
 import { Just, Nothing } from '../../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
@@ -24,17 +25,17 @@ const getChunkIfLoaded = chunk => (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL
 const calculateMovement = (terrain: Terrain) => (
   { translation }: Transform, velocity: Velocity, blockPosition: Vec3, collider: Collider,
 ) => terrain
-  .getChunk(Math.floor(blockPosition[0] / 16) * 16, Math.floor(blockPosition[2] / 16) * 16)
+  .getChunk(toChunkPosition(blockPosition[0]), toChunkPosition(blockPosition[2]))
   .chain(getChunkIfLoaded)
-  .map((chunk) => {
-    let blockX = Math.floor(blockPosition[0] % 16);
-    let blockZ = Math.floor(blockPosition[2] % 16);
-    blockX = blockX >= 0 ? blockX : blockX + 16;
-    blockZ = blockZ >= 0 ? blockZ : blockZ + 16;
-    const block = chunk.getBlock(blockX, Math.floor(blockPosition[1]), blockZ);
-    if (!block || !blocksFlags[block][HAS_PHYSICS_MODEL]) {
-      return;
-    }
+  .map(chunk => chunk.getBlock(
+    toPositionInChunk(blockPosition[0]),
+    Math.floor(blockPosition[1]),
+    toPositionInChunk(blockPosition[2]),
+  ))
+  .chain(block => (blocksFlags[block][HAS_PHYSICS_MODEL]
+    ? Just(block)
+    : Nothing))
+  .map(() => {
     const blockPositionNormalized = vec3.add(vec3.create(), blockPosition, halfVector);
     const blockAABB = createAABB(
       blockPositionNormalized,

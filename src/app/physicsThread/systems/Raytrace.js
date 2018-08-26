@@ -6,6 +6,7 @@ import type { Maybe } from '../../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
 import type World from '../../ecs/World';
 import type { Terrain } from '../Terrain/Terrain';
+import { toChunkPosition } from '../../../../common/chunk';
 import { Nothing } from '../../../../common/fp/monads/maybe';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
@@ -38,7 +39,7 @@ const getFace = (block: Vec3, emptyBlock: Vec3): BlockFace => {
 };
 
 const getBlockDetails = (raytrace, x, y, z): Maybe<BlockDetails> => raytrace.terrain
-  .getChunk(Math.floor(x / 16) * 16, Math.floor(z / 16) * 16)
+  .getChunk(toChunkPosition(x), toChunkPosition(z))
   .map((chunk) => {
     const position = vec3.fromValues(x, y, z);
     x = x >= 0

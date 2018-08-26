@@ -303,7 +303,7 @@ export default class Chunk extends ChunkWithData<Chunk> {
       const block = this.blocks[index];
       if (block) {
         if (typeof this.blocksInfo[block].renderToChunk === 'function') { // TODO: MODEL
-          buffers[bufferInfo[block][0]].vertexCount = this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
+          buffers[bufferInfo[block][0]].vertexCount += this.blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]], buffers);
         } else {
           this.createTopPlane(block, i, j, k, buffers);
           this.createBottomPlane(block, i, j, k, buffers);

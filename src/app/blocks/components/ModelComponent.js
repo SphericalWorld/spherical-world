@@ -43,7 +43,7 @@ const ModelComponent = (model: Object) => ({
     for (let i = 0; i < model.indices.length; i += 1) {
       indexBuffer.push(model.indices[i] + vertexCount);
     }
-    return vertexCount + (model.vertexPositions.length / 3);
+    return model.vertexPositions.length / 3;
   },
 });
 

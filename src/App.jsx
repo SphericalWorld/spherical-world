@@ -23,7 +23,11 @@ const App = () => (
         <div id="addons" />
       </section>
       <canvas id="glcanvas">
-        Your browser doesn&apos;t appear to support the HTML5 <code>&lt;canvas&gt;</code> element.
+        Your browser doesn&apos;t appear to support the HTML5
+        <code>
+          &lt;canvas&gt;
+        </code>
+        element.
       </canvas>
       <canvas id="texture-canvas" />
     </div>

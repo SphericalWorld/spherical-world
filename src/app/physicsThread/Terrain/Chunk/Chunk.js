@@ -26,25 +26,6 @@ export default class Chunk extends ChunkWithData<Chunk> {
   getBlock(x, y, z) {
     return this.blocks[getIndex(x, y, z)];
   }
-  // TODO move to common functions from methods
-  at(x: number, y: number, z: number): number {
-    let chunk = this;
-    if (x < 0) {
-      chunk = chunk.northChunk;
-      x += 16;
-    } else if (x > 15) {
-      chunk = chunk.southChunk;
-      x -= 16;
-    }
-    if (z < 0) {
-      chunk = chunk.westChunk;
-      z += 16;
-    } else if (z > 15) {
-      chunk = chunk.eastChunk;
-      z -= 16;
-    }
-    return chunk.blocks[x + (z << 4) + (y << 8)];
-  }
 
   setBlock(x, y, z, value) {
     this.blocks[x + z * 16 + y * 256] = value;

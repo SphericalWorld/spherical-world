@@ -86,7 +86,7 @@ const Torch = () => {
         for (let i = 0; i < model.indices.length; i += 1) {
           indexBuffer.push(model.indices[i] + vertexCount);
         }
-        return vertexCount + (model.vertexPositions.length / 3);
+        return model.vertexPositions.length / 3;
       },
 
       putBlock(chunk, x: number, y: number, z: number, value: number, plane: number): boolean {

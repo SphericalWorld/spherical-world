@@ -12,7 +12,7 @@ import UserControlSystem from './UserControlSystem';
 export default (world: World, terrain: Terrain): System[] => [
   TerrainSystem(world, terrain),
   UserControlSystem(world, terrain),
-  GravitySystem(world),
+  GravitySystem(world, terrain),
   VelocitySystem(world),
   PhysicsSystem(world, terrain),
   RaytraceSystem(world, terrain),

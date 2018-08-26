@@ -13,8 +13,8 @@ const putBlock = (chunk, x: number, y: number, z: number, value: number, plane: 
 
 const BasePropertiesComponent = () => ({
   id: 0,
-  fallSpeedCap: 0,
-  fallAcceleration: 0.00002,
+  fallSpeedCap: Number.MIN_SAFE_INTEGER,
+  fallAcceleration: 1,
   lightTransparent: true,
   sightTransparent: true,
   selfTransparent: false,

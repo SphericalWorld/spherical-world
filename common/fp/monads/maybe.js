@@ -1,9 +1,10 @@
 // @flow
+import type { Alternative } from '../algebraicDataTypes/Alternative';
 import type { Monad } from '../algebraicDataTypes/Monad.type';
 
 export type Maybe<T> = TNothing<T> | Just<T>;
 
-class Just<T> implements Monad<T> {
+class Just<T> implements Monad<T>, Alternative<T> {
   +isJust: true = true;
   +value: T;
 
@@ -22,19 +23,35 @@ class Just<T> implements Monad<T> {
   chain<G>(fn: T => Maybe<G>): Maybe<G> {
     return fn(this.value);
   }
+
+  alt(value: Maybe<T>): Maybe<T> { // eslint-disable-line no-unused-vars
+    return this;
+  }
+
+  static zero() {
+    return Nothing;
+  }
 }
 
 const JustFactory = <T>(value: T): Maybe<T> => new Just(value);
 
-class TNothing<T> implements Monad<T> {
+class TNothing<T> implements Monad<T>, Alternative<T> {
   +isJust: false = false;
 
-  map<G>(mapFn: * => G): TNothing {
+  map<G>(mapFn: * => G): TNothing { // eslint-disable-line no-unused-vars
     return this;
   }
 
-  chain<G>(fn: T => Maybe<G>): Maybe<G> {
+  chain<G>(fn: T => Maybe<G>): Maybe<G> { // eslint-disable-line no-unused-vars
     return this;
+  }
+
+  alt(value: Maybe<T>): Maybe<T> {
+    return value;
+  }
+
+  static zero() {
+    return Nothing;
   }
 }
 

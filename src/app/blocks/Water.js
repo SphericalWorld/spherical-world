@@ -8,8 +8,8 @@ const Water = () => Block({
   sightTransparent: true,
   selfTransparent: true,
   needPhysics: false,
-  fallSpeedCap: 0.002,
-  fallAcceleration: 0.00001,
+  fallSpeedCap: -3,
+  fallAcceleration: 0.5,
   buffer: {
     top: 2,
     bottom: 2,
