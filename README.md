@@ -7,11 +7,17 @@
 This project is an attempt to create voxel-based game in pure javascript. It was resurrected after 4 years of inactivity and right now under heavy refactorings.
 
 ## Requirements
-Latest NodeJS, Latest Chrome/Firefox
+Latest NodeJS, Latest Chrome/Firefox, Latest Docker
 
 ## Running
 ### Server
 `npm run start-server`
+linux users may need to run docker under sudo:
+`sudo npm run start-server`
+`nvm` is not working with `sudo` out of the box, if you use `nvm` to manage your `node` versions, you may need to apply this workaround to make `nvm` compatible with `sudo`:
+```bash
+n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local
+```
 ### Client
 `npm run`
 

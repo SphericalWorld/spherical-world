@@ -22,37 +22,35 @@ const getChunkIfLoaded = chunk => (chunk.state === CHUNK_STATUS_NEED_LOAD_ALL
   ? Nothing
   : Just(chunk));
 
-const calculateMovement = (terrain: Terrain) => (
-  { translation }: Transform, velocity: Velocity, blockPosition: Vec3, collider: Collider,
-) => terrain
-  .getChunk(toChunkPosition(blockPosition[0]), toChunkPosition(blockPosition[2]))
-  .chain(getChunkIfLoaded)
-  .map(chunk => chunk.getBlock(
-    toPositionInChunk(blockPosition[0]),
-    Math.floor(blockPosition[1]),
-    toPositionInChunk(blockPosition[2]),
-  ))
-  .chain(block => (blocksFlags[block][HAS_PHYSICS_MODEL]
-    ? Just(block)
-    : Nothing))
-  .map(() => {
-    const blockPositionNormalized = vec3.add(vec3.create(), blockPosition, halfVector);
-    const blockAABB = createAABB(
-      blockPositionNormalized,
-      oneVector,
-    );
-
-    if (testCollision(collider.shape, blockAABB)) {
-      const manifold = collide({
-        shape: collider.shape,
-      }, {
-        shape: blockAABB,
-      });
-      vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
-      move(collider.shape, translation);
-      velocity.linear[manifold.normal.find(el => el)] = 0;
-    }
-  });
+const calculateMovement = (terrain: Terrain) => {
+  const blockAABB = createAABB(vec3.create(), oneVector);
+  return (
+    { translation }: Transform, velocity: Velocity, blockPosition: Vec3, collider: Collider,
+  ) => terrain
+    .getChunk(toChunkPosition(blockPosition[0]), toChunkPosition(blockPosition[2]))
+    .chain(getChunkIfLoaded)
+    .map(chunk => chunk.getBlock(
+      toPositionInChunk(blockPosition[0]),
+      Math.floor(blockPosition[1]),
+      toPositionInChunk(blockPosition[2]),
+    ))
+    .chain(block => (blocksFlags[block][HAS_PHYSICS_MODEL]
+      ? Just(block)
+      : Nothing))
+    .map(() => {
+      blockAABB.move(vec3.add(vec3.create(), blockPosition, halfVector));
+      if (testCollision(collider.shape, blockAABB)) {
+        const manifold = collide({
+          shape: collider.shape,
+        }, {
+          shape: blockAABB,
+        });
+        vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
+        move(collider.shape, translation);
+        velocity.linear[manifold.normal.find(el => el)] = 0;
+      }
+    });
+};
 
 const collideWithTerrain = (terrain: Terrain) => {
   const calculate = calculateMovement(terrain);

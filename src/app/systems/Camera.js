@@ -96,7 +96,7 @@ export default (world: World) =>
 
       // console.log(rotation)
       mat4.fromQuat(camera.mvMatrix, rotation);
-      mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - 0.6, -translation[2]]);
+      mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - 1.7, -translation[2]]);
       this.cameraMovements.clear();
 
       const sight = vec3.create();

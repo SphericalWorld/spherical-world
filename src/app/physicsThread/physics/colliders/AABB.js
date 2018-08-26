@@ -10,25 +10,32 @@ export type COLLIDER_AABB_TYPE = 0;
 export const COLLIDER_AABB: COLLIDER_AABB_TYPE = 0;
 
 class AABBinner {
+  +toMin: Vec3;
+  +toMax: Vec3;
   min: Vec3;
   max: Vec3;
   size: Vec3;
   halfSize: Vec3;
   center: Vec3;
+  objectPosition: Vec3;
   +type: COLLIDER_TYPE;
-  constructor(translation: Vec3, size: Vec3) {
+
+  constructor(translation: Vec3, size: Vec3, objectPosition: ?Vec3) {
     this.type = COLLIDER_AABB;
     this.size = size;
     this.center = translation;
     this.halfSize = vec3.scale(vec3.create(), size, 0.5);
-    this.min = vec3.sub(vec3.create(), translation, this.halfSize);
-    this.max = vec3.add(vec3.create(), translation, this.halfSize);
+    this.objectPosition = objectPosition || this.halfSize;
+    this.toMin = vec3.sub(vec3.create(), vec3.create(), this.objectPosition);
+    this.toMax = vec3.sub(vec3.create(), size, this.objectPosition);
+    this.min = vec3.add(vec3.create(), translation, this.toMin);
+    this.max = vec3.add(vec3.create(), translation, this.toMax);
   }
 
   move(translation: Vec3) {
-    vec3.sub(this.min, translation, this.halfSize);
-    vec3.add(this.max, translation, this.halfSize);
-    vec3.copy(this.center, translation);
+    vec3.add(this.min, translation, this.toMin);
+    vec3.add(this.max, translation, this.toMax);
+    vec3.copy(this.center, vec3.add(vec3.create(), this.min, this.halfSize));
   }
 }
 
@@ -41,8 +48,8 @@ export type AABB = {|
   ...$Exact<Collider>;
 |};
 
-export const createAABB = (translation: Vec3, size: Vec3): AABB =>
-  new AABBinner(translation, size);
+export const createAABB = (translation: Vec3, size: Vec3, objectPosition: ?Vec3): AABB =>
+  new AABBinner(translation, size, objectPosition);
 
 export const testAABBvsAABB = (a: AABB, b: AABB): boolean =>
   (a.min[0] < b.max[0] && a.max[0] > b.min[0])

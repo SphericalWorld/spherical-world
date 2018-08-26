@@ -177,7 +177,7 @@ const playerProvider = (
     data.id,
     new Transform(data.x, data.y, data.z),
     new Camera(),
-    new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8)), // 1.8
+    new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)), // 1.8
     new Physics(),
     new Velocity(),
     new Gravity(),

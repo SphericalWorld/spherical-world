@@ -32,7 +32,7 @@ const ModelComponent = (model: Object) => ({
     for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
       vertexBuffer.push(
         model.vertexPositions[i * 3] + x + chunk.x,
-        model.vertexPositions[i * 3 + 1] + y - 1,
+        model.vertexPositions[i * 3 + 1] + y,
         model.vertexPositions[i * 3 + 2] + z + chunk.z,
       );
       colorBuffer.push(r, g, b);

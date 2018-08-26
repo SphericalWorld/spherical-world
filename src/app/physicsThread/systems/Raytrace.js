@@ -51,10 +51,10 @@ const getBlockDetails = (raytrace, x, y, z): Maybe<BlockDetails> => raytrace.ter
       : 15 + ((z + 1) % 16);
 
     return {
-      block: chunk.getBlock(x, y + 1, z),
+      block: chunk.getBlock(x, y, z),
       position,
       geoId: chunk.geoId,
-      positionInChunk: { x, y: y + 1, z },
+      positionInChunk: { x, y, z },
     };
   });
 

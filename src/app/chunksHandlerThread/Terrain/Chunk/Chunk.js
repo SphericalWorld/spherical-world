@@ -1,6 +1,5 @@
 // @flow
-import type {BlockFace} from '../../../../../common/block';
-
+import type { BlockFace } from '../../../../../common/block';
 import { getIndex } from '../../../../../common/chunk';
 import {
   blocksTextureInfo,
@@ -100,7 +99,7 @@ const getLight = (i: number, j: number, k: number, chunk) => {
 
 const addDefaultVertex = (i, j, k, u, v) => ([
   j + (i ? v : k ? u : (j < 0 ? 1 : 0)),
-  ((j || k) ? (v - 1) : (i < 0 ? -1 : 0)),
+  ((j || k) ? v : (i < 0 ? 1 : 0)),
   k + ((i || j) ? u : (k < 0 ? 1 : 0)),
 ]);
 
@@ -112,8 +111,8 @@ const addPlane = (i: number, j: number, k: number): number[][] => [
 ];
 
 const basePlanes = [
-  addPlane(1, 0, 0),
   addPlane(-1, 0, 0),
+  addPlane(1, 0, 0),
   addPlane(0, -1, 0),
   addPlane(0, 1, 0),
   addPlane(0, 0, -1),

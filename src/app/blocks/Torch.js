@@ -75,7 +75,7 @@ const Torch = () => {
         for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
           vertexBuffer.push(
             torches[flag][i * 3] + x + chunk.x,
-            torches[flag][i * 3 + 1] + y - 1,
+            torches[flag][i * 3 + 1] + y,
             torches[flag][i * 3 + 2] + z + chunk.z,
           );
           colorBuffer.push(r, g, b);
