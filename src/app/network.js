@@ -107,14 +107,15 @@ class Network {
     if (!this.connected) {
       return console.log('socket disconnected');
     }
+    const params = {
+      type,
+      data,
+      id: this.requestId,
+    };
     return new Promise((resolve, reject) => {
       this.requests.set(this.requestId, { resolve, reject, time: Date.now() });
       this.requestId += 1;
-      this.connection.send(JSON.stringify({
-        type,
-        data,
-        id: this.requestId,
-      }));
+      this.connection.send(JSON.stringify(params));
     });
   }
 
