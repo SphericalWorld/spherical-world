@@ -20,3 +20,4 @@ export const SAPLING_OAK: 17 = 17;
 export const CLAY: 18 = 18;
 export const REEDS: 19 = 19;
 export const DEAD_BUSH: 20 = 20;
+export const WATER_STILL: 21 = 21;

@@ -23,6 +23,8 @@ import saplingOak from './blocks/sapling_oak.png';
 import clay from './blocks/clay.png';
 import reeds from './blocks/reeds.png';
 import deadBush from './blocks/deadbush.png';
+import waterStill from './blocks/water_still.png';
+
 
 import blockSelector from './block_selector.png';
 import blockDamage from './block_damage.png';
@@ -55,6 +57,8 @@ const texturesProvider = async () => Promise.all([
   Texture.create(clay, { name: 'clay', atlasId: 18 }),
   Texture.create(reeds, { name: 'reeds', atlasId: 19 }),
   Texture.create(deadBush, { name: 'deadBush', atlasId: 20 }),
+  Texture.create(waterStill, { name: 'waterStill', atlasId: 21 }),
+
   //
   // waterStill: {
   //   path: 'blocks/water_still.png',

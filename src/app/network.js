@@ -1,8 +1,15 @@
 // @flow
 import zlib from 'pako';
-import type { GameEvent } from './GameEvent/GameEvent';
 import HashMap from '../../common/fp/data-structures/Map';
 import EventObservable from './GameEvent/EventObservable';
+
+type NetworkEvent = {
+  +type: string;
+  +payload: {
+    +data: Object;
+    +binaryData: ?ArrayBuffer;
+  };
+}
 
 class Network {
   latency: number = 0;
@@ -15,7 +22,7 @@ class Network {
   requestBinaryData: ?ArrayBuffer;
   host: string = `ws://${window.location.hostname}`;
   port: number = 8080;
-  events: EventObservable<GameEvent> = new EventObservable();
+  events: EventObservable<NetworkEvent> = new EventObservable();
 
   constructor() {
     this.addonServerInfo = {
@@ -54,20 +61,6 @@ class Network {
         binaryData: this.requestBinaryData,
       },
     });
-    if (this.router[message.type]) {
-      if (typeof message.id === 'number') {
-        const callback = function (result) {
-          if (this.connected) {
-            this.connection.send(JSON.stringify({ id: message.id, data: result }));
-          }
-        };
-        this.router[message.type](message.data || callback, this.requestBinaryData || callback, callback);
-      } else {
-        this.router[message.type](message.data, this.requestBinaryData);
-      }
-    } else {
-      console.error('no handler regitered for message', message.type);
-    }
     this.requestBinaryData = null;
   }
 
@@ -114,21 +107,15 @@ class Network {
     if (!this.connected) {
       return console.log('socket disconnected');
     }
-    const params = {
-      type,
-      data,
-      id: this.requestId,
-    };
-    let resolve;
-    let reject;
-    const promise = new Promise((onResolve, onReject) => {
-      resolve = onResolve;
-      reject = onReject;
+    return new Promise((resolve, reject) => {
+      this.requests.set(this.requestId, { resolve, reject, time: Date.now() });
+      this.requestId += 1;
+      this.connection.send(JSON.stringify({
+        type,
+        data,
+        id: this.requestId,
+      }));
     });
-    this.requests.set(this.requestId, { resolve, reject, time: Date.now() });
-    this.requestId += 1;
-    this.connection.send(JSON.stringify(params));
-    return promise;
   }
 
   emit(type: string, data?: any): void {

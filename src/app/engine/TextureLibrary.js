@@ -157,11 +157,11 @@ class GlTextureLibrary {
 
 
     const animTextures = [];
-    for (const i in this.textures) {
-      if (this.textures[i].animation && (this.textures[i].textureImage.height > this.textures[i].textureImage.width)) {
-        animTextures.push(this.textures[i]);
+    for (const texture of this.textures.values()) {
+      if (texture.animation && (texture.textureImage.height > texture.textureImage.width)) {
+        animTextures.push(texture);
 
-        this.ctx.drawImage(this.textures[i].textureImage, 0, 0);
+        this.ctx.drawImage(texture.textureImage, 0, 0);
         const tex = makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA);
 
         // console.log(this.textureCanvas.toDataURL())

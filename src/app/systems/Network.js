@@ -12,6 +12,11 @@ export default (ecs: World, network: Network) =>
       .filter(el => el.network === true)
       .subscribeQueue();
 
+    networkEvents = network.events
+      .subscribe(({ type, payload: { data } }) => {
+        ecs.dispatch({ type, payload: data });
+      });
+
     lastUpdate = Date.now();
     update(delta: number): void {
       if (Date.now() > this.lastUpdate + 100) { // TODO: replace Date.now() by global engine tick time

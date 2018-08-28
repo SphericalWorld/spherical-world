@@ -8,6 +8,8 @@ declare module "ws" {
 
     on(message: 'message', handler: (data: string) => any): void;
     on(message: 'close', handler: () => any): void;
+
+    send(data: any, options?: Object, cb?: Function): void;
   }
 
   declare export class Server {

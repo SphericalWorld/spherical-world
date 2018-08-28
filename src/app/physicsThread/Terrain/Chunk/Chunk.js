@@ -23,10 +23,6 @@ export default class Chunk extends ChunkWithData<Chunk> {
     this.light = new Uint16Array(this.height * 16 * 16);
   }
 
-  getBlock(x, y, z) {
-    return this.blocks[getIndex(x, y, z)];
-  }
-
   setBlock(x, y, z, value) {
     this.blocks[x + z * 16 + y * 256] = value;
     this.state = CHUNK_STATUS_NEED_LOAD_VBO;

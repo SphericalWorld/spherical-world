@@ -11,15 +11,22 @@ Latest NodeJS, Latest Chrome/Firefox, Latest Docker
 
 ## Running
 ### Server
-`npm run start-server`
+```bash
+npm run start-server
+```
+
 linux users may need to run docker under sudo:
-`sudo npm run start-server`
+
+```bash
+sudo npm run start-server
+```
+
 `nvm` is not working with `sudo` out of the box, if you use `nvm` to manage your `node` versions, you may need to apply this workaround to make `nvm` compatible with `sudo`:
 ```bash
 n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local
 ```
 ### Client
-`npm run`
+`npm start`
 
 ## License
 Source code provided under [MIT license](LICENSE)

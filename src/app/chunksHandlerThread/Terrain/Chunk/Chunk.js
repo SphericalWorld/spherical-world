@@ -225,7 +225,6 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
 type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
 
 export default class Chunk extends ChunkWithData<Chunk> {
-  blocks: Uint8Array;
   flags: Uint8Array = new Uint8Array(this.height * 16 * 16);
   light: Uint16Array = new Uint16Array(this.height * 16 * 16);
   minimap: Uint8Array = new Uint8Array(256 * 3);
@@ -424,10 +423,6 @@ export default class Chunk extends ChunkWithData<Chunk> {
         }
       }
     }
-  }
-
-  getBlock(x: number, y: number, z: number) {
-    return this.blocks[getIndex(x, y, z)];
   }
 
   setBlock(x: number, y: number, z: number, value: number) {

@@ -35,14 +35,17 @@ export default class World {
   registerThread(thread: Thread) {
     this.threads.push(thread);
     this.threadsMap.set(thread.id, thread);
+    if (typeof window === 'undefined') {
+      setInterval(() => this.update(1000 / 60), 1000 / 60);
+    }
     thread.events.subscribe(({ type, payload }) => {
       if (type === 'CREATE_ENTITY') {
         this.addExistedEntity(payload.id, ...payload.components);
       } else if (type === 'UPDATE_COMPONENTS') {
         this.updateComponents(payload.components || []);
-        if (typeof window === 'undefined') {
-          this.update(payload.delta);
-        }
+        // if (typeof window === 'undefined') {
+        //   this.update(payload.delta);
+        // }
         if (payload.events && payload.events.length) {
           for (let i = 0; i < payload.events.length; i += 1) {
             this.events.emit(payload.events[i]);

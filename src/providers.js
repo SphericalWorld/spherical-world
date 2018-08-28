@@ -46,8 +46,8 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   return world;
 };
 
-const getTerrain = (Chunk, network, textureLibrary, materialLibrary, TerrainBase) => {
-  const Terrain = terrainProvider(Chunk, network, TerrainBase);
+const getTerrain = (Chunk, textureLibrary, materialLibrary, TerrainBase) => {
+  const Terrain = terrainProvider(Chunk, TerrainBase);
   const terrain = new Terrain();
   terrain.texture = textureLibrary.get('terrain').glTexture;
   terrain.overlayTexture = textureLibrary.get('terrainOverlay').glTexture;
@@ -93,7 +93,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const time = new (timeProvider())(Date.now());
   const Chunk = chunkProvider();
   const TerrainBase = terrainBaseProvider(Chunk);
-  const terrain = getTerrain(Chunk, network, textureLibrary, materialLibrary, TerrainBase);
+  const terrain = getTerrain(Chunk, textureLibrary, materialLibrary, TerrainBase);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
   const Inventory = inventoryProvider(store);

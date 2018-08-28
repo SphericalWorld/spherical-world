@@ -1,14 +1,7 @@
 // @flow
 import {
-  PLAYER_LOADED,
   PLAYER_CHANGED_ROTATION,
 } from './playerConstants';
-
-export const loadPlayer = (playerData: Object, mainPlayer: boolean) => ({
-  type: PLAYER_LOADED,
-  payload: { playerData, mainPlayer },
-  meta: { worker: true },
-});
 
 let oldTimeChangeRotation = Date.now();
 

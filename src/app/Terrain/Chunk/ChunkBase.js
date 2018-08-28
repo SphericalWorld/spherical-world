@@ -73,8 +73,4 @@ export const SLICE: 256 = 256;
 export const COLUMN_NESTED_CHUNK: 15 = 15;
 export const ROW_NESTED_CHUNK: 240 = 240;
 
-/* ::
-export const TChunkBase = new ChunkBase(0, 0);
-*/
-
 export default ChunkBase;

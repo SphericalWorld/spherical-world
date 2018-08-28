@@ -22,7 +22,7 @@ class SocketHandlers {
 
   removeBlock(ws, data) {
     this.server.terrain.removeBlockHandler(data);
-    ws.player.broadcastToLinked('TERRAIN_REMOVED_BLOCK', data);
+    ws.player.broadcastToLinked('PLAYER_DESTROYED_BLOCK', data);
   }
 
   playerChangePosition(ws, data, callback) {

@@ -5,6 +5,7 @@ import StateInputEvent, { STATE_UP, STATE_DOWN } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';
 import {
   MOUSE_MOVE,
+  MOUSE_WHEEL,
   MOUSE_LEFT_BUTTON,
   MOUSE_MIDDLE_BUTTON,
   MOUSE_RIGHT_BUTTON,
@@ -47,11 +48,16 @@ export default class MouseSource implements InputSource {
     this.onEvent(new StateInputEvent(keys[e.button], STATE_UP));
   }
 
+  onMouseWheel = (e: WheelEvent) => {
+    this.onEvent(new RangeInputEvent(MOUSE_WHEEL, e.deltaX, e.deltaY));
+  }
+
   setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget) => {
     oldTarget.removeEventListener('mousedown', this.onMouseDown);
     oldTarget.removeEventListener('mouseup', this.onMouseUp);
     newTarget.addEventListener('mousedown', this.onMouseDown, false);
     newTarget.addEventListener('mouseup', this.onMouseUp, false);
+    newTarget.addEventListener('wheel', this.onMouseWheel, false);
   }
 
   changeTracking = () => {

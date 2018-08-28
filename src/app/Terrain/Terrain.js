@@ -1,26 +1,18 @@
 // @flow
 import { mat4 } from 'gl-matrix';
 import type { Mat4 } from 'gl-matrix';
-
 import type Material from '../engine/Material';
-import { getGeoId } from '../../../common/chunk';
 import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import type ChunkProgram from '../../shaders/Chunk/Chunk';
 
-const terrainProvider = (Chunk, network, TerrainBase: typeof ITerrainBase) =>
+const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
   class Terrain extends TerrainBase {
     loadTerrainMipmap: typeof loadTerrainMipmap;
     material: Material;
     foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
-
-    constructor() {
-      super();
-      network.route('PLACE_BLOCK', this.onServerBlockPlaced.bind(this));
-      network.route('TERRAIN_REMOVED_BLOCK', this.onServerBlockRemoved.bind(this));
-    }
 
     loadChunk = (data) => {
       // console.log(data)
@@ -131,25 +123,6 @@ const terrainProvider = (Chunk, network, TerrainBase: typeof ITerrainBase) =>
       gl.disableVertexAttribArray(shader.aBlockData);
 
       gl.activeTexture(gl.TEXTURE0);
-    }
-
-    onServerBlockPlaced(data) {
-      const geoId = getGeoId(data.x, data.z);
-      const payload = {
-        type: 'PLACE_BLOCK', geoId, x: data.x, y: data.y, z: data.z, blockId: data.blockId, plane: data.plane,
-      };
-      this.app.chunksHandlerThread.postMessage(payload);
-      this.app.physicsThread.postMessage(payload);
-    }
-
-    onServerBlockRemoved(data) {
-      console.log(data)
-      const geoId = getGeoId(data.x, data.z);
-      const payload = {
-        type: 'REMOVE_BLOCK', geoId, x: data.x, y: data.y, z: data.z,
-      };
-      this.app.chunksHandlerThread.postMessage(payload);
-      this.app.physicsThread.postMessage(payload);
     }
 
     generateBiomeColorMap(texture) {

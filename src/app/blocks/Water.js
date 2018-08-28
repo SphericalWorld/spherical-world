@@ -1,6 +1,6 @@
 // @flow
 import Block from './Block';
-import { GRASS } from '../engine/textureConstants';
+import { WATER_STILL } from '../engine/textureConstants';
 
 const Water = () => Block({
   id: 127,
@@ -20,12 +20,12 @@ const Water = () => Block({
   },
 
   textures: {
-    top: GRASS,
-    bottom: GRASS,
-    north: GRASS,
-    south: GRASS,
-    west: GRASS,
-    east: GRASS,
+    top: WATER_STILL,
+    bottom: WATER_STILL,
+    north: WATER_STILL,
+    south: WATER_STILL,
+    west: WATER_STILL,
+    east: WATER_STILL,
   },
 });
 

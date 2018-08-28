@@ -1,10 +1,10 @@
 // @flow
 import type { Maybe } from '../../../common/fp/monads/maybe';
-import type TChunkBase from './Chunk/ChunkBase';
+import type ChunkBase from './Chunk/ChunkBase';
 import { getGeoId } from '../../../common/chunk';
 import HashMap from '../../../common/fp/data-structures/Map';
 
-const terrainBaseProvider = (Chunk: TChunkBase) => {
+const terrainBaseProvider = (Chunk: ChunkBase) => {
   class Terrain {
     chunks: HashMap<string, Chunk> = new HashMap();
     size: number;

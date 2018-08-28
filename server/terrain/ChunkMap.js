@@ -1,6 +1,6 @@
 // @flow
-import type { Functor } from '../../common/fp/Functor.type';
-import type { Foldable } from '../../common/fp/Foldable.type';
+import type { Functor } from '../../common/fp/algebraicDataTypes/Functor.type';
+import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable.type';
 import { createArray } from '../../common/utils/array';
 
 // ((
