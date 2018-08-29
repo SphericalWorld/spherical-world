@@ -1,7 +1,7 @@
-@import '../..//components/MainMenu/colors.scss';
+@import '../../styles/colors';
 
 .button {
-  background-color: transparentize($color-1, 0.3);
+  background-color: transparentize($primary, 0.3);
   border: 1px solid transparentize($backgraund, 0.5);
   border-radius: 3px;
   box-shadow:
@@ -9,7 +9,7 @@
     inset 0 1px transparentize($glass, 0.3), /* Top light Line */
     inset 0 3px 5px transparentize($glass, 0.3), /* Sides Light Shadow */
     inset 0 -8px 30px transparentize($shadow, 0.3); /* Dark Background */
-  color: transparentize($color-1, 0);
+  color: transparentize($primary, 0);
   font-size: 1.3em;
   font-weight: bold;
   margin: 0.7em;
@@ -24,7 +24,7 @@
 }
 
 .button:hover {
-  background-color: transparentize($color-1, 0);
+  background-color: $primary;
   color: $glass;
   letter-spacing: 1px;
   transition: all 0.3s ease;

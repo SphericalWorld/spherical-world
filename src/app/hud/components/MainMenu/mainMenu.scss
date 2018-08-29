@@ -1,4 +1,4 @@
-@import './colors';
+@import '../../styles/colors';
 
 .wrapper {
   align-items: center;
@@ -16,7 +16,7 @@
 
 .mainMenu {
   background: transparentize($backgraund, 0.1);
-  border: 4px ridge transparentize($color-1, 0.75);
+  border: 4px ridge transparentize($primary, 0.75);
   box-shadow:
     inset 0 -5px 5px transparentize($glass, 0.75),
     inset 0 0 10px transparentize($glass, 0.75),
@@ -29,4 +29,3 @@
   pointer-events: all;
   width: 20em;
 }
-// rgba(255, 255, 255, 0.25);
