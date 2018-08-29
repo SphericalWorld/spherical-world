@@ -1,6 +1,39 @@
+@import '../..//components/MainMenu/colors.scss';
+
 .button {
-  padding: 0.5em;
-  border-radius: 0.3em;
-  font-size: 1.5em;
+  background-color: transparentize($color-1, 0.3);
+  border: 1px solid transparentize($backgraund, 0.5);
+  border-radius: 3px;
+  box-shadow:
+    0 2px 8px transparentize($shadow, 0.3), /* Exterior Shadow */
+    inset 0 1px transparentize($glass, 0.3), /* Top light Line */
+    inset 0 3px 5px transparentize($glass, 0.3), /* Sides Light Shadow */
+    inset 0 -8px 30px transparentize($shadow, 0.3); /* Dark Background */
+  color: transparentize($color-1, 0);
+  font-size: 1.3em;
   font-weight: bold;
+  margin: 0.7em;
+  padding: 0.5em;
+  text-align: center;
+  text-shadow: /* Simulating Text Stroke */
+    -1px -1px 0 $shadow,
+    1px -1px 0 $shadow,
+    -1px 1px 0 $shadow,
+    1px 1px 0 $shadow;
+  text-transform: capitalize;
+}
+
+.button:hover {
+  background-color: transparentize($color-1, 0);
+  color: $glass;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.small {
+
+}
+
+.big {
+
 }

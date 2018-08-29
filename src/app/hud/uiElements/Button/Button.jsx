@@ -2,14 +2,26 @@
 import React from 'react';
 import { button } from './button.scss';
 
-type Props = {
-  text: string;
-}
+export const SIZE_SMALL: 'small' = 'small';
+export const SIZE_BIG: 'big' = 'big';
 
-const Button = ({ text }: Props) => (
-  <button className={button}>
+export type Size =
+  | typeof SIZE_SMALL
+  | typeof SIZE_BIG;
+
+type Props = {|
+  +text: string;
+  size?: Size;
+|}
+
+const Button = ({ text, size = SIZE_SMALL }: Props) => (
+  <button type="button" className={`${button} ${size}`}>
     {text}
   </button>
 );
+
+Button.defaultProps = {
+  size: SIZE_SMALL,
+};
 
 export default Button;
