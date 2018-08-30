@@ -29,7 +29,7 @@ export default class ChunkMap<T> implements Functor<T>, Foldable<T> {
   }
 
   map<U>(mapFn: (T, i: number, j: number) => U): ChunkMap<U> {
-    return new ChunkMap(this.data.map((el, i) => mapFn(el, i >>> 4, i & 0xF)));
+    return new ChunkMap(this.data.map((el, i) => mapFn(el, i & 0xF, i >>> 4)));
   }
 
   // reduce(reducer: (T, T, number, T[]) => T, initial?: T): T {
