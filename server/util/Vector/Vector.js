@@ -1,5 +1,5 @@
 // @flow
-import type { Setoid } from '../../../common/fp/algebraicDataTypes/Setoid.type';
+import type { Setoid } from '../../../common/fp/algebraicDataTypes/Setoid';
 
 const PI2 = Math.PI * 2;
 

@@ -1,6 +1,6 @@
 // @flow
-import type { Filterable } from '../../../common/fp/algebraicDataTypes/Filterable.type';
-import type { Functor } from '../../../common/fp/algebraicDataTypes/Functor.type';
+import type { Filterable } from '../../../common/fp/algebraicDataTypes/Filterable';
+import type { Functor } from '../../../common/fp/algebraicDataTypes/Functor';
 
 import EventQueue from './EventQueue';
 

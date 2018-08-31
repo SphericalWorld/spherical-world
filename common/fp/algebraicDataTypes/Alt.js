@@ -1,6 +1,6 @@
 // @flow
-import type { Functor } from './Functor.type';
+import type { Functor } from './Functor';
 
-export interface Alt<+R> extends Functor<R> {
-  alt(b: Alt<R>): Alt<R>
+export interface Alt<+A> extends Functor<A> {
+  alt(b: Alt<A>): Alt<A>
 }

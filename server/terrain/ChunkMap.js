@@ -1,6 +1,6 @@
 // @flow
-import type { Functor } from '../../common/fp/algebraicDataTypes/Functor.type';
-import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable.type';
+import type { Functor } from '../../common/fp/algebraicDataTypes/Functor';
+import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable';
 import { createArray } from '../../common/utils/array';
 
 // ((
@@ -21,14 +21,14 @@ import { createArray } from '../../common/utils/array';
 //   initialValue: U
 // ) => U)
 
-export default class ChunkMap<T> implements Functor<T>, Foldable<T> {
-  data: T[];
+export default class ChunkMap<A> implements Functor<A>, Foldable<A> {
+  data: A[];
 
-  constructor(data: T[]) {
+  constructor(data: A[]) {
     this.data = data;
   }
 
-  map<U>(mapFn: (T, i: number, j: number) => U): ChunkMap<U> {
+  map<B>(mapFn: (A, i: number, j: number) => B): ChunkMap<B> {
     return new ChunkMap(this.data.map((el, i) => mapFn(el, i & 0xF, i >>> 4)));
   }
 
@@ -36,19 +36,19 @@ export default class ChunkMap<T> implements Functor<T>, Foldable<T> {
   //   return this.data.reduce(reducer, initial);
   // }
 
-  reduce<U>(
-    reducer: (U, T, number, T[]) => U,
-    initial?: U = this.data[0],
-  ): U {
+  reduce<B>(
+    reducer: (B, A, number, A[]) => B,
+    initial?: B = this.data[0],
+  ): B {
     return this.data.reduce(reducer, initial);
   }
 
-  get(i: number, j: number): T {
+  get(i: number, j: number): A {
     return this.data[(i << 4) + j];
   }
 
-  static of(filler: T): ChunkMap<T> {
-    const data: T[] = createArray(256, filler);
+  static of(filler: A): ChunkMap<A> {
+    const data: A[] = createArray(256, filler);
     return new ChunkMap(data);
   }
 }

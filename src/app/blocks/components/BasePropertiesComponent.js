@@ -1,6 +1,6 @@
 // @flow
 import { getIndex } from '../../../../common/chunk';
-import identity from '../../../../common/fp/identity';
+import identity from '../../../../common/fp/combinators/identity';
 import { SLICE } from '../../Terrain/Chunk/ChunkBase';
 
 const putBlock = (

@@ -1,8 +1,8 @@
 // @flow
 import type { Alt } from './Alt';
 
-export interface Plus<+R> extends Alt<R> {
+export interface Plus<+A> extends Alt<A> {
   +constructor: {
-    zero(): Plus<R>,
+    zero(): Plus<A>,
   }
 }
