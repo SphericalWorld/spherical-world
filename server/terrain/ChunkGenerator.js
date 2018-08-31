@@ -1,7 +1,7 @@
 // @flow
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
-import chain from '../../common/fp/algebraicDataTypes/Chain.type';
+import chain from '../../common/fp/algebraicDataTypes/Chain';
 import { clamp } from '../../common/utils/numberUtils';
 import { IGenerator } from './chunk-generators/Generator.types';
 import IO from '../../common/fp/monads/io';
@@ -78,14 +78,17 @@ const generateHeightMap = (hills: Simplex2D, mountains: Simplex2D) => ({ x, z })
   );
 
 const clamp256 = clamp(0, 255);
+const toByte = (x: number) => Math.floor(clamp256(x));
 
 const generateRainfall = (simplex: Simplex2D) => ({ x, z }) =>
-  Math.floor(clamp256(128 + (simplex(x, z) * 128 * 2)));
+  toByte(128 + (simplex(x, z) * 128 * 2));
 
 const generateTemperature = (simplex: Simplex2D) => ({ x, z }) =>
-  Math.floor(clamp256(128 + (simplex(x, z) * 128 * 2)));
+  toByte(128 + (simplex(x, z) * 128 * 2));
 
-type ChunkLiftIO = ({ chunk: Chunk, i: number, j: number, height: number }) => IO<Chunk>;
+type ChunkLiftIO = ({
+  chunk: Chunk, i: number, j: number, height: number, x: number, z: number,
+}) => IO<Chunk>;
 
 const generateCaves = (generator: ChunkGenerator): ChunkLiftIO => ({
   chunk, i, j, height, x, z,

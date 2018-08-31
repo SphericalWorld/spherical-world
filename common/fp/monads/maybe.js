@@ -1,6 +1,6 @@
 // @flow
 import type { Alternative } from '../algebraicDataTypes/Alternative';
-import type { Monad } from '../algebraicDataTypes/Monad.type';
+import type { Monad } from '../algebraicDataTypes/Monad';
 
 export type Maybe<T> = TNothing<T> | Just<T>;
 

@@ -1,4 +1,4 @@
 // @flow
-export interface Applicative<R> {
-  +ap: <U>(fn: R => Applicative<U>) => Applicative<U>;
-}
+import type { Apply } from './Apply';
+
+export interface Applicative<+A> extends Apply<A> {}
