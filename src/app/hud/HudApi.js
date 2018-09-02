@@ -1,6 +1,5 @@
 // @flow
 // import './services/swMouse';
-// import './hudCore';
 import react from 'react';
 import reactDom from 'react-dom';
 import * as reactRedux from 'react-redux';

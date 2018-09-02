@@ -8,7 +8,7 @@ import type ChunkGenerator from './ChunkGenerator';
 import IO from '../../common/fp/monads/io';
 import { profileChunkGeneration } from '../../common/profileUtils';
 import { generate, generateObjects } from './ChunkGenerator';
-import { getGeoId } from '../../common/chunk';
+import { getGeoId, toPositionInChunk } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
@@ -22,6 +22,21 @@ const {
 } = fs;
 
 const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);
+
+const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
+  let chunkTo = chunk;
+  if (x < chunk.x) {
+    chunkTo = chunkTo.northChunk;
+  } else if (x > chunk.x + 15) {
+    chunkTo = chunkTo.southChunk;
+  }
+  if (z < chunk.z) {
+    chunkTo = chunkTo.westChunk;
+  } else if (z > chunk.z + 15) {
+    chunkTo = chunkTo.eastChunk;
+  }
+  return chunkTo;
+};
 
 class Chunk {
   terrain: Terrain;
@@ -171,68 +186,19 @@ class Chunk {
   }
 
   setUnsafe(x: number, y: number, z: number, block: number): void {
-    let chunk = this;
-    if (x < 0) {
-      chunk = chunk.northChunk;
-      x += 16;
-    } else if (x > 15) {
-      chunk = chunk.southChunk;
-      x -= 16;
-    }
-    if (z < 0) {
-      chunk = chunk.westChunk;
-      z += 16;
-    } else if (z > 15) {
-      chunk = chunk.eastChunk;
-      z -= 16;
-    }
-    chunk.data[x + (z << 4) + (y << 8)] = block;
+    getChunkNear(this, x, y, z).data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)] = block;
   }
 
   setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
-    let chunk = this;
-    if (x < 0) {
-      chunk = chunk.northChunk;
-      x += 16;
-    } else if (x > 15) {
-      chunk = chunk.southChunk;
-      x -= 16;
-    }
-    if (z < 0) {
-      chunk = chunk.westChunk;
-      z += 16;
-    } else if (z > 15) {
-      chunk = chunk.eastChunk;
-      z -= 16;
-    }
+    const chunk = getChunkNear(this, x, y, z);
     return IO.from(() => {
-      chunk.data[x + (z << 4) + (y << 8)] = block;
+      chunk.data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)] = block;
       return chunk;
     });
   }
 
-  setAtIndex(index: number, block: number): void {
-    const chunk = this;
-    chunk.data[index] = block;
-  }
-
   at(x: number, y: number, z: number): number {
-    let chunk = this;
-    if (x < 0) {
-      chunk = chunk.northChunk;
-      x += 16;
-    } else if (x > 15) {
-      chunk = chunk.southChunk;
-      x -= 16;
-    }
-    if (z < 0) {
-      chunk = chunk.westChunk;
-      z += 16;
-    } else if (z > 15) {
-      chunk = chunk.eastChunk;
-      z -= 16;
-    }
-    return chunk.data[x + (z << 4) + (y << 8)];
+    return getChunkNear(this, x, y, z).data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)];
   }
 
   async generateObjects(): Promise<Chunk> {

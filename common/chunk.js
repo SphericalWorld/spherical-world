@@ -14,10 +14,7 @@ export const getIndex = (x: number, y: number, z: number) => x + (z << 4) + (y <
 
 export const toChunkPosition = (dimension: number): number => Math.floor(dimension / 16) * 16;
 
-export const toPositionInChunk = (dimension: number) => {
-  const blockX = Math.floor(dimension % 16);
-  return blockX >= 0 ? blockX : blockX + 16;
-};
+export const toPositionInChunk = (dimension: number) => dimension & 0xF;
 
 export const filterFarChunks = <T: { x: number, z: number }>(
   oldPosition: Vec3, newPosition: Vec3, chunks: HashMap<string, T>,

@@ -67,7 +67,7 @@ export default class Player {
   }
 
   addChunks(chunks) {
-    this.chunksId.push.apply(this.chunksId, chunks);
+    this.chunksId.push(...chunks);
   }
 
   removeChunks(chunks) {

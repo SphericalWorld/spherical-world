@@ -56,7 +56,7 @@ export default class Terrain {
 
   async sendChunk(player, x: number, z: number) {
     let chunk;
-    if (false) {
+    if (true) {
       chunk = await this.ensureChunk(x, z);
       await chunk.generateWithSurrounding(2);
     } else {

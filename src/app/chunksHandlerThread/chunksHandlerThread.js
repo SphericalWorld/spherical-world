@@ -60,7 +60,7 @@ events
     .get(geoId)
     .map((chunk) => {
       chunk.putBlock(x, y, z, blockId, face);
-      chunk.light[x + z * 16 + y * 256] = chunk.light[x + z * 16 + y * 256] & 0x000F | 0xFD20;
+      chunk.light[x + z * 16 + y * 256] = (chunk.light[x + z * 16 + y * 256] & 0x000F) | 0xFD20;
 
       chunk.calcRecursionRed(x, y, z);
       chunk.calcRecursionGreen(x, y, z);

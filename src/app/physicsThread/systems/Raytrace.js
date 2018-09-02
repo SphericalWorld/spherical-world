@@ -6,7 +6,7 @@ import type { Maybe } from '../../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
 import type World from '../../ecs/World';
 import type { Terrain } from '../Terrain/Terrain';
-import { toChunkPosition } from '../../../../common/chunk';
+import { toChunkPosition, toPositionInChunk } from '../../../../common/chunk';
 import { Nothing } from '../../../../common/fp/monads/maybe';
 import { System } from '../../systems/System';
 import Transform from '../../components/Transform';
@@ -42,13 +42,8 @@ const getBlockDetails = (raytrace, x, y, z): Maybe<BlockDetails> => raytrace.ter
   .getChunk(toChunkPosition(x), toChunkPosition(z))
   .map((chunk) => {
     const position = vec3.fromValues(x, y, z);
-    x = x >= 0
-      ? x % 16
-      : 15 + ((x + 1) % 16);
-
-    z = z >= 0
-      ? z % 16
-      : 15 + ((z + 1) % 16);
+    x = toPositionInChunk(x);
+    z = toPositionInChunk(z);
 
     return {
       block: chunk.getBlock(x, y, z),

@@ -13,10 +13,10 @@ type Generator = {|
 |};
 
 const findPosition = (chunk: Chunk) => {
-  const xStart = 0;
-  const xEnd = 9;
-  const zStart = 0;
-  const zEnd = 9;
+  const xStart = chunk.x;
+  const xEnd = chunk.x + 9;
+  const zStart = chunk.z;
+  const zEnd = chunk.z + 9;
   let y = 255;
   while (y > 0 && ([0, 127].includes(chunk.at(xStart, y, zStart))
     || [0, 127].includes(chunk.at(xStart, y, zEnd))
@@ -38,7 +38,7 @@ const generateRoom = (generator, chunk: Chunk) => {
   for (let i = y; i > y - generator.height; i -= 1) {
     for (let j = xStart; j < xEnd; j += 1) {
       for (let k = zStart; k < zEnd; k += 1) {
-        if (j === 0 || j === 8 || k === 0 || k === 8) {
+        if (j === xStart || j === xEnd - 1 || k === zStart || k === zEnd - 1) {
           chunk.setUnsafe(j, i, k, 16);
         } else {
           chunk.setUnsafe(j, i, k, 0);
