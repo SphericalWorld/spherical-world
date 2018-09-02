@@ -1,20 +1,36 @@
 // @flow
-import type TextureLibrary from '../engine/TextureLibrary';
+import type TextureLibrary from '../engine/Texture/TextureLibrary';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 import blockPickerProvider from './BlockPicker';
 import blockRemoverProvider from './BlockRemover';
 import skyboxProvider from './Skybox';
+
+import terrainDiffuseProvider from './TerrainDiffuse';
+import terrainOverlayProvider from './TerrainOverlay';
+import terrainAnimatedProvider from './TerrainAnimated';
 import terrainProvider from './Terrain';
 
 
-const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) => ({
-  BlockPicker: blockPickerProvider(textureLibrary, shaderLibrary),
-  BlockRemover: blockRemoverProvider(textureLibrary, shaderLibrary),
-  Skybox: skyboxProvider(textureLibrary, shaderLibrary),
-  Terrain: terrainProvider(textureLibrary, shaderLibrary),
-});
+const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) => {
+  const terrainDiffuse = terrainDiffuseProvider(textureLibrary, shaderLibrary);
+  const terrainOverlay = terrainOverlayProvider(textureLibrary, shaderLibrary);
+  const terrainAnimated = terrainAnimatedProvider(textureLibrary, shaderLibrary);
+  const terrain = terrainProvider(textureLibrary, shaderLibrary, [
+    terrainDiffuse,
+    terrainOverlay,
+    terrainAnimated,
+  ]);
 
-// export const BlockRemover = blockRemoverProvider(textureLibrary, shaderLibrary);
+  return ([
+    blockPickerProvider(textureLibrary, shaderLibrary),
+    blockRemoverProvider(textureLibrary, shaderLibrary),
+    skyboxProvider(textureLibrary, shaderLibrary),
+    terrainDiffuse,
+    terrainOverlay,
+    terrainAnimated,
+    terrain,
+  ]);
+};
 
 export default materialsProvider;

@@ -1,6 +1,6 @@
 // @flow
 import { gl } from '../glEngine';
-import Material from '../Material';
+import type { Material } from '../Material/Material';
 
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;

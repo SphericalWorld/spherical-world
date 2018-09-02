@@ -1,6 +1,6 @@
 // @flow
 import type { Entity } from '../ecs/Entity';
-import type { MaterialFactory } from '../engine/Material';
+import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import BlockRemover from '../components/BlockRemover';
 import GlObject from '../engine/glObject';
 import { World } from '../ecs';
@@ -9,10 +9,10 @@ import { createCube } from '../engine/Model';
 
 const blockRemoverProvider = (
   ecs: World,
-  BlockRemoverMaterial: MaterialFactory,
+  materialLibrary: MaterialLibrary,
 ) => (id: Entity): Entity => {
   const model = createCube(1.001);
-  const material = BlockRemoverMaterial();
+  const material = materialLibrary.get('blockRemover');
   const object = new GlObject({ model, material });
   return ecs.createEntity(
     id,

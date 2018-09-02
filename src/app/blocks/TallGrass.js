@@ -18,6 +18,7 @@ const TallGrass = () => Block(
       west: 1,
       east: 1,
     },
+    baseRemoveTime: 0.2,
   },
   ModelComponent(model),
 );

@@ -2,11 +2,6 @@
 // import Player from './player/Player';
 
 const socketHandlersProvider = Player => class SocketHandlers {
-  constructor(app, network) {
-    this.app = app;
-    this.network = network;
-  }
-
   loadOtherPlayer(data) {
     new Player(data, this.app);
   }

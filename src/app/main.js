@@ -36,7 +36,7 @@ const engineProvider = (
 
     async init() {
       await network.connect();
-      this.resourceLoader = new ResourceLoader(network);
+      this.resourceLoader = new ResourceLoader();
       initWebGL();
 
       Player.hudBillboardModel = createBillboard(2.0);

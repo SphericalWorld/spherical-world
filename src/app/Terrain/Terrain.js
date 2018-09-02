@@ -1,7 +1,7 @@
 // @flow
 import { mat4 } from 'gl-matrix';
 import type { Mat4 } from 'gl-matrix';
-import type Material from '../engine/Material';
+import type { Material } from '../engine/Material/Material';
 import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
@@ -15,7 +15,6 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
     foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
 
     loadChunk = (data) => {
-      // console.log(data)
       let chunk = this.getChunk(data.x, data.z);
       if (chunk.isJust === false) {
         chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
@@ -33,24 +32,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
       const chunksToRender = [...this.chunks.values()]
         .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m)); // TODO cache loaded chunks array
 
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, this.texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
-      gl.activeTexture(gl.TEXTURE2);
-      gl.bindTexture(gl.TEXTURE_2D, this.overlayTexture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-
-      gl.activeTexture(gl.TEXTURE3);
-      // gl.bindTexture(gl.TEXTURE_2D, this.overlayTexture); // TODO remove
-
-      gl.bindTexture(gl.TEXTURE_2D, this.animatedTexture);
-
-      // gl.bindTexture(gl.TEXTURE_2D, this.texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      this.material.use();
 
       gl.uniform4f(shader.uFogColor, ...skyColor, 1);
       // TODO: underwater fog goes here
@@ -69,7 +51,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
       gl.disable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-      gl.activeTexture(gl.TEXTURE1);
+      gl.activeTexture(gl.TEXTURE3);
       for (const chunk of chunksToRender) {
         gl.bindTexture(gl.TEXTURE_2D, chunk.foliageTexture);
         gl.bindVertexArray(chunk.buffers.vao);

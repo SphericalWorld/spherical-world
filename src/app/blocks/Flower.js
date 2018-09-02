@@ -4,6 +4,7 @@ const Flower = () => ({
   sightTransparent: true,
   selfTransparent: false,
   needPhysics: false,
+  baseRemoveTime: 0.2,
 });
 
 export default Flower;

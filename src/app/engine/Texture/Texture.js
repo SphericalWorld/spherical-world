@@ -1,5 +1,5 @@
 // @flow
-import { gl } from './glEngine';
+import { gl } from '../glEngine';
 
 export const makeTexture = (
   textureImage: HTMLImageElement | HTMLCanvasElement,
@@ -33,7 +33,7 @@ export default class Texture {
   glTexture: WebGLTexture;
   atlasId: ?number = null;
   name: string;
-  target: number;
+  target: number = gl.TEXTURE_2D;
   meta: ?Object;
   animated: boolean = false;
   frames: number = 0;
@@ -101,3 +101,42 @@ export default class Texture {
     return texture;
   }
 }
+
+export const TextureImageUnits = [
+  gl.TEXTURE0,
+  gl.TEXTURE1,
+  gl.TEXTURE2,
+  gl.TEXTURE3,
+  gl.TEXTURE4,
+  gl.TEXTURE5,
+  gl.TEXTURE6,
+  gl.TEXTURE7,
+  gl.TEXTURE8,
+  gl.TEXTURE9,
+  gl.TEXTURE10,
+  gl.TEXTURE11,
+  gl.TEXTURE12,
+  gl.TEXTURE13,
+  gl.TEXTURE14,
+  gl.TEXTURE15,
+  gl.TEXTURE16,
+  gl.TEXTURE17,
+  gl.TEXTURE18,
+  gl.TEXTURE19,
+  gl.TEXTURE20,
+  gl.TEXTURE21,
+  gl.TEXTURE22,
+  gl.TEXTURE23,
+  gl.TEXTURE24,
+  gl.TEXTURE25,
+  gl.TEXTURE26,
+  gl.TEXTURE27,
+  gl.TEXTURE28,
+  gl.TEXTURE29,
+  gl.TEXTURE30,
+  gl.TEXTURE31,
+];
+
+type getElements = <T>(val: T[]) => T;
+
+export type TextureImageUnit = $Call<getElements, typeof TextureImageUnits>;

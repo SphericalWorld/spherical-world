@@ -7,6 +7,7 @@ import ModelComponent from './components/ModelComponent';
 const FlowerRed = () => Block(
   {
     id: 131,
+    baseRemoveTime: 0.2,
   },
   ModelComponent(model),
   Flower(),

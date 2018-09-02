@@ -1,6 +1,6 @@
 // @flow
 import { getIndex } from '../../../../../common/chunk';
-import { SIGHT_TRANSPARENT } from '../../../blocks/blockInfo';
+import { SIGHT_TRANSPARENT, blocksFlags } from '../../../blocks/blockInfo';
 import {
   ROW,
   ROW_NESTED_CHUNK,
@@ -27,7 +27,7 @@ const calcRecursion = (
     z: number,
     index,
   ): number => (chunk.light[index] & reversedMask) | ((Math.max(
-    dec,
+    (mode ? (chunk.light[index] & mask) : 0) + dec,
     ((z < 15) ? chunk.light[index + ROW] : chunk.eastChunk.light[index - ROW_NESTED_CHUNK]) & mask,
     ((z > 0) ? chunk.light[index - ROW] : chunk.westChunk.light[index + ROW_NESTED_CHUNK]) & mask,
     ((x < 15) ? chunk.light[index + COLUMN] : chunk.southChunk.light[index - COLUMN_NESTED_CHUNK]) & mask,
@@ -54,8 +54,7 @@ const calcRecursion = (
   const updateIfLightRemove = (
     index, lightTmp, chunk: Chunk, ...params
   ) => ((lightTmp > (chunk.light[index] & mask))
-    ? calcRecursionRemoveInternal(chunk, ...params)
-    : null);
+    && calcRecursionRemoveInternal(chunk, ...params));
 
   const updateIfLight = mode
     ? updateIfLightAdd
@@ -80,13 +79,17 @@ const calcRecursion = (
     ((y > 0) && updateIfLight(index - SLICE, lightTmp, chunk, x, y - 1, z, limit)));
 
   const calcRecursionInternal = (
-    chunk: Chunk, x: number, y: number, z: number,
+    chunk: Chunk, x: number, y: number, z: number, limit?: number,
   ) => {
+    if (!limit) {
+      return;
+    }
     const index = getIndex(x, y, z);
-    if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+    if (chunk.blocks[index] && !blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
       chunk.light[index] &= reversedMask;
     } else {
-      calcNear(chunk, x, y, z, index, (chunk.light[index] & mask) - dec);
+      chunk.light[index] = calcCurrent(chunk, x, y, z, index);
+      calcNear(chunk, x, y, z, index, (chunk.light[index] & mask) - dec, limit - 1);
     }
   };
 
@@ -102,7 +105,7 @@ const calcRecursion = (
     }
     const index = getIndex(x, y, z);
     const lightTmp = chunk.light[index];
-    if (chunk.blocks[index] && !chunk.blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+    if (chunk.blocks[index] && !blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
       chunk.light[index] &= reversedMask;
     } else {
       chunk.light[index] = calcCurrent(chunk, x, y, z, index);

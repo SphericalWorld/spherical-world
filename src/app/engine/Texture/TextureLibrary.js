@@ -1,6 +1,8 @@
 // @flow
-import { gl } from './glEngine';
+import { gl } from '../glEngine';
 import Texture, { makeTexture } from './Texture';
+
+const TILE_SIZE = 64;
 
 const drawImage = (
   context: CanvasRenderingContext2D,
@@ -67,25 +69,34 @@ class GlTextureLibrary {
   }
 
   makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {
-    const tileSize = 64;
     this.textureCanvas.width = 1024;
     this.textureCanvas.height = 1024;
     this.ctx.fillStyle = '#FFF0';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (const texture of this.textures.values()) {
-      if (predicate(texture)) {
-        drawImage(this.ctx, texture.image, ((texture.atlasId % 16) * tileSize), tileSize * (Math.floor(texture.atlasId / 16)), 64, 64, 0, false, true);
+      if (typeof texture.atlasId === 'number' && predicate(texture)) {
+        drawImage(
+          this.ctx,
+          texture.image,
+          ((texture.atlasId % 16) * TILE_SIZE),
+          TILE_SIZE * (Math.floor(texture.atlasId / 16)),
+          TILE_SIZE,
+          TILE_SIZE,
+          0,
+          false,
+          true,
+        );
       }
     }
     return Texture.createFromCanvas({ canvas: this.textureCanvas, name });
   }
 
   makeTextureAtlas(): Texture {
-    return this.makeTextureAtlasBase('terrain', texture => typeof texture.atlasId === 'number');
+    return this.makeTextureAtlasBase('terrain', () => true);
   }
 
   makeTextureAtlasOverlay(): Texture {
-    return this.makeTextureAtlasBase('terrainOverlay', texture => (typeof texture.atlasId === 'number') && texture.meta && texture.meta.overlay);
+    return this.makeTextureAtlasBase('terrainOverlay', texture => texture.meta && texture.meta.overlay);
   }
 
   makeChunkMinimap(data: Uint8Array): ImageData {
@@ -125,9 +136,15 @@ class GlTextureLibrary {
     this.textureCanvas.height = 16;
     this.ctx.fillStyle = 'rgba(255, 255, 255, 0)';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    for (const i in this.textures) {
-      if (typeof (this.textures[i].id) !== 'undefined') {
-        this.ctx.drawImage(this.textures[i].textureImage, ((this.textures[i].id % 16)), (Math.floor(this.textures[i].id / 16)), 1, 1);
+    for (const texture of this.textures.values()) {
+      if (typeof texture.id !== 'undefined') {
+        this.ctx.drawImage(
+          texture.textureImage,
+          ((texture.id % 16)),
+          (Math.floor(texture.id / 16)),
+          1,
+          1
+        );
       }
     }
     const pixelData = this.ctx.getImageData(0, 0, 16, 16);

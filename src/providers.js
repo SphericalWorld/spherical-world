@@ -3,18 +3,18 @@ import type { ShaderLibrary } from './app/engine/ShaderLibrary';
 import type Network from './app/network';
 import Main from './app/main';
 import playerProvider from './app/player/Player';
-import GlTextureLibrary from './app/engine/TextureLibrary';
+import GlTextureLibrary from './app/engine/Texture/TextureLibrary';
 import Thread from './app/Thread/Thread';
 import texturesProvider from './textures';
 import shaderLibraryProvider from './app/engine/ShaderLibrary';
-import materialLibraryProvider from './app/engine/MaterialLibrary';
+import materialLibraryProvider from './app/engine/Material/MaterialLibrary';
 import materialsProvider from './app/materials';
 import shadersProvider from './shaders';
 import inventoryProvider from './app/player/Inventory';
 import blockRemoverProvider from './app/player/BlockRemover';
 import blockPickerProvider from './app/player/BlockPicker';
 import skyboxProvider from './app/skybox';
-import chunkProvider from './app/Terrain/Chunk';
+import Chunk from './app/Terrain/Chunk';
 import resourceLoader from './app/ResourceLoader';
 import addon from './app/addon';
 import terrainBaseProvider from './app/Terrain/TerrainBase';
@@ -46,17 +46,12 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   return world;
 };
 
-const getTerrain = (Chunk, textureLibrary, materialLibrary, TerrainBase) => {
+const getTerrain = (textureLibrary, materialLibrary, TerrainBase) => {
   const Terrain = terrainProvider(Chunk, TerrainBase);
   const terrain = new Terrain();
-  terrain.texture = textureLibrary.get('terrain').glTexture;
-  terrain.overlayTexture = textureLibrary.get('terrainOverlay').glTexture;
-  terrain.animatedTexture = textureLibrary.get('animatedTexture').glTexture;
-
   terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
   terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
-  const material = materialLibrary.get('terrain');
-  terrain.material = material;
+  terrain.material = materialLibrary.get('terrain');
   return terrain;
 };
 
@@ -78,22 +73,21 @@ const getTextures = async () => {
 
 const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: ShaderLibrary) => {
   const materials = materialsProvider(textureLibrary, shaderLibrary);
-  return [new (materialLibraryProvider())()
-    .add(...Object.values(materials)), materials];
+  return new (materialLibraryProvider())()
+    .add(...materials);
 };
 
 const mainProvider = async (store, network: Network, physicsThread: Worker, chunksHandlerThread: Worker) => {
   const textureLibrary = await getTextures();
   const shaderLibrary = getShaders();
-  const [materialLibrary, materials] = getMaterials(textureLibrary, shaderLibrary);
+  const materialLibrary = getMaterials(textureLibrary, shaderLibrary);
   const world = createECS(physicsThread, chunksHandlerThread);
-  const BlockRemover = blockRemoverProvider(world, materials.BlockRemover);
+  const BlockRemover = blockRemoverProvider(world, materialLibrary);
   const BlockPicker = blockPickerProvider(world, materialLibrary, BlockRemover);
   const Skybox = skyboxProvider(world, materialLibrary);
   const time = new (timeProvider())(Date.now());
-  const Chunk = chunkProvider();
   const TerrainBase = terrainBaseProvider(Chunk);
-  const terrain = getTerrain(Chunk, textureLibrary, materialLibrary, TerrainBase);
+  const terrain = getTerrain(textureLibrary, materialLibrary, TerrainBase);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
   const Inventory = inventoryProvider(store);

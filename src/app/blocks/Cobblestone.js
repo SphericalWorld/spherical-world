@@ -1,6 +1,6 @@
 // @flow
 import Block from './Block';
-import { COBBLESTONE } from '../engine/textureConstants';
+import { COBBLESTONE } from '../engine/Texture/textureConstants';
 
 const Cobblestone = () => Block({
   id: 16,

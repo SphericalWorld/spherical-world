@@ -1,6 +1,6 @@
 // @flow
 import Block from './Block';
-import { OAK, OAK_TOP } from '../engine/textureConstants';
+import { OAK, OAK_TOP } from '../engine/Texture/textureConstants';
 
 const Oak = () => Block({
   id: 4,

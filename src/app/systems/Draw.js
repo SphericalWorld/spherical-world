@@ -3,7 +3,6 @@ import type { Mat4 } from 'gl-matrix';
 import { mat4 } from 'gl-matrix';
 import type World from '../ecs/World';
 import type { System } from './System';
-
 import { gl } from '../engine/glEngine';
 import { GlShaderProgram } from '../engine/glShader';
 import {
@@ -65,8 +64,6 @@ export default (world: World, terrain: Terrain, time: Time) =>
       for (const { transform, visual, skybox } of this.skybox) {
         this.useShader(visual.glObject.material.shader);
         visual.glObject.material.use();
-
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         gl.uniform1f(this.currentShader.uTime, time.dayPercent);
         gl.uniform4f(this.currentShader.uLighting, ...skyColor);

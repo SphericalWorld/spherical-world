@@ -91,7 +91,7 @@ const Torch = () => {
 
       putBlock(chunk, x: number, y: number, z: number, value: number, plane: number): boolean {
         const index = getIndex(x, y, z);
-        chunk.blocksFlags[index] = this.getFlags(plane);
+        chunk.flags[index] = this.getFlags(plane);
         chunk.blocks[index] = value;
         return true;
       },

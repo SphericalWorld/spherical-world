@@ -1,6 +1,6 @@
 // @flow
 import Block from './Block';
-import { GRASS, GRASS_SIDE, DIRT } from '../engine/textureConstants';
+import { GRASS, GRASS_SIDE, DIRT } from '../engine/Texture/textureConstants';
 
 const Grass = () => Block({
   id: 1,

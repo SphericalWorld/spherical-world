@@ -6,7 +6,7 @@ import {
   Transform, Visual, Raytracer, Player,
 } from '../components';
 import { createCube } from '../engine/Model';
-import type { MaterialLibrary } from '../engine/MaterialLibrary';
+import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 
 const blockPickerProvider = (
   ecs: World,

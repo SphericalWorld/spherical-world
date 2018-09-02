@@ -56,8 +56,8 @@ export default class ChunkProgram extends GlShaderProgram {
     this.use();
 
     gl.uniform1i(this.uBlocksTexture, 0);
-    gl.uniform1i(this.uGrassColorMapTexture, 1);
-    gl.uniform1i(this.uBlocksOverlayTexture, 2);
-    gl.uniform1i(this.uAnimationTexture, 3);
+    gl.uniform1i(this.uBlocksOverlayTexture, 1);
+    gl.uniform1i(this.uAnimationTexture, 2);
+    gl.uniform1i(this.uGrassColorMapTexture, 3);
   }
 }

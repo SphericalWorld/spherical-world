@@ -1,12 +1,12 @@
 // @flow
-import Material from '../engine/Material';
-import type TextureLibrary from '../engine/TextureLibrary';
+import type { Material } from '../engine/Material/Material';
+import type { ShaderLibrary } from '../engine/ShaderLibrary';
+import type TextureLibrary from '../engine/Texture/TextureLibrary';
+import MultiMaterial from '../engine/Material/MultiMaterial';
 
-const skyboxProvider = (textureLibrary: TextureLibrary, shaderLibrary) =>
-  new Material({
+export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary, layers: Material[]) =>
+  new MultiMaterial({
     name: 'terrain',
     shader: shaderLibrary.get('chunk'),
-    diffuse: textureLibrary.get('blockDamaged'),
+    layers,
   });
-
-export default skyboxProvider;

@@ -1,5 +1,5 @@
 // @flow
-import Material from './Material';
+import type { Material } from './Material';
 
 const materialLibraryProvider = () => {
   class MaterialLibrary {

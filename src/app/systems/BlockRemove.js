@@ -43,7 +43,7 @@ const getPlayerAttackEvents = (world: World) => world.events
 export default (world: World) =>
   class BlockRemove implements System {
     removers = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
-    picker = world.createSelector([Transform, Player, Raytracer]);
+    picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
     playerAttackEvents = getPlayerAttackEvents(world);
     playerPutBlockEvents = getPutBlockEvents(world, this.picker);
@@ -52,7 +52,6 @@ export default (world: World) =>
       for (const {
         visual, blockRemover, raytracer: { block }, id,
       } of this.removers) {
-        // console.log(this.picker)
         if (id === id) { // TODO: main player ID
           const { removing } = blockRemover;
           this.playerAttackEvents.events.forEach((possibleRemoving) => {
@@ -77,6 +76,9 @@ export default (world: World) =>
         blockRemover.position = block.position;
         const maxFrames = visual.glObject.material.diffuse.frames;
         visual.glObject.material.frame = Math.floor(maxFrames * blockRemover.removedPart);
+      }
+      for (const { visual, raytracer } of this.picker) {
+        visual.enabled = !!raytracer.block.block;
       }
       this.playerAttackEvents.clear();
     }

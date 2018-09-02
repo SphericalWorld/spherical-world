@@ -159,7 +159,7 @@ import {
   Gravity,
   UserControlled,
 } from '../components';
-import type { MaterialLibrary } from '../engine/MaterialLibrary';
+import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
