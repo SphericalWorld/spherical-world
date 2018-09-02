@@ -19,5 +19,6 @@ module.exports = {
     "implicit-arrow-linebreak": "off",
     "lines-between-class-members": ["error", "always", { exceptAfterSingleLine: true }],
     "array-callback-return": "off", // unfortunately this rule is broken in eslint with lots false-positives
+    "jsx-a11y/label-has-associated-control": "off",
   },
 };
