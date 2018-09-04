@@ -38,7 +38,11 @@ class GlTextureLibrary {
   ctx: CanvasRenderingContext2D;
 
   constructor() {
-    this.textureCanvas = (document.getElementById('texture-canvas'): HTMLCanvasElement);
+    const textureCanvas = document.getElementById('texture-canvas');
+    if (!(textureCanvas instanceof HTMLCanvasElement)) {
+      throw new Error('Fatal error: texture canvas not found');
+    }
+    this.textureCanvas = textureCanvas;
     this.ctx = this.textureCanvas.getContext('2d');
 
     this.animTexCount = 0;
@@ -139,11 +143,11 @@ class GlTextureLibrary {
     for (const texture of this.textures.values()) {
       if (typeof texture.id !== 'undefined') {
         this.ctx.drawImage(
-          texture.textureImage,
+          texture.image,
           ((texture.id % 16)),
           (Math.floor(texture.id / 16)),
           1,
-          1
+          1,
         );
       }
     }
@@ -175,10 +179,10 @@ class GlTextureLibrary {
 
     const animTextures = [];
     for (const texture of this.textures.values()) {
-      if (texture.animation && (texture.textureImage.height > texture.textureImage.width)) {
+      if (texture.animation && (texture.image.height > texture.image.width)) {
         animTextures.push(texture);
 
-        this.ctx.drawImage(texture.textureImage, 0, 0);
+        this.ctx.drawImage(texture.image, 0, 0);
         const tex = makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA);
 
         // console.log(this.textureCanvas.toDataURL())

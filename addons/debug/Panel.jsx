@@ -28,24 +28,59 @@ const mapState = (state) => {
   };
 };
 
+type Props = {|
+  +x: number;
+  +y: number;
+  +z: number;
+  +chunkX: number;
+  +chunkZ: number;
+  +mouseX: number;
+  +mouseY: number;
+  +mouseZ: number;
+|}
+
 const Panel: PanelType = ({
   x, y, z, chunkX, chunkZ, mouseX, mouseY, mouseZ,
-}) => (
+}: Props) => (
   <div id="hud-debug" ng-show="hudDebugVisible">
     <div>==Debug info==</div>
     <div>Player:</div>
-    <div>x: {x}</div>
-    <div>y: {y}</div>
-    <div>z: {z}</div>
+    <div>
+      x:
+      {x}
+    </div>
+    <div>
+      y:
+      {y}
+    </div>
+    <div>
+      z:
+      {z}
+    </div>
     <div>|</div>
     <div>Chunk:</div>
-    <div>x in chunk: {chunkX}</div>
-    <div>z in chunk: {chunkZ}</div>
+    <div>
+      x in chunk:
+      {chunkX}
+    </div>
+    <div>
+      z in chunk:
+      {chunkZ}
+    </div>
     <div>|</div>
     <div>Cursor world position:</div>
-    <div>x: {mouseX}</div>
-    <div>y: {mouseY}</div>
-    <div>z: {mouseZ}</div>
+    <div>
+      x:
+      {mouseX}
+    </div>
+    <div>
+      y:
+      {mouseY}
+    </div>
+    <div>
+      z:
+      {mouseZ}
+    </div>
   </div>
 );
 

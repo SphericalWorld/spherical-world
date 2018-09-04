@@ -23,17 +23,14 @@ class Network {
   host: string = `ws://${window.location.hostname}`;
   port: number = 8080;
   events: EventObservable<NetworkEvent> = new EventObservable();
+  addonServerInfo = {
+    host: window.location.origin,
+  };
 
-  constructor() {
-    this.addonServerInfo = {
-      host: window.location.origin,
-    };
-
-    /** binary data from last package. data saved in this field and wait for next package
-     * with json data, which should describe purpose of this data, after that we'll be able
-     * to call proper handler */
-    this.requestBinaryData = null;
-  }
+  /** binary data from last package. data saved in this field and wait for next package
+   * with json data, which should describe purpose of this data, after that we'll be able
+   * to call proper handler */
+  requestBinaryData = null;
 
   processBinaryData(data: ArrayBuffer) {
     this.requestBinaryData = zlib.inflate(new Uint8Array(data));

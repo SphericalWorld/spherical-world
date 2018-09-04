@@ -10,15 +10,6 @@ const playerProvider = () => {
       this.blockInDown = chunk.getBlock(blockX, Math.floor(this.y + 1), blockZ);
       this.blockInUp = chunk.getBlock(blockX, Math.floor(this.y + 2), blockZ);
     }
-
-    putBlock(geoId, x, y, z, plane) {
-      if (this.selectedItem.count > 0) {
-        this.selectedItem.count -= 1;
-        if (this.selectedItem.count === 0) {
-          delete this.selectedItem;
-        }
-      }
-    }
   }
   return Player;
 };

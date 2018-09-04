@@ -54,21 +54,19 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   generateFoliageTexture() {
-    const dataArray = [];
+    const dataArray = new Uint8Array(256 * 3);
     for (let i = 0; i < 256; i += 1) {
       const rainfall = 255 - this.rainfallData[i];
       const temperature = 255 - this.temperatureData[i];
       const index = ((256 * rainfall) + Math.floor((temperature * rainfall) / 256)) * 4;
-      dataArray.push(
-        this.terrain.foliageColorMap[index],
-        this.terrain.foliageColorMap[index + 1],
-        this.terrain.foliageColorMap[index + 2],
-      );
+      dataArray[i * 3] = this.terrain.foliageColorMap[index];
+      dataArray[i * 3 + 1] = this.terrain.foliageColorMap[index + 1];
+      dataArray[i * 3 + 2] = this.terrain.foliageColorMap[index + 2];
     }
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 16, 16, 0, gl.RGB, gl.UNSIGNED_BYTE, new Uint8Array(dataArray));
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 16, 16, 0, gl.RGB, gl.UNSIGNED_BYTE, dataArray);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     this.foliageTexture = texture;

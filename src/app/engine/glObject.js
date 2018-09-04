@@ -12,7 +12,6 @@ class GlObject {
   model: Model;
 
   constructor({ model, material }: Options = {}) {
-    this.horizontalRotate = 0;
     this.model = model;
     if (!material) {
       throw new Error('Material should be provided for GlObject');

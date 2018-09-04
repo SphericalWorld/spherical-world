@@ -1,13 +1,10 @@
 // @flow
 import { combineReducers } from 'redux';
-
 import { reduceReducers } from '../../common/utils/reducerUtils';
 
-import playerReducer from '../player/playerReducer';
 import hudReducer from '../hud/hudReducer';
 
 const combinedReducer = combineReducers({
-  players: playerReducer,
   hudData: hudReducer,
 });
 

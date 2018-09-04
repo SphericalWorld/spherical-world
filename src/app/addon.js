@@ -1,11 +1,12 @@
 // @flow
 const addonProvider = store => class Addon {
-  constructor(resourceLoader, addonName, manifest) {
+  name: string;
+  mainNode: HTMLElement = document.createElement('div');
+
+  constructor(addonName: string, manifest) {
     this.name = addonName;
     this.manifest = manifest;
     this.loaded = true;
-    this.resourceLoader = resourceLoader;
-    this.mainNode = document.createElement('div');
     this.mainNode.setAttribute('id', `addon-${this.name}`);
 
     this.scriptsNode = document.createElement('div');
@@ -13,10 +14,6 @@ const addonProvider = store => class Addon {
     this.mainNode.appendChild(this.scriptsNode);
 
     document.getElementById('addons').appendChild(this.mainNode);
-  }
-
-  async load() {
-    await this.resourceLoader.loadAddonScripts(this.name, this.manifest.main, this.scriptsNode);
   }
 
   removeFromGame() {

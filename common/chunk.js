@@ -10,7 +10,7 @@ import HashMap from './fp/data-structures/Map';
 
 export const getGeoId = (x: number, z: number): string => `${x | 0}_${z | 0}`;
 
-export const getIndex = (x: number, y: number, z: number) => x + (z << 4) + (y << 8);
+export const getIndex = (x: number, y: number, z: number) => x | (z << 4) | (y << 8);
 
 export const toChunkPosition = (dimension: number): number => Math.floor(dimension / 16) * 16;
 

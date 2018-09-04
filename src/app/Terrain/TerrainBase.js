@@ -35,11 +35,6 @@ const terrainBaseProvider = (Chunk: ChunkBase) => {
         chunk.setEastChunk(eastChunk);
         eastChunk.setWestChunk(chunk);
       });
-
-      if (this.terrainMipMap) {
-        chunk.terrainMipMap = this.terrainMipMap;
-      }
-
       return chunk;
     }
 

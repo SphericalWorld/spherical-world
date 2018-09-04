@@ -23,9 +23,8 @@ export function initWebGL() {
 const multiplyVec4 = (
   mat: Mat4,
   vec: Vec4,
-  dest: Vec4,
+  dest: Vec4 = vec,
 ): Vec4 => {
-  if (!dest) { dest = vec; }
   const x = vec[0];
   const y = vec[1];
   const z = vec[2];

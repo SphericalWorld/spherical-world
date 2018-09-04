@@ -8,7 +8,7 @@ import type ChunkGenerator from './ChunkGenerator';
 import IO from '../../common/fp/monads/io';
 import { profileChunkGeneration } from '../../common/profileUtils';
 import { generate, generateObjects } from './ChunkGenerator';
-import { getGeoId, toPositionInChunk } from '../../common/chunk';
+import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
@@ -186,19 +186,19 @@ class Chunk {
   }
 
   setUnsafe(x: number, y: number, z: number, block: number): void {
-    getChunkNear(this, x, y, z).data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)] = block;
+    getChunkNear(this, x, y, z).data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)] = block;
   }
 
   setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
     const chunk = getChunkNear(this, x, y, z);
     return IO.from(() => {
-      chunk.data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)] = block;
+      chunk.data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)] = block;
       return chunk;
     });
   }
 
   at(x: number, y: number, z: number): number {
-    return getChunkNear(this, x, y, z).data[(x & 0xF) + ((z & 0xF) << 4) + (y << 8)];
+    return getChunkNear(this, x, y, z).data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)];
   }
 
   async generateObjects(): Promise<Chunk> {

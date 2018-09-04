@@ -123,7 +123,7 @@ const generateResources = (generator: ChunkGenerator) => pipeMonadic(
       if (y >= WATER_LEVEL) AIR;
       else if (y < WATER_LEVEL - 1 && generator.simplexResourcesClay(x, z) > 0.8) CLAY;
       else SAND;
-    }
+    },
   ),
   setBlocksInRangeIO(
     height => [0, height - 5],

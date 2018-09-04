@@ -19,8 +19,8 @@ const resourceLoaderProvider = Addon => class ResourceLoader {
   async loadAddon(addonName: string) {
     let manifest = await (await fetch(`${this.addonServerInfo.host}/addons/${addonName}/package.json`)).text();
     manifest = JSON.parse(manifest);
-    const addon = new Addon(this, addonName, manifest);
-    await addon.load();
+    const addon = new Addon(addonName, manifest);
+    await this.loadAddonScripts(addon.name, addon.manifest.main, addon.scriptsNode);
   }
 
   async loadAddons() {
@@ -33,7 +33,7 @@ const resourceLoaderProvider = Addon => class ResourceLoader {
       const s = document.createElement('script');
       s.type = 'text/javascript';
       s.id = addonName;
-      const script = URL.createObjectURL(new Blob([`${scriptBundle}//@ sourceURL=${s.id}`], { type: 'text/javascript' }));
+      const script = URL.createObjectURL(new Blob([`${scriptBundle}//@ sourceURL=${s.id}`], { type: s.type }));
       s.onload = function onload() {
         URL.revokeObjectURL(script);
         resolve(scriptBundle);

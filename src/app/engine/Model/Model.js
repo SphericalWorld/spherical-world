@@ -5,6 +5,12 @@ import type { Material } from '../Material/Material';
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
 
+type MeshJSON = {|
+  vertexPositions: number[],
+  vertexTextureCoords: number[],
+  indices: number[],
+|};
+
 class Model {
   vertexBuffer: WebGLBuffer = gl.createBuffer();
   indexBuffer: WebGLBuffer = gl.createBuffer();
@@ -42,7 +48,7 @@ class Model {
     gl.bindVertexArray(null);
   }
 
-  loadFromJson(model, scale?: number = 1) {
+  loadFromJson(model: MeshJSON, scale?: number = 1) {
     const size = Math.max(...model.vertexPositions);
     let vertexPositions = model.vertexPositions.map(el => el / size);
     if (scale) {

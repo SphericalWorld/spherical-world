@@ -26,7 +26,7 @@
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "flow": "./node_modules/flow-bin/cli.js",
-    "lint": "./node_modules/eslint/bin/eslint.js --ignore-pattern=node_modules --ignore-pattern=bundle.js src server",
+    "lint": "./node_modules/eslint/bin/eslint.js --ignore-pattern=node_modules --ignore-pattern=bundle.js --ext .jsx,.js src server common addons",
     "fix-nvm-sudo": "n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local"
   },
   "proxy": "http://localhost:1337",

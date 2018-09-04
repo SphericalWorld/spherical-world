@@ -1,7 +1,15 @@
 // @flow
+import type { Block } from '../../common/block';
+
 import Chunk from './Chunk';
 import ChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
+
+type Position3D = {|
+  x: number,
+  y: number,
+  z: number,
+|};
 
 export default class Terrain {
   locationName: string;
@@ -86,12 +94,16 @@ export default class Terrain {
 
   putBlockHandler({
     geoId, x, y, z, blockId,
+  }: {
+    geoId: string,
+    blockId: Block,
+    ...Position3D
   }) {
     const chunk = this.chunks.get(geoId);
     if (!chunk) {
       return;
     }
-    console.log(blockId)
+    console.log(blockId);
     chunk.data[x + z * 16 + y * 256] = blockId;
     if (chunk.changesCount < 15) {
       chunk.changesCount += 1;

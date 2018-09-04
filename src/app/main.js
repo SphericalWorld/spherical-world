@@ -1,4 +1,5 @@
 // @flow
+import type Network from './network';
 import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
@@ -19,16 +20,15 @@ setInterval(() => {
 
 const engineProvider = (
   store,
-  network,
+  network: Network,
   Player,
-  ResourceLoader,
+  resourceLoader,
   ecs: World,
   Skybox,
 ) => {
   class Engine {
     ecs: World = ecs;
     lastTime: number = 0;
-    resourceLoader: ResourceLoader;
 
     constructor() {
       this.init().catch(console.error);
@@ -36,7 +36,6 @@ const engineProvider = (
 
     async init() {
       await network.connect();
-      this.resourceLoader = new ResourceLoader();
       initWebGL();
 
       Player.hudBillboardModel = createBillboard(2.0);
@@ -49,7 +48,7 @@ const engineProvider = (
 
       this.hud = new HUD(store);
 
-      await this.resourceLoader.loadAddons();
+      await resourceLoader.loadAddons();
       this.skyBox = Skybox();
       await network.start();
       requestAnimationFrame(this.gameCycle);

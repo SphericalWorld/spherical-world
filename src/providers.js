@@ -95,7 +95,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
 
   world.registerSystem(...systemsProvider(world, terrain, network, time, store));
 
-  return Main(store, network, Player, ResourceLoader, world, Skybox);
+  return Main(store, network, Player, new ResourceLoader(), world, Skybox);
 };
 
 export default mainProvider;

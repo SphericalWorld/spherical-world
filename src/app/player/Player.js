@@ -1,24 +1,4 @@
 // @flow
-// import GlObject from '../engine/glObject';
-// import { connect } from '../util';
-// import { loadPlayer } from './playerActions';
-// import { gl } from '../engine/glEngine';
-//
-// // import BlockPicker from './BlockPicker';
-//
-// function mapState(store, player) {
-//   const {
-//     x, y, z, horizontalRotate, verticalRotate,
-//   } = store.players.instances[player.id];
-//   return {
-//     x, y, z, horizontalRotate, verticalRotate,
-//   };
-// }
-//
-// const mapActions = () => ({
-//   loadPlayer,
-// });
-//
 // const playerProvider = (store, BlockRemover, BlockPicker, Inventory) => {
 //   @connect(mapState, mapActions, store)
 //   class Player {
