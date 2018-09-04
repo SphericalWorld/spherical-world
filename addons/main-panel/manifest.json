@@ -1,8 +1,0 @@
-{
-	"name":"main-panel",
-	"main": "index.html",
-	"style": "main.css",
-	"scripts": {
-		"main":"main.js"
-	}
-}

@@ -1,3 +1,6 @@
+// flow-typed signature: 209f8b11dcc5193540f891b284cbf2b7
+// flow-typed version: da30fe6876/gl-matrix_v2.x.x/flow_>=v0.25.x
+
 declare module "gl-matrix" {
   declare type Vec2 = [number, number];
 

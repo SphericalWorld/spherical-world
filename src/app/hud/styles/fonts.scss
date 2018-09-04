@@ -1,0 +1,13 @@
+@import './colors';
+
+%font-main {
+  color: $font-color-main;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow:
+    -2px 0 1px $font-color-main-shadow,
+    0 2px 1px $font-color-main-shadow,
+    2px 0 1px $font-color-main-shadow,
+    0 -2px 1px $font-color-main-shadow;
+}

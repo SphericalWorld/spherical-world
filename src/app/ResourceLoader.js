@@ -5,7 +5,6 @@ const addonsToLoad = [
   'xpbar',
   'debug',
   'unit-player',
-  'main-panel',
   'inventory',
   'sw-chat',
   'sw-minimap',
