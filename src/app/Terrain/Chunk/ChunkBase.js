@@ -24,7 +24,6 @@ class ChunkBase<TChunk> {
   constructor(x: number, z: number) {
     this.x = x;
     this.z = z;
-    this.height = 256;
     this.geoId = getGeoId(x, z);
   }
 

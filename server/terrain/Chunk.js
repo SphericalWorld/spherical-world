@@ -5,6 +5,7 @@ import zlib from 'zlib';
 import type ChunkMap from './ChunkMap';
 import type Terrain from './Terrain';
 import type ChunkGenerator from './ChunkGenerator';
+import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 import IO from '../../common/fp/monads/io';
 import { profileChunkGeneration } from '../../common/profileUtils';
 import { generate, generateObjects } from './ChunkGenerator';
@@ -16,6 +17,7 @@ const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation
 const {
   readFile,
   outputFile,
+  appendFile,
 }: {
   readFile: (string) => Promise<Buffer>,
   outputFile: (string, Buffer | string) => Promise<void>,
@@ -48,6 +50,7 @@ class Chunk {
   filePath: string;
   metaPath: string;
   data: Buffer;
+  flags: Buffer;
   chunkGenerator: ChunkGenerator;
   changesCount: number;
   terrainGenerated: boolean = false;
@@ -85,7 +88,9 @@ class Chunk {
     if (this.terrainGenerated) {
       return this;
     }
-    this.data = Buffer.alloc(65536);
+    this.data = Buffer.alloc(BLOCKS_IN_CHUNK);
+    this.flags = Buffer.alloc(BLOCKS_IN_CHUNK);
+
     await new Promise((resolve) => {
       generate(this.chunkGenerator, this)
         .map(resolve)
@@ -173,15 +178,17 @@ class Chunk {
   }
 
   async save(): Promise<Chunk> {
-    outputFile(this.filePath, this.data);
-    this.saveMeta();
+    await outputFile(this.filePath, this.data);
+    // await appendFile(this.filePath, this.flags);
+    this.saveMeta({
+      objectsGenerated: this.objectsGenerated,
+      dataLength: this.data.length,
+    });
     return this;
   }
 
-  async saveMeta(): Promise<Chunk> {
-    outputFile(this.filePath, JSON.stringify({
-      objectsGenerated: this.objectsGenerated,
-    }));
+  async saveMeta(meta): Promise<Chunk> {
+    await outputFile(this.metaPath, JSON.stringify(meta));
     return this;
   }
 

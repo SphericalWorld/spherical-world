@@ -2,7 +2,7 @@
 import type Server from './server';
 import Player from './player';
 
-class SocketHandlers {
+export default class SocketHandlers {
   server: Server;
 
   constructor(server: Server) {
@@ -26,33 +26,28 @@ class SocketHandlers {
   }
 
   playerChangePosition(ws, data, callback) {
-    ws.player.changeCoord(data.x, data.y, data.z, (result) => {
-      if (!callback) {
-        return;
-      }
-      if (result) {
-        callback(true);
-        ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_POSITION', {
-          id: ws.player.id, x: ws.player.x, y: ws.player.y, z: ws.player.z,
-        });
-      } else {
-        callback(false, {
-          x: ws.player.x, y: ws.player.y, z: ws.player.z,
-        });
-      }
-    });
+    const result = ws.player.changeCoord(data.x, data.y, data.z);
+    if (result) {
+      callback(true);
+      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_POSITION', {
+        id: ws.player.id, x: ws.player.x, y: ws.player.y, z: ws.player.z,
+      });
+    } else {
+      callback(false, {
+        x: ws.player.x, y: ws.player.y, z: ws.player.z,
+      });
+    }
   }
 
   playerChangeRotation(ws, data) {
-    ws.player.changeRotation(data.v, data.h, (result) => {
-      if (result) {
-        ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, v: ws.player.verticalRotate, h: ws.player.horizontalRotate });
-      } else {
-        callback(false, {
-          x: ws.player.x, y: ws.player.y, z: ws.player.z,
-        });
-      }
-    });
+    const result = ws.player.changeRotation(data.v, data.h);
+    if (result) {
+      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, v: ws.player.verticalRotate, h: ws.player.horizontalRotate });
+    } else {
+      callback(false, {
+        x: ws.player.x, y: ws.player.y, z: ws.player.z,
+      });
+    }
   }
 
   loadGameData(ws, data, callback) {
@@ -91,5 +86,3 @@ class SocketHandlers {
     }
   }
 }
-
-module.exports = SocketHandlers;

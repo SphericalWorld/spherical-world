@@ -1,6 +1,7 @@
 // @flow
 import type { BlockFace } from '../../../../../common/block';
 import { getIndex } from '../../../../../common/chunk';
+import { BLOCKS_IN_CHUNK, CHUNK_HEIGHT } from '../../../../../common/constants/chunk';
 import {
   blocksTextureInfo,
   blocksFlags,
@@ -290,7 +291,7 @@ export default class Chunk extends ChunkWithData<Chunk> {
   calcVBO() {
     const buffers = [createBuffers(), createBuffers(), createBuffers()];
 
-    for (let index = SLICE; index < this.height * SLICE; index += 1) {
+    for (let index = SLICE; index < BLOCKS_IN_CHUNK; index += 1) {
       const i = index >>> 8;
       const j = index & 0xF;
       const k = (index >>> 4) & 0xF;
@@ -366,7 +367,7 @@ export default class Chunk extends ChunkWithData<Chunk> {
   prepareLight() {
     for (let x = 0; x < 16; x += 1) {
       for (let z = 0; z < 16; z += 1) {
-        let y = this.height - 1;
+        let y = CHUNK_HEIGHT - 1;
         let lightLevel = 15;
         while (y > 0) {
           const index = getIndex(x, y, z);
@@ -394,7 +395,7 @@ export default class Chunk extends ChunkWithData<Chunk> {
   calcGlobalLight() {
     for (let x = 0; x < 16; x += 1) {
       for (let z = 0; z < 16; z += 1) {
-        let y = this.height - 1;
+        let y = CHUNK_HEIGHT - 1;
         while ((y > 0) && (blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
           y -= 1;
           this.calcGlobalRecursion(x, y + 1, z);
@@ -403,7 +404,7 @@ export default class Chunk extends ChunkWithData<Chunk> {
     }
     for (let x = 0; x < 16; x += 1) {
       for (let z = 0; z < 16; z += 1) {
-        let y = this.height - 1;
+        let y = CHUNK_HEIGHT - 1;
         while (y > 0) {
           const index = getIndex(x, y, z);
           if (this.blocks[index] === 128) {

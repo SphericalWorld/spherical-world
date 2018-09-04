@@ -22,7 +22,7 @@ export default class Player {
     id += 1;
   }
 
-  changeCoord(x, y, z, callback) {
+  changeCoord(x, y, z) {
     if (true) {
       const chunkXold = Math.floor(x / 16) * 16;
       const chunkZold = Math.floor(z / 16) * 16;
@@ -50,20 +50,18 @@ export default class Player {
       this.x = x;
       this.y = y;
       this.z = z;
-      callback(true);
-    } else {
-      callback(false);
+      return true;
     }
+    return false;
   }
 
-  changeRotation(verticalRotate, horizontalRotate, callback) {
+  changeRotation(verticalRotate, horizontalRotate) {
     if (true) {
       this.verticalRotate = verticalRotate;
       this.horizontalRotate = horizontalRotate;
-      callback(true);
-    } else {
-      callback(false);
+      return true;
     }
+    return false;
   }
 
   addChunks(chunks) {
@@ -72,10 +70,6 @@ export default class Player {
 
   removeChunks(chunks) {
     this.chunksId = this.chunksId.filter(item => chunks.indexOf(item) === -1);
-  }
-
-  getChunks() {
-    return this.chunksId;
   }
 
   addLink(player) {
