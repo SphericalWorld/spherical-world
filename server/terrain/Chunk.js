@@ -81,7 +81,8 @@ class Chunk {
   }
 
   async getCompressedData(): Promise<Buffer> {
-    return deflate(this.data);
+    const totalLength = this.data.length + this.flags.length;
+    return deflate(Buffer.concat([this.data, this.flags], totalLength));
   }
 
   async generate(): Promise<Chunk> {
@@ -192,8 +193,16 @@ class Chunk {
     return this;
   }
 
-  setUnsafe(x: number, y: number, z: number, block: number): void {
-    getChunkNear(this, x, y, z).data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)] = block;
+  setUnsafe(x: number, y: number, z: number, block: number | [number, number]): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xF) | ((z & 0xF) << 4) | (y << 8);
+    if (typeof block === 'number') {
+      chunk.data[index] = block;
+    } else {
+      const [data, flags] = block;
+      chunk.data[index] = data;
+      chunk.flags[index] = flags;
+    }
   }
 
   setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
@@ -220,27 +229,6 @@ class Chunk {
     });
     this.objectsGenerated = true;
     return this;
-  }
-
-  setHeightMap(heightMap: ChunkMap<number>): Chunk => IO<Chunk> {
-    return chunk => IO.from(() => {
-      this.heightMap = heightMap;
-      return chunk;
-    });
-  }
-
-  setRainfall(rainfall: ChunkMap<number>): Chunk => IO<Chunk> {
-    return chunk => IO.from(() => {
-      this.rainfall = rainfall;
-      return chunk;
-    });
-  }
-
-  setTemperature(temperature: ChunkMap<number>): Chunk => IO<Chunk> {
-    return chunk => IO.from(() => {
-      this.temperature = temperature;
-      return chunk;
-    });
   }
 }
 

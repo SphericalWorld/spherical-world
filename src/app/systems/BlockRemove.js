@@ -25,7 +25,7 @@ const getPutBlockEvents = (world: World, picker) => world.events
     const { emptyBlock, face } = picker[0].raytracer;
     if (emptyBlock) {
       world.createEventAndDispatch(PLAYER_PUT_BLOCK, {
-        face,
+        flags: face,
         geoId: emptyBlock.geoId,
         x: emptyBlock.positionInChunk.x,
         y: emptyBlock.positionInChunk.y,

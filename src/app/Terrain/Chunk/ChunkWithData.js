@@ -7,7 +7,7 @@ import { CHUNK_STATUS_NEED_LOAD_VBO } from './chunkConstants';
 export default class ChunkWithData<TChunk> extends ChunkBase<TChunk> {
   blocks: Uint8Array;
   light: Uint16Array = new Uint16Array(BLOCKS_IN_CHUNK);
-  flags: Uint8Array = new Uint8Array(BLOCKS_IN_CHUNK);
+  flags: Uint8Array;
 
   getBlock(x: number, y: number, z: number) {
     return this.blocks[getIndex(x, y, z)];

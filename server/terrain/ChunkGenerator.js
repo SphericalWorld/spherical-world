@@ -198,6 +198,21 @@ const iterateChunk = funcToIterate => (chunk: Chunk): IO<Chunk> => chunk.heightM
 const generateStructures = (generator: ChunkGenerator) =>
   pipeMonadic(...generator.structures);
 
+const setHeightMap = (heightMap: ChunkMap<number>) => (chunk: Chunk) => IO.from(() => {
+  chunk.heightMap = heightMap;
+  return chunk;
+});
+
+const setRainfall = (rainfall: ChunkMap<number>) => (chunk: Chunk) => IO.from(() => {
+  chunk.rainfall = rainfall;
+  return chunk;
+});
+
+const setTemperature = (temperature: ChunkMap<number>) => (chunk: Chunk) => IO.from(() => {
+  chunk.temperature = temperature;
+  return chunk;
+});
+
 export const generate = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> => {
   const { x, z } = chunk;
   const data = ChunkMap
@@ -210,9 +225,9 @@ export const generate = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> => 
   const rainfall = data.map(generateRainfall(generator.simplexRainfall));
   const temperature = data.map(generateTemperature(generator.simplexTemperature));
   return pipeMonadic(
-    chunk.setHeightMap(heightMap),
-    chunk.setRainfall(rainfall),
-    chunk.setTemperature(temperature),
+    setHeightMap(heightMap),
+    setRainfall(rainfall),
+    setTemperature(temperature),
     iterateChunk(pipeMonadic(
       generateCaves(generator),
       generateResources(generator),

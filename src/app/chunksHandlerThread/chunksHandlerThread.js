@@ -1,5 +1,6 @@
 // @flow
 import type { GameEvent } from '../GameEvent/GameEvent';
+import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
 import EventObservable from '../GameEvent/EventObservable';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';
 import terrainBaseProvider from '../Terrain/TerrainBase';
@@ -33,7 +34,8 @@ events
     } else {
       chunk = chunk.extract();
     }
-    chunk.blocks = new Uint8Array(data.data);
+    chunk.blocks = new Uint8Array(data.data.slice(0, BLOCKS_IN_CHUNK));
+    chunk.flags = new Uint8Array(data.data.slice(BLOCKS_IN_CHUNK, BLOCKS_IN_CHUNK + BLOCKS_IN_CHUNK));
     chunk.prepareLight();
     chunk.updateState();
   });
@@ -55,11 +57,11 @@ events
   .filter(e => e.type === PLAYER_PUT_BLOCK)
   .map(e => e.payload)
   .subscribe(({
-    geoId, x, y, z, blockId, face,
+    geoId, x, y, z, blockId, flags,
   }) => terrain.chunks
     .get(geoId)
     .map((chunk) => {
-      chunk.putBlock(x, y, z, blockId, face);
+      chunk.putBlock(x, y, z, blockId, flags);
       chunk.light[x + z * 16 + y * 256] = (chunk.light[x + z * 16 + y * 256] & 0x000F) | 0xFD20;
 
       chunk.calcRecursionRed(x, y, z);

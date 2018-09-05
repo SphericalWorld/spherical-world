@@ -93,18 +93,19 @@ export default class Terrain {
   }
 
   putBlockHandler({
-    geoId, x, y, z, blockId,
+    geoId, x, y, z, blockId, flags,
   }: {
     geoId: string,
     blockId: Block,
+    flags: number,
     ...Position3D
   }) {
     const chunk = this.chunks.get(geoId);
     if (!chunk) {
       return;
     }
-    console.log(blockId);
     chunk.data[x + z * 16 + y * 256] = blockId;
+    chunk.flags[x + z * 16 + y * 256] = flags;
     if (chunk.changesCount < 15) {
       chunk.changesCount += 1;
     } else {
@@ -114,6 +115,6 @@ export default class Terrain {
   }
 
   removeBlockHandler(params) {
-    this.putBlockHandler({ ...params, blockId: 0 });
+    this.putBlockHandler({ ...params, blockId: 0, flags: 0 });
   }
 }
