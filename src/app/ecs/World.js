@@ -154,7 +154,7 @@ export default class World {
     this.registerEntity(id, components);
   }
 
-  createEntity(id: Entity | null, ...components: Component[]): Entity {
+  createEntity(id: ?Entity, ...components: Component[]): Entity {
     const entityId = id || EntityManager.generateId();
     for (const thread of this.threads) {
       const componentsToAdd = components

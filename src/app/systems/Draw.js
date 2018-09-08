@@ -70,7 +70,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
         gl.uniform3f(this.currentShader.uSunPosition, ...skybox.sunPosition);
 
         this.mvPushMatrix();
-        // mat4.translate(this.mvMatrix, this.mvMatrix, transform.translation);
+        mat4.translate(this.mvMatrix, this.mvMatrix, transform.translation);
 
         this.setMatrixUniforms();
         visual.glObject.draw();

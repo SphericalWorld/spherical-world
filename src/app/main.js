@@ -49,7 +49,7 @@ const engineProvider = (
       this.hud = new HUD(store);
 
       await resourceLoader.loadAddons();
-      this.skyBox = Skybox();
+      this.skyBox = Skybox(this.player);
       await network.start();
       requestAnimationFrame(this.gameCycle);
     }

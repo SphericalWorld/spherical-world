@@ -9,6 +9,7 @@ import {
   Player,
   Visual,
   Raytracer,
+  Joint,
 } from '../components';
 import {
   PLAYER_ATTACKED,
@@ -42,16 +43,22 @@ const getPlayerAttackEvents = (world: World) => world.events
 
 export default (world: World) =>
   class BlockRemove implements System {
-    removers = world.createSelector([Transform, BlockRemover, Visual, Raytracer]);
+    removers = world.createSelector([Transform, BlockRemover, Visual, Joint]);
     picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
     playerAttackEvents = getPlayerAttackEvents(world);
     playerPutBlockEvents = getPutBlockEvents(world, this.picker);
 
+    raytracerRegistry = world.components.get('Raytracer');
+
     update(delta: number): void {
       for (const {
-        visual, blockRemover, raytracer: { block }, id,
+        visual, blockRemover, id, joint,
       } of this.removers) {
+        if (!joint.raytracer) {
+          joint.raytracer = this.raytracerRegistry.get(joint.parent);
+        }
+        const { block } = joint.raytracer;
         if (id === id) { // TODO: main player ID
           const { removing } = blockRemover;
           this.playerAttackEvents.events.forEach((possibleRemoving) => {

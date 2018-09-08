@@ -5,6 +5,7 @@ import { toChunkPosition, toPositionInChunk } from '../../../../common/chunk';
 import { Just, Nothing } from '../../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
+import Joint from '../../components/Joint';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
 import Velocity from '../../components/Velocity';
@@ -84,8 +85,10 @@ const collideWithTerrain = (terrain: Terrain) => {
 
 export default (ecs: World, terrain: Terrain) =>
   class PhysicsSystem implements System {
-    components = ecs.createSelector([Transform, Velocity, Physics, Collider]);
+    components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
+    dependentComponents = ecs.createSelector([Transform, Joint]);
     collideWithTerrain = collideWithTerrain(terrain);
+    transformRegistry = ecs.components.get('Transform');
 
     update(delta: number): Array {
       const result = [];
@@ -94,6 +97,14 @@ export default (ecs: World, terrain: Terrain) =>
       } of this.components) {
         move(collider.shape, transform.translation);
         this.collideWithTerrain(transform, velocity, collider);
+      }
+
+      for (const { id, joint, transform } of this.dependentComponents) {
+        if (!joint.parentTransform) {
+          joint.parentTransform = this.transformRegistry.get(joint.parent);
+        }
+        vec3.copy(transform.translation, joint.parentTransform.translation);
+        result.push([id, transform]);
       }
       return result;
     }
