@@ -1,0 +1,48 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+%size-img {
+  height: $size-slot;
+  width: $size-slot;
+}
+
+.slot {
+  @extend %font-main;
+  @extend %size-img;
+  background-color: $background-color-slot;
+  border: $size-border solid $border-color-slot;
+  border-radius: 0.7em;
+  margin: 0.2em -0.1em;
+}
+
+.slotItem {
+  background-size: 100%;
+  border-radius: 0.7em;
+  height: 100%;
+  position: relative;
+}
+
+.slotItemCount {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+.selectedSlot {
+  .slotItem {
+    box-shadow: $selected-slot 0 0 10px 5px inset, $selected-slot 0 0 5px 0;
+  }
+}
+
+.slotItem:hover {
+  box-shadow: $hover-slot 0 0 5px 1px inset;
+}
+
+.imageDiamond {
+  background-image: url('https://github.com/SphericalWorld/spherical-world/blob/master/src/textures/items/diamond.png?raw=true');
+}
+
+.imageIronIngot {
+  background-image: url('https://github.com/SphericalWorld/spherical-world/blob/master/src/textures/items/iron_ingot.png?raw=true');
+}

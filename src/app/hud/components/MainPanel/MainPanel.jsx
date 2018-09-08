@@ -37,32 +37,17 @@ import {
   paginationUp,
   paginationDown,
   paginationPage,
-  selectedSlot,
-  slotItem,
-  slot as slotStyle,
-  slotItemCount,
+  paginationControl,
 } from './mainPanel.scss';
-
-type InventorySlot = {|
-  +count: number;
-|};
+import InventorySlot from '../../uiElements/InventorySlot';
+import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 
 type StateProps = {|
-  +slots: $ReadOnlyArray<InventorySlot>;
+  +slots: $ReadOnlyArray<InventorySlotDetails>;
   +selectedItemIndex: number;
 |};
 
 type Props = StateProps;
-
-const Slot = ({ slot, selected }: { slot: InventorySlot, selected: boolean }) => (
-  <li sw-droppable="true" className={`${slotStyle} ${String(selected && selectedSlot)}`}>
-    <div>
-      <div className={slotItem} sw-droppable="true" sw-draggable="slot" ng-style="{'background-image': 'url({{slot.icon}})'}" sw-item-tooltip="slot">
-        <span className={slotItemCount}>{slot.count}</span>
-      </div>
-    </div>
-  </li>
-);
 
 class MainPanel extends PureComponent<Props> {
   render() {
@@ -72,13 +57,17 @@ class MainPanel extends PureComponent<Props> {
         <div className={mainPanel}>
           <ul className={itemsContainer}>
             { slots.map((slot, index) =>
-              <Slot slot={slot} selected={index === selectedItemIndex} />)
+              <InventorySlot slot={slot} selected={index === selectedItemIndex} />)
             }
           </ul>
           <div className={pagination}>
-            <div className={paginationUp} />
-            <div className={paginationDown} />
-            <div className={paginationPage}>1</div>
+            <div className={paginationControl}>
+              <div className={paginationUp} />
+              <div className={paginationDown} />
+            </div>
+            <div className={paginationPage}>
+              10
+            </div>
           </div>
         </div>
       </section>
@@ -86,11 +75,14 @@ class MainPanel extends PureComponent<Props> {
   }
 }
 
+const imageSlots = (new Array(11)).fill(0).map((_, index) => ({
+  count: index,
+  image: `${Math.random() > 0.5 ? 'diamond' : 'ironIngot'}`,
+}));
+
 const mapState = () => ({
   selectedItemIndex: 3,
-  slots: (new Array(10)).fill(0).map((_, index) => ({
-    count: index,
-  })),
+  slots: imageSlots,
 });
 
 export default connect(mapState, null)(MainPanel);

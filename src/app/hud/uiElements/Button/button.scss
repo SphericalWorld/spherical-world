@@ -2,14 +2,14 @@
 
 .button {
   background-color: transparentize($primary, 0.3);
-  border: 1px solid transparentize($backgraund, 0.5);
+  border: 1px solid transparentize($background-main-menu, 0.5);
   border-radius: 3px;
   box-shadow:
     0 2px 8px transparentize($shadow, 0.3), /* Exterior Shadow */
     inset 0 1px transparentize($glass, 0.3), /* Top light Line */
     inset 0 3px 5px transparentize($glass, 0.3), /* Sides Light Shadow */
     inset 0 -8px 30px transparentize($shadow, 0.3); /* Dark Background */
-  color: transparentize($primary, 0);
+  color: $primary;
   font-size: 1.3em;
   font-weight: bold;
   margin: 0.7em;
