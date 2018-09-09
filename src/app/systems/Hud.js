@@ -1,6 +1,6 @@
 // @flow
-import type World from '../ecs/World';
-import type { System } from './System';
+import type World from '../../../common/ecs/World';
+import type { System } from '../../../common/ecs/System';
 import { Transform, UserControlled } from '../components';
 import { MENU_TOGGLED } from '../hud/hudConstants';
 import { connect } from '../util';

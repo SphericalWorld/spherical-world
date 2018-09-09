@@ -1,9 +1,9 @@
 // @flow
-import type { Entity } from '../ecs/Entity';
+import type { Entity } from '../../../common/ecs/Entity';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import BlockRemover from '../components/BlockRemover';
 import GlObject from '../engine/glObject';
-import { World } from '../ecs';
+import { World } from '../../../common/ecs';
 import { Transform, Visual, Joint } from '../components';
 import { createCube } from '../engine/Model';
 

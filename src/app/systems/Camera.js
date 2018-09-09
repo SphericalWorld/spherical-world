@@ -3,12 +3,13 @@ import type { Mat4 } from 'gl-matrix';
 import {
   mat4, quat, vec3, vec4,
 } from 'gl-matrix';
-import type { World } from '../ecs';
+import type { World } from '../../../common/ecs';
 import type { Viewport } from '../components/Camera';
+import type { Input } from '../Input/Input';
 import { gl, unproject } from '../engine/glEngine';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
-import { System } from './System';
+import { System } from '../../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 
@@ -51,7 +52,7 @@ const getCameraMovements = (world: World) => world.events
   .filter(el => el.type === CAMERA_MOVED)
   .subscribeQueue();
 
-export default (world: World) =>
+export default (world: World, input: Input) =>
   class CameraSystem implements System {
     camera = world.createSelector([Transform, Camera]);
     bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
@@ -64,16 +65,16 @@ export default (world: World) =>
     cameraLockedObserver = world.events
       .filter(el => el.type === CAMERA_LOCKED)
       .subscribe(() => {
-        world.input.deactivateContext(GameplayMenuContext);
-        world.input.activateContext(GameplayMainContext);
+        input.deactivateContext(GameplayMenuContext);
+        input.activateContext(GameplayMainContext);
         this.bodyElement.requestPointerLock();
       });
 
     cameraUnlockedObservable = world.events
       .filter(el => el.type === CAMERA_UNLOCKED)
       .subscribe(() => {
-        world.input.deactivateContext(GameplayMainContext);
-        world.input.activateContext(GameplayMenuContext);
+        input.deactivateContext(GameplayMainContext);
+        input.activateContext(GameplayMenuContext);
       });
 
     update(delta: number): void {

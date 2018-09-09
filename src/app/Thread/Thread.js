@@ -1,8 +1,9 @@
 // @flow
+import type { Thread as IThread } from '../../../common/Thread';
 import type { THREAD_ID } from './threadConstants';
-import EventObservable from '../GameEvent/EventObservable';
+import EventObservable from '../../../common/GameEvent/EventObservable';
 
-class Thread {
+class Thread implements IThread {
   +id: THREAD_ID;
   +events: EventObservable<any> = new EventObservable();
   +thread: Worker;

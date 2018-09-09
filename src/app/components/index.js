@@ -1,5 +1,5 @@
 // @flow
-export type { Component } from './Component';
+export type { Component } from '../../../common/ecs/Component';
 export { default as BlockRemover } from './BlockRemover';
 export { default as Camera } from './Camera';
 export { default as Collider } from './Collider';

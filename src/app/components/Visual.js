@@ -1,5 +1,5 @@
 // @flow
-import type { Component } from './Component';
+import type { Component } from '../../../common/ecs/Component';
 import type GlObject from '../engine/glObject';
 import { THREAD_MAIN } from '../Thread/threadConstants';
 

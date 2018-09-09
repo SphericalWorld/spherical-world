@@ -1,9 +1,9 @@
 // @flow
 import type { Terrain } from '../Terrain';
-import type { Component } from '../../components/Component';
-import type { Entity } from '../../ecs/Entity';
-import type { System } from '../../systems/System';
-import type { World } from '../../ecs';
+import type { Component } from '../../../../common/ecs/Component';
+import type { Entity } from '../../../../common/ecs/Entity';
+import type { System } from '../../../../common/ecs/System';
+import type { World } from '../../../../common/ecs';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../../player/events';
 import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
 

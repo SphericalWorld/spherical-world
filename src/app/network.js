@@ -1,7 +1,7 @@
 // @flow
 import zlib from 'pako';
 import HashMap from '../../common/fp/data-structures/Map';
-import EventObservable from './GameEvent/EventObservable';
+import EventObservable from '../../common/GameEvent/EventObservable';
 
 type NetworkEvent = {
   +type: string;

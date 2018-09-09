@@ -1,7 +1,7 @@
 // @flow
-import type { GameEvent } from '../GameEvent/GameEvent';
+import type { GameEvent } from '../../../common/GameEvent/GameEvent';
 import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
-import EventObservable from '../GameEvent/EventObservable';
+import EventObservable from '../../../common/GameEvent/EventObservable';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';
 import terrainBaseProvider from '../Terrain/TerrainBase';
 import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';

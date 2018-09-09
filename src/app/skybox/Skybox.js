@@ -1,7 +1,7 @@
 // @flow
-import type { Entity } from '../ecs/Entity';
+import type { Entity } from '../../../common/ecs/Entity';
 import GlObject from '../engine/glObject';
-import { World } from '../ecs';
+import { World } from '../../../common/ecs';
 import {
   Transform, Visual, Skybox, Joint,
 } from '../components';

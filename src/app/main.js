@@ -4,7 +4,7 @@ import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
 // import playerModel from '../models/player.json';
-import { World } from './ecs';
+import { World } from '../../common/ecs';
 
 let tex = 0;
 setInterval(() => {

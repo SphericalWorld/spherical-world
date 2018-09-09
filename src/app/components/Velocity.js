@@ -1,7 +1,7 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
-import type { Component } from './Component';
+import type { Component } from '../../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Velocity implements Component {

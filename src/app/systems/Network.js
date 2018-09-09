@@ -1,8 +1,8 @@
 // @flow
-import type World from '../ecs/World';
+import type World from '../../../common/ecs/World';
 import type Network from '../network';
 import { PLAYER_CHANGE_POSITION } from '../player/playerConstants';
-import { System } from './System';
+import { System } from '../../../common/ecs/System';
 import { Transform, Camera } from '../components';
 
 export default (ecs: World, network: Network) =>

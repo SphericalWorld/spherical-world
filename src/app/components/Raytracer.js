@@ -1,7 +1,7 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
 import type { BlockFace, Block } from '../../../common/block';
-import { Component } from './Component';
+import { Component } from '../../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export type BlockDetails = {|

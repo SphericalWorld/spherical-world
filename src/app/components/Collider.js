@@ -1,6 +1,6 @@
 // @flow
 import type { Vec3 } from 'gl-matrix';
-import type { Component } from './Component';
+import type { Component } from '../../../common/ecs/Component';
 import type { Collider as TCollider, COLLIDER_TYPE } from '../physicsThread/physics/Collider';
 import { createAABB } from '../physicsThread/physics/colliders/AABB';
 import { THREAD_PHYSICS } from '../Thread/threadConstants';

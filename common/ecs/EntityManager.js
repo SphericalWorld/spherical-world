@@ -2,7 +2,7 @@
 import uuid from 'uuid/v1';
 import type { Entity } from './Entity';
 import type World from './World';
-import { Component } from '../components/Component';
+import { Component } from './Component';
 
 type SelectorFunction = (Entity) => boolean;
 const Base = {};

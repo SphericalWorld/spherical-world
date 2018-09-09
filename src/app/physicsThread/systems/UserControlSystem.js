@@ -15,8 +15,8 @@ import {
   PLAYER_JUMPED,
   PLAYER_STOPED_JUMP,
 } from '../../player/events';
-import { System } from '../../systems/System';
-import { World } from '../../ecs';
+import { System } from '../../../../common/ecs/System';
+import { World } from '../../../../common/ecs';
 import Transform from '../../components/Transform';
 import Velocity from '../../components/Velocity';
 import UserControlled from '../../components/UserControlled';

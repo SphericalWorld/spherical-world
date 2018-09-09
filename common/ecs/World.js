@@ -1,12 +1,10 @@
 // @flow
 import type { GameEvent, GAME_EVENT_TYPE } from '../GameEvent/GameEvent';
-import type { Input } from '../Input/Input';
-import type Thread from '../Thread/Thread';
-import type { THREAD_ID } from '../Thread/threadConstants';
+import type { Thread, THREAD_ID } from '../Thread';
 import type { Entity } from './Entity';
-import type { System } from '../systems/System';
+import type { System } from './System';
 import type { transform } from './EntityManager';
-import { Component } from '../components/Component';
+import { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 
@@ -22,7 +20,6 @@ export default class World {
   threadsMap: Map<number, Thread> = new Map();
   componentTypes: Map<string, typeof Component> = new Map();
   selectors: EntitySelector<typeof Component[]>[] = [];
-  input: Input;
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
   listeners: Array<GameEvent => void> = [];
@@ -79,9 +76,10 @@ export default class World {
 
   update(delta: number): void {
     const changedData = new Map();
-    for (const system of this.systems) {
-      const changedComponents = system.update(delta / 1000);
-      if (changedComponents) {
+    this.systems
+      .map(system => system.update(delta / 1000))
+      .filter(changedComponents => changedComponents)
+      .forEach((changedComponents) => {
         for (const [id, ...components] of changedComponents) {
           for (const component of components) {
             let el = changedData.get(component);
@@ -92,8 +90,8 @@ export default class World {
             el.set(id, component);
           }
         }
-      }
-    }
+      });
+
     const changedDataArray = [...changedData.entries()];
     for (const thread of this.threads) {
       const componentsToUpdate = changedDataArray
@@ -173,10 +171,5 @@ export default class World {
 
   createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean) {
     this.dispatch({ type, payload, network });
-  }
-
-  setInput(input: Input) {
-    this.input = input;
-    input.onDispatch((gameEvent: GameEvent) => this.dispatch(gameEvent));
   }
 }

@@ -1,7 +1,7 @@
 // @flow
-import type { Entity } from '../ecs/Entity';
+import type { Entity } from '../../../common/ecs/Entity';
 import type Transform from './Transform';
-import { Component } from './Component';
+import { Component } from '../../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Joint implements Component {

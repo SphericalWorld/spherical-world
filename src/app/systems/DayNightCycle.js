@@ -1,8 +1,8 @@
 // @flow
 import { vec3 } from 'gl-matrix';
-import type World from '../ecs/World';
+import type World from '../../../common/ecs/World';
 import type { Time } from '../Time/Time';
-import { System } from './System';
+import { System } from '../../../common/ecs/System';
 import { Transform, Skybox } from '../components';
 
 

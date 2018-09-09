@@ -22,7 +22,7 @@ import terrainProvider from './app/Terrain';
 import systemsProvider from './app/systems';
 
 import timeProvider from './app/Time/Time';
-import { World } from './app/ecs';
+import { World } from '../common/ecs';
 
 import * as componentsProvider from './app/components';
 
@@ -37,11 +37,6 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
   world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
   world.registerComponentTypes(...Object.values(componentsProvider));
-
-  const inputSources = inputSourcesProvider();
-  const inputContexts = inputContextsProvider();
-  const input = inputProvider(inputSources, inputContexts);
-  world.setInput(input);
 
   return world;
 };
@@ -93,7 +88,12 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const Inventory = inventoryProvider(store);
   const Player = playerProvider(world, materialLibrary, BlockPicker, Inventory);
 
-  world.registerSystem(...systemsProvider(world, terrain, network, time, store));
+  const inputSources = inputSourcesProvider();
+  const inputContexts = inputContextsProvider();
+  const input = inputProvider(inputSources, inputContexts);
+  input.onDispatch(event => world.dispatch(event));
+
+  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
 
   return Main(store, network, Player, new ResourceLoader(), world, Skybox);
 };

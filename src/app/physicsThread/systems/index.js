@@ -1,6 +1,6 @@
 // @flow
-import type World from '../../ecs/World';
-import type { System } from '../../systems/System';
+import type World from '../../../../common/ecs/World';
+import type { System } from '../../../../common/ecs/System';
 import type { Terrain } from '../Terrain/Terrain';
 import TerrainSystem from './Terrain';
 import RaytraceSystem from './Raytrace';

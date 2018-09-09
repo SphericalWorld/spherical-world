@@ -1,6 +1,6 @@
 // @flow
 import type { Vec3, Quat } from 'gl-matrix';
-import { Component } from './Component';
+import { Component } from '../../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Transform implements Component {

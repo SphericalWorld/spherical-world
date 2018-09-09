@@ -5,7 +5,7 @@ import terrainProvider from './Terrain';
 import Chunk from './Terrain/Chunk/Chunk';
 import systemsProvider from './systems';
 import * as componentsProvider from '../components';
-import { World } from '../ecs';
+import { World } from '../../../common/ecs';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 const TerrainBase = terrainBaseProvider(Chunk);
