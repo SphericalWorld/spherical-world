@@ -4,10 +4,6 @@ import { COAL_ORE } from '../engine/Texture/textureConstants';
 
 const CoalOre = () => Block({
   id: 8,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

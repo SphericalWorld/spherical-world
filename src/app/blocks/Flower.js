@@ -2,7 +2,6 @@
 const Flower = () => ({
   lightTransparent: true,
   sightTransparent: true,
-  selfTransparent: false,
   needPhysics: false,
   baseRemoveTime: 0.2,
 });

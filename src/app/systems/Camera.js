@@ -74,7 +74,6 @@ export default (world: World) =>
       .subscribe(() => {
         world.input.deactivateContext(GameplayMainContext);
         world.input.activateContext(GameplayMenuContext);
-        this.bodyElement.requestPointerLock();
       });
 
     update(delta: number): void {

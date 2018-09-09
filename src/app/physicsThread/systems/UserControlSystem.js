@@ -1,5 +1,8 @@
 // @flow
 import { vec3, quat } from 'gl-matrix';
+import { Just } from '../../../../common/fp/monads/maybe';
+import { getBlock } from '../../../../common/terrain';
+import { blocksInfo } from '../../blocks/blockInfo';
 import {
   PLAYER_MOVED,
   PLAYER_STOPED_MOVE,
@@ -10,6 +13,7 @@ import {
   PLAYER_RUN,
   PLAYER_STOPED_RUN,
   PLAYER_JUMPED,
+  PLAYER_STOPED_JUMP,
 } from '../../player/events';
 import { System } from '../../systems/System';
 import { World } from '../../ecs';
@@ -54,7 +58,8 @@ export default (world: World, terrain: Terrain) =>
       .subscribeQueue();
 
     jumpEvents = world.events
-      .filter(el => el.type === PLAYER_JUMPED)
+      .filter(el => el.type === PLAYER_JUMPED || el.type === PLAYER_STOPED_JUMP)
+      .map(el => el.type === PLAYER_JUMPED)
       .subscribeQueue();
 
     runEvents = world.events
@@ -63,7 +68,6 @@ export default (world: World, terrain: Terrain) =>
       .subscribeQueue();
 
     update(delta: number): Array {
-      const result = [];
       const [{
         id, transform, velocity, userControlled: userControls,
       }] = this.components;
@@ -74,13 +78,7 @@ export default (world: World, terrain: Terrain) =>
         controls.isRunning = isRunning;
         return controls;
       }, userControls);
-      this.jumpEvents.events.reduce(() => (velocity.linear[1] === 0
-        ? vec3.add(velocity.linear, velocity.linear, [0, 5, 0])
-        : velocity.linear),
-      null);
-
-      const movingX = userControls.movingForward - userControls.movingBackward;
-      const movingZ = userControls.movingLeft - userControls.movingRight;
+      userControls.isJumping = this.jumpEvents.events.reduce((_, isJumping) => isJumping, userControls.isJumping);
 
       // // 1.570796327rad == 90*
       // let deltaX = -delta * this.speed * (this.running + 1) * (Math.sin(this.horizontalRotate) * movingX + (Math.sin(this.horizontalRotate + 1.570796327)) * movingZ);
@@ -92,10 +90,14 @@ export default (world: World, terrain: Terrain) =>
       // vec3.transformQuat(velocity.linear, velocity.linear, quat.rotateX(quat.create(), quat.create(), transform.rotation.x));
       // console.log( quat.rotateX(quat.create(), quat.create(), transform.rotation.x))
 
-      const angle = getAngle(movingX, movingZ);
-      const rotation = quat.rotateY(quat.create(), transform.rotation, (angle * Math.PI) / 180);
+
 
       if (userControls.movingForward || userControls.movingBackward || userControls.movingLeft || userControls.movingRight) {
+        const movingX = userControls.movingForward - userControls.movingBackward;
+        const movingZ = userControls.movingLeft - userControls.movingRight;
+        const angle = getAngle(movingX, movingZ);
+        const rotation = quat.rotateY(quat.create(), transform.rotation, (angle * Math.PI) / 180);
+
         const v = vec3.fromValues(1, 0, 0);
         vec3.transformQuat(v, v, rotation);
 
@@ -107,10 +109,19 @@ export default (world: World, terrain: Terrain) =>
 
         userControls.velocity = [-v[2], 0, -v3[2]];
         vec3.scale(userControls.velocity, userControls.velocity, 10 * (userControls.isRunning ? 2 : 1));
-        result.push([id, velocity]);
       } else {
         vec3.set(userControls.velocity, 0, 0, 0);
       }
+
+      getBlock(terrain)(...transform.translation)
+        .alt(Just(0))
+        .map((block) => {
+          if (blocksInfo[block].needPhysics && userControls.isJumping && velocity.linear[1] === 0) {
+            velocity.linear[1] += 5;
+          } else if (block === 127) {
+            userControls.velocity[1] = userControls.isJumping ? 5 : 0;
+          }
+        });
 
       this.moveEvents.clear();
       this.jumpEvents.clear();

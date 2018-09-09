@@ -4,10 +4,6 @@ import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
 // import playerModel from '../models/player.json';
-import {
-  playerStopJumping, // TODO: needs only for swimming
-} from './player/playerActions';
-
 import { World } from './ecs';
 
 let tex = 0;

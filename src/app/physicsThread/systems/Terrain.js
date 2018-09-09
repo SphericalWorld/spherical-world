@@ -14,7 +14,7 @@ const blockRemoveObserver = (ecs: World, terrain: Terrain) => ecs.events
     geoId, x, y, z,
   }) => terrain.chunks
     .get(geoId)
-    .map(chunk => chunk.setBlock(x, y, z, 0)));
+    .map(chunk => chunk.removeBlock(x, y, z)));
 
 const blockPutObserver = (ecs: World, terrain: Terrain) => ecs.events
   .filter(e => e.type === PLAYER_PUT_BLOCK)
@@ -23,9 +23,7 @@ const blockPutObserver = (ecs: World, terrain: Terrain) => ecs.events
     geoId, x, y, z, blockId, face,
   }) => terrain.chunks
     .get(geoId)
-    .map((chunk) => {
-      chunk.putBlock(x, y, z, blockId, face);
-    }));
+    .map(chunk => chunk.putBlock(x, y, z, blockId, face)));
 
 const onChunkAdd = (ecs: World, terrain: Terrain) => ecs.events
   .filter(el => el.type === CHUNK_LOADED && el)

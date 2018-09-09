@@ -6,8 +6,6 @@ const OakLeaves = () => Block({
   id: 5,
   lightTransparent: false,
   sightTransparent: true,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 1,
     bottom: 1,

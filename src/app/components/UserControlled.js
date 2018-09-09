@@ -14,5 +14,6 @@ export default class UserControlled implements Component {
   movingLeft = false;
   movingRight = false;
   isRunning = false;
+  isJumping = false;
   velocity: Vec3 = vec3.create();
 }

@@ -4,10 +4,6 @@ import { SAND } from '../engine/Texture/textureConstants';
 
 const Sand = () => Block({
   id: 2,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

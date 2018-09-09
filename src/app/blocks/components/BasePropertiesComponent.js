@@ -23,10 +23,10 @@ const BasePropertiesComponent = () => ({
   id: 0,
   fallSpeedCap: Number.MIN_SAFE_INTEGER,
   fallAcceleration: 1,
-  lightTransparent: true,
-  sightTransparent: true,
+  lightTransparent: false,
+  sightTransparent: false,
   selfTransparent: false,
-  needPhysics: false,
+  needPhysics: true,
   baseRemoveTime: 1,
   textures: {
     top: 0,

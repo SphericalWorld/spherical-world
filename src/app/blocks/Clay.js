@@ -4,10 +4,6 @@ import { CLAY } from '../engine/Texture/textureConstants';
 
 const Clay = () => Block({
   id: 7,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

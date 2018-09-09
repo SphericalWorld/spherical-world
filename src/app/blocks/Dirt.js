@@ -4,10 +4,6 @@ import { DIRT } from '../engine/Texture/textureConstants';
 
 const Dirt = () => Block({
   id: 6,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

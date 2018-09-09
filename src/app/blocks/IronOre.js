@@ -4,10 +4,6 @@ import { IRON_ORE } from '../engine/Texture/textureConstants';
 
 const IronOre = () => Block({
   id: 9,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

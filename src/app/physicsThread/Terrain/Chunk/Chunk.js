@@ -2,7 +2,6 @@
 import { getIndex } from '../../../../../common/chunk';
 import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
 import { blocksInfo } from '../../../blocks/blockInfo';
-
 import {
   CHUNK_STATUS_NEED_LOAD_VBO,
 } from '../../../Terrain/Chunk/chunkConstants';

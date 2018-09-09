@@ -8,7 +8,6 @@ const Reeds = () => Block(
     id: 133,
     lightTransparent: true,
     sightTransparent: true,
-    selfTransparent: false,
     needPhysics: false,
   },
   ModelComponent(model),

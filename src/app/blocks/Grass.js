@@ -4,10 +4,6 @@ import { GRASS, GRASS_SIDE, DIRT } from '../engine/Texture/textureConstants';
 
 const Grass = () => Block({
   id: 1,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 1,
     bottom: 1,

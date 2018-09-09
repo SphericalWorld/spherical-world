@@ -4,10 +4,6 @@ import { STONE } from '../engine/Texture/textureConstants';
 
 const Stone = () => Block({
   id: 3,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

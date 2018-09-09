@@ -4,10 +4,6 @@ import { OAK, OAK_TOP } from '../engine/Texture/textureConstants';
 
 const Oak = () => Block({
   id: 4,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

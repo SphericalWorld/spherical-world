@@ -1,8 +1,4 @@
 // @flow
-import {
-  PLAYER_CHANGED_ROTATION,
-} from './playerConstants';
-
 let oldTimeChangeRotation = Date.now();
 
 export const playerChangeRotation = (movementX: number, movementY: number) => (dispatch, getState) => {

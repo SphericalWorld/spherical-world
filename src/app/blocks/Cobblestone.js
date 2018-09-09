@@ -4,10 +4,6 @@ import { COBBLESTONE } from '../engine/Texture/textureConstants';
 
 const Cobblestone = () => Block({
   id: 16,
-  lightTransparent: false,
-  sightTransparent: false,
-  selfTransparent: false,
-  needPhysics: true,
   buffer: {
     top: 0,
     bottom: 0,

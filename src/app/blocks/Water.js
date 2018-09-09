@@ -4,7 +4,6 @@ import { WATER_STILL } from '../engine/Texture/textureConstants';
 
 const Water = () => Block({
   id: 127,
-  lightTransparent: false,
   sightTransparent: true,
   selfTransparent: true,
   needPhysics: false,

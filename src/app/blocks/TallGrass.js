@@ -8,7 +8,6 @@ const TallGrass = () => Block(
     id: 129,
     lightTransparent: true,
     sightTransparent: true,
-    selfTransparent: false,
     needPhysics: false,
     buffer: {
       top: 1,

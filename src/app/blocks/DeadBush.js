@@ -8,7 +8,6 @@ const DeadBush = () => Block(
     id: 132,
     lightTransparent: true,
     sightTransparent: true,
-    selfTransparent: false,
     needPhysics: false,
   },
   ModelComponent(model),
