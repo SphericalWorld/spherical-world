@@ -7,7 +7,7 @@ import {
   slotItemCount,
   imageDiamond,
   imageIronIngot,
-} from './InventorySlot.scss';
+} from './inventorySlot.scss';
 
 export type InventorySlotDetails = {|
   +count: number;
@@ -21,7 +21,7 @@ type Props = {|
 
 const InventorySlot = ({ slot, selected }: Props) => (
   <li sw-droppable="true" className={`${slotStyle} ${String(selected && selectedSlot)}`}>
-    <div className={`${slotItem} ${slot.image === 'diamond' ? imageDiamond : imageIronIngot}`} sw-droppable="true" sw-draggable="slot" ng-style="{'background-image': 'url({{slot.icon}})'}" sw-item-tooltip="slot">
+    <div className={`${slotItem} ${slot.image === 'diamond' ? imageDiamond : imageIronIngot}`} sw-droppable="true" sw-draggable="slot" sw-item-tooltip="slot">
       <span className={slotItemCount}>
         {slot.count}
       </span>

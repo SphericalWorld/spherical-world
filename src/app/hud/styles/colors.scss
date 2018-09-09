@@ -4,6 +4,7 @@ $secondary: #e3b891;
 $shadow: #000;
 $glass: #fff;
 $background-main-menu: #000;
+$font-color-main-menu: #fff;
 
 $success: #0f0;
 $warning: #fa0;
@@ -14,7 +15,7 @@ $font-color-main-shadow: #000;
 
 $background-color-slot: #05544a6b;
 $border-color-slot: #113436;
-$selected-slot: #fff8ca;
-$hover-slot: #fff3a7;
+$selected-slot: #bccdd6;
+$hover-slot: lighten(darken($primary, 10%), 40%);
 
-$border-pagination-page: 1px solid $border-color-slot;
+$border-pagination-page: 0.1em solid $border-color-slot;

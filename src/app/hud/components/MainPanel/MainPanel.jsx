@@ -38,6 +38,7 @@ import {
   paginationDown,
   paginationPage,
   paginationControl,
+  mainPanelSection,
 } from './mainPanel.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
@@ -53,7 +54,7 @@ class MainPanel extends PureComponent<Props> {
   render() {
     const { slots, selectedItemIndex } = this.props;
     return (
-      <section>
+      <section className={mainPanelSection}>
         <div className={mainPanel}>
           <ul className={itemsContainer}>
             { slots.map((slot, index) =>

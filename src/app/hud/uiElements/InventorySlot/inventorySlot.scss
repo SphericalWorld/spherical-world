@@ -13,12 +13,12 @@
   background-color: $background-color-slot;
   border: $size-border solid $border-color-slot;
   border-radius: 0.7em;
-  margin: 0.2em -0.1em;
+  margin: 0.1em -0.1em;
 }
 
 .slotItem {
   background-size: 100%;
-  border-radius: 0.7em;
+  border-radius: 0.5em;
   height: 100%;
   position: relative;
 }
@@ -31,18 +31,18 @@
 
 .selectedSlot {
   .slotItem {
-    box-shadow: $selected-slot 0 0 10px 5px inset, $selected-slot 0 0 5px 0;
+    box-shadow: $selected-slot 0 0 $size-of-shadow $size-of-shadow/3 inset, $selected-slot 0 0 $size-of-shadow/3 0;
   }
 }
 
 .slotItem:hover {
-  box-shadow: $hover-slot 0 0 5px 1px inset;
+  box-shadow: $hover-slot 0 0 $size-of-shadow/2 $size-of-shadow/4 inset;
 }
 
 .imageDiamond {
-  background-image: url('https://github.com/SphericalWorld/spherical-world/blob/master/src/textures/items/diamond.png?raw=true');
+  background-image: url('/items/diamond.png');
 }
 
 .imageIronIngot {
-  background-image: url('https://github.com/SphericalWorld/spherical-world/blob/master/src/textures/items/iron_ingot.png?raw=true');
+  background-image: url('/items/iron_ingot.png');
 }
