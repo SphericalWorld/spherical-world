@@ -1,0 +1,48 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+%size-img {
+  height: $size-slot;
+  width: $size-slot;
+}
+
+.slot {
+  @extend %font-main;
+  @extend %size-img;
+  background-color: $background-color-slot;
+  border: $size-border solid $border-color-slot;
+  border-radius: 0.7em;
+  margin: 0.1em -0.1em;
+}
+
+.slotItem {
+  background-size: 100%;
+  border-radius: 0.5em;
+  height: 100%;
+  position: relative;
+}
+
+.slotItemCount {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+.selectedSlot {
+  .slotItem {
+    box-shadow: $selected-slot 0 0 $size-of-shadow $size-of-shadow/3 inset, $selected-slot 0 0 $size-of-shadow/3 0;
+  }
+}
+
+.slotItem:hover {
+  box-shadow: $hover-slot 0 0 $size-of-shadow/2 $size-of-shadow/4 inset;
+}
+
+.imageDiamond {
+  background-image: url('/items/diamond.png');
+}
+
+.imageIronIngot {
+  background-image: url('/items/iron_ingot.png');
+}
