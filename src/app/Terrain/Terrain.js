@@ -24,7 +24,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
       chunk.generateFoliageTexture();
     }
 
-    draw(skyColor, globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
+    draw(skyColor: number[], globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
       const { shader } = (this.material: { shader: ChunkProgram });
       const m = mat4.create();
       mat4.multiply(m, pMatrix, mvMatrix);

@@ -53,7 +53,7 @@ export default class Texture {
 
   static makeAnimatedTexture(textureImage: HTMLImageElement | HTMLCanvasElement, target: number, type: number = gl.RGBA): WebGLTexture {
     const texture: WebGLTexture = gl.createTexture();
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
     gl.bindTexture(target, texture);
     // console.log(textureImage)
     gl.texImage3D(

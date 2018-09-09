@@ -197,7 +197,11 @@ class GlTextureLibrary {
   }
 
   get(textureName: string): Texture {
-    return this.textures.get(textureName);
+    const texture = this.textures.get(textureName);
+    if (!texture) {
+      throw Error(`Texture ${textureName} is not registered`);
+    }
+    return texture;
   }
 
   add(...textures: Texture[]): this {

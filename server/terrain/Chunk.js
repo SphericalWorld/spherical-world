@@ -188,7 +188,7 @@ class Chunk {
     return this;
   }
 
-  async saveMeta(meta): Promise<Chunk> {
+  async saveMeta(meta: Object): Promise<Chunk> {
     await outputFile(this.metaPath, JSON.stringify(meta));
     return this;
   }

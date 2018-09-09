@@ -65,7 +65,7 @@ for (const block of blocks) {
   blocksFlags[block.id][LIGHT_TRANSPARENT] = block.lightTransparent ? 1 : 0;
   blocksFlags[block.id][SIGHT_TRANSPARENT] = block.sightTransparent ? 1 : 0;
   blocksFlags[block.id][HAS_PHYSICS_MODEL] = block.needPhysics ? 1 : 0;
-  blocksFlags[block.id][HAS_GRAPHICS_MODEL] = block.model ? 1 : 0;
+  blocksFlags[block.id][HAS_GRAPHICS_MODEL] = 'model' in block ? 1 : 0;
   blocksFlags[block.id][4] = block.selfTransparent ? 1 : 0;
 
 

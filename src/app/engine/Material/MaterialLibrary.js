@@ -5,8 +5,12 @@ const materialLibraryProvider = () => {
   class MaterialLibrary {
     materials: Map<string, Material> = new Map();
 
-    get(materialName: string): ?Material {
-      return this.materials.get(materialName);
+    get(materialName: string): Material {
+      const material = this.materials.get(materialName);
+      if (!material) {
+        throw Error(`Material ${materialName} is not registered`);
+      }
+      return material;
     }
 
     add(...materials: Material[]): this {
