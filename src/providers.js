@@ -93,7 +93,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch(event => world.dispatch(event));
 
-  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
+  world.registerSystem(...systemsProvider(world, terrain, network, time, input, Player, store));
 
   return Main(store, network, Player, new ResourceLoader(), world, Skybox);
 };

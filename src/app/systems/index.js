@@ -19,6 +19,7 @@ export default (
   network: Network,
   time: Time,
   input: Input,
+  Player,
   store,
 ): System[] => [
   TerrainSystem(world, network, terrain),
@@ -27,5 +28,5 @@ export default (
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
   HudSystem(world, store),
-  NetworkSystem(world, network),
+  NetworkSystem(world, network, Player),
 ].map(S => new S());

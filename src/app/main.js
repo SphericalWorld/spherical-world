@@ -3,7 +3,6 @@ import type Network from './network';
 import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
-// import playerModel from '../models/player.json';
 import { World } from '../../common/ecs';
 
 let tex = 0;
@@ -36,11 +35,9 @@ const engineProvider = (
 
       Player.hudBillboardModel = createBillboard(2.0);
 
-      this.player = await network.request('LOGIN', { cookie: 12345 });
+      const player = await network.request('LOGIN', { cookie: 12345 });
 
-      // Player.model = new Model(playerModel, 2);
-
-      this.player = Player(this.player);
+      this.player = Player(player, true);
 
       this.hud = new HUD(store);
 

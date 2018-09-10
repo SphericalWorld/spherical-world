@@ -129,6 +129,7 @@
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../../common/ecs/Entity';
 import GlObject from '../engine/glObject';
+import playerModel from '../../models/player.json';
 import { World } from '../../../common/ecs';
 import {
   Transform,
@@ -138,9 +139,10 @@ import {
   Velocity,
   Gravity,
   UserControlled,
+  Visual,
 } from '../components';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
-import { createCube } from '../engine/Model';
+import Model from '../engine/Model/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
 const playerProvider = (
@@ -148,21 +150,24 @@ const playerProvider = (
   materialLibrary: MaterialLibrary,
   BlockPicker,
   Inventory,
-) => (data: Object): Entity => {
-  const model = createCube(1.001);
-  const material = materialLibrary.get('blockSelector'); // 'player'
-  const object = new GlObject({ model, material });
+) => (data: Object, isMainPlayer: boolean = false): Entity => {
+  const model = new Model(playerModel, 2);
+  const material = materialLibrary.get('skybox'); // 'player'
   const blockPicker = BlockPicker();
   return ecs.createEntity(
     data.id,
-    new Transform(data.x, data.y, data.z),
-    new Camera(),
-    new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)), // 1.8
-    new Physics(),
-    new Velocity(),
-    new Gravity(),
-    new UserControlled(),
-    // new Visual(object),
+    ...[
+      new Transform(data.x, data.y, data.z),
+      new Camera(),
+      new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)), // 1.8
+      new Physics(),
+      new Velocity(),
+      new Gravity(),
+      new UserControlled(),
+      isMainPlayer
+        ? null
+        : new Visual(new GlObject({ model, material })),
+    ].filter(el => el),
   );
 };
 

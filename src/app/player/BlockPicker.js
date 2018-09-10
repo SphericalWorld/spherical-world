@@ -1,13 +1,13 @@
 // @flow
 import type { Entity } from '../../../common/ecs/Entity';
+import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
+import type { CreateBlockRemover } from './BlockRemover';
 import GlObject from '../engine/glObject';
 import { World } from '../../../common/ecs';
 import {
   Transform, Visual, Raytracer, Player,
 } from '../components';
 import { createCube } from '../engine/Model';
-import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
-import type { CreateBlockRemover } from './BlockRemover';
 
 const blockPickerProvider = (
   ecs: World,
