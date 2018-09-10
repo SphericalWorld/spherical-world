@@ -16,7 +16,7 @@
   top: 0;
 }
 
-.mainMenu {
+.inner {
   background: transparentize($background-main-menu, 0.1);
   border: 0.2em ridge transparentize($primary, 0.75);
   box-shadow:
@@ -29,7 +29,7 @@
   width: 20em;
 }
 
-.labelMenu {
+.label {
   @extend %font-main;
   background: transparentize($background-main-menu, 0.01);
   border: $px1*3 ridge transparentize($primary, 0.3);

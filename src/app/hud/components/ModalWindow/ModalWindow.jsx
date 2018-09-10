@@ -2,27 +2,26 @@
 import type { Node } from 'react';
 import React from 'react';
 import {
-  mainMenu,
+  inner,
   wrapper,
-  labelMenu,
+  label,
 } from './modalWindow.scss';
 
 type Props = {|
-  +text: string;
+  +caption: string;
   +children?: Node,
 |}
 
-const ModalWindow = ({ text, children }: Props) => (
+const ModalWindow = ({ caption, children }: Props) => (
   <div className={wrapper}>
-    <nav className={mainMenu}>
-      <div className={labelMenu}>
-        {text}
-      </div>
-      <div>
+    <div className={inner}>
+      <header className={label}>
+        {caption}
+      </header>
+      <section>
         {children}
-      </div>
-    </nav>
-
+      </section>
+    </div>
   </div>
 );
 
