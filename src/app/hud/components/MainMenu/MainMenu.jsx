@@ -1,18 +1,21 @@
 // @flow
 import React from 'react';
 import Button from '../../uiElements/Button';
-import { mainMenu, wrapper } from './mainMenu.scss';
+import ModalWindow from '../ModalWindow';
+import {
+  contentMenu,
+} from './mainMenu.scss';
 
 const MainMenu = () => (
-  <div className={wrapper}>
-    <nav className={mainMenu}>
+  <ModalWindow text="Main Menu">
+    <div className={contentMenu}>
       <Button text="return to game" />
       <Button text="video" />
       <Button text="audio" />
       <Button text="key bindings" />
       <Button text="exit" />
-    </nav>
-  </div>
+    </div>
+  </ModalWindow>
 );
 
 export default MainMenu;

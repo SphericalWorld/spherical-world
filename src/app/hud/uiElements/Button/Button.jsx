@@ -11,7 +11,7 @@ export type Size =
 
 type Props = {|
   +text: string;
-  size?: Size;
+  +size?: Size;
 |}
 
 const Button = ({ text, size = SIZE_SMALL }: Props) => (
@@ -19,9 +19,5 @@ const Button = ({ text, size = SIZE_SMALL }: Props) => (
     {text}
   </button>
 );
-
-Button.defaultProps = {
-  size: SIZE_SMALL,
-};
 
 export default Button;
