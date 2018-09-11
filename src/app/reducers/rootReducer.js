@@ -8,9 +8,6 @@ const combinedReducer = combineReducers({
   hudData: hudReducer,
 });
 
-const rootReducer = reduceReducers(combinedReducer,
-  // entityCrudReducer,
-  // editingFeatureReducer,
-);
+const rootReducer = reduceReducers(combinedReducer);
 
 export default rootReducer;

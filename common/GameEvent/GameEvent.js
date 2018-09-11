@@ -1,5 +1,5 @@
 // @flow
-import type { PLAYER_DESTROYED_BLOCK_TYPE } from '../player/events';
+import type { PLAYER_DESTROYED_BLOCK_TYPE } from '../../src/app/player/events';
 
 export type GAME_EVENT_TYPE = string;
 

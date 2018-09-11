@@ -91,7 +91,6 @@ export default (world: World, terrain: Terrain) =>
       // console.log( quat.rotateX(quat.create(), quat.create(), transform.rotation.x))
 
 
-
       if (userControls.movingForward || userControls.movingBackward || userControls.movingLeft || userControls.movingRight) {
         const movingX = userControls.movingForward - userControls.movingBackward;
         const movingZ = userControls.movingLeft - userControls.movingRight;

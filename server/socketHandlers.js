@@ -42,7 +42,7 @@ export default class SocketHandlers {
   playerChangeRotation(ws, data) {
     const result = ws.player.changeRotation(data.v, data.h);
     if (result) {
-      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, v: ws.player.verticalRotate, h: ws.player.horizontalRotate });
+      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, rotation: data.rotation });
     } else {
       callback(false, {
         x: ws.player.x, y: ws.player.y, z: ws.player.z,

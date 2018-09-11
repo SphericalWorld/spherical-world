@@ -2,18 +2,6 @@
 // const playerProvider = (store, BlockRemover, BlockPicker, Inventory) => {
 //   @connect(mapState, mapActions, store)
 //   class Player {
-//     loadPlayer: typeof loadPlayer;
-//
-//     id: number;
-//     x: number = 0.0;
-//     y: number = 0.0;
-//     z: number = 0.0;
-//     horizontalRotate: number = 0.0;
-//     verticalRotate: number = 0.0;
-//     movingForward: boolean = false;
-//     movingBack: boolean = false;
-//     movingLeft: boolean = false;
-//     movingRight: boolean = false;
 //     name: string;
 //
 //     blockRemover: BlockRemover;
@@ -26,11 +14,6 @@
 //     }
 //
 //     constructor(params, app) {
-//       this.app = app;
-//       this.speed = 0.006;
-//       this.currentSpeed = 0;
-//       this.running = false;
-//       this.jumping = false;
 //       this.blockRemovingSpeed = 2;
 //       this.blockInDown = 0;
 //       this.blockInUp = 0;
@@ -56,12 +39,6 @@
 //       this.hudBillboard = new GlObject({ material: 'qwe'});
 //       this.hudBillboard.model = Player.hudBillboardModel;
 //
-//       if (!this.mainPlayer) {
-//         this.glObject = new GlObject({ material: 'qwe'});
-//         this.glObject.model = Player.model;
-//         this.glObject.texture = Player.texture;
-//       }
-//
 //       setInterval(() => {
 //         this.exp += 1;
 //         if (this.exp === this.expForLevel) {
@@ -69,27 +46,8 @@
 //         }
 //       }, 200);
 //
-//       this.textureLibrary = app.textureLibrary;
 //       this.nicknameTexture = this.textureLibrary.makeTextureFromText(this.name);
 //       this.hudBillboard.texture = this.nicknameTexture;
-//       this.loadPlayer({
-//         x: this.x,
-//         y: this.y,
-//         z: this.z,
-//         speed: this.speed,
-//         currentSpeed: this.currentSpeed,
-//         movingForward: this.movingForward,
-//         movingBack: this.movingBack,
-//         movingLeft: this.movingLeft,
-//         movingRight: this.movingRight,
-//         horizontalRotate: this.horizontalRotate,
-//         verticalRotate: this.verticalRotate,
-//         fallSpeed: this.fallSpeed,
-//         id: this.id,
-//         running: this.running,
-//       }, this.mainPlayer);
-//       this.blockRemover = new BlockRemover();
-//       this.blockPicker = new BlockPicker();
 //     }
 //
 //     putBlock(geoId, x, y, z, plane) {

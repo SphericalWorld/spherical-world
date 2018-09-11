@@ -49,6 +49,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
         gl.uniform4f(this.currentShader.uLighting, 1, 1, 1, 1);
         this.mvPushMatrix();
         mat4.translate(this.mvMatrix, this.mvMatrix, position.translation);
+        mat4.multiply(this.mvMatrix, this.mvMatrix, mat4.fromQuat(mat4.create(), position.rotation));
         this.setMatrixUniforms();
         visual.glObject.draw();
         this.mvPopMatrix();
