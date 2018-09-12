@@ -4,15 +4,6 @@ import { DIRT } from '../engine/Texture/textureConstants';
 
 const Dirt = () => Block({
   id: 6,
-  buffer: {
-    top: 0,
-    bottom: 0,
-    north: 0,
-    south: 0,
-    west: 0,
-    east: 0,
-  },
-
   textures: {
     top: DIRT,
     bottom: DIRT,

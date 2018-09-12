@@ -2,19 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-type StateProps = {|
-  +x: number,
-  +y: number,
-  +z: number,
-  +chunkX: number,
-  +chunkZ: number,
-  +mouseX: number,
-  +mouseY: number,
-  +mouseZ: number,
-|};
-
-type PanelType = StateProps => React$Element<*>;
-
 const mapState = (state) => {
   const [x, y, z] = state.hudData.player.position;
   // const [mouseX, mouseY, mouseZ] = state.mouse.worldPosition;
@@ -24,7 +11,7 @@ const mapState = (state) => {
   chunkZ = chunkZ >= 0 ? chunkZ : chunkZ + 16;
 
   return {
-    x, y, z, chunkX, chunkZ, // mouseX, mouseY, mouseZ,
+    x, y, z, chunkX, chunkZ, mouseX: 0, mouseY: 0, mouseZ: 0,
   };
 };
 
@@ -39,7 +26,7 @@ type Props = {|
   +mouseZ: number;
 |}
 
-const Panel: PanelType = ({
+const Panel = ({
   x, y, z, chunkX, chunkZ, mouseX, mouseY, mouseZ,
 }: Props) => (
   <div id="hud-debug" ng-show="hudDebugVisible">

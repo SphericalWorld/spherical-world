@@ -4,15 +4,6 @@ import { STONE } from '../engine/Texture/textureConstants';
 
 const Stone = () => Block({
   id: 3,
-  buffer: {
-    top: 0,
-    bottom: 0,
-    north: 0,
-    south: 0,
-    west: 0,
-    east: 0,
-  },
-
   textures: {
     top: STONE,
     bottom: STONE,

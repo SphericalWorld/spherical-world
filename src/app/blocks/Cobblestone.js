@@ -4,15 +4,6 @@ import { COBBLESTONE } from '../engine/Texture/textureConstants';
 
 const Cobblestone = () => Block({
   id: 16,
-  buffer: {
-    top: 0,
-    bottom: 0,
-    north: 0,
-    south: 0,
-    west: 0,
-    east: 0,
-  },
-
   textures: {
     top: COBBLESTONE,
     bottom: COBBLESTONE,
