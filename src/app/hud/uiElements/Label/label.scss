@@ -1,0 +1,20 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.label {
+  @extend %font-main;
+  // color: lighten($primary, 20%);
+  font-size: 1em;
+  margin: 0.5em;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.small {
+
+}
+
+.big {
+
+}
