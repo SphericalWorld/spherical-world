@@ -19,3 +19,6 @@ $selected-slot: #bccdd6;
 $hover-slot: lighten(darken($primary, 10%), 40%);
 
 $border-pagination-page: 0.1em solid $border-color-slot;
+
+$border-key-bindings: 0.4em ridge transparentize($primary, 0.75);
+$font-color-key-bindings-header: #ff0;

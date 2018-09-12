@@ -2,6 +2,19 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
+$size-of-romb: 0.6em;
+
+%angle {
+  // background: radial-gradient(closest-side, #878841 7%, #000c0b);
+  background-color: mix($glass, $primary, 40%);//;#9ba7aa;
+  border: 0.12em solid mix($font-color-main-shadow, $primary, 55%);//#2e4446;
+  box-shadow: 0 0 0 0.16em $font-color-main-shadow inset;
+  height: $size-of-romb;
+  position: absolute;
+  transform: rotate(45deg);
+  width: $size-of-romb;
+}
+
 .wrapper {
   align-items: center;
   bottom: 9em;
@@ -14,11 +27,12 @@
   right: 0;
   text-align: center;
   top: 0;
+  user-select: none;
 }
 
 .inner {
   background: transparentize($background-main-menu, 0.1);
-  border: 0.2em ridge transparentize($primary, 0.75);
+  border: 0.2em ridge transparentize($primary, 0.85);
   box-shadow:
     inset 0 $size-of-shadow-main-menu/-3 $size-of-shadow-main-menu/3 transparentize($glass, 0.75),
     inset 0 0 $size-of-shadow-main-menu transparentize($glass, 0.75),
@@ -26,7 +40,38 @@
     inset 0 $size-of-shadow-main-menu/4 $size-of-shadow-main-menu/3 transparentize($glass, 0.75);
   pointer-events: all;
   position: relative;
-  width: 20em;
+}
+
+.frame {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.angleLeftTop {
+  @extend %angle;
+  left: -$size-of-romb/1.5;
+  top: -$size-of-romb/1.5;
+}
+
+.angleRightTop {
+  @extend %angle;
+  right: -$size-of-romb/1.5;
+  top: -$size-of-romb/1.5;
+}
+
+.angleLeftBottom {
+  @extend %angle;
+  bottom: -$size-of-romb/1.5;
+  left: -$size-of-romb/1.5;
+}
+
+.angleRightBottom {
+  @extend %angle;
+  bottom: -$size-of-romb/1.5;
+  right: -$size-of-romb/1.5;
 }
 
 .label {
@@ -42,7 +87,7 @@
   color: $font-color-main-menu;
   font-size: 1.1em;
   left: 50%;
-  padding: 0.4em 1.1em;
+  padding: 0.4em 3em;
   position: absolute;
   transform: translate(-50%, -50%);
 }
