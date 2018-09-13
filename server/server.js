@@ -2,9 +2,12 @@
 import WebSocket, { Server as WebSocketServer } from 'ws';
 import HashMap from '../common/fp/data-structures/Map';
 import parseJson from '../common/utils/parseString';
+import Transform from '../src/app/components/Transform';
+import { THREAD_MAIN } from '../src/app/Thread/threadConstants';
 import Terrain from './terrain/Terrain';
 import Player from './player';
 import SocketHandlers from './socketHandlers';
+import { World } from '../common/ecs';
 
 const isSocketOpen = (ws: WebSocket): boolean => ws.readyState === WebSocket.OPEN;
 
@@ -70,6 +73,9 @@ type Message = {
   type: ?string;
   data: any;
 }
+
+const world = new World(THREAD_MAIN);
+world.registerComponentTypes(Transform);
 
 export default class Server {
   wss: WebSocketServer;

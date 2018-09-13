@@ -15,7 +15,7 @@ export type BlockDetails = {|
 export default class Raytracer implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName = 'raytracer';
-  static componentType: { 'raytracer': Raytracer };
+  static componentType: {| 'raytracer': Raytracer |};
 
   face: BlockFace = 0;
   block: BlockDetails = {};

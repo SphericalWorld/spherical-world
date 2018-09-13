@@ -18,7 +18,7 @@ export default class Collider implements Component {
   };
 
   static componentName = 'collider';
-  static componentType: { 'collider': Collider };
+  static componentType: {| 'collider': Collider |};
 
   shape: TCollider;
   threadData: Array<any>;

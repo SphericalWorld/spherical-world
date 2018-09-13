@@ -7,7 +7,7 @@ import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 export default class Velocity implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName = 'velocity';
-  static componentType: { 'velocity': Velocity };
+  static componentType: {| 'velocity': Velocity |};
 
   linear: Vec3 = vec3.create();
   // angular: Vec3 = [0, 0, 0];
