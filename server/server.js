@@ -1,13 +1,10 @@
 // @flow
 import WebSocket, { Server as WebSocketServer } from 'ws';
+import type SocketHandlers from './socketHandlers';
 import HashMap from '../common/fp/data-structures/Map';
 import parseJson from '../common/utils/parseString';
-import Transform from '../src/app/components/Transform';
-import { THREAD_MAIN } from '../src/app/Thread/threadConstants';
 import Terrain from './terrain/Terrain';
 import Player from './player';
-import SocketHandlers from './socketHandlers';
-import { World } from '../common/ecs';
 
 const isSocketOpen = (ws: WebSocket): boolean => ws.readyState === WebSocket.OPEN;
 
@@ -74,16 +71,13 @@ type Message = {
   data: any;
 }
 
-const world = new World(THREAD_MAIN);
-world.registerComponentTypes(Transform);
-
-export default class Server {
+export default (router: SocketHandlers) => class Server {
   wss: WebSocketServer;
   connections: WeakMap<WebSocket, any> = new WeakMap();
-  router: SocketHandlers = new SocketHandlers(this);
   terrain: Terrain;
 
   constructor() {
+    router.server = this;
     this.terrain = new Terrain('steppe', 11);
     setTimeout(() => {
       for (let i = -36; i < 36; i += 1) {
@@ -96,16 +90,16 @@ export default class Server {
       }
     }, 50000);
     this.players = [];
-    this.router.terrain = this.terrain;
-    this.router.route('loadGameData', this.router.loadGameData.bind(this.router));
-    this.router.route('PING', () => {});
-    this.router.route('PLAYER_PUT_BLOCK', this.router.putBlock.bind(this.router));
-    this.router.route('PLAYER_DESTROYED_BLOCK', this.router.removeBlock.bind(this.router));
-    this.router.route('PLAYER_CHANGE_POSITION', this.router.playerChangePosition.bind(this.router));
-    this.router.route('PLAYER_CHANGED_ROTATION', this.router.playerChangeRotation.bind(this.router));
-    this.router.route('PLAYER_STARTED_REMOVE_BLOCK', Player.startRemoveBlock);
-    this.router.route('PLAYER_STOPED_REMOVE_BLOCK', Player.stopRemoveBlock);
-    this.router.route('LOGIN', this.router.login.bind(this.router), false);
+    router.terrain = this.terrain;
+    router.route('loadGameData', router.loadGameData.bind(router));
+    router.route('PING', () => {});
+    router.route('PLAYER_PUT_BLOCK', router.putBlock.bind(router));
+    router.route('PLAYER_DESTROYED_BLOCK', router.removeBlock.bind(router));
+    router.route('PLAYER_CHANGE_POSITION', router.playerChangePosition.bind(router));
+    router.route('PLAYER_CHANGED_ROTATION', router.playerChangeRotation.bind(router));
+    router.route('PLAYER_STARTED_REMOVE_BLOCK', Player.startRemoveBlock);
+    router.route('PLAYER_STOPED_REMOVE_BLOCK', Player.stopRemoveBlock);
+    router.route('LOGIN', router.login.bind(router), false);
 
 
     this.wss = new WebSocketServer({ port: 8080 });
@@ -122,8 +116,8 @@ export default class Server {
                 return request.callback(message.data);
               });
           } else if (typeof message.type === 'string') {
-            if (this.router.router[message.type]) {
-              if (this.router.router[message.type].needAuth && !wrapper.player) {
+            if (router.router[message.type]) {
+              if (router.router[message.type].needAuth && !wrapper.player) {
                 return;
               }
               const callback = (result, data) => {
@@ -131,7 +125,7 @@ export default class Server {
                   wrapper.send({ id: message.id, result, data });
                 }
               };
-              this.router.router[message.type].handler(wrapper, message.data || callback, callback);
+              router.router[message.type].handler(wrapper, message.data || callback, callback);
             } else {
               console.error('handler not registered', message.type);
             }
@@ -150,4 +144,4 @@ export default class Server {
       });
     });
   }
-}
+};

@@ -1,4 +1,8 @@
 // @flow
+import type { Entity } from '../common/ecs/Entity';
+import type World from '../common/ecs/World';
+
+import Transform from '../src/app/components/Transform';
 
 let id = 1;
 
@@ -107,3 +111,11 @@ export default class Player {
     ws.player.broadcastToLinked('OTHER_PLAYER_STOP_REMOVE_BLOCK', { id: ws.player.id });
   }
 }
+
+export const playerProvider = (
+  world: World,
+) => (id: Entity) => {
+  return world.createEntity(id, new Transform(0, 132, 0));
+};
+
+export type CreatePlayer = $Call<typeof playerProvider, *>;

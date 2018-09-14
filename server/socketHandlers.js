@@ -1,15 +1,11 @@
 // @flow
+import type { CreatePlayer } from './player';
 import type Server from './server';
 import Player from './player';
 
-export default class SocketHandlers {
+export default (createPlayer: CreatePlayer) => class SocketHandlers {
   server: Server;
-
-  constructor(server: Server) {
-    this.server = server;
-    this.router = {};
-    console.log('socketHandlers loaded');
-  }
+  router = {};
 
   route(message: string, handler: Function, needAuth: boolean = true) {
     this.router[message] = { handler, needAuth };
@@ -62,6 +58,8 @@ export default class SocketHandlers {
   login(ws, data, callback) {
     // data.cookie
     const player = new Player();
+    createPlayer(player.id);
+
     player.terrain = this.server.terrain;
     player.socket = ws;
     ws.player = player;
@@ -85,4 +83,4 @@ export default class SocketHandlers {
       });
     }
   }
-}
+};

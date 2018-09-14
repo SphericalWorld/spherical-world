@@ -1,4 +1,4 @@
 // @flow
-import Server from './server';
+import mainProvider from './providers';
 
-export default new Server();
+export default mainProvider();
