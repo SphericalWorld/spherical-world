@@ -21,25 +21,25 @@
   flex: 0 1 5%;
 }
 
-.article {
+.commandGroup {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   padding: 0 0.5em;
 }
 
-.article > span {
+.commandGroup > .label {
   color: $font-color-main;
 }
+
 
 .section {
   flex: 0 1 80%;
   overflow-x: hidden;
   overflow-y: auto;
-
 }
 
-.commandLine {
+.command {
   align-items: baseline;
   display: flex;
   flex-direction: row;
@@ -47,16 +47,16 @@
   margin: 0.3em 0;
 }
 
-.commandLine > * {
+.command > * {
   flex: 0 1 33%;
   margin: 0;
 }
 
-.commandLine > span {
+.command > .label {
   color: $font-color-key-bindings-header;
 }
 
-.commandLine > span:first-child {
+.command > .label:first-child {
   padding: 0 1.1em;
   text-align: left;
 }
@@ -64,13 +64,13 @@
 .footer {
   border-top: $border-key-bindings;
   display: flex;
-  flex: 0 1 19%;
+  flex: 0 1 15%;
   flex-direction: column;
   justify-content: center;
 }
 
 .helpLine {
-  padding: 0.2em;
+  padding: 0.3em;
 }
 
 .footerButtons {
@@ -85,6 +85,6 @@
   margin: 0;
 }
 
-.footerButtons > span {
+.footerButtons > .label {
   flex: 0 1 15%;
 }

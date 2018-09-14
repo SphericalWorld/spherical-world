@@ -2,17 +2,14 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
-$size-of-romb: 0.6em;
-
-%angle {
-  // background: radial-gradient(closest-side, #878841 7%, #000c0b);
-  background-color: mix($glass, $primary, 40%);//;#9ba7aa;
-  border: 0.12em solid mix($font-color-main-shadow, $primary, 55%);//#2e4446;
+%corner {
+  background-color: mix($glass, $primary, 40%);
+  border: 0.12em solid mix($font-color-main-shadow, $primary, 55%);
   box-shadow: 0 0 0 0.16em $font-color-main-shadow inset;
-  height: $size-of-romb;
+  height: $size-of-corner;
   position: absolute;
   transform: rotate(45deg);
-  width: $size-of-romb;
+  width: $size-of-corner;
 }
 
 .wrapper {
@@ -50,28 +47,28 @@ $size-of-romb: 0.6em;
   top: 0;
 }
 
-.angleLeftTop {
-  @extend %angle;
-  left: -$size-of-romb/1.5;
-  top: -$size-of-romb/1.5;
+.cornerLeftTop {
+  @extend %corner;
+  left: -$size-of-corner/$sqrt2;
+  top: -$size-of-corner/$sqrt2;
 }
 
-.angleRightTop {
-  @extend %angle;
-  right: -$size-of-romb/1.5;
-  top: -$size-of-romb/1.5;
+.cornerRightTop {
+  @extend %corner;
+  right: -$size-of-corner/$sqrt2;
+  top: -$size-of-corner/$sqrt2;
 }
 
-.angleLeftBottom {
-  @extend %angle;
-  bottom: -$size-of-romb/1.5;
-  left: -$size-of-romb/1.5;
+.cornerLeftBottom {
+  @extend %corner;
+  bottom: -$size-of-corner/$sqrt2;
+  left: -$size-of-corner/$sqrt2;
 }
 
-.angleRightBottom {
-  @extend %angle;
-  bottom: -$size-of-romb/1.5;
-  right: -$size-of-romb/1.5;
+.cornerRightBottom {
+  @extend %corner;
+  bottom: -$size-of-corner/$sqrt2;
+  right: -$size-of-corner/$sqrt2;
 }
 
 .label {

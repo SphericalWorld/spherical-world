@@ -6,10 +6,10 @@ import {
   wrapper,
   label,
   frame,
-  angleLeftTop,
-  angleLeftBottom,
-  angleRightTop,
-  angleRightBottom,
+  cornerLeftTop,
+  cornerLeftBottom,
+  cornerRightTop,
+  cornerRightBottom,
 } from './modalWindow.scss';
 
 type Props = {|
@@ -25,10 +25,10 @@ const ModalWindow = ({ caption, children }: Props) => (
         {caption}
       </header>
       <div className={frame}>
-        <div className={angleLeftTop} />
-        <div className={angleLeftBottom} />
-        <div className={angleRightTop} />
-        <div className={angleRightBottom} />
+        <div className={cornerLeftTop} />
+        <div className={cornerLeftBottom} />
+        <div className={cornerRightTop} />
+        <div className={cornerRightBottom} />
       </div>
       <section>
         {children}

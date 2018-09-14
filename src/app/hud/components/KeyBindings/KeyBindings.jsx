@@ -5,97 +5,95 @@ import Label from '../../uiElements/Label';
 import ModalWindow from '../ModalWindow';
 import {
   content,
-  commandLine,
+  command,
   header,
   footer,
   section,
-  article,
+  commandGroup,
   helpLine,
   footerButtons,
+  label,
 } from './keyBindings.scss';
 
 const KeyBindings = () => (
   <ModalWindow caption="Key Bindings">
     <div className={content}>
-      <header className={`${commandLine} ${header}`}>
-        <Label text="command" />
-        <Label text="key 1" />
-        <Label text="key 2" />
+      <header className={`${command} ${header}`}>
+        <Label text="command" className={label} />
+        <Label text="key 1" className={label} />
+        <Label text="key 2" className={label} />
       </header>
       <section className={section}>
         <section>
-          <article className={article}>
-            <Label text="movement keys" size="big" />
+          <article className={commandGroup}>
+            <Label text="movement keys" size="big" className={label} />
           </article>
-          <div className={commandLine}>
-            <Label text="action 1" />
+          <div className={command}>
+            <Label text="action 1" className={label} />
             <Button text="A" size="small" />
             <Button text="B" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 2" />
+          <div className={command}>
+            <Label text="action 2" className={label} />
             <Button text="C" size="small" />
             <Button text="D" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 3" />
+          <div className={command}>
+            <Label text="action 3" className={label} />
             <Button text="E" size="small" />
             <Button text="F" size="small" />
           </div>
-
-          <article className={article}>
-            <Label text="movement keys" size="big" />
+          <article className={commandGroup}>
+            <Label text="movement keys" size="big" className={label} />
           </article>
-          <div className={commandLine}>
-            <Label text="action 1" />
+          <div className={command}>
+            <Label text="action 1" className={label} />
             <Button text="A" size="small" />
             <Button text="B" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 2" />
+          <div className={command}>
+            <Label text="action 2" className={label} />
             <Button text="C" size="small" />
             <Button text="D" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 3" />
+          <div className={command}>
+            <Label text="action 3" className={label} />
             <Button text="E" size="small" />
             <Button text="F" size="small" />
           </div>
-
-          <article className={article}>
-            <Label text="movement keys" size="big" />
+          <article className={commandGroup}>
+            <Label text="movement keys" size="big" className={label} />
           </article>
-          <div className={commandLine}>
-            <Label text="action 1" />
+          <div className={command}>
+            <Label text="action 1" className={label} />
             <Button text="A" size="small" />
             <Button text="B" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 2" />
+          <div className={command}>
+            <Label text="action 2" className={label} />
             <Button text="C" size="small" />
             <Button text="D" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 3" />
+          <div className={command}>
+            <Label text="action 3" className={label} />
             <Button text="E" size="small" />
             <Button text="F" size="small" />
           </div>
-
-          <article className={article}>
-            <Label text="movement keys" size="big" />
+          <article className={commandGroup}>
+            <Label text="movement keys" size="big" className={label} />
           </article>
-          <div className={commandLine}>
-            <Label text="action 1" />
+          <div className={command}>
+            <Label text="action 1" className={label} />
             <Button text="A" size="small" />
             <Button text="B" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 2" />
+          <div className={command}>
+            <Label text="action 2" className={label} />
             <Button text="C" size="small" />
             <Button text="D" size="small" />
           </div>
-          <div className={commandLine}>
-            <Label text="action 3" />
+          <div className={command}>
+            <Label text="action 3" className={label} />
             <Button text="E" size="small" />
             <Button text="F" size="small" />
           </div>
@@ -103,11 +101,11 @@ const KeyBindings = () => (
       </section>
       <footer className={footer}>
         <div className={helpLine}>
-          <Label text="press key to bind to command" size="small" />
+          <Label text="press key to bind to command" size="small" className={label} />
         </div>
         <div className={footerButtons}>
           <Button text="reset to default" size="small" />
-          <Label text=" " />
+          <Label text=" " className={label} />
           <Button text="unbind key" size="small" />
           <Button text="OK" size="small" />
           <Button text="Cancel" size="small" />
