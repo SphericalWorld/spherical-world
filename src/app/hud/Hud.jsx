@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MainMenu from './components/MainMenu';
 import MainPanel from './components/MainPanel/MainPanel';
+import KeyBindings from './components/KeyBindings/KeyBindings';
 
 type StateProps = {|
   +mainMenuToggled: boolean;
@@ -16,10 +17,10 @@ const mapState = ({
   mainMenuToggled,
 });
 
-const Hud = (props: Props) => (
+const Hud = ({ mainMenuToggled }: Props) => (
   <div>
     <MainPanel />
-    {props.mainMenuToggled && <MainMenu />}
+    {mainMenuToggled && <KeyBindings />}
   </div>
 );
 

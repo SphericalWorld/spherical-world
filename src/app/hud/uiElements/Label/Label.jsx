@@ -16,6 +16,7 @@ export type Size =
 type Props = {|
   +text: string;
   +size?: Size;
+  +className?: string;
 |}
 
 const sizes = {
@@ -23,8 +24,8 @@ const sizes = {
   [SIZE_BIG]: big,
 };
 
-const Label = ({ text, size = SIZE_SMALL }: Props) => (
-  <span type="label" className={`${label} ${sizes[size]}`}>
+const Label = ({ text, size = SIZE_SMALL, className = '' }: Props) => (
+  <span type="label" className={`${label} ${sizes[size]} ${className}`}>
     {text}
   </span>
 );

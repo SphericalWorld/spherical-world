@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { button } from './button.scss';
+import { button, small, big } from './button.scss';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';
@@ -14,8 +14,13 @@ type Props = {|
   +size?: Size;
 |}
 
-const Button = ({ text, size = SIZE_SMALL }: Props) => (
-  <button type="button" className={`${button} ${size}`}>
+const sizes = {
+  [SIZE_SMALL]: small,
+  [SIZE_BIG]: big,
+};
+
+const Button = ({ text, size = SIZE_BIG }: Props) => (
+  <button type="button" className={`${button} ${sizes[size]}`}>
     {text}
   </button>
 );

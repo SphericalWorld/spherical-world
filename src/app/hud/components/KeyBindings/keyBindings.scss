@@ -1,0 +1,91 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+%flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  @extend %flex;
+  height: 30em;
+  padding: 1.8em 0.2em 0.1em;
+  position: relative;
+  width: 40em;
+}
+
+.header {
+  border-bottom: $border-key-bindings;
+  flex: 0 1 5%;
+}
+
+.commandGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0 0.5em;
+}
+
+.labelCommandGroup {
+  color: $font-color-main;
+}
+
+
+.section {
+  flex: 0 1 80%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.command {
+  align-items: baseline;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0.3em 0;
+}
+
+.command > * {
+  flex: 0 1 33%;
+  margin: 0;
+}
+
+.label,
+.labelFirst {
+  color: $font-color-key-bindings-header;
+}
+
+.labelFirst {
+  padding: 0 1.1em;
+  text-align: left;
+}
+
+.footer {
+  border-top: $border-key-bindings;
+  display: flex;
+  flex: 0 1 15%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.helpLine {
+  padding: 0.3em;
+}
+
+.footerButtons {
+  border-top: $border-key-bindings;
+  display: flex;
+  flex-direction: row;
+  padding: 0.5em;
+}
+
+.footerButtons > * {
+  flex: 0 1 30%;
+  margin: 0;
+}
+
+.footerButtons > .label {
+  flex: 0 1 15%;
+}

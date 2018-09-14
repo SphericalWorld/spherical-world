@@ -9,3 +9,8 @@ $size-of-shadow: 0.9em;
 $size-of-shadow-main-menu: 1em;
 
 $px1: 0.06em;
+
+//modalWindow
+$size-of-corner: 0.6em;
+$sqrt2: 1.41421356237;
+$size-of-half-corner: $size-of-corner/$sqrt2;
