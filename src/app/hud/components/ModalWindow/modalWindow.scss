@@ -49,26 +49,26 @@
 
 .cornerLeftTop {
   @extend %corner;
-  left: -$size-of-corner/$sqrt2;
-  top: -$size-of-corner/$sqrt2;
+  left: -$size-of-half-corner;
+  top: -$size-of-half-corner;
 }
 
 .cornerRightTop {
   @extend %corner;
-  right: -$size-of-corner/$sqrt2;
-  top: -$size-of-corner/$sqrt2;
+  right: -$size-of-half-corner;
+  top: -$size-of-half-corner;
 }
 
 .cornerLeftBottom {
   @extend %corner;
-  bottom: -$size-of-corner/$sqrt2;
-  left: -$size-of-corner/$sqrt2;
+  bottom: -$size-of-half-corner;
+  left: -$size-of-half-corner;
 }
 
 .cornerRightBottom {
   @extend %corner;
-  bottom: -$size-of-corner/$sqrt2;
-  right: -$size-of-corner/$sqrt2;
+  bottom: -$size-of-half-corner;
+  right: -$size-of-half-corner;
 }
 
 .label {

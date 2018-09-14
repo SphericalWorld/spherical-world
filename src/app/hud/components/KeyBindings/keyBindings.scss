@@ -28,7 +28,7 @@
   padding: 0 0.5em;
 }
 
-.commandGroup > .label {
+.labelCommandGroup {
   color: $font-color-main;
 }
 
@@ -52,11 +52,12 @@
   margin: 0;
 }
 
-.command > .label {
+.label,
+.labelFirst {
   color: $font-color-key-bindings-header;
 }
 
-.command > .label:first-child {
+.labelFirst {
   padding: 0 1.1em;
   text-align: left;
 }

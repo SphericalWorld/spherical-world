@@ -16,7 +16,7 @@ export type Size =
 type Props = {|
   +text: string;
   +size?: Size;
-  +className?: string ;
+  +className?: string;
 |}
 
 const sizes = {
