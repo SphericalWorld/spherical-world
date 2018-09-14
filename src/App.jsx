@@ -2,12 +2,12 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 // eslint-disable-next-line
-import PhysicsThread from 'worker-loader!./app/physicsThread/index';
+import PhysicsThread from 'worker-loader!./physicsThread/index';
 // eslint-disable-next-line
-import ChunksHandlerThread from 'worker-loader!./app/chunksHandlerThread/index';
-import configureStore from './app/store/configureStore';
-import Network from './app/network';
-import Hud from './app/hud/Hud';
+import ChunksHandlerThread from 'worker-loader!./chunksHandlerThread/index';
+import configureStore from './store/configureStore';
+import Network from './network';
+import Hud from './hud/Hud';
 
 const physicsThread = new PhysicsThread();
 const chunksHandlerThread = new ChunksHandlerThread();

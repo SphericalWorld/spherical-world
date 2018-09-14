@@ -2,7 +2,7 @@
 import type { Entity } from '../common/ecs/Entity';
 import type World from '../common/ecs/World';
 
-import Transform from '../src/app/components/Transform';
+import Transform from '../src/components/Transform';
 
 let id = 1;
 

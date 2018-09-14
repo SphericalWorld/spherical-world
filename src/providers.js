@@ -1,36 +1,36 @@
 // @flow
-import type { ShaderLibrary } from './app/engine/ShaderLibrary';
-import type Network from './app/network';
-import Main from './app/main';
-import playerProvider from './app/player/Player';
-import GlTextureLibrary from './app/engine/Texture/TextureLibrary';
-import Thread from './app/Thread/Thread';
+import type { ShaderLibrary } from './engine/ShaderLibrary';
+import type Network from './network';
+import Main from './main';
+import playerProvider from './player/Player';
+import GlTextureLibrary from './engine/Texture/TextureLibrary';
+import Thread from './Thread/Thread';
 import texturesProvider from './textures';
-import shaderLibraryProvider from './app/engine/ShaderLibrary';
-import materialLibraryProvider from './app/engine/Material/MaterialLibrary';
-import materialsProvider from './app/materials';
+import shaderLibraryProvider from './engine/ShaderLibrary';
+import materialLibraryProvider from './engine/Material/MaterialLibrary';
+import materialsProvider from './materials';
 import shadersProvider from './shaders';
-import inventoryProvider from './app/player/Inventory';
-import blockRemoverProvider from './app/player/BlockRemover';
-import blockPickerProvider from './app/player/BlockPicker';
-import skyboxProvider from './app/skybox';
-import Chunk from './app/Terrain/Chunk';
-import resourceLoader from './app/ResourceLoader';
-import addon from './app/addon';
-import terrainBaseProvider from './app/Terrain/TerrainBase';
-import terrainProvider from './app/Terrain';
-import systemsProvider from './app/systems';
+import inventoryProvider from './player/Inventory';
+import blockRemoverProvider from './player/BlockRemover';
+import blockPickerProvider from './player/BlockPicker';
+import skyboxProvider from './skybox';
+import Chunk from './Terrain/Chunk';
+import resourceLoader from './ResourceLoader';
+import addon from './addon';
+import terrainBaseProvider from './Terrain/TerrainBase';
+import terrainProvider from './Terrain';
+import systemsProvider from './systems';
 
-import timeProvider from './app/Time/Time';
+import timeProvider from './Time/Time';
 import { World } from '../common/ecs';
 
-import * as componentsProvider from './app/components';
+import * as componentsProvider from './components';
 
-import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './app/Thread/threadConstants';
+import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
 
-import inputProvider from './app/Input/inputProvider';
-import inputSourcesProvider from './app/Input/inputSources/inputSourcesProvider';
-import inputContextsProvider from './app/Input/inputContexts';
+import inputProvider from './Input/inputProvider';
+import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
+import inputContextsProvider from './Input/inputContexts';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   const world = new World(THREAD_MAIN);

@@ -1,5 +1,5 @@
 // @flow
-import Texture from '../app/engine/Texture/Texture';
+import Texture from '../engine/Texture/Texture';
 
 import grass from './blocks/grass_top.png';
 import sand from './blocks/sand.png';

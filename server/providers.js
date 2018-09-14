@@ -1,7 +1,7 @@
 // @flow
 import World from '../common/ecs/World';
-import Transform from '../src/app/components/Transform';
-import { THREAD_MAIN } from '../src/app/Thread/threadConstants';
+import Transform from '../src/components/Transform';
+import { THREAD_MAIN } from '../src/Thread/threadConstants';
 import { playerProvider } from './player';
 import serverProvider from './server';
 import socketHandlersProvider from './socketHandlers';

@@ -1,6 +1,6 @@
 // @flow
-import { gl } from '../../app/engine/glEngine';
-import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../app/engine/glShader';
+import { gl } from '../../engine/glEngine';
+import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import vertexShaderData from './diffuseAnimated.vert';
 import fragmentShaderData from './diffuseAnimated.frag';
 

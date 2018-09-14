@@ -1,5 +1,5 @@
 // @flow
-import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../app/engine/glShader';
+import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import vertexShaderData from './skybox.vert';
 import fragmentShaderData from './skybox.frag';
 
