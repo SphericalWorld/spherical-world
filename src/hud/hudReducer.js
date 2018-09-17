@@ -1,5 +1,5 @@
 // @flow
-import { createReducer } from '../common/utils/reducerUtils';
+import { createReducer } from '../util/reducerUtils';
 import { HUD_DATA_UPDATED, MENU_TOGGLED } from './hudConstants';
 
 const initialState = {

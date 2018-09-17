@@ -1,10 +1,10 @@
 // @flow
 import type { Maybe } from '../../common/fp/monads/maybe';
 import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
-import type { INPUT_TYPE } from './events';
+import type { INPUT_TYPE } from './eventTypes';
 import HashMap from '../../common/fp/data-structures/Map';
 import { Just, Nothing } from '../../common/fp/monads/maybe';
-import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './events';
+import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
 import InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 

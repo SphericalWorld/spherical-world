@@ -1,5 +1,9 @@
 // @flow
 import React from 'react';
+import { connect } from 'react-redux';
+import type { getElements } from '../../../../common/utils/flow';
+import type { State } from '../../../reducers/rootReducer';
+import { EVENT_CATEGORIES } from '../../../Input/eventTypes';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../ModalWindow';
@@ -17,7 +21,40 @@ import {
   labelCommandGroup,
 } from './keyBindings.scss';
 
-const KeyBindings = () => (
+type ActionMapppingProps = {|
+  +caption: string;
+  +gameEvent: string;
+  +firstKey: string;
+  +secondKey: string;
+|};
+
+type ActionCategoryProps = {|
+  +name: getElements<typeof EVENT_CATEGORIES>,
+  +items: $ReadOnlyArray<ActionMapppingProps>,
+|}
+
+type KeyBindingsProps = {|
+  +keyCategories: $ReadOnlyArray<ActionCategoryProps>
+|};
+
+const ActionMappping = ({ caption, firstKey, secondKey }: ActionMapppingProps) => (
+  <div className={command}>
+    <Label text={caption} className={labelFirst} />
+    <Button text={firstKey} size="small" />
+    <Button text={secondKey} size="small" />
+  </div>
+);
+
+const ActionCategory = ({ name, items }: ActionCategoryProps) => (
+  <div>
+    <article className={commandGroup}>
+      <Label text={name} size="big" className={labelCommandGroup} />
+    </article>
+    { items.map(mapping => <ActionMappping key={mapping.gameEvent} {...mapping} />) }
+  </div>
+);
+
+const KeyBindings = ({ keyCategories }: KeyBindingsProps) => (
   <ModalWindow caption="Key Bindings">
     <div className={content}>
       <header className={`${command} ${header}`}>
@@ -27,78 +64,7 @@ const KeyBindings = () => (
       </header>
       <section className={section}>
         <section>
-          <article className={commandGroup}>
-            <Label text="movement keys" size="big" className={labelCommandGroup} />
-          </article>
-          <div className={command}>
-            <Label text="action 1" className={labelFirst} />
-            <Button text="A" size="small" />
-            <Button text="B" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 2" className={labelFirst} />
-            <Button text="C" size="small" />
-            <Button text="D" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 3" className={labelFirst} />
-            <Button text="E" size="small" />
-            <Button text="F" size="small" />
-          </div>
-          <article className={commandGroup}>
-            <Label text="movement keys" size="big" className={labelCommandGroup} />
-          </article>
-          <div className={command}>
-            <Label text="action 1" className={labelFirst} />
-            <Button text="A" size="small" />
-            <Button text="B" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 2" className={labelFirst} />
-            <Button text="C" size="small" />
-            <Button text="D" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 3" className={labelFirst} />
-            <Button text="E" size="small" />
-            <Button text="F" size="small" />
-          </div>
-          <article className={commandGroup}>
-            <Label text="movement keys" size="big" className={labelCommandGroup} />
-          </article>
-          <div className={command}>
-            <Label text="action 1" className={labelFirst} />
-            <Button text="A" size="small" />
-            <Button text="B" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 2" className={labelFirst} />
-            <Button text="C" size="small" />
-            <Button text="D" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 3" className={labelFirst} />
-            <Button text="E" size="small" />
-            <Button text="F" size="small" />
-          </div>
-          <article className={commandGroup}>
-            <Label text="movement keys" size="big" className={labelCommandGroup} />
-          </article>
-          <div className={command}>
-            <Label text="action 1" className={labelFirst} />
-            <Button text="A" size="small" />
-            <Button text="B" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 2" className={labelFirst} />
-            <Button text="C" size="small" />
-            <Button text="D" size="small" />
-          </div>
-          <div className={command}>
-            <Label text="action 3" className={labelFirst} />
-            <Button text="E" size="small" />
-            <Button text="F" size="small" />
-          </div>
+          { keyCategories.map(category => <ActionCategory key={category.name} {...category} />) }
         </section>
       </section>
       <footer className={footer}>
@@ -117,4 +83,6 @@ const KeyBindings = () => (
   </ModalWindow>
 );
 
-export default KeyBindings;
+const mapState = ({ keyBindings: { keyCategories } }: State) => ({ keyCategories });
+
+export default connect(mapState, null)(KeyBindings);

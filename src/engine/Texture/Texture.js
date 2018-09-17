@@ -1,4 +1,6 @@
 // @flow
+import type { getElements } from '../../../common/utils/flow';
+
 import { gl } from '../glEngine';
 
 export const makeTexture = (
@@ -137,6 +139,4 @@ export const TextureImageUnits = [
   gl.TEXTURE31,
 ];
 
-type getElements = <T>(val: T[]) => T;
-
-export type TextureImageUnit = $Call<getElements, typeof TextureImageUnits>;
+export type TextureImageUnit = getElements<typeof TextureImageUnits>;

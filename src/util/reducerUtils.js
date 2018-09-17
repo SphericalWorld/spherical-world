@@ -1,5 +1,9 @@
 // @flow
-export function createReducer<T>(initialState: T, fnMap): (T) => T {
+type ReducersMap<T> = {
+  [string]: T => T,
+};
+
+export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T) => T {
   return (state = initialState, { type, payload }) => {
     const handler = fnMap[type];
 
