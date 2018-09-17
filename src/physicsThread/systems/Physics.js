@@ -6,7 +6,7 @@ import { Just, Nothing } from '../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
 import Joint from '../../components/Joint';
-import { System } from '../../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../../common/ecs/System';
 import { World } from '../../../common/ecs';
 import Velocity from '../../components/Velocity';
 import Transform from '../../components/Transform';
@@ -90,7 +90,7 @@ export default (ecs: World, terrain: Terrain) =>
     collideWithTerrain = collideWithTerrain(terrain);
     transformRegistry = ecs.components.get('Transform');
 
-    update(delta: number): Array {
+    update(delta: number): UpdatedComponents {
       const result = [];
       for (const {
         transform, velocity, collider,

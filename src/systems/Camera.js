@@ -9,7 +9,7 @@ import type { Input } from '../Input/Input';
 import { gl, unproject } from '../engine/glEngine';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
-import { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 
@@ -77,7 +77,7 @@ export default (world: World, input: Input) =>
         input.activateContext(GameplayMenuContext);
       });
 
-    update(delta: number): void {
+    update(delta: number): UpdatedComponents {
       const movement = this.cameraMovements.events.reduce(([x, y], { payload }) => ([x + payload.x, y + payload.y]), [0, 0]);
       const [{ id, transform, camera }] = this.camera;
       camera.viewport = resizeViewport(camera.viewport);

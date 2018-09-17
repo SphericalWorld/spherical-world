@@ -15,7 +15,7 @@ import {
   PLAYER_JUMPED,
   PLAYER_STOPED_JUMP,
 } from '../../player/events';
-import { System } from '../../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../../common/ecs/System';
 import { World } from '../../../common/ecs';
 import Transform from '../../components/Transform';
 import Velocity from '../../components/Velocity';
@@ -67,7 +67,7 @@ export default (world: World, terrain: Terrain) =>
       .map(el => el.type === PLAYER_RUN)
       .subscribeQueue();
 
-    update(delta: number): Array {
+    update(delta: number): UpdatedComponents {
       const [{
         id, transform, velocity, userControlled: userControls,
       }] = this.components;

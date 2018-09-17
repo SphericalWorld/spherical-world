@@ -3,7 +3,7 @@ import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import type Network from '../network';
 import type { Terrain } from '../Terrain/Terrain';
-import type { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import type { World } from '../../common/ecs';
 import { filterFarChunks } from '../../common/chunk';
 import Camera from '../components/Camera';
@@ -34,7 +34,7 @@ export default (ecs: World, network: Network, terrain: Terrain) =>
 
     oldPosition: Vec3 = vec3.create();
 
-    update(delta: number): void {
+    update(delta: number): ?UpdatedComponents {
       const [{ transform }] = this.player;
       // terrain.chunks = filterFarChunks(this.oldPosition, transform.translation, terrain.chunks);
       vec3.copy(this.oldPosition, transform.translation);

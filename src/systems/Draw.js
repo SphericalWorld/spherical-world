@@ -2,7 +2,7 @@
 import type { Mat4 } from 'gl-matrix';
 import { mat4 } from 'gl-matrix';
 import type World from '../../common/ecs/World';
-import type { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { gl } from '../engine/glEngine';
 import { GlShaderProgram } from '../engine/glShader';
 import {
@@ -24,7 +24,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
     skyColorGradient: Gradient = new Gradient([[0, 0x8cd3ff], [33, 0xffe899], [53, 0xff8b56], [87, 0x1C1C7C], [100, 0x1a1a1a]]);
     lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
 
-    update(): void {
+    update(): ?UpdatedComponents {
       const { camera } = this.camera[0];
       this.mvMatrix = camera.mvMatrix;
       this.pMatrix = camera.viewport.pMatrix;

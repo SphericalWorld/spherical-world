@@ -1,6 +1,6 @@
 // @flow
 import WebSocket, { Server as WebSocketServer } from 'ws';
-import type SocketHandlers from './socketHandlers';
+import type { SocketHandlers } from './socketHandlers';
 import HashMap from '../common/fp/data-structures/Map';
 import parseJson from '../common/utils/parseString';
 import Terrain from './terrain/Terrain';

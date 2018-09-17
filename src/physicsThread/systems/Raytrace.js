@@ -8,7 +8,7 @@ import type World from '../../../common/ecs/World';
 import type { Terrain } from '../Terrain/Terrain';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
 import { Nothing } from '../../../common/fp/monads/maybe';
-import { System } from '../../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../../common/ecs/System';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
 import UserControlled from '../../components/UserControlled';
@@ -68,7 +68,7 @@ export default (ecs: World, terrain: Terrain) =>
     currentShader: WebGLProgram;
     terrain: Terrain;
 
-    update(): Array {
+    update(): UpdatedComponents {
       const result = [];
       for (const { id, transform, raytracer } of this.components) {
         const { camera } = this.cameras[0];

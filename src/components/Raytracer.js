@@ -18,6 +18,10 @@ export default class Raytracer implements Component {
   static componentType: {| 'raytracer': Raytracer |};
 
   face: BlockFace = 0;
-  block: BlockDetails = {};
+  block: BlockDetails = {
+    block: 0,
+    face: 0,
+  };
+
   emptyBlock: ?BlockDetails;
 }

@@ -1,6 +1,6 @@
 // @flow
 import type World from '../../common/ecs/World';
-import type { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, UserControlled } from '../components';
 import { MENU_TOGGLED } from '../hud/hudConstants';
 import { connect } from '../util';
@@ -24,7 +24,7 @@ export default (ecs: World, store) => {
       .filter(e => e.type === MENU_TOGGLED)
       .subscribe(() => this.toggleMenu(!this.states.mainMenuToggled));
 
-    update(delta: number): void {
+    update(delta: number): ?UpdatedComponents {
       this.updateHudData({
         player: {
           position: this.player[0].transform.translation,

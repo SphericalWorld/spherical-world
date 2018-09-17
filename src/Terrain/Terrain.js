@@ -6,7 +6,7 @@ import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
-import type ChunkProgram from '../../shaders/Chunk/Chunk';
+import type ChunkProgram from '../shaders/Chunk/Chunk';
 
 const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
   class Terrain extends TerrainBase {
@@ -107,7 +107,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
       gl.activeTexture(gl.TEXTURE0);
     }
 
-    generateBiomeColorMap(texture) {
+    generateBiomeColorMap(texture: WebGLTexture) {
       const fb = gl.createFramebuffer();
       gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
       gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);

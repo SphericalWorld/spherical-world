@@ -11,15 +11,6 @@ const HudApi = function (store) {
     store,
     'react-redux': reactRedux,
   };
-  // this.providers = {};
-  // angular.module('ui', ['hudCore'], ($controllerProvider, $compileProvider, $provide) => {
-  //   self.providers = {
-  //     $controllerProvider,
-  //     $compileProvider,
-  //     $provide,
-  //   };
-  // });
-  // this.injector = angular.bootstrap(document.getElementById('hud'), ['ui']);
 };
 
 HudApi.prototype.showDebugInfo = function () {

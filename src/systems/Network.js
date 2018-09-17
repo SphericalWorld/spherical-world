@@ -3,7 +3,7 @@ import { vec3, quat } from 'gl-matrix';
 import type World from '../../common/ecs/World';
 import type Network from '../network';
 import { PLAYER_CHANGE_POSITION, PLAYER_CHANGED_ROTATION } from '../player/playerConstants';
-import { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 
 export default (ecs: World, network: Network, Player) =>
@@ -34,7 +34,7 @@ export default (ecs: World, network: Network, Player) =>
       .subscribeQueue();
 
     lastUpdate = Date.now();
-    update(delta: number): void {
+    update(delta: number): UpdatedComponents {
       const result = [];
       if (Date.now() > this.lastUpdate + 100) { // TODO: replace Date.now() by global engine tick time
         this.lastUpdate = Date.now();

@@ -1,7 +1,7 @@
 // @flow
 import type { Maybe } from '../../common/fp/monads/maybe';
 import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
-import type { INPUT_TYPE } from './eventTypes';
+import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
 import HashMap from '../../common/fp/data-structures/Map';
 import { Just, Nothing } from '../../common/fp/monads/maybe';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
@@ -13,6 +13,8 @@ type MappedEvent = {|
   +gameEvent: GAME_EVENT_TYPE,
   +data?: InputEvent => Object,
   +onEnd?: GAME_EVENT_TYPE,
+  +caption?: string,
+  +category?: EVENT_CATEGORY
 |};
 
 export default class InputContext {

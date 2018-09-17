@@ -2,7 +2,7 @@
 import { vec3 } from 'gl-matrix';
 import type World from '../../common/ecs/World';
 import type { Time } from '../Time/Time';
-import { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, Skybox } from '../components';
 
 
@@ -13,7 +13,7 @@ export default (world: World, time: Time) =>
     pMatrix: number[];
     skybox = world.createSelector([Transform, Skybox]);
 
-    update(delta: number): void {
+    update(delta: number): UpdatedComponents {
       time.update(Date.now());
       const { day, hour, minute } = time;
       const [{ id, skybox }] = this.skybox;

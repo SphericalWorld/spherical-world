@@ -1,8 +1,6 @@
 // @flow
 import type { Terrain } from '../Terrain';
-import type { Component } from '../../../common/ecs/Component';
-import type { Entity } from '../../../common/ecs/Entity';
-import type { System } from '../../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../../common/ecs/System';
 import type { World } from '../../../common/ecs';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../../player/events';
 import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
@@ -35,7 +33,7 @@ export default (ecs: World, terrain: Terrain) =>
     blockPutEvents = blockPutObserver(ecs, terrain);
     onChunkAdd = onChunkAdd(ecs, terrain);
 
-    update(delta: number): (Entity | Component)[][] {
+    update(delta: number): ?UpdatedComponents {
       // console.log(delta)
     }
   };

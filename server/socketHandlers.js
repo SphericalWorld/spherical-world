@@ -3,7 +3,7 @@ import type { CreatePlayer } from './player';
 import type Server from './server';
 import Player from './player';
 
-export default (createPlayer: CreatePlayer) => class SocketHandlers {
+const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandlers {
   server: Server;
   router = {};
 
@@ -84,3 +84,8 @@ export default (createPlayer: CreatePlayer) => class SocketHandlers {
     }
   }
 };
+
+declare var tmp: $Call<typeof socketHandlersProvider, CreatePlayer>;
+export type SocketHandlers = tmp;
+
+export default socketHandlersProvider;

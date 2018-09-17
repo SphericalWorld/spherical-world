@@ -1,4 +1,6 @@
 // @flow
+import type { getElements } from '../../common/utils/flow';
+
 // keep constants in integers to be able to use shared memory for input sync in the future
 export const INPUT_TYPE_ACTION: 0 = 0;
 export const INPUT_TYPE_STATE: 1 = 1;
@@ -18,3 +20,5 @@ export type INPUT_TYPE =
   | typeof INPUT_TYPE_ACTION
   | typeof INPUT_TYPE_STATE
   | typeof INPUT_TYPE_RANGE;
+
+export type EVENT_CATEGORY = getElements<typeof EVENT_CATEGORIES>;

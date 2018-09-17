@@ -2,7 +2,7 @@
 import { vec3 } from 'gl-matrix';
 import type World from '../../common/ecs/World';
 import { blocksInfo } from '../blocks/blockInfo';
-import type { System } from '../../common/ecs/System';
+import type { System, UpdatedComponents } from '../../common/ecs/System';
 import {
   Transform,
   BlockRemover,
@@ -51,7 +51,7 @@ export default (world: World) =>
 
     raytracerRegistry = world.components.get('Raytracer');
 
-    update(delta: number): void {
+    update(delta: number): ?UpdatedComponents {
       for (const {
         visual, blockRemover, id, joint,
       } of this.removers) {

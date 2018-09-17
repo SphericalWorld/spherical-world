@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import type { getElements } from '../../../../common/utils/flow';
+import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
-import { EVENT_CATEGORIES } from '../../../Input/eventTypes';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../ModalWindow';
@@ -29,7 +28,7 @@ type ActionMapppingProps = {|
 |};
 
 type ActionCategoryProps = {|
-  +name: getElements<typeof EVENT_CATEGORIES>,
+  +name: EVENT_CATEGORY,
   +items: $ReadOnlyArray<ActionMapppingProps>,
 |}
 
