@@ -23,6 +23,16 @@ class ChunkBase<TChunk> {
   light: Uint16Array = new Uint16Array(BLOCKS_IN_CHUNK);
   flags: Uint8Array;
 
+  static BUFFERS_COUNT: number = 3;
+
+  constructor(blocksData: ArrayBuffer, x: number, z: number) {
+    this.x = x;
+    this.z = z;
+    this.geoId = getGeoId(x, z);
+    this.blocks = new Uint8Array(blocksData, 0, BLOCKS_IN_CHUNK);
+    this.flags = new Uint8Array(blocksData, BLOCKS_IN_CHUNK);
+  }
+
   getBlock(x: number, y: number, z: number) {
     return this.blocks[getIndex(x, y, z)];
   }
@@ -30,14 +40,6 @@ class ChunkBase<TChunk> {
   setBlock(x: number, y: number, z: number, value: number) {
     this.blocks[getIndex(x, y, z)] = value;
     this.state = CHUNK_STATUS_NEED_LOAD_VBO;
-  }
-
-  static BUFFERS_COUNT: number = 3;
-
-  constructor(x: number, z: number) {
-    this.x = x;
-    this.z = z;
-    this.geoId = getGeoId(x, z);
   }
 
   checkNestedChunks() {

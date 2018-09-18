@@ -38,12 +38,13 @@ export default class Chunk extends ChunkBase<Chunk> {
 
   constructor(
     terrain: Terrain,
+    blocksData: ArrayBuffer,
     x: number,
     z: number,
     temperatureData: number[],
     rainfallData: number[],
   ) {
-    super(x, z);
+    super(blocksData, x, z);
     this.terrain = terrain;
     this.terrainMipMap = null;
     this.rainfallData = new Uint8Array(rainfallData);

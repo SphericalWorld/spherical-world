@@ -1,6 +1,5 @@
 // @flow
 import type { GameEvent } from '../../common/GameEvent/GameEvent';
-import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 import EventObservable from '../../common/GameEvent/EventObservable';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';
 import terrainBaseProvider from '../Terrain/TerrainBase';
@@ -30,12 +29,10 @@ events
   .subscribe(({ payload: data }) => {
     let chunk = terrain.getChunk(data.x, data.z);
     if (chunk.isJust === false) {
-      chunk = terrain.addChunk(new Chunk(data.x, data.z));
+      chunk = terrain.addChunk(new Chunk(data.data, data.x, data.z));
     } else {
       chunk = chunk.extract();
     }
-    chunk.blocks = new Uint8Array(data.data, 0, BLOCKS_IN_CHUNK);
-    chunk.flags = new Uint8Array(data.data, BLOCKS_IN_CHUNK, BLOCKS_IN_CHUNK);
     chunk.prepareLight();
     chunk.updateState();
   });

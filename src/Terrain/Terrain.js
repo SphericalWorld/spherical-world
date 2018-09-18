@@ -4,7 +4,6 @@ import type { Mat4, Vec3 } from 'gl-matrix';
 import type { Material } from '../engine/Material/Material';
 import { WATER } from '../../common/blocks';
 import { toChunkPosition, toPositionInChunk } from '../../common/chunk';
-import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
@@ -23,12 +22,10 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
     }) => {
       let chunk = this.getChunk(data.x, data.z);
       if (chunk.isJust === false) {
-        chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
+        chunk = this.addChunk(new Chunk(this, blocksData, data.x, data.z, data.temperature, data.rainfall));
       } else {
         chunk = chunk.extract();
       }
-      chunk.blocks = new Uint8Array(blocksData, 0, BLOCKS_IN_CHUNK);
-      chunk.flags = new Uint8Array(blocksData, BLOCKS_IN_CHUNK);
       chunk.generateFoliageTexture();
     }
 
@@ -57,7 +54,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
           }
         });
 
-      getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2])
+      getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
       gl.uniform4f(shader.uGlobalColor, ...globalColor);
 

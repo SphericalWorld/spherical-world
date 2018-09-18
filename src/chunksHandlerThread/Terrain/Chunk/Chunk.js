@@ -234,8 +234,8 @@ export default class Chunk extends ChunkBase<Chunk> {
   createWestPlane: CreatePlane;
   createEastPlane: CreatePlane;
 
-  constructor(x: number, z: number) {
-    super(x, z);
+  constructor(binaryData: ArrayBuffer, x: number, z: number) {
+    super(binaryData, x, z);
 
     this.terrainMipMap = null;
 
