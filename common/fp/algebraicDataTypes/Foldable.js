@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export interface Foldable<A> {
   reduce<B>(
     callbackfn: (

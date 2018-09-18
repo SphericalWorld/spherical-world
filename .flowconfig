@@ -6,3 +6,10 @@ module.file_ext=.json
 module.file_ext=.vert
 module.file_ext=.frag
 module.file_ext=.scss
+
+[strict]
+nonstrict-import
+unclear-type
+unsafe-getters-setters
+untyped-import
+untyped-type-import

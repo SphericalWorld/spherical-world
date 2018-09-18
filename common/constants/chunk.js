@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const TERRAIN_SIZE: 16 = 16;
 export const TERRAIN_HALF_SIZE: 8 = 8;
 

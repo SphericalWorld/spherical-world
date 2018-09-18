@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Applicative } from './Applicative';
 import type { Plus } from './Plus';
 

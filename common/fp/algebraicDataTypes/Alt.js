@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Functor } from './Functor';
 
 export interface Alt<+A> extends Functor<A> {

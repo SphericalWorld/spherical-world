@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Chain } from './Chain';
 import type { Applicative } from './Applicative';
 

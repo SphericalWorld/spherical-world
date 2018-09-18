@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export interface Chain<+A> {
   +chain: <B>(fn: A => Chain<B>) => Chain<B>;
 }

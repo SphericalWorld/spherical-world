@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Alternative } from '../algebraicDataTypes/Alternative';
 import type { Monad } from '../algebraicDataTypes/Monad';
 

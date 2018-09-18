@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export interface Functor<A> {
   map<B>(fn: A => B): Functor<B>
 }
