@@ -16,7 +16,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
   class Draw implements System {
     components = world.createSelector([Transform, Visual], [Skybox]);
     skybox = world.createSelector([Transform, Visual, Skybox]);
-    camera = world.createSelector([Camera]);
+    camera = world.createSelector([Camera, Transform]);
     mvMatrixStack = [];
     mvMatrix: Mat4;
     pMatrix: Mat4;
@@ -25,7 +25,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
     lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
 
     update(): ?UpdatedComponents {
-      const { camera } = this.camera[0];
+      const { camera, transform: cameraPosition } = this.camera[0];
       this.mvMatrix = camera.mvMatrix;
       this.pMatrix = camera.viewport.pMatrix;
 
@@ -42,7 +42,7 @@ export default (world: World, terrain: Terrain, time: Time) =>
       const color = Math.floor(this.lightColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
       const globalColor = [((color & 0xFF0000) >> 16) / 256, ((color & 0xFF00) >> 8) / 256, (color & 0xFF) / 256, 1];
       // console.log(globalColor)s
-      terrain.draw(skyColor, globalColor, this.pMatrix, this.mvMatrix);
+      terrain.draw(cameraPosition.translation, skyColor, globalColor, this.pMatrix, this.mvMatrix);
       const draw = (position: Transform, visual: Visual): void => {
         this.useShader(visual.glObject.material.shader);
         visual.glObject.material.use();

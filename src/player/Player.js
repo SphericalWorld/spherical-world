@@ -15,8 +15,6 @@
 //
 //     constructor(params, app) {
 //       this.blockRemovingSpeed = 2;
-//       this.blockInDown = 0;
-//       this.blockInUp = 0;
 //
 //       this.fallSpeed = 0;
 //       if (typeof params === 'object') {

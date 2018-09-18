@@ -13,8 +13,16 @@ import { CHUNK_LOADED } from '../Terrain/terrainConstants';
 const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => network.events
   .filter(e => e.type === 'loadChunk')
   .subscribe(({ type, payload }) => {
-    terrain.loadChunk(payload.data);
-    ecs.createEventAndDispatch(CHUNK_LOADED, { data: payload.binaryData, x: payload.data.x, z: payload.data.z });
+    const data = new SharedArrayBuffer(payload.binaryData.byteLength); // eslint-disable-line no-undef
+    const viewOld = new Uint8Array(payload.binaryData);
+    const viewNew = new Uint8Array(data);
+
+    for (let i = 0; i < payload.binaryData.byteLength; i += 1) {
+      viewNew[i] = viewOld[i];
+    }
+    // console.log(data, viewNew)
+    terrain.loadChunk(data, payload.data);
+    ecs.createEventAndDispatch(CHUNK_LOADED, { data, x: payload.data.x, z: payload.data.z });
   });
 
 const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events

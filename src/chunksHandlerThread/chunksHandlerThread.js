@@ -34,8 +34,8 @@ events
     } else {
       chunk = chunk.extract();
     }
-    chunk.blocks = new Uint8Array(data.data.slice(0, BLOCKS_IN_CHUNK));
-    chunk.flags = new Uint8Array(data.data.slice(BLOCKS_IN_CHUNK, BLOCKS_IN_CHUNK + BLOCKS_IN_CHUNK));
+    chunk.blocks = new Uint8Array(data.data, 0, BLOCKS_IN_CHUNK);
+    chunk.flags = new Uint8Array(data.data, BLOCKS_IN_CHUNK, BLOCKS_IN_CHUNK);
     chunk.prepareLight();
     chunk.updateState();
   });

@@ -9,8 +9,7 @@ import {
   blocksInfo,
   LIGHT_TRANSPARENT,
 } from '../../../blocks/blockInfo';
-import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
-import { SLICE } from '../../../Terrain/Chunk/ChunkBase';
+import ChunkBase, { SLICE } from '../../../Terrain/Chunk/ChunkBase';
 
 import {
   CHUNK_STATUS_LOADED,
@@ -225,7 +224,7 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
 
 type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
 
-export default class Chunk extends ChunkWithData<Chunk> {
+export default class Chunk extends ChunkBase<Chunk> {
   minimap: Uint8Array = new Uint8Array(256 * 3);
 
   createTopPlane: CreatePlane;

@@ -1,7 +1,8 @@
 // @flow
 import type { ChunkState } from './chunkConstants';
-import { CHUNK_STATUS_NEED_LOAD_ALL } from './chunkConstants';
-import { getGeoId } from '../../../common/chunk';
+import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
+import { CHUNK_STATUS_NEED_LOAD_ALL, CHUNK_STATUS_NEED_LOAD_VBO } from './chunkConstants';
+import { getGeoId, getIndex } from '../../../common/chunk';
 // north direction - decreasing of X
 
 class ChunkBase<TChunk> {
@@ -18,6 +19,18 @@ class ChunkBase<TChunk> {
   hasNestedChunks: boolean = false;
   surroundingChunks: TChunk[] = [];
   hasSurroundingChunks: boolean = false;
+  blocks: Uint8Array;
+  light: Uint16Array = new Uint16Array(BLOCKS_IN_CHUNK);
+  flags: Uint8Array;
+
+  getBlock(x: number, y: number, z: number) {
+    return this.blocks[getIndex(x, y, z)];
+  }
+
+  setBlock(x: number, y: number, z: number, value: number) {
+    this.blocks[getIndex(x, y, z)] = value;
+    this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+  }
 
   static BUFFERS_COUNT: number = 3;
 

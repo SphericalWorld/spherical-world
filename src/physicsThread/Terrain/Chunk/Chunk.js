@@ -1,12 +1,12 @@
 // @flow
 import { getIndex } from '../../../../common/chunk';
-import ChunkWithData from '../../../Terrain/Chunk/ChunkWithData';
+import ChunkBase from '../../../Terrain/Chunk/ChunkBase';
 import { blocksInfo } from '../../../blocks/blockInfo';
 import {
   CHUNK_STATUS_NEED_LOAD_VBO,
 } from '../../../Terrain/Chunk/chunkConstants';
 
-export default class Chunk extends ChunkWithData<Chunk> {
+export default class Chunk extends ChunkBase<Chunk> {
   rainfallData = new Uint8Array(256);
   temperatureData = new Uint8Array(256);
 

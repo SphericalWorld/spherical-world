@@ -6,6 +6,7 @@ import {
 import type { World } from '../../common/ecs';
 import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
+import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { gl, unproject } from '../engine/glEngine';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
@@ -96,7 +97,7 @@ export default (world: World, input: Input) =>
 
       // console.log(rotation)
       mat4.fromQuat(camera.mvMatrix, rotation);
-      mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - 1.7, -translation[2]]);
+      mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - PLAYER_CAMERA_HEIGHT, -translation[2]]);
       this.cameraMovements.clear();
 
       const sight = vec3.create();

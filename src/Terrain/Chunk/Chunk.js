@@ -3,7 +3,7 @@ import type { Mat4 } from 'gl-matrix';
 import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
-import type ChunkProgram from '../../../shaders/Chunk/Chunk';
+import type ChunkProgram from '../../shaders/Chunk/Chunk';
 import type { Terrain } from '../Terrain';
 
 import Frustum from '../../engine/Frustum';
@@ -86,7 +86,6 @@ export default class Chunk extends ChunkBase<Chunk> {
     if (chunksLoaded === 12 * 12) {
       console.log(Date.now() - timeOld);
     }
-
     this.buffers = {
       vertexBuffer: null,
       indexBuffer: null,

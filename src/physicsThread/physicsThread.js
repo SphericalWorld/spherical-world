@@ -19,16 +19,6 @@ class PhysicsThread {
     world.registerThread(new Thread(THREAD_MAIN, self));
     world.registerSystem(...systemsProvider(world, terrain));
   }
-
-  physicsLoop() {
-    // for (const [id, player] of this.players.entries()) {
-    //   player.calcPhysics(elapsed);
-    //   players[id] = {
-    //     blockInDown: player.blockInDown,
-    //     blockInUp: player.blockInUp,
-    //   };
-    // }
-  }
 }
 
 export default new PhysicsThread();

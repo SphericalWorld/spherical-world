@@ -1,7 +1,11 @@
 // @flow
 import { mat4 } from 'gl-matrix';
-import type { Mat4 } from 'gl-matrix';
+import type { Mat4, Vec3 } from 'gl-matrix';
 import type { Material } from '../engine/Material/Material';
+import { WATER } from '../../common/blocks';
+import { toChunkPosition, toPositionInChunk } from '../../common/chunk';
+import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
+import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import { ITerrainBase } from './TerrainBase';
@@ -14,17 +18,21 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
     material: Material;
     foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
 
-    loadChunk = (data) => {
+    loadChunk = (blocksData: ArrayBuffer, data: {
+      x: number, z: number, temperature: number[], rainfall: number[],
+    }) => {
       let chunk = this.getChunk(data.x, data.z);
       if (chunk.isJust === false) {
         chunk = this.addChunk(new Chunk(this, data.x, data.z, data.temperature, data.rainfall));
       } else {
         chunk = chunk.extract();
       }
+      chunk.blocks = new Uint8Array(blocksData, 0, BLOCKS_IN_CHUNK);
+      chunk.flags = new Uint8Array(blocksData, BLOCKS_IN_CHUNK);
       chunk.generateFoliageTexture();
     }
 
-    draw(skyColor: number[], globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
+    draw(cameraPosition: Vec3, skyColor: number[], globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
       const { shader } = (this.material: { shader: ChunkProgram });
       const m = mat4.create();
       mat4.multiply(m, pMatrix, mvMatrix);
@@ -34,17 +42,22 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
 
       this.material.use();
 
-      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-      // TODO: underwater fog goes here
-      // if (((this.app.player.blockInDown === 127) && (this.app.player.y - Math.floor(this.app.player.y) < 0.45)) || ((this.app.player.blockInUp === 127) && (this.app.player.y - Math.floor(this.app.player.y) > 0.45))) {
-      //   gl.uniform1f(shader.uFogDensity, 0.09);
-      //   gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, globalColor[3]);
-      //   gl.uniform1i(shader.uFogType, 1);
-      // } else {
-      gl.uniform1f(shader.uFogDensity, 0.007);
-      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-      gl.uniform1i(shader.uFogType, 0);
-      // }
+      const getBlockDetails = (x, y, z) => this
+        .getChunk(toChunkPosition(x), toChunkPosition(z))
+        .map((chunk) => {
+          const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
+          if (blockInDown === WATER) {
+            gl.uniform1f(shader.uFogDensity, 0.09);
+            gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
+            gl.uniform1i(shader.uFogType, 1);
+          } else {
+            gl.uniform1f(shader.uFogDensity, 0.007);
+            gl.uniform4f(shader.uFogColor, ...skyColor, 1);
+            gl.uniform1i(shader.uFogType, 0);
+          }
+        });
+
+      getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2])
 
       gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
