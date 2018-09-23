@@ -7,16 +7,12 @@ import Transform from '../src/components/Transform';
 let id = 1;
 
 export default class Player {
-  constructor(x, y, z) {
+  constructor() {
     this.id = id;
     this.x = 0;
-    this.y = 132;
     this.z = 0;
     this.dx = 0;
     this.dz = 0;
-    this.v = 0;
-    this.verticalRotate = 0;
-    this.horizontalRotate = 0;
     this.id = id;
     this.chunksId = [];
     this.locationName = 'steppe';
@@ -52,20 +48,14 @@ export default class Player {
         }
       }
       this.x = x;
-      this.y = y;
       this.z = z;
       return true;
     }
     return false;
   }
 
-  changeRotation(verticalRotate, horizontalRotate) {
-    if (true) {
-      this.verticalRotate = verticalRotate;
-      this.horizontalRotate = horizontalRotate;
-      return true;
-    }
-    return false;
+  changeRotation() {
+    return true;
   }
 
   addChunks(chunks) {

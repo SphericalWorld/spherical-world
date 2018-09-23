@@ -25,9 +25,8 @@ const blockPickerProvider = (
     new Raytracer(),
     new Player(),
   );
-
-  BlockRemover(picker);
-  return picker;
+  BlockRemover(picker.id);
+  return picker.id;
 };
 
 export default blockPickerProvider;

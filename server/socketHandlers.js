@@ -1,6 +1,6 @@
 // @flow
 import type { CreatePlayer } from './player';
-import type Server from './server';
+import type { Server } from './server';
 import Player from './player';
 
 const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandlers {
@@ -49,7 +49,7 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
   loadGameData(ws, data, callback) {
     for (let i = -8; i < 8; i += 1) {
       for (let j = -8; j < 8; j += 1) {
-        this.terrain.sendChunk(ws.player, i * 16, j * 16);
+        this.server.terrain.sendChunk(ws.player, i * 16, j * 16);
       }
     }
     callback(true);
@@ -58,8 +58,7 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
   login(ws, data, callback) {
     // data.cookie
     const player = new Player();
-    createPlayer(player.id);
-
+    const playerData = createPlayer(player.id);
     player.terrain = this.server.terrain;
     player.socket = ws;
     ws.player = player;
@@ -71,7 +70,7 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
     this.server.players.push(player);
 
     callback(true, {
-      id: player.id, name: player.name, x: player.x, y: player.y, z: player.z,
+      id: playerData.id, name: player.name, transform: playerData.transform,
     });
 
     for (let i = 0; i < ws.player.linkedPlayers.length; i += 1) {

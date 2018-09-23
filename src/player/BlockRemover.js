@@ -14,13 +14,13 @@ const blockRemoverProvider = (
   const model = createCube(1.001);
   const material = materialLibrary.get('blockRemover');
   const object = new GlObject({ model, material });
-  return ecs.createEntity(
+  return (ecs.createEntity(
     id,
     new Transform(0, 64, 0),
     new Visual(object),
     new BlockRemover(),
     new Joint(pickerId),
-  );
+  )).id;
 };
 
 export type CreateBlockRemover = $Call<typeof blockRemoverProvider, *, *>;

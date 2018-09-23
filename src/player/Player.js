@@ -110,10 +110,10 @@ const playerProvider = (
   const model = new Model(playerModel, 2);
   const material = materialLibrary.get('skybox'); // 'player'
   const blockPicker = BlockPicker();
-  return ecs.createEntity(
+  return (ecs.createEntity(
     data.id,
     ...[
-      new Transform(data.x, data.y, data.z),
+      new Transform(data.transform.translation[0], data.transform.translation[1], data.transform.translation[2]),
       new Camera(),
       new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)), // 1.8
       new Physics(),
@@ -124,7 +124,7 @@ const playerProvider = (
         ? null
         : new Visual(new GlObject({ model, material })),
     ].filter(el => el),
-  );
+  )).id;
 };
 
 export default playerProvider;

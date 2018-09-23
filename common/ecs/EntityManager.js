@@ -34,7 +34,7 @@ export class EntitySelector<T> {
 }
 
 export class EntityManager {
-  static generateId(): string {
+  static generateId(): Entity {
     return uuid();
   }
 }

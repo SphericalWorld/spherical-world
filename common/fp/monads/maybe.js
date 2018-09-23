@@ -28,6 +28,10 @@ class Just<T> implements Monad<T>, Alternative<T> {
     return this;
   }
 
+  ap<B>(b: Maybe<T => B>) {
+    return b.isJust === true ? this.map(b.value) : b;
+  }
+
   static zero() {
     return Nothing;
   }
@@ -38,7 +42,7 @@ const JustFactory = <T>(value: T): Maybe<T> => new Just(value);
 class TNothing<T> implements Monad<T>, Alternative<T> {
   +isJust: false = false;
 
-  map<G>(mapFn: * => G): TNothing { // eslint-disable-line no-unused-vars
+  map<G>(mapFn: T => G): TNothing<G> { // eslint-disable-line no-unused-vars
     return this;
   }
 
@@ -48,6 +52,10 @@ class TNothing<T> implements Monad<T>, Alternative<T> {
 
   alt(value: Maybe<T>): Maybe<T> {
     return value;
+  }
+
+  ap<B>(b: Maybe<T => B>): TNothing { // eslint-disable-line no-unused-vars
+    return this;
   }
 
   static zero() {

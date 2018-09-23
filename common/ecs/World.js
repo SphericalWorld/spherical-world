@@ -152,7 +152,7 @@ export default class World {
     this.registerEntity(id, components);
   }
 
-  createEntity(id: ?Entity, ...components: Component[]): Entity {
+  createEntity<T: Component[]>(id: ?Entity, ...components: T): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
     const entityId = id || EntityManager.generateId();
     for (const thread of this.threads) {
       const componentsToAdd = components
@@ -161,7 +161,14 @@ export default class World {
       thread.postMessage({ type: 'CREATE_ENTITY', payload: { id: entityId, components: componentsToAdd } });
     }
     this.registerEntity(entityId, components.map(el => ({ type: el.constructor.name, data: el })));
-    return entityId;
+    const selectedComponents = {
+      id: entityId,
+    };
+    for (let i = 0; i < components.length; i += 1) {
+      const component = components[i];
+      selectedComponents[component.constructor.componentName] = component;
+    }
+    return selectedComponents;
   }
 
   dispatch(gameEvent: GameEvent) {

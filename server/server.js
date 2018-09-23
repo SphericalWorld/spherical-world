@@ -71,7 +71,7 @@ type Message = {
   data: any;
 }
 
-export default (router: SocketHandlers) => class Server {
+const serverProvider = (router: SocketHandlers) => class Server {
   wss: WebSocketServer;
   connections: WeakMap<WebSocket, any> = new WeakMap();
   terrain: Terrain;
@@ -90,7 +90,6 @@ export default (router: SocketHandlers) => class Server {
       }
     }, 50000);
     this.players = [];
-    router.terrain = this.terrain;
     router.route('loadGameData', router.loadGameData.bind(router));
     router.route('PING', () => {});
     router.route('PLAYER_PUT_BLOCK', router.putBlock.bind(router));
@@ -145,3 +144,8 @@ export default (router: SocketHandlers) => class Server {
     });
   }
 };
+
+declare var tmp: $Call<typeof serverProvider, *>;
+export type Server = tmp;
+
+export default serverProvider;
