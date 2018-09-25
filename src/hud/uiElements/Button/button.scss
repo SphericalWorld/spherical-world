@@ -20,6 +20,7 @@
     $px1 $px1 0 $shadow;
   text-transform: capitalize;
   transition: all 0.2s ease;
+  user-select: none;
 }
 
 .button:hover {
