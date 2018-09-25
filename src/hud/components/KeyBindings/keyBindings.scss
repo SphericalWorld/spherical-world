@@ -19,6 +19,7 @@
 .header {
   border-bottom: $border-key-bindings;
   flex: 0 1 5%;
+  user-select: none;
 }
 
 .commandGroup {
@@ -73,6 +74,7 @@
 
 .helpLine {
   padding: 0.3em;
+  user-select: none;
 }
 
 .footerButtons {

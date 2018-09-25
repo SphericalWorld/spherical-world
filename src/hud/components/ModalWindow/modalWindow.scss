@@ -24,7 +24,6 @@
   right: 0;
   text-align: center;
   top: 0;
-  user-select: none;
 }
 
 .inner {
@@ -42,7 +41,6 @@
 .frame {
   bottom: 0;
   left: 0;
-  position: absolute;
   right: 0;
   top: 0;
 }
@@ -84,7 +82,8 @@
   color: $font-color-main-menu;
   font-size: 1.1em;
   left: 50%;
-  padding: 0.4em 3em;
+  padding: 0.4em 1em;
   position: absolute;
   transform: translate(-50%, -50%);
+  user-select: none;
 }
