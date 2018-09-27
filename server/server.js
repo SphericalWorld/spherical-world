@@ -5,6 +5,7 @@ import HashMap from '../common/fp/data-structures/Map';
 import parseJson from '../common/utils/parseString';
 import Terrain from './terrain/Terrain';
 import Player from './player';
+import EventObservable from '../common/GameEvent/EventObservable';
 
 const isSocketOpen = (ws: WebSocket): boolean => ws.readyState === WebSocket.OPEN;
 
@@ -75,6 +76,7 @@ const serverProvider = (router: SocketHandlers) => class Server {
   wss: WebSocketServer;
   connections: WeakMap<WebSocket, any> = new WeakMap();
   terrain: Terrain;
+  events: EventObservable<any> = new EventObservable();
 
   constructor() {
     router.server = this;
@@ -94,8 +96,6 @@ const serverProvider = (router: SocketHandlers) => class Server {
     router.route('PING', () => {});
     router.route('PLAYER_PUT_BLOCK', router.putBlock.bind(router));
     router.route('PLAYER_DESTROYED_BLOCK', router.removeBlock.bind(router));
-    router.route('PLAYER_CHANGE_POSITION', router.playerChangePosition.bind(router));
-    router.route('PLAYER_CHANGED_ROTATION', router.playerChangeRotation.bind(router));
     router.route('PLAYER_STARTED_REMOVE_BLOCK', Player.startRemoveBlock);
     router.route('PLAYER_STOPED_REMOVE_BLOCK', Player.stopRemoveBlock);
     router.route('LOGIN', router.login.bind(router), false);
@@ -115,6 +115,10 @@ const serverProvider = (router: SocketHandlers) => class Server {
                 return request.callback(message.data);
               });
           } else if (typeof message.type === 'string') {
+            this.events.emit({
+              type: message.type,
+              payload: message.data,
+            });
             if (router.router[message.type]) {
               if (router.router[message.type].needAuth && !wrapper.player) {
                 return;

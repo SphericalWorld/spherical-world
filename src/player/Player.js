@@ -114,15 +114,18 @@ const playerProvider = (
     data.id,
     ...[
       new Transform(data.transform.translation[0], data.transform.translation[1], data.transform.translation[2]),
-      new Camera(),
-      new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)), // 1.8
+      new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)),
       new Physics(),
       new Velocity(),
       new Gravity(),
-      new UserControlled(),
-      isMainPlayer
-        ? null
-        : new Visual(new GlObject({ model, material })),
+      ...isMainPlayer
+        ? [
+          new UserControlled(),
+          new Camera(),
+        ]
+        : [
+          new Visual(new GlObject({ model, material })),
+        ],
     ].filter(el => el),
   )).id;
 };

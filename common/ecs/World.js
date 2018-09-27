@@ -32,17 +32,11 @@ export default class World {
   registerThread(thread: Thread) {
     this.threads.push(thread);
     this.threadsMap.set(thread.id, thread);
-    if (typeof window === 'undefined') {
-      setInterval(() => this.update(1000 / 60), 1000 / 60);
-    }
     thread.events.subscribe(({ type, payload }) => {
       if (type === 'CREATE_ENTITY') {
         this.addExistedEntity(payload.id, ...payload.components);
       } else if (type === 'UPDATE_COMPONENTS') {
         this.updateComponents(payload.components || []);
-        // if (typeof window === 'undefined') {
-        //   this.update(payload.delta);
-        // }
         if (payload.events && payload.events.length) {
           for (let i = 0; i < payload.events.length; i += 1) {
             this.events.emit(payload.events[i]);
@@ -82,21 +76,20 @@ export default class World {
       .forEach((changedComponents) => {
         for (const [id, ...components] of changedComponents) {
           for (const component of components) {
-            let el = changedData.get(component);
+            let el = changedData.get(component.constructor);
             if (!el) {
               el = new Map();
-              changedData.set(component, el);
+              changedData.set(component.constructor, el);
             }
             el.set(id, component);
           }
         }
       });
-
     const changedDataArray = [...changedData.entries()];
     for (const thread of this.threads) {
       const componentsToUpdate = changedDataArray
-        .filter(([component]) => component.constructor.threads.includes(thread.id))
-        .map(([component, data]) => ({ type: component.constructor.name, data: [...data.entries()] }));
+        .filter(([constructor]) => constructor.threads.includes(thread.id))
+        .map(([constructor, data]) => ({ type: constructor.name, data: [...data.entries()] }));
       thread.postMessage({
         type: 'UPDATE_COMPONENTS',
         payload: {
@@ -114,7 +107,10 @@ export default class World {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       for (const [key, data] of component.data) {
-        Object.assign(componentRegistry.get(key), data);
+        const componentForUpdate = componentRegistry.get(key);
+        if (componentForUpdate) {
+          Object.assign(componentForUpdate, data);
+        }
       }
     }
   }

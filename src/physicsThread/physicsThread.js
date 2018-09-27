@@ -18,6 +18,7 @@ class PhysicsThread {
     world.registerComponentTypes(...Object.values(componentsProvider));
     world.registerThread(new Thread(THREAD_MAIN, self));
     world.registerSystem(...systemsProvider(world, terrain));
+    setInterval(() => world.update(1000 / 60), 1000 / 60);
   }
 }
 

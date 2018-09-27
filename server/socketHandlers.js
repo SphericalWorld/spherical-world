@@ -21,31 +21,6 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
     ws.player.broadcastToLinked('PLAYER_DESTROYED_BLOCK', data);
   }
 
-  playerChangePosition(ws, data, callback) {
-    const result = ws.player.changeCoord(data.x, data.y, data.z);
-    if (result) {
-      callback(true);
-      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_POSITION', {
-        id: ws.player.id, x: ws.player.x, y: ws.player.y, z: ws.player.z,
-      });
-    } else {
-      callback(false, {
-        x: ws.player.x, y: ws.player.y, z: ws.player.z,
-      });
-    }
-  }
-
-  playerChangeRotation(ws, data) {
-    const result = ws.player.changeRotation(data.v, data.h);
-    if (result) {
-      ws.player.broadcastToLinked('OTHER_PLAYER_CHANGE_ROTATION', { id: ws.player.id, rotation: data.rotation });
-    } else {
-      callback(false, {
-        x: ws.player.x, y: ws.player.y, z: ws.player.z,
-      });
-    }
-  }
-
   loadGameData(ws, data, callback) {
     for (let i = -8; i < 8; i += 1) {
       for (let j = -8; j < 8; j += 1) {
@@ -59,6 +34,7 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
     // data.cookie
     const player = new Player();
     const playerData = createPlayer(player.id);
+    player.playerData = playerData;
     player.terrain = this.server.terrain;
     player.socket = ws;
     ws.player = player;
@@ -75,10 +51,10 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
 
     for (let i = 0; i < ws.player.linkedPlayers.length; i += 1) {
       ws.postMessage('LOAD_OTHER_PLAYER', {
-        id: ws.player.linkedPlayers[i].id, name: ws.player.linkedPlayers[i].name, x: ws.player.linkedPlayers[i].x, y: ws.player.linkedPlayers[i].y, z: ws.player.linkedPlayers[i].z,
+        id: ws.player.linkedPlayers[i].id, name: ws.player.linkedPlayers[i].name, transform: ws.player.linkedPlayers[i].playerData.transform,
       });
       ws.player.linkedPlayers[i].socket.postMessage('LOAD_OTHER_PLAYER', {
-        id: ws.player.id, name: ws.player.name, x: ws.player.x, y: ws.player.y, z: ws.player.z,
+        id: playerData.id, name: player.name, transform: playerData.transform,
       });
     }
   }

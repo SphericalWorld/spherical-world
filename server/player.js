@@ -13,8 +13,6 @@ export default class Player {
     this.z = 0;
     this.dx = 0;
     this.dz = 0;
-    this.id = id;
-    this.chunksId = [];
     this.locationName = 'steppe';
     this.name = `Unnamed Player ${id}`;
     this.linkedPlayers = [];
@@ -56,14 +54,6 @@ export default class Player {
 
   changeRotation() {
     return true;
-  }
-
-  addChunks(chunks) {
-    this.chunksId.push(...chunks);
-  }
-
-  removeChunks(chunks) {
-    this.chunksId = this.chunksId.filter(item => chunks.indexOf(item) === -1);
   }
 
   addLink(player) {
