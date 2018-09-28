@@ -6,7 +6,7 @@ import { Just, Nothing } from '../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
 import Joint from '../../components/Joint';
-import type { System, UpdatedComponents } from '../../../common/ecs/System';
+import type { System } from '../../../common/ecs/System';
 import { World } from '../../../common/ecs';
 import Velocity from '../../components/Velocity';
 import Transform from '../../components/Transform';
@@ -83,29 +83,29 @@ const collideWithTerrain = (terrain: Terrain) => {
   };
 };
 
-export default (ecs: World, terrain: Terrain) =>
-  class PhysicsSystem implements System {
-    components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
-    dependentComponents = ecs.createSelector([Transform, Joint]);
-    collideWithTerrain = collideWithTerrain(terrain);
-    transformRegistry = ecs.components.get('Transform');
+export default (ecs: World, terrain: Terrain): System => {
+  const components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
+  const dependentComponents = ecs.createSelector([Transform, Joint]);
+  const collideWithTerrainPApplied = collideWithTerrain(terrain);
+  const transformRegistry = ecs.components.get('Transform');
 
-    update(delta: number): UpdatedComponents {
-      const result = [];
-      for (const {
-        transform, velocity, collider,
-      } of this.components) {
-        move(collider.shape, transform.translation);
-        this.collideWithTerrain(transform, velocity, collider);
-      }
-
-      for (const { id, joint, transform } of this.dependentComponents) {
-        if (!joint.parentTransform) {
-          joint.parentTransform = this.transformRegistry.get(joint.parent);
-        }
-        vec3.copy(transform.translation, joint.parentTransform.translation);
-        result.push([id, transform]);
-      }
-      return result;
+  const physicsSystem = (delta: number) => {
+    const result = [];
+    for (const {
+      transform, velocity, collider,
+    } of components) {
+      move(collider.shape, transform.translation);
+      collideWithTerrainPApplied(transform, velocity, collider);
     }
+
+    for (const { id, joint, transform } of dependentComponents) {
+      if (!joint.parentTransform) {
+        joint.parentTransform = transformRegistry.get(joint.parent);
+      }
+      vec3.copy(transform.translation, joint.parentTransform.translation);
+      result.push([id, transform]);
+    }
+    return result;
   };
+  return physicsSystem;
+};

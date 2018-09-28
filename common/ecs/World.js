@@ -71,7 +71,7 @@ export default class World {
   update(delta: number): void {
     const changedData = new Map();
     this.systems
-      .map(system => system.update(delta / 1000))
+      .map(system => system(delta / 1000))
       .filter(changedComponents => changedComponents)
       .forEach((changedComponents) => {
         for (const [id, ...components] of changedComponents) {

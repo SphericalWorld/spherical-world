@@ -9,4 +9,4 @@ export default (
   server: Server,
 ): System[] => [
   NetworkSystem(world, server),
-].map(S => new S());
+];

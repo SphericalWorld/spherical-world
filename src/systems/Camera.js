@@ -10,7 +10,7 @@ import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { gl, unproject } from '../engine/glEngine';
 import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
 import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
-import type { System, UpdatedComponents } from '../../common/ecs/System';
+import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 
@@ -53,65 +53,62 @@ const getCameraMovements = (world: World) => world.events
   .filter(el => el.type === CAMERA_MOVED)
   .subscribeQueue();
 
-export default (world: World, input: Input) =>
-  class CameraSystem implements System {
-    camera = world.createSelector([Transform, Camera]);
-    bodyElement: HTMLElement = document.getElementsByTagName('body')[0];
+export default (world: World, input: Input): System => {
+  const cameras = world.createSelector([Transform, Camera]);
+  const bodyElement = document.getElementsByTagName('body')[0];
 
-    mvMatrix: Mat4;
-    pMatrix: Mat4;
+  const cameraMovements = getCameraMovements(world);
 
-    cameraMovements = getCameraMovements(world);
+  world.events
+    .filter(el => el.type === CAMERA_LOCKED)
+    .subscribe(() => {
+      input.deactivateContext(GameplayMenuContext);
+      input.activateContext(GameplayMainContext);
+      bodyElement.requestPointerLock();
+    });
 
-    cameraLockedObserver = world.events
-      .filter(el => el.type === CAMERA_LOCKED)
-      .subscribe(() => {
-        input.deactivateContext(GameplayMenuContext);
-        input.activateContext(GameplayMainContext);
-        this.bodyElement.requestPointerLock();
-      });
+  world.events
+    .filter(el => el.type === CAMERA_UNLOCKED)
+    .subscribe(() => {
+      input.deactivateContext(GameplayMainContext);
+      input.activateContext(GameplayMenuContext);
+    });
 
-    cameraUnlockedObservable = world.events
-      .filter(el => el.type === CAMERA_UNLOCKED)
-      .subscribe(() => {
-        input.deactivateContext(GameplayMainContext);
-        input.activateContext(GameplayMenuContext);
-      });
+  const cameraSystem = (delta: number) => {
+    const movement = cameraMovements.events.reduce(([x, y], { payload }) => ([x + payload.x, y + payload.y]), [0, 0]);
+    const [{ id, transform, camera }] = cameras;
+    camera.viewport = resizeViewport(camera.viewport);
 
-    update(delta: number): UpdatedComponents {
-      const movement = this.cameraMovements.events.reduce(([x, y], { payload }) => ([x + payload.x, y + payload.y]), [0, 0]);
-      const [{ id, transform, camera }] = this.camera;
-      camera.viewport = resizeViewport(camera.viewport);
+    const { translation, rotation } = transform;
+    camera.yaw += movement[1] * 0.005;
+    camera.pitch += movement[0] * 0.005;
 
-      const { translation, rotation } = transform;
-      camera.yaw += movement[1] * 0.005;
-      camera.pitch += movement[0] * 0.005;
+    quat.identity(rotation);
+    quat.rotateX(rotation, rotation, camera.yaw);
+    quat.rotateY(rotation, rotation, camera.pitch);
+    quat.normalize(rotation, rotation);
+    // quat.rotateY(rotation, rotation, movement[0] * 0.005);
+    // quat.rotateX(rotation, rotation, movement[1] * 0.005);
+    // quat.fromEuler(rotation, 0, camera.pitch, 0)
 
-      quat.identity(rotation);
-      quat.rotateX(rotation, rotation, camera.yaw);
-      quat.rotateY(rotation, rotation, camera.pitch);
-      quat.normalize(rotation, rotation);
-      // quat.rotateY(rotation, rotation, movement[0] * 0.005);
-      // quat.rotateX(rotation, rotation, movement[1] * 0.005);
-      // quat.fromEuler(rotation, 0, camera.pitch, 0)
+    // console.log(rotation)
+    mat4.fromQuat(camera.mvMatrix, rotation);
+    mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - PLAYER_CAMERA_HEIGHT, -translation[2]]);
+    cameraMovements.clear();
 
-      // console.log(rotation)
-      mat4.fromQuat(camera.mvMatrix, rotation);
-      mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - PLAYER_CAMERA_HEIGHT, -translation[2]]);
-      this.cameraMovements.clear();
+    const sight = vec3.create();
+    const {
+      viewport: { viewportWidth, viewportHeight, pMatrix },
+      mvMatrix,
+    } = camera;
+    const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
+    const worldPositionNear = getWorldPositionNear(viewportWidth, viewportHeight, pMatrix, mvMatrix);
+    vec3.subtract(sight, worldPosition, worldPositionNear);
+    vec3.normalize(sight, sight);
 
-      const sight = vec3.create();
-      const {
-        viewport: { viewportWidth, viewportHeight, pMatrix },
-        mvMatrix,
-      } = camera;
-      const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
-      const worldPositionNear = getWorldPositionNear(viewportWidth, viewportHeight, pMatrix, mvMatrix);
-      vec3.subtract(sight, worldPosition, worldPositionNear);
-      vec3.normalize(sight, sight);
-
-      camera.worldPosition = worldPositionNear;
-      camera.sight = sight;
-      return [[id, transform, camera]];
-    }
+    camera.worldPosition = worldPositionNear;
+    camera.sight = sight;
+    return [[id, transform, camera]];
   };
+  return cameraSystem;
+};

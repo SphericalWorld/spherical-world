@@ -16,4 +16,4 @@ export default (world: World, terrain: Terrain): System[] => [
   VelocitySystem(world),
   PhysicsSystem(world, terrain),
   RaytraceSystem(world, terrain),
-].map(S => new S());
+];

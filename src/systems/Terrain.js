@@ -3,7 +3,7 @@ import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import type Network from '../network';
 import type { Terrain } from '../Terrain/Terrain';
-import type { System, UpdatedComponents } from '../../common/ecs/System';
+import type { System } from '../../common/ecs/System';
 import type { World } from '../../common/ecs';
 import { filterFarChunks } from '../../common/chunk';
 import Camera from '../components/Camera';
@@ -34,17 +34,17 @@ const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events
       chunk.bindVBO(e.buffers, e.buffersInfo);
     }));
 
-export default (ecs: World, network: Network, terrain: Terrain) =>
-  class TerrainSystem implements System {
-    onChunkLoaded = onChunkLoaded(ecs, network, terrain);
-    onChunkVBOLoaded = onChunkVBOLoaded(ecs, terrain);
-    player = ecs.createSelector([Transform, Camera]);
+export default (ecs: World, network: Network, terrain: Terrain): System => {
+  onChunkLoaded(ecs, network, terrain);
+  onChunkVBOLoaded(ecs, terrain);
+  const player = ecs.createSelector([Transform, Camera]);
 
-    oldPosition: Vec3 = vec3.create();
+  const oldPosition: Vec3 = vec3.create();
 
-    update(delta: number): ?UpdatedComponents {
-      const [{ transform }] = this.player;
-      // terrain.chunks = filterFarChunks(this.oldPosition, transform.translation, terrain.chunks);
-      vec3.copy(this.oldPosition, transform.translation);
-    }
+  const terrainSystem = (delta: number) => {
+    const [{ transform }] = player;
+    // terrain.chunks = filterFarChunks(this.oldPosition, transform.translation, terrain.chunks);
+    vec3.copy(oldPosition, transform.translation);
   };
+  return terrainSystem;
+};

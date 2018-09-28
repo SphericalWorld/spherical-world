@@ -4,6 +4,4 @@ import type { Entity } from './Entity';
 
 export type UpdatedComponents = (Entity | Component)[][];
 
-export interface System {
-  update(delta: number): ?UpdatedComponents;
-}
+export type System = (delta: number) => ?UpdatedComponents;

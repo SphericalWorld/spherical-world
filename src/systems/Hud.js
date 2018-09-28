@@ -17,8 +17,8 @@ const mapState = ({
   states,
 });
 
-export default (ecs: World, store) => {
-  class Hud implements System {
+export default (ecs: World, store): System => {
+  class Hud {
     player = ecs.createSelector([Transform, UserControlled]);
     menuToggledObservable = ecs.events
       .filter(e => e.type === MENU_TOGGLED)
@@ -33,5 +33,7 @@ export default (ecs: World, store) => {
     }
   }
 
-  return connect(mapState, mapActions, store)(Hud);
+
+  const hud = new (connect(mapState, mapActions, store)(Hud))();
+  return delta => hud.update(delta);
 };

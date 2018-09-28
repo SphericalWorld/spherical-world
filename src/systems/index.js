@@ -29,4 +29,4 @@ export default (
   DrawSystem(world, terrain, time),
   HudSystem(world, store),
   NetworkSystem(world, network, Player),
-].map(S => new S());
+];
