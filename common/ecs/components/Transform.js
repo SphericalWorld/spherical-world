@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Vec3, Quat } from 'gl-matrix';
 import type { Component } from '../Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';

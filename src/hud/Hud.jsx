@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import type { State } from '../reducers/rootReducer';
 import MainMenu from './components/MainMenu';
 import MainPanel from './components/MainPanel/MainPanel';
 import KeyBindings from './components/KeyBindings/KeyBindings';
@@ -13,7 +14,7 @@ type Props = StateProps;
 
 const mapState = ({
   hudData: { states: { mainMenuToggled } },
-}) => ({
+}: State) => ({
   mainMenuToggled,
 });
 

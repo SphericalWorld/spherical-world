@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export default class EventQueue<T> {
   events: T[] = [];
 

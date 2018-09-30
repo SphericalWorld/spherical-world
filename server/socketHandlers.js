@@ -33,7 +33,7 @@ const socketHandlersProvider = (createPlayer: CreatePlayer) => class SocketHandl
   login(ws, data, callback) {
     // data.cookie
     const player = new Player();
-    const playerData = createPlayer(player.id);
+    const playerData = createPlayer(player.id, ws);
     player.playerData = playerData;
     player.terrain = this.server.terrain;
     player.socket = ws;

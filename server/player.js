@@ -1,8 +1,11 @@
 // @flow
+import type WebSocket from 'ws';
 import type { Entity } from '../common/ecs/Entity';
 import type World from '../common/ecs/World';
 
-import Transform from '../src/components/Transform';
+import Transform from './components/Transform';
+import Network from './components/Network';
+
 
 let id = 1;
 
@@ -11,8 +14,6 @@ export default class Player {
     this.id = id;
     this.x = 0;
     this.z = 0;
-    this.dx = 0;
-    this.dz = 0;
     this.locationName = 'steppe';
     this.name = `Unnamed Player ${id}`;
     this.linkedPlayers = [];
@@ -50,10 +51,6 @@ export default class Player {
       return true;
     }
     return false;
-  }
-
-  changeRotation() {
-    return true;
   }
 
   addLink(player) {
@@ -94,8 +91,12 @@ export default class Player {
 
 export const playerProvider = (
   world: World,
-) => (id: Entity) => {
-  return world.createEntity(id, new Transform(0, 132, 0));
+) => (id: Entity, socket: WebSocket) => {
+  return world.createEntity(
+    id,
+    new Transform(0, 132, 0),
+    new Network(socket),
+  );
 };
 
 export type CreatePlayer = $Call<typeof playerProvider, *>;

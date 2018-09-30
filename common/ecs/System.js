@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Component } from './Component';
 import type { Entity } from './Entity';
 
