@@ -1,6 +1,6 @@
 // @flow
 type ReducersMap<T> = {
-  [string]: T => T,
+  [string]: (T, any) => T,
 };
 
 export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T) => T {

@@ -22,5 +22,6 @@ module.exports = {
     "jsx-a11y/label-has-associated-control": "off",
     "react/require-default-props": "off", // just broken rule, false positives everywhere
     "react/default-props-match-prop-types": "off", // same here
+    "react/destructuring-assignment": ["always", { "ignoreClassFields": true }]
   },
 };

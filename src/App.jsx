@@ -5,15 +5,13 @@ import { Provider } from 'react-redux';
 import PhysicsThread from 'worker-loader!./physicsThread/index';
 // eslint-disable-next-line
 import ChunksHandlerThread from 'worker-loader!./chunksHandlerThread/index';
-import configureStore from './store/configureStore';
+import store from './store/store';
 import Network from './network';
 import Hud from './hud/Hud';
 
 const physicsThread = new PhysicsThread();
 const chunksHandlerThread = new ChunksHandlerThread();
 const network = new Network();
-
-const store = configureStore({ network, workers: [physicsThread, chunksHandlerThread] });
 
 const App = () => (
   <Provider store={store}>

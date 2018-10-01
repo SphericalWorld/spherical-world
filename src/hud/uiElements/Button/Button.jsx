@@ -12,6 +12,7 @@ export type Size =
 type Props = {|
   +text: string;
   +size?: Size;
+  +onClick?: () => *
 |}
 
 const sizes = {
@@ -19,8 +20,8 @@ const sizes = {
   [SIZE_BIG]: big,
 };
 
-const Button = ({ text, size = SIZE_BIG }: Props) => (
-  <button type="button" className={`${button} ${sizes[size]}`}>
+const Button = ({ text, size = SIZE_BIG, onClick }: Props) => (
+  <button onClick={onClick} type="button" className={`${button} ${sizes[size]}`}>
     {text}
   </button>
 );

@@ -3,12 +3,14 @@ import type World from '../../common/ecs/World';
 import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, UserControlled } from '../components';
 import { MENU_TOGGLED } from '../hud/hudConstants';
+import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
 import { connect } from '../util';
-import { updateHudData, toggleMenu } from '../hud/hudActions';
+import { updateHudData } from '../hud/hudActions';
+import { toggleUIState } from '../hud/utils/StateRouter';
 
 const mapActions = () => ({
   updateHudData,
-  toggleMenu,
+  toggleUIState,
 });
 
 const mapState = ({
@@ -19,10 +21,13 @@ const mapState = ({
 
 export default (ecs: World, store): System => {
   class Hud {
+    toggleUIState: typeof toggleUIState;
+    updateHudData: typeof updateHudData;
+
     player = ecs.createSelector([Transform, UserControlled]);
     menuToggledObservable = ecs.events
       .filter(e => e.type === MENU_TOGGLED)
-      .subscribe(() => this.toggleMenu(!this.states.mainMenuToggled));
+      .subscribe(() => this.toggleUIState(MAIN_MENU));
 
     update(delta: number): ?UpdatedComponents {
       this.updateHudData({
