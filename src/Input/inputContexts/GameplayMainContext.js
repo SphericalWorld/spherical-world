@@ -3,6 +3,7 @@ import InputContext from '../InputContext';
 import {
   KEY_A,
   KEY_D,
+  KEY_I,
   KEY_S,
   KEY_W,
   KEY_SPACE,
@@ -32,6 +33,7 @@ import {
   PLAYER_RUN_EVENT,
   PLAYER_ATTACK_EVENT,
   PLAYER_PUT_BLOCK_EVENT,
+  TOGGLE_INVENTORY_EVENT,
 } from '../events';
 
 export default class GameplayMainContext extends InputContext {
@@ -53,5 +55,6 @@ export default class GameplayMainContext extends InputContext {
     this.events.set(KEY_SHIFT_LEFT, PLAYER_RUN_EVENT);
     this.events.set(KEY_SPACE, PLAYER_JUMP_EVENT);
     this.events.set(KEY_ESCAPE, TOGGLE_MENU_EVENT);
+    this.events.set(KEY_I, TOGGLE_INVENTORY_EVENT);
   }
 }

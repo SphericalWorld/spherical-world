@@ -16,7 +16,7 @@ export type InventorySlotDetails = {|
 
 type Props = {|
   +slot: InventorySlotDetails;
-  +selected: boolean
+  +selected?: boolean
 |};
 
 const InventorySlot = ({ slot, selected }: Props) => (

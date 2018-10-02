@@ -7,7 +7,7 @@ import { KEY_BINDINGS } from './keyBindingsConstants';
 import { setUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
-import ModalWindow from '../ModalWindow';
+import ModalWindowMenu from '../ModalWindowMenu';
 import {
   content,
   command,
@@ -67,7 +67,7 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
   render() {
     const { keyCategories } = this.props;
     return (
-      <ModalWindow caption="Key Bindings">
+      <ModalWindowMenu caption="Key Bindings">
         <div className={content}>
           <header className={`${command} ${header}`}>
             <Label text="command" className={labelFirst} />
@@ -94,7 +94,7 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
             </div>
           </footer>
         </div>
-      </ModalWindow>
+      </ModalWindowMenu>
     );
   }
 }

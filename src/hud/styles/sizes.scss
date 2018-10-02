@@ -10,7 +10,46 @@ $size-of-shadow-main-menu: 1em;
 
 $px1: 0.06em;
 
-//modalWindow
+//modalWindowMenu
 $size-of-corner: 0.6em;
 $sqrt2: 1.41421356237;
 $size-of-half-corner: $size-of-corner/$sqrt2;
+
+//InventorySlot Inventory
+
+%size-img {
+  height: $size-slot;
+  width: $size-slot;
+}
+
+%slot-style {
+  @extend %font-main;
+  @extend %size-img;
+  background-color: $background-color-slot;
+  border: $size-border solid $border-color-slot;
+  border-radius: 0.7em;
+  margin: 0.1em -0.11em;
+}
+
+%alignment {
+  align-items: center;
+  bottom: 9em;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  margin: auto;
+  pointer-events: all;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+}
+
+%inventory {
+  background: transparentize(darken($primary, 10%), 0.15);
+  box-shadow:
+    inset 0 0 $size-of-shadow transparentize($glass, 0.75),
+    inset 0 $size-of-shadow $size-of-shadow transparentize($glass, 0.75);
+}

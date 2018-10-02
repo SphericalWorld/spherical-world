@@ -3,9 +3,10 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { setUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
-import ModalWindow from '../ModalWindow';
+import ModalWindowMenu from '../ModalWindowMenu';
 import { KEY_BINDINGS } from '../KeyBindings/keyBindingsConstants';
 import { MAIN_MENU } from './mainMenuConstants';
+
 import {
   content,
 } from './mainMenu.scss';
@@ -26,7 +27,7 @@ class MainMenu extends PureComponent<Props> {
 
   render() {
     return (
-      <ModalWindow caption="Main Menu">
+      <ModalWindowMenu caption="Main Menu">
         <div className={content}>
           <Button text="return to game" onClick={this.close} />
           <Button text="video" />
@@ -34,7 +35,7 @@ class MainMenu extends PureComponent<Props> {
           <Button text="key bindings" onClick={this.openKeyBindings} />
           <Button text="exit" onClick={this.close} />
         </div>
-      </ModalWindow>
+      </ModalWindowMenu>
     );
   }
 }
