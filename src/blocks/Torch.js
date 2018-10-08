@@ -60,12 +60,8 @@ const Torch = () => {
         y: number,
         z: number,
         {
-          texCoordBuffer,
           vertexBuffer,
           indexBuffer,
-          colorBuffer,
-          globalColorBuffer,
-          blockDataBuffer,
           vertexCount,
         },
       ) {
@@ -77,12 +73,13 @@ const Torch = () => {
             torches[flag][i * 3] + x + chunk.x,
             torches[flag][i * 3 + 1] + y,
             torches[flag][i * 3 + 2] + z + chunk.z,
+            model.vertexTextureCoords[i * 2],
+            model.vertexTextureCoords[i * 2 + 1],
+            this.id,
+            r, g, b,
+            sunlight,
           );
-          colorBuffer.push(r, g, b);
-          globalColorBuffer.push(sunlight);
-          blockDataBuffer.push(this.id);
         }
-        texCoordBuffer.push(...model.vertexTextureCoords);
         for (let i = 0; i < model.indices.length; i += 1) {
           indexBuffer.push(model.indices[i] + vertexCount);
         }

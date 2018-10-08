@@ -10,7 +10,12 @@ import {
 } from '../components';
 import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
-import { Terrain } from '../Terrain/Terrain';
+import {
+  Terrain,
+  getVisibleChunks,
+  drawOpaqueChunkData,
+  drawTransparentChunkData,
+} from '../Terrain/Terrain';
 
 export default (world: World, terrain: Terrain, time: Time): System => {
   const components = world.createSelector([Transform, Visual], [Skybox]);
@@ -56,6 +61,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     pMatrix = camera.viewport.pMatrix;
 
     gl.clear(gl.DEPTH_BUFFER_BIT);
+    const chunksToRender = getVisibleChunks(terrain, pMatrix, mvMatrix);
     // terrain.material.shader.use()
     useShader(terrain.material.shader);
     gl.uniform1f(terrain.material.shader.uTime, time.currentTimeFromStart / 1000); // TODO remove
@@ -68,7 +74,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     const color = Math.floor(lightColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
     const globalColor = [((color & 0xFF0000) >> 16) / 256, ((color & 0xFF00) >> 8) / 256, (color & 0xFF) / 256, 1];
     // console.log(globalColor)s
-    terrain.draw(cameraPosition.translation, skyColor, globalColor, pMatrix, mvMatrix);
+    drawOpaqueChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     const draw = (position: Transform, visual: Visual): void => {
       useShader(visual.glObject.material.shader);
@@ -104,7 +110,9 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       visual.glObject.draw();
       mvPopMatrix();
     }
-    // console.log(components);
+
+    useShader(terrain.material.shader);
+    drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     for (const { transform, visual } of components) {
       if (!visual.glObject.material.transparent || !visual.enabled) {

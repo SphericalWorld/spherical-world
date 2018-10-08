@@ -21,10 +21,6 @@ const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
 type GLBuffers = {
   vertexBuffer: WebGLBuffer,
   indexBuffer: WebGLBuffer,
-  texCoordBuffer: WebGLBuffer,
-  colorBuffer: WebGLBuffer,
-  globalColorBuffer: WebGLBuffer,
-  blockDataBuffer: WebGLBuffer,
   vao: null,
 };
 
@@ -90,39 +86,31 @@ export default class Chunk extends ChunkBase<Chunk> {
     this.buffers = {
       vertexBuffer: null,
       indexBuffer: null,
-      texCoordBuffer: null,
-      colorBuffer: null,
-      globalColorBuffer: null,
-      blockDataBuffer: null,
       vao: null,
     };
     this.buffersInfo = buffersInfo;
     this.buffers.vao = gl.createVertexArray();
     gl.bindVertexArray(this.buffers.vao);
 
-    this.buffers.texCoordBuffer = createBuffer(buffers.texCoordBuffer);
-    gl.enableVertexAttribArray(shader.aTextureCoord);
-    gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
-
-    this.buffers.vertexBuffer = createBuffer(buffers.vertexBuffer);
-    gl.enableVertexAttribArray(shader.aVertexPosition);
-    gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
-
     this.buffers.indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 
-    this.buffers.colorBuffer = createBuffer(buffers.colorBuffer);
-    gl.enableVertexAttribArray(shader.aVertexColor);
-    gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
+    this.buffers.vertexBuffer = createBuffer(buffers.vertexBuffer);
+    gl.enableVertexAttribArray(shader.aVertexPosition);
+    gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
 
-    this.buffers.globalColorBuffer = createBuffer(buffers.globalColorBuffer);
-    gl.enableVertexAttribArray(shader.aVertexGlobalColor);
-    gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(shader.aTextureCoord);
+    gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
 
-    this.buffers.blockDataBuffer = createBuffer(buffers.blockDataBuffer);
     gl.enableVertexAttribArray(shader.aBlockData);
-    gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0); // TODO: maybe float to uint
+    gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20); // TODO: maybe float to uint
+
+    gl.enableVertexAttribArray(shader.aVertexColor);
+    gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
+
+    gl.enableVertexAttribArray(shader.aVertexGlobalColor);
+    gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
 
     gl.bindVertexArray(null);
 

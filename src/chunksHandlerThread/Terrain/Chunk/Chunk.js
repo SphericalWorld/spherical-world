@@ -32,20 +32,12 @@ import {
 type ChunkBuffers = {|
   +vertexBuffer: number[],
   +indexBuffer: number[],
-  +texCoordBuffer: number[],
-  +colorBuffer: number[],
-  +globalColorBuffer: number[],
-  +blockDataBuffer: number[],
   vertexCount: number,
 |}
 
 const createBuffers = (): ChunkBuffers => ({
   vertexBuffer: [],
   indexBuffer: [],
-  texCoordBuffer: [],
-  colorBuffer: [],
-  globalColorBuffer: [],
-  blockDataBuffer: [],
   vertexCount: 0,
 });
 
@@ -119,7 +111,7 @@ const basePlanes = [
   addPlane(0, 0, 1),
 ];
 
-const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, buffer, color, chunk) => {
+const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, color, chunk) => {
   let c = 0;
   let cf = 0;
   let s1f = 0;
@@ -150,8 +142,7 @@ const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, buffer, color, chunk) =
     r, g, b, vGlobal,
   ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
 
-  buffer.colorBuffer.push(r, g, b);
-  buffer.globalColorBuffer.push(vGlobal * color);
+  return [r, g, b, vGlobal * color];
 };
 
 const addVertexTL = addVertex(-1, -1);
@@ -172,41 +163,40 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
   const iVertex = i + ii;
   const jVertex = j + jj;
   const kVertex = k + kk;
-
-  addVertexTL(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
-  addVertexTR(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
-  addVertexBL(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
-  addVertexBR(iVertex, jVertex, kVertex, ii, jj, kk, light, buffer, color, chunk);
-
   const plane = planes[planeIndex];
+  const textureU = blocksTextureInfo[block][planeIndex] / 16;
+  const textureV = Math.floor(textureU) / 16;
+
   buffer.vertexBuffer.push(
     plane[0] + j,
     plane[1] + i,
     plane[2] + k,
+    textureU, textureV,
+    block,
+    ...addVertexTL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[3] + j,
     plane[4] + i,
     plane[5] + k,
+    textureU, textureV + (1 / 16),
+    block,
+    ...addVertexTR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[6] + j,
     plane[7] + i,
     plane[8] + k,
+    textureU + (1 / 16), textureV,
+    block,
+    ...addVertexBL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[9] + j,
     plane[10] + i,
     plane[11] + k,
-  );
-  const textureU = blocksTextureInfo[block][planeIndex] / 16;
-  const textureV = Math.floor(textureU) / 16;
-
-  buffer.texCoordBuffer.push(
-    textureU, textureV,
-    textureU, textureV + (1 / 16),
-    textureU + (1 / 16), textureV,
     textureU + (1 / 16), textureV + (1 / 16),
+    block,
+    ...addVertexBR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
   );
 
-  buffer.blockDataBuffer.push(block, block, block, block);
   // TODO: create one index buffer per all chunks
   const b = [
     buffer.vertexCount,
@@ -334,20 +324,11 @@ export default class Chunk extends ChunkBase<Chunk> {
       buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
     }
     const buffersData = buffers.reduce((prev, curr) => ({
-      texCoordBuffer: prev.texCoordBuffer.concat(curr.texCoordBuffer),
       vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
       indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
-      colorBuffer: prev.colorBuffer.concat(curr.colorBuffer),
-      globalColorBuffer: prev.globalColorBuffer.concat(curr.globalColorBuffer),
-      blockDataBuffer: prev.blockDataBuffer.concat(curr.blockDataBuffer),
     }), createBuffers());
-    buffersData.texCoordBuffer = new Float32Array(buffersData.texCoordBuffer).buffer;
     buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
     buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;
-    buffersData.colorBuffer = new Float32Array(buffersData.colorBuffer).buffer;
-    buffersData.globalColorBuffer = new Float32Array(buffersData.globalColorBuffer).buffer;
-    buffersData.blockDataBuffer = new Float32Array(buffersData.blockDataBuffer).buffer;
-
     self.postMessage({
       type: 'UPDATE_COMPONENTS',
       payload: {

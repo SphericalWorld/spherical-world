@@ -16,6 +16,7 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
     loadTerrainMipmap: typeof loadTerrainMipmap;
     material: Material;
     foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
+    chunksToRender: Chunk[];
 
     loadChunk = (blocksData: ArrayBuffer, data: {
       x: number, z: number, temperature: number[], rainfall: number[],
@@ -27,94 +28,6 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
         chunk = chunk.extract();
       }
       chunk.generateFoliageTexture();
-    }
-
-    draw(cameraPosition: Vec3, skyColor: number[], globalColor: number[], pMatrix: Mat4, mvMatrix: Mat4): void {
-      const { shader } = (this.material: { shader: ChunkProgram });
-      const m = mat4.create();
-      mat4.multiply(m, pMatrix, mvMatrix);
-
-      const chunksToRender = [...this.chunks.values()]
-        .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m)); // TODO cache loaded chunks array
-
-      this.material.use();
-
-      const getBlockDetails = (x, y, z) => this
-        .getChunk(toChunkPosition(x), toChunkPosition(z))
-        .map((chunk) => {
-          const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
-          if (blockInDown === WATER) {
-            gl.uniform1f(shader.uFogDensity, 0.09);
-            gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
-            gl.uniform1i(shader.uFogType, 1);
-          } else {
-            gl.uniform1f(shader.uFogDensity, 0.007);
-            gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-            gl.uniform1i(shader.uFogType, 0);
-          }
-        });
-
-      getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
-
-      gl.uniform4f(shader.uGlobalColor, ...globalColor);
-
-      gl.disable(gl.BLEND);
-      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
-      gl.activeTexture(gl.TEXTURE3);
-      for (const chunk of chunksToRender) {
-        gl.bindTexture(gl.TEXTURE_2D, chunk.foliageTexture);
-        gl.bindVertexArray(chunk.buffers.vao);
-        for (let i = 0; i < chunk.buffersInfo.length - 1; i += 1) {
-          if (chunk.buffersInfo[i].indexCount) {
-            gl.uniform1i(shader.uBufferNum, chunk.buffersInfo[i].index);
-            gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[i].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[i].offset);
-          }
-        }
-      }
-
-
-      gl.bindVertexArray(null);
-
-
-      const ii = Chunk.BUFFERS_COUNT - 1;
-      gl.enableVertexAttribArray(shader.aVertexPosition);
-      gl.enableVertexAttribArray(shader.aTextureCoord);
-      gl.enableVertexAttribArray(shader.aVertexColor);
-      gl.enableVertexAttribArray(shader.aVertexGlobalColor);
-      gl.enableVertexAttribArray(shader.aBlockData);
-
-      gl.uniform1i(shader.uBufferNum, ii);
-      gl.enable(gl.BLEND);
-      gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-
-      gl.disable(gl.CULL_FACE);
-
-      for (const chunk of chunksToRender) {
-        if (chunk.buffersInfo[ii].indexCount) {
-          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.colorBuffer);
-          gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 0, 0);
-          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.globalColorBuffer);
-          gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 0, 0);
-          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.texCoordBuffer);
-          gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 0, 0);
-          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.vertexBuffer);
-          gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 0, 0);
-          gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.blockDataBuffer);
-          gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 0, 0);
-          gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, chunk.buffers.indexBuffer);
-          gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[ii].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[ii].offset);
-        }
-      }
-      gl.enable(gl.CULL_FACE);
-
-      gl.disableVertexAttribArray(shader.aVertexPosition);
-      gl.disableVertexAttribArray(shader.aTextureCoord);
-      gl.disableVertexAttribArray(shader.aVertexColor);
-      gl.disableVertexAttribArray(shader.aVertexGlobalColor);
-      gl.disableVertexAttribArray(shader.aBlockData);
-
-      gl.activeTexture(gl.TEXTURE0);
     }
 
     generateBiomeColorMap(texture: WebGLTexture) {
@@ -140,5 +53,119 @@ const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
 /* ::
 export const Terrain = terrainProvider();
 */
+
+
+export const getVisibleChunks = (terrain: Terrain, pMatrix: Mat4, mvMatrix: Mat4) => {
+  const m = mat4.create();
+  mat4.multiply(m, pMatrix, mvMatrix);
+
+  terrain.chunksToRender = [...terrain.chunks.values()]
+    .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m)); // TODO cache loaded chunks array
+};
+
+export const drawOpaqueChunkData = (terrain: Terrain, cameraPosition: Vec3, skyColor: number[], globalColor: number[]) => {
+  const { shader } = (terrain.material: { shader: ChunkProgram });
+  const { chunksToRender } = terrain;
+  terrain.material.use();
+
+  const getBlockDetails = (x, y, z) => terrain
+    .getChunk(toChunkPosition(x), toChunkPosition(z))
+    .map((chunk) => {
+      const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
+      if (blockInDown === WATER) {
+        gl.uniform1f(shader.uFogDensity, 0.09);
+        gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
+        gl.uniform1i(shader.uFogType, 1);
+      } else {
+        gl.uniform1f(shader.uFogDensity, 0.007);
+        gl.uniform4f(shader.uFogColor, ...skyColor, 1);
+        gl.uniform1i(shader.uFogType, 0);
+      }
+    });
+
+  getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+
+  gl.uniform4f(shader.uGlobalColor, ...globalColor);
+
+  gl.activeTexture(gl.TEXTURE3);
+  for (const chunk of chunksToRender) {
+    gl.bindTexture(gl.TEXTURE_2D, chunk.foliageTexture);
+    gl.bindVertexArray(chunk.buffers.vao);
+    for (let i = 0; i < chunk.buffersInfo.length - 1; i += 1) {
+      if (chunk.buffersInfo[i].indexCount) {
+        gl.uniform1i(shader.uBufferNum, chunk.buffersInfo[i].index);
+        gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[i].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[i].offset);
+      }
+    }
+  }
+
+  gl.bindVertexArray(null);
+  gl.activeTexture(gl.TEXTURE0);
+};
+
+export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3, skyColor: number[], globalColor: number[]) => {
+  const { shader } = (terrain.material: { shader: ChunkProgram });
+  const { chunksToRender } = terrain;
+  terrain.material.use();
+
+  const getBlockDetails = (x, y, z) => terrain
+    .getChunk(toChunkPosition(x), toChunkPosition(z))
+    .map((chunk) => {
+      const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
+      if (blockInDown === WATER) {
+        gl.uniform1f(shader.uFogDensity, 0.09);
+        gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
+        gl.uniform1i(shader.uFogType, 1);
+      } else {
+        gl.uniform1f(shader.uFogDensity, 0.007);
+        gl.uniform4f(shader.uFogColor, ...skyColor, 1);
+        gl.uniform1i(shader.uFogType, 0);
+      }
+    });
+
+  getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+
+  gl.uniform4f(shader.uGlobalColor, ...globalColor);
+
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+  gl.activeTexture(gl.TEXTURE3);
+
+  const ii = 2; //Chunk.BUFFERS_COUNT - 1;
+  gl.enableVertexAttribArray(shader.aVertexPosition);
+  gl.enableVertexAttribArray(shader.aTextureCoord);
+  gl.enableVertexAttribArray(shader.aBlockData);
+  gl.enableVertexAttribArray(shader.aVertexColor);
+  gl.enableVertexAttribArray(shader.aVertexGlobalColor);
+
+  gl.uniform1i(shader.uBufferNum, ii);
+  gl.enable(gl.BLEND);
+  gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+  gl.disable(gl.CULL_FACE);
+
+  for (const chunk of chunksToRender) {
+    if (chunk.buffersInfo[ii].indexCount) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers.vertexBuffer);
+      gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
+      gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
+      gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20);
+      gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
+      gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, chunk.buffers.indexBuffer);
+      gl.drawElements(gl.TRIANGLES, chunk.buffersInfo[ii].indexCount, gl.UNSIGNED_SHORT, chunk.buffersInfo[ii].offset);
+    }
+  }
+  gl.enable(gl.CULL_FACE);
+  gl.disable(gl.BLEND);
+
+  gl.disableVertexAttribArray(shader.aVertexPosition);
+  gl.disableVertexAttribArray(shader.aTextureCoord);
+  gl.disableVertexAttribArray(shader.aBlockData);
+  gl.disableVertexAttribArray(shader.aVertexColor);
+  gl.disableVertexAttribArray(shader.aVertexGlobalColor);
+
+  gl.activeTexture(gl.TEXTURE0);
+};
 
 export default terrainProvider;
