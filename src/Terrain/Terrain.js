@@ -63,27 +63,29 @@ export const getVisibleChunks = (terrain: Terrain, pMatrix: Mat4, mvMatrix: Mat4
     .filter(el => el.state === CHUNK_STATUS_LOADED && el.inFrustum(m)); // TODO cache loaded chunks array
 };
 
+const getBlockDetails = (terrain, x, y, z) => terrain
+  .getChunk(toChunkPosition(x), toChunkPosition(z))
+  .map(chunk => chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z)));
+
+const drawFog = (terrain, shader, skyColor, x, y, z) => getBlockDetails(terrain, x, y, z)
+  .map((blockInDown) => {
+    if (blockInDown === WATER) {
+      gl.uniform1f(shader.uFogDensity, 0.09);
+      gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
+      gl.uniform1i(shader.uFogType, 1);
+    } else {
+      gl.uniform1f(shader.uFogDensity, 0.007);
+      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
+      gl.uniform1i(shader.uFogType, 0);
+    }
+  });
+
 export const drawOpaqueChunkData = (terrain: Terrain, cameraPosition: Vec3, skyColor: number[], globalColor: number[]) => {
   const { shader } = (terrain.material: { shader: ChunkProgram });
   const { chunksToRender } = terrain;
   terrain.material.use();
 
-  const getBlockDetails = (x, y, z) => terrain
-    .getChunk(toChunkPosition(x), toChunkPosition(z))
-    .map((chunk) => {
-      const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
-      if (blockInDown === WATER) {
-        gl.uniform1f(shader.uFogDensity, 0.09);
-        gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
-        gl.uniform1i(shader.uFogType, 1);
-      } else {
-        gl.uniform1f(shader.uFogDensity, 0.007);
-        gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-        gl.uniform1i(shader.uFogType, 0);
-      }
-    });
-
-  getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+  drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
   gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
@@ -108,30 +110,13 @@ export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3,
   const { chunksToRender } = terrain;
   terrain.material.use();
 
-  const getBlockDetails = (x, y, z) => terrain
-    .getChunk(toChunkPosition(x), toChunkPosition(z))
-    .map((chunk) => {
-      const blockInDown = chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z));
-      if (blockInDown === WATER) {
-        gl.uniform1f(shader.uFogDensity, 0.09);
-        gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1C / 256, 0x48 / 256, 1);
-        gl.uniform1i(shader.uFogType, 1);
-      } else {
-        gl.uniform1f(shader.uFogDensity, 0.007);
-        gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-        gl.uniform1i(shader.uFogType, 0);
-      }
-    });
-
-  getBlockDetails(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+  drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
   gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-  gl.activeTexture(gl.TEXTURE3);
-
-  const ii = 2; //Chunk.BUFFERS_COUNT - 1;
+  const ii = 2; // Chunk.BUFFERS_COUNT - 1;
   gl.enableVertexAttribArray(shader.aVertexPosition);
   gl.enableVertexAttribArray(shader.aTextureCoord);
   gl.enableVertexAttribArray(shader.aBlockData);
@@ -139,7 +124,6 @@ export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3,
   gl.enableVertexAttribArray(shader.aVertexGlobalColor);
 
   gl.uniform1i(shader.uBufferNum, ii);
-  gl.enable(gl.BLEND);
   gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
   gl.disable(gl.CULL_FACE);
@@ -157,7 +141,6 @@ export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3,
     }
   }
   gl.enable(gl.CULL_FACE);
-  gl.disable(gl.BLEND);
 
   gl.disableVertexAttribArray(shader.aVertexPosition);
   gl.disableVertexAttribArray(shader.aTextureCoord);

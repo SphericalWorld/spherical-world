@@ -60,7 +60,6 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     mvMatrix = camera.mvMatrix;
     pMatrix = camera.viewport.pMatrix;
 
-    gl.clear(gl.DEPTH_BUFFER_BIT);
     const chunksToRender = getVisibleChunks(terrain, pMatrix, mvMatrix);
     // terrain.material.shader.use()
     useShader(terrain.material.shader);
@@ -110,6 +109,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       visual.glObject.draw();
       mvPopMatrix();
     }
+    gl.enable(gl.BLEND);
 
     useShader(terrain.material.shader);
     drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
@@ -120,6 +120,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       }
       draw(transform, visual);
     }
+    gl.disable(gl.BLEND);
   };
   return drawSystem;
 };
