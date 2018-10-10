@@ -1,6 +1,7 @@
 // @flow
 import { gl } from '../glEngine';
 import Texture, { makeTexture } from './Texture';
+import { CHUNK_WIDTH, TERRAIN_SIZE } from '../../../common/constants/chunk';
 
 const TILE_SIZE = 64;
 
@@ -122,8 +123,8 @@ class GlTextureLibrary {
   }
 
   makeTerrainMinimap(terrain) {
-    this.textureCanvas.width = 16 * terrain.size;
-    this.textureCanvas.height = 16 * terrain.size;
+    this.textureCanvas.width = CHUNK_WIDTH * TERRAIN_SIZE;
+    this.textureCanvas.height = CHUNK_WIDTH * TERRAIN_SIZE;
     this.ctx.fillStyle = 'rgba(255, 255, 255, 0)';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 

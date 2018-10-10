@@ -1,7 +1,7 @@
 // @flow
 import type { BlockFace } from '../../../../common/block';
 import { getIndex } from '../../../../common/chunk';
-import { BLOCKS_IN_CHUNK, CHUNK_HEIGHT } from '../../../../common/constants/chunk';
+import { BLOCKS_IN_CHUNK, CHUNK_WIDTH, CHUNK_HEIGHT } from '../../../../common/constants/chunk';
 import {
   blocksTextureInfo,
   blocksFlags,
@@ -345,8 +345,8 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   prepareLight() {
-    for (let x = 0; x < 16; x += 1) {
-      for (let z = 0; z < 16; z += 1) {
+    for (let x = 0; x < CHUNK_WIDTH; x += 1) {
+      for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
         let lightLevel = 15;
         while (y > 0) {
@@ -373,8 +373,8 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   calcGlobalLight() {
-    for (let x = 0; x < 16; x += 1) {
-      for (let z = 0; z < 16; z += 1) {
+    for (let x = 0; x < CHUNK_WIDTH; x += 1) {
+      for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
         while ((y > 0) && (blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
           y -= 1;
@@ -382,8 +382,8 @@ export default class Chunk extends ChunkBase<Chunk> {
         }
       }
     }
-    for (let x = 0; x < 16; x += 1) {
-      for (let z = 0; z < 16; z += 1) {
+    for (let x = 0; x < CHUNK_WIDTH; x += 1) {
+      for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
         while (y > 0) {
           const index = getIndex(x, y, z);

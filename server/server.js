@@ -72,7 +72,7 @@ type Message = {
   data: any;
 }
 
-const serverProvider = (router: SocketHandlers) => class Server {
+const serverProvider = (router: SocketHandlers, world) => class Server {
   wss: WebSocketServer;
   connections: WeakMap<WebSocket, any> = new WeakMap();
   terrain: Terrain;
@@ -141,6 +141,7 @@ const serverProvider = (router: SocketHandlers) => class Server {
         console.log('Player disconnected');
         const { player } = wrapper;
         if (player) {
+          world.deleteEntity(player.id);
           this.players.splice(this.players.indexOf(player), 1);
           player.destroy();
         }

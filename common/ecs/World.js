@@ -167,6 +167,16 @@ export default class World {
     return selectedComponents;
   }
 
+  deleteEntity(id: Entity): void {
+    for (const registry of this.components.values()) {
+      registry.delete(id);
+    }
+    for (const selector of this.selectors) {
+      const index = selector.components.findIndex(el => el.id !== id);
+      selector.components.splice(index, 1); // TODO: seems like it should be linked list with pool
+    }
+  }
+
   dispatch(gameEvent: GameEvent) {
     this.eventsForThreads.push(gameEvent);
     this.events.emit(gameEvent);

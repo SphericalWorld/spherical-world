@@ -12,11 +12,6 @@ const terrainBaseProvider = (Chunk: ChunkBase) => {
     playerX: number;
     playerZ: number;
 
-    constructor() {
-      this.size = 16;
-      this.halfSize = 8;
-    }
-
     addChunk(chunk: Chunk): Chunk {
       this.chunks.set(chunk.geoId, chunk);
       this.chunks.get(getGeoId(chunk.x - 16, chunk.z)).map((northChunk) => {

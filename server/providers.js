@@ -18,7 +18,7 @@ const mainProvider = () => {
   const world = createECS();
   const Player = playerProvider(world);
   const socketHandlers = new (socketHandlersProvider(Player))();
-  const Server = serverProvider(socketHandlers);
+  const Server = serverProvider(socketHandlers, world);
   const server = new Server();
   world.registerSystem(...systemsProvider(world, server));
   return server;

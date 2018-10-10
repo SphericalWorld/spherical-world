@@ -18,6 +18,11 @@ const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
   return buffer;
 };
 
+type DataBuffers = {
+  vertexBuffer: ArrayBuffer,
+  indexBuffer: ArrayBuffer,
+};
+
 type GLBuffers = {
   vertexBuffer: WebGLBuffer,
   indexBuffer: WebGLBuffer,
@@ -46,7 +51,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     this.rainfallData = new Uint8Array(rainfallData);
     this.temperatureData = new Uint8Array(temperatureData);
 
-    this.frustum = new Frustum([[this.x, 0, this.z], [this.x + 16, 256, this.z + 16]]);
+    this.frustum = new Frustum([[x, 0, z], [x + 16, 256, z + 16]]);
     this.minimap = null;
   }
 
@@ -73,7 +78,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     return this.frustum.boxInFrustum(m);
   }
 
-  bindVBO(buffers, buffersInfo) {
+  bindVBO(buffers: DataBuffers, buffersInfo) {
     const { shader } = (this.terrain.material: { shader: ChunkProgram });
 
     if (!timeOld) {

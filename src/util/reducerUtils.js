@@ -3,7 +3,9 @@ type ReducersMap<T> = {
   [string]: (T, any) => T,
 };
 
-export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T) => T {
+type Action = {| +type: string, +payload: any |};
+
+export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T, Action) => T {
   return (state = initialState, { type, payload }) => {
     const handler = fnMap[type];
 

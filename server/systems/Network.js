@@ -3,10 +3,10 @@ import type World from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import type { Server } from '../server';
 
-import { Transform } from '../components/index';
+import { Transform, Network } from '../components/index';
 
 export default (world: World, server: Server): System => {
-  const components = world.createSelector([Transform]);
+  const components = world.createSelector([Transform, Network]);
   server.events
     .filter(e => e.type === 'SYNC_GAME_DATA')
     .subscribe(({ payload }) => {
@@ -17,11 +17,11 @@ export default (world: World, server: Server): System => {
     });
 
   const networkSystem = (delta: number) => {
-    for (const player of server.players) {
-      player.socket.postMessage('SYNC_GAME_DATA', {
+    for (const { network, id } of components) {
+      network.socket.postMessage('SYNC_GAME_DATA', {
         type: 'Transform',
         data: components
-          .filter(el => el.id !== player.id)
+          .filter(el => el.id !== id)
           .map(el => [el.id, el.transform]),
       });
     }
