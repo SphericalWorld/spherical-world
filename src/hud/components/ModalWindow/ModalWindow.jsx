@@ -1,36 +1,31 @@
 // @flow
-import type { Node } from 'react';
 import React from 'react';
+import type { Node } from 'react';
+import Button from '../../uiElements/Button';
+import Label from '../../uiElements/Label';
 import {
   inner,
+  inventoryName,
+  header,
   wrapper,
-  label,
-  frame,
-  cornerLeftTop,
-  cornerLeftBottom,
-  cornerRightTop,
-  cornerRightBottom,
+  buttonClose,
+  childrenSection,
 } from './modalWindow.scss';
 
 type Props = {|
   +caption: string;
   +children?: Node,
+  +onClose?: () => *;
 |}
 
-const ModalWindow = ({ caption, children }: Props) => (
+const ModalWindow = ({ caption, children, onClose }: Props) => (
   <div className={wrapper}>
-
     <div className={inner}>
-      <header className={label}>
-        {caption}
+      <header className={header}>
+        <Label text={caption} className={inventoryName} />
+        <Button onClick={onClose} text="X" size="small" className={buttonClose} />
       </header>
-      <div className={frame}>
-        <div className={cornerLeftTop} />
-        <div className={cornerLeftBottom} />
-        <div className={cornerRightTop} />
-        <div className={cornerRightBottom} />
-      </div>
-      <section>
+      <section className={childrenSection}>
         {children}
       </section>
     </div>

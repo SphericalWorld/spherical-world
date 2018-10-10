@@ -1,0 +1,66 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.inventory {
+  justify-content: center;
+}
+
+.inventorySlots {
+  align-items: center;
+  box-shadow: inset 0 0 5em 0.1em transparentize($glass, 0.45);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  list-style-type: none;
+  margin: auto;
+  padding: 1em;
+}
+
+.inventorySlots > li {
+  margin: -0.11em;
+}
+
+%size-img {
+  height: $size-slot;
+  width: $size-slot;
+}
+
+.slot {
+  @extend %slot-style;
+}
+
+.slot.empty {
+  background-color: transparent;
+  border: $size-border solid transparentize($border-color-slot, 1);
+  height: 0;
+}
+
+.coins {
+  @extend %inventory;
+  border-top: $border-inventory;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0.5em;
+}
+
+.icon {
+  padding-right: 0.3em;
+}
+
+.coin {
+  padding: 0 0.6em;
+}
+
+.gold > .icon {
+  color: #ffce07;
+}
+
+.silver > .icon {
+  color: #c0c0c0;
+}
+
+.bronze > .icon {
+  color: #cd7f32;
+}
