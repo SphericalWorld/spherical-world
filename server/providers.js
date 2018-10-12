@@ -3,7 +3,6 @@ import World from '../common/ecs/World';
 import { THREAD_MAIN } from '../src/Thread/threadConstants';
 import { playerProvider } from './player';
 import serverProvider from './server';
-import socketHandlersProvider from './socketHandlers';
 import systemsProvider from './systems';
 import * as componentsProvider from './components';
 
@@ -16,11 +15,10 @@ const createECS = () => {
 
 const mainProvider = () => {
   const world = createECS();
-  const Player = playerProvider(world);
-  const socketHandlers = new (socketHandlersProvider(Player))();
-  const Server = serverProvider(socketHandlers, world);
+  const createPlayer = playerProvider(world);
+  const Server = serverProvider(world);
   const server = new Server();
-  world.registerSystem(...systemsProvider(world, server));
+  world.registerSystem(...systemsProvider(world, server, createPlayer));
   return server;
 };
 

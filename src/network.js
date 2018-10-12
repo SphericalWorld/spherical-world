@@ -1,6 +1,5 @@
 // @flow
 import zlib from 'pako';
-import HashMap from '../common/fp/data-structures/Map';
 import EventObservable from '../common/GameEvent/EventObservable';
 
 type NetworkEvent = {
@@ -13,12 +12,9 @@ type NetworkEvent = {
 
 class Network {
   latency: number = 0;
-  router = {};
-  requests: HashMap<number, {resolve: Function}> = new HashMap();
   connection: WebSocket;
   connected = false;
   pingDescriptor: IntervalID;
-  requestId: number = 0;
   requestBinaryData: ?ArrayBuffer;
   host: string = `ws://${window.location.hostname}`;
   port: number = 8080;
@@ -34,20 +30,6 @@ class Network {
 
   processBinaryData(data: ArrayBuffer) {
     this.requestBinaryData = zlib.inflate(new Uint8Array(data));
-  }
-
-  processResponseToRequest(message: MessageEvent) {
-    this.requests.get(message.id)
-      .map((request) => {
-        const { resolve, reject } = request;
-        if (this.requestBinaryData) {
-          resolve([message.data, this.requestBinaryData]);
-          this.requestBinaryData = null;
-        } else {
-          resolve(message.data);
-        }
-        return this.requests.delete(message.id);
-      });
   }
 
   processAction(message: MessageEvent) {
@@ -74,46 +56,22 @@ class Network {
           return;
         }
         const parsedMessage = JSON.parse(message.data);
-        if (typeof parsedMessage.id === 'number') {
-          this.processResponseToRequest(parsedMessage);
-          return;
-        }
         this.processAction(parsedMessage);
       };
     });
     this.connected = true;
   }
 
-  async start(): Promise<void> {
-    await this.request('loadGameData');
+  start(): void {
+    this.emit('loadGameData');
     this.pingDescriptor = setInterval(() => {
       let timeOld = Date.now();
-      this.request('PING', () => {
+      this.emit('PING', () => {
         const timeNew = Date.now();
         this.latency = timeNew - timeOld;
         timeOld = timeNew;
       });
     }, 5000);
-  }
-
-  route(message: string, handler: Function) {
-    this.router[message] = handler;
-  }
-
-  async request(type: string, data?: any): Promise<any> {
-    if (!this.connected) {
-      return console.log('socket disconnected');
-    }
-    const params = {
-      type,
-      data,
-      id: this.requestId,
-    };
-    return new Promise((resolve, reject) => {
-      this.requests.set(this.requestId, { resolve, reject, time: Date.now() });
-      this.requestId += 1;
-      this.connection.send(JSON.stringify(params));
-    });
   }
 
   emit(type: string, data?: any): void {

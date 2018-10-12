@@ -1,5 +1,5 @@
 // @flow
-import type WebSocket from 'ws';
+import type { SocketWrapper } from './server';
 import type { Entity } from '../common/ecs/Entity';
 import type World from '../common/ecs/World';
 
@@ -19,38 +19,6 @@ export default class Player {
     this.linkedPlayers = [];
     this.party = [];
     id += 1;
-  }
-
-  changeCoord(x, y, z) {
-    if (true) {
-      const chunkXold = Math.floor(x / 16) * 16;
-      const chunkZold = Math.floor(z / 16) * 16;
-
-      const chunkX = Math.floor(this.x / 16) * 16;
-      const chunkZ = Math.floor(this.z / 16) * 16;
-      if (chunkXold > chunkX) {
-        for (let i = -8; i < 8; i += 1) {
-          this.terrain.sendChunk(this, chunkX + (8 * 16), chunkZ + (i * 16));
-        }
-      } else if (chunkXold < chunkX) {
-        for (let i = -8; i < 8; i += 1) {
-          this.terrain.sendChunk(this, chunkX - (8 * 16), chunkZ + (i * 16));
-        }
-      }
-      if (chunkZold > chunkZ) {
-        for (let i = -8; i < 8; i += 1) {
-          this.terrain.sendChunk(this, chunkX + (i * 16), chunkZ + (8 * 16));
-        }
-      } else if (chunkZold < chunkZ) {
-        for (let i = -8; i < 8; i += 1) {
-          this.terrain.sendChunk(this, chunkX + (i * 16), chunkZ - (8 * 16));
-        }
-      }
-      this.x = x;
-      this.z = z;
-      return true;
-    }
-    return false;
   }
 
   addLink(player) {
@@ -91,12 +59,14 @@ export default class Player {
 
 export const playerProvider = (
   world: World,
-) => (id: Entity, socket: WebSocket) => {
-  return world.createEntity(
+) => (id: Entity, socket: SocketWrapper) => {
+  const player = world.createEntity(
     id,
     new Transform(0, 132, 0),
     new Network(socket),
   );
+  socket.player = player;
+  return player;
 };
 
 export type CreatePlayer = $Call<typeof playerProvider, *>;

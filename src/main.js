@@ -32,19 +32,27 @@ const engineProvider = (
     async init() {
       await network.connect();
       initWebGL();
+      this.hud = new HUD(store);
+
+      network.events
+        .filter(e => e.type === 'LOGGED_IN')
+        .subscribe(({ payload }) => {
+          const player = Player(payload.data, true);
+          const skyBox = Skybox(player);
+        });
+
+      network.events
+        .filter(e => e.type === 'GAME_START')
+        .subscribe(({ payload }) => {
+          resourceLoader.loadAddons();
+          requestAnimationFrame(this.gameCycle);
+        });
+
+      network.emit('LOGIN', { cookie: 12345 });
 
       Player.hudBillboardModel = createBillboard(2.0);
 
-      const player = await network.request('LOGIN', { cookie: 12345 });
-
-      this.player = Player(player, true);
-
-      this.hud = new HUD(store);
-
-      await resourceLoader.loadAddons();
-      this.skyBox = Skybox(this.player);
-      await network.start();
-      requestAnimationFrame(this.gameCycle);
+      network.start();
     }
 
     gameCycle = (time: number): void => {

@@ -1,5 +1,5 @@
 // @flow strict
-import type WebSocket from 'ws';
+import type { SocketWrapper } from '../server';
 import type { Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../src/Thread/threadConstants';
 
@@ -8,9 +8,9 @@ export default class Network implements Component {
   static componentName: 'network' = 'network';
   static componentType: {| 'network': Network |};
 
-  socket: WebSocket;
+  socket: SocketWrapper;
 
-  constructor(socket: WebSocket) {
+  constructor(socket: SocketWrapper) {
     this.socket = socket;
   }
 }
