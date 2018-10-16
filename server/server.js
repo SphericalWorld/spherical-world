@@ -1,6 +1,7 @@
 // @flow
 import WebSocket, { Server as WebSocketServer } from 'ws';
 import type World from '../common/ecs/World';
+import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
 import Terrain from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
@@ -30,16 +31,9 @@ const emit = (ws, data): void => {
   send(ws, data);
 };
 
-export type SocketWrapper = {
-  player: null;
-  postMessage: Function;
-  emit: Function;
-  send: Function;
-  sendSerialized: Function;
-}
-
-const wrapSocket = ((ws: WebSocket): SocketWrapper => ({
+const wrapSocket = ((ws: WebSocket): Socket => ({
   player: null,
+  ws,
   postMessage: postMessage(ws),
   emit: emit(ws),
   send: send(ws),
@@ -52,11 +46,17 @@ type Message = {
   data: any;
 }
 
+type ServerEvents = {|
+  type: string;
+  socket: Socket;
+  payload: any;
+|} // TODO: change to enum for simplified refinements
+
 const serverProvider = (world: World) => class Server {
   wss: WebSocketServer;
   connections: WeakMap<WebSocket, any> = new WeakMap();
   terrain: Terrain;
-  events: EventObservable<any> = new EventObservable();
+  events: EventObservable<ServerEvents> = new EventObservable();
 
   constructor() {
     this.terrain = new Terrain('steppe', 11);

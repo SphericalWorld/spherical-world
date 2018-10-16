@@ -1,5 +1,5 @@
 // @flow
-import type { SocketWrapper } from './server';
+import type { Socket } from './network/socket';
 import type { Entity } from '../common/ecs/Entity';
 import type World from '../common/ecs/World';
 
@@ -11,12 +11,8 @@ let id = 1;
 
 export default class Player {
   constructor() {
-    this.id = id;
-    this.x = 0;
-    this.z = 0;
     this.locationName = 'steppe';
     this.name = `Unnamed Player ${id}`;
-    this.linkedPlayers = [];
     this.party = [];
     id += 1;
   }
@@ -26,22 +22,8 @@ export default class Player {
     player.linkedPlayers.push(this);
   }
 
-  deleteLink(player) {
-    this.linkedPlayers.splice(this.linkedPlayers.indexOf(player), 1);
-    player.linkedPlayers.splice(player.linkedPlayers.indexOf(this), 1);
-  }
-
-  broadcastToLinked(message, data) {
-    for (let i = 0; i < this.linkedPlayers.length; i += 1) {
-      this.linkedPlayers[i].socket.postMessage(message, data);
-    }
-  }
-
   destroy() {
     this.broadcastToLinked('OTHER_PLAYER_DISCONNECT', { id: this.id });
-    for (let i = 0; i < this.linkedPlayers.length; i += 1) {
-      this.deleteLink(this.linkedPlayers[i]);
-    }
   }
 
   static startRemoveBlock(ws, data) {
@@ -59,7 +41,7 @@ export default class Player {
 
 export const playerProvider = (
   world: World,
-) => (id: Entity, socket: SocketWrapper) => {
+) => (id: Entity, socket: Socket) => {
   const player = world.createEntity(
     id,
     new Transform(0, 132, 0),

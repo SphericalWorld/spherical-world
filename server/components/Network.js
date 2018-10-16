@@ -1,6 +1,8 @@
 // @flow strict
-import type { SocketWrapper } from '../server';
+import type { Socket } from '../network/socket';
 import type { Component } from '../../common/ecs/Component';
+import type { Entity } from '../../common/ecs/Entity';
+
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../src/Thread/threadConstants';
 
 export default class Network implements Component {
@@ -8,9 +10,17 @@ export default class Network implements Component {
   static componentName: 'network' = 'network';
   static componentType: {| 'network': Network |};
 
-  socket: SocketWrapper;
+  socket: Socket;
+  linkedPlayers: { +network: Network, +id: Entity }[] = [];
 
-  constructor(socket: SocketWrapper) {
+  constructor(socket: Socket) {
     this.socket = socket;
+  }
+
+  destructor() {
+    for (const player of this.linkedPlayers) {
+      player.network.linkedPlayers = player.network.linkedPlayers
+        .filter(el => el.id !== this.socket.player.id);
+    }
   }
 }

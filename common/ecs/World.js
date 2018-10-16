@@ -169,10 +169,14 @@ export default class World {
 
   deleteEntity(id: Entity): void {
     for (const registry of this.components.values()) {
-      registry.delete(id);
+      const component = registry.get(id);
+      if (component) {
+        if (component.destructor) component.destructor();
+        registry.delete(id);
+      }
     }
     for (const selector of this.selectors) {
-      const index = selector.components.findIndex(el => el.id !== id);
+      const index = selector.components.findIndex(el => el.id === id);
       selector.components.splice(index, 1); // TODO: seems like it should be linked list with pool
     }
   }
