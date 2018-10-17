@@ -5,14 +5,13 @@ import type World from '../common/ecs/World';
 
 import Transform from './components/Transform';
 import Network from './components/Network';
-
+import PlayerData from './components/PlayerData';
 
 let id = 1;
 
 export default class Player {
   constructor() {
     this.locationName = 'steppe';
-    this.name = `Unnamed Player ${id}`;
     this.party = [];
     id += 1;
   }
@@ -45,6 +44,7 @@ export const playerProvider = (
   const player = world.createEntity(
     id,
     new Transform(0, 132, 0),
+    new PlayerData(`Unnamed Player ${id}`),
     new Network(socket),
   );
   socket.player = player;

@@ -3,7 +3,7 @@ import type World from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import type { Server } from '../server';
 import type { CreatePlayer } from '../player';
-import { broadcastToLinked } from '../network/socket';
+import { broadcastToLinked, send } from '../network/socket';
 import { Transform, Network } from '../components/index';
 
 const onSyncGameData = (server: Server, world: World) => server.events
@@ -31,33 +31,29 @@ const onLogin = (server: Server, createPlayer: CreatePlayer, players) => server.
   .subscribe(({ socket }) => {
     // data.cookie
     const player = createPlayer(null, socket);
+    const { id, transform, playerData } = player;
     // player.terrain = this.server.terrain;
     for (const otherPlayer of players) {
-      if (player.id !== otherPlayer.id) {
+      if (id !== otherPlayer.id) {
         player.network.linkedPlayers.push(otherPlayer);
         otherPlayer.network.linkedPlayers.push(player);
-        socket.postMessage('LOAD_OTHER_PLAYER', {
-          id: otherPlayer.id, transform: otherPlayer.transform,
+        send(socket, 'LOAD_OTHER_PLAYER', {
+          id: otherPlayer.id, transform: otherPlayer.transform, playerData: otherPlayer.playerData,
         });
       }
     }
     broadcastToLinked(socket.player, 'LOAD_OTHER_PLAYER', {
-      id: player.id, transform: player.transform,
+      id, transform, playerData,
     });
-
-    // callback(true, {
-    //   id: playerData.id, name: player.name, transform: playerData.transform,
-    // });
-    //
-    socket.postMessage('LOGGED_IN', {
-      id: player.id, transform: player.transform,
+    send(socket, 'LOGGED_IN', {
+      id, transform, playerData,
     });
   });
 
 const onLoadGameData = (server: Server) => server.events
   .filter(e => e.type === 'loadGameData' && e)
   .subscribe(({ socket }) => {
-    socket.postMessage('GAME_START');
+    send(socket, 'GAME_START');
     for (let i = -8; i < 8; i += 1) {
       for (let j = -8; j < 8; j += 1) {
         server.terrain.sendChunk({ socket }, i * 16, j * 16);
@@ -76,7 +72,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
 
   const networkSystem = (delta: number) => {
     for (const { network, id, transform } of players) {
-      network.socket.postMessage('SYNC_GAME_DATA', {
+      send(network.socket, 'SYNC_GAME_DATA', {
         type: 'Transform',
         data: players
           .filter(el => el.id !== id)

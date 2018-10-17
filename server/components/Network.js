@@ -3,10 +3,10 @@ import type { Socket } from '../network/socket';
 import type { Component } from '../../common/ecs/Component';
 import type { Entity } from '../../common/ecs/Entity';
 
-import { THREAD_MAIN, THREAD_PHYSICS } from '../../src/Thread/threadConstants';
+import { THREAD_MAIN } from '../../src/Thread/threadConstants';
 
 export default class Network implements Component {
-  static threads = [THREAD_MAIN, THREAD_PHYSICS];
+  static threads = [THREAD_MAIN];
   static componentName: 'network' = 'network';
   static componentType: {| 'network': Network |};
 

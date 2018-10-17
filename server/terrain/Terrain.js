@@ -1,9 +1,9 @@
 // @flow
 import type { Block } from '../../common/block';
-
 import Chunk from './Chunk';
 import ChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
+import { send } from '../network/socket';
 
 type Position3D = {|
   x: number,
@@ -87,7 +87,7 @@ export default class Terrain {
 
     const data = await chunk.getCompressedData();
     player.socket.sendSerialized(data);
-    player.socket.postMessage('loadChunk', {
+    send(player.socket, 'loadChunk', {
       x, z, rainfall: chunk.rainfall.data, temperature: chunk.temperature.data,
     });
   }

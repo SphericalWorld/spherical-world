@@ -1,19 +1,21 @@
 // @flow
-import type WebSocket from 'ws';
+import WebSocket from 'ws';
 import type { Network } from '../components/index';
 import type { Entity } from '../../common/ecs/Entity';
 
 export type Socket = {
   player: { +network: Network, +id: Entity };
   ws: WebSocket,
-  postMessage: Function;
-  emit: Function;
   send: Function;
   sendSerialized: Function;
 }
 
-export const send = (receiver: Socket, type: string, payload: any): void =>
-  receiver.ws.send(JSON.stringify({ type, data: payload }));
+const isSocketOpen = (ws: WebSocket): boolean => ws.readyState === WebSocket.OPEN;
+
+export const send = (receiver: Socket, type: string, payload: any): void => (
+  isSocketOpen(receiver.ws)
+    ? receiver.ws.send(JSON.stringify({ type, data: payload }))
+    : console.warn('attempt to send message to closed socket'));
 
 export const broadcast = (receivers: Socket[], type: string, payload: any): void =>
   receivers.forEach(socket => send(socket, type, payload));
