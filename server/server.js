@@ -49,7 +49,6 @@ const onMessage = events => socket => data =>
 
 const serverProvider = (world: World) => class Server {
   wss: WebSocketServer;
-  connections: WeakMap<WebSocket, any> = new WeakMap();
   terrain: Terrain;
   events: EventObservable<ServerEvents> = new EventObservable();
 
@@ -73,7 +72,6 @@ const serverProvider = (world: World) => class Server {
 
     this.wss.on('connection', (ws) => {
       const wrapper = wrapSocket(ws);
-      this.connections.set(ws, wrapper);
       ws.on('message', onMessage(this.events)(wrapper));
 
       ws.on('close', () => {
