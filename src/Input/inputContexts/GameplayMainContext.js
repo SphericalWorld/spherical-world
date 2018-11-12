@@ -2,18 +2,18 @@
 import type { InputContext } from '../InputContext';
 import { createContext } from '../InputContext';
 import {
-  PLAYER_MOVE_FORWARD_EVENT,
-  PLAYER_MOVE_BACKWARD_EVENT,
-  PLAYER_MOVE_LEFT_EVENT,
-  PLAYER_MOVE_RIGHT_EVENT,
-  PLAYER_JUMP_EVENT,
-  TOGGLE_MENU_EVENT,
-  CAMERA_UNLOCKED_EVENT,
-  CAMERA_MOVED_EVENT,
-  PLAYER_RUN_EVENT,
-  PLAYER_ATTACK_EVENT,
-  PLAYER_PUT_BLOCK_EVENT,
-  TOGGLE_INVENTORY_EVENT,
+  playerAttackEvent,
+  playerPutBlockEvent,
+  cameraMovedEvent,
+  cameraUnlockedEvent,
+  playerMoveForwardEvent,
+  playerMoveBackwardEvent,
+  playerMoveLeftEvent,
+  playerMoveRightEvent,
+  playerRunEvent,
+  playerJumpEvent,
+  toggleMenuEvent,
+  toggleInventoryEvent,
 } from '../events';
 
 export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' = 'GAMEPLAY_MAIN_CONTEXT';
@@ -22,19 +22,19 @@ const createGameplayMainContext = (): InputContext => createContext({
   type: GAMEPLAY_MAIN_CONTEXT,
   active: false,
   eventTypes: [
-    PLAYER_ATTACK_EVENT,
-    PLAYER_PUT_BLOCK_EVENT,
-    CAMERA_MOVED_EVENT,
-    CAMERA_UNLOCKED_EVENT,
-    PLAYER_MOVE_FORWARD_EVENT,
-    PLAYER_MOVE_BACKWARD_EVENT,
-    PLAYER_MOVE_LEFT_EVENT,
-    PLAYER_MOVE_RIGHT_EVENT,
+    playerAttackEvent,
+    playerPutBlockEvent,
+    cameraMovedEvent,
+    cameraUnlockedEvent,
+    playerMoveForwardEvent,
+    playerMoveBackwardEvent,
+    playerMoveLeftEvent,
+    playerMoveRightEvent,
 
-    PLAYER_RUN_EVENT,
-    PLAYER_JUMP_EVENT,
-    TOGGLE_MENU_EVENT,
-    TOGGLE_INVENTORY_EVENT,
+    playerRunEvent,
+    playerJumpEvent,
+    toggleMenuEvent,
+    toggleInventoryEvent,
   ],
 });
 

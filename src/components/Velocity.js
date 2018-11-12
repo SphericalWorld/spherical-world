@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import type { Component } from '../../common/ecs/Component';

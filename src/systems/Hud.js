@@ -16,8 +16,10 @@ const mapActions = () => ({
 
 const mapState = ({
   hudData: { states },
+  keyBindings,
 }) => ({
   states,
+  keyBindings,
 });
 
 export default (ecs: World, store): System => {
@@ -40,6 +42,10 @@ export default (ecs: World, store): System => {
           position: this.player[0].transform.translation,
         },
       });
+    }
+
+    componentDidUpdate() {
+
     }
   }
 

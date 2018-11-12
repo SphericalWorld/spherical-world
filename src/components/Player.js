@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 

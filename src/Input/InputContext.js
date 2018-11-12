@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Maybe } from '../../common/fp/monads/maybe';
 import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
 import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
@@ -9,6 +9,7 @@ import InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 
 type MappedEvent = {|
+  +action: string,
   +type: INPUT_TYPE,
   +gameEvent: GAME_EVENT_TYPE,
   +data?: InputEvent => Object,

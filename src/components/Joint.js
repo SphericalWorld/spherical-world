@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Entity } from '../../common/ecs/Entity';
 import type Transform from './Transform';
 import type { Component } from '../../common/ecs/Component';

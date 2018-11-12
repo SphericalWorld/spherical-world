@@ -5,8 +5,9 @@ import type Network from '../network';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { setKey } from '../Input/Input';
+import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 
-export default (ecs: World, network: Network, input: Input, Player): System => {
+export default (ecs: World, network: Network, input: Input, Player, store): System => {
   const player = ecs.createSelector([Transform, Camera]);
   const events = ecs.events
     .filter(el => el.network === true)
@@ -32,7 +33,10 @@ export default (ecs: World, network: Network, input: Input, Player): System => {
   ecs.events
     .filter(e => e.type === 'LOAD_CONTROL_SETTINGS')
     .subscribe(({ payload }) => {
-      payload.controls.forEach(([key, action]) => setKey(input, key, action));
+      payload.controls.forEach(([key, action]) => {
+        setKey(input, key, action);
+        store.dispatch(setKeyRedux(key, action));
+      });
     });
 
   let lastUpdate = Date.now();

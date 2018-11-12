@@ -3,10 +3,12 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
+import rawEventInfo from '../../../../common/constants/input/rawEventInfo';
 import { KEY_BINDINGS } from './keyBindingsConstants';
 import { setUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
+import StatusPanel from './StatusPanel';
 import ModalWindowMenu from '../ModalWindowMenu';
 import {
   content,
@@ -35,7 +37,7 @@ type ActionCategoryProps = {|
 |}
 
 type DispatchProps = {|
-  setUIState: typeof setUIState,
+  +setUIState: typeof setUIState,
 |};
 
 type KeyBindingsOwnProps = {|
@@ -47,8 +49,8 @@ type KeyBindingsProps = KeyBindingsOwnProps & DispatchProps;
 const ActionMappping = ({ caption, firstKey, secondKey }: ActionMapppingProps) => (
   <div className={command}>
     <Label text={caption} className={labelFirst} />
-    <Button text={firstKey} size="small" />
-    <Button text={secondKey} size="small" />
+    <Button text={rawEventInfo[firstKey] ? rawEventInfo[firstKey].caption : 'Not bound'} size="small" />
+    <Button text={rawEventInfo[secondKey] ? rawEventInfo[secondKey].caption : 'Not bound'} size="small" />
   </div>
 );
 
@@ -83,7 +85,7 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
           </section>
           <footer className={footer}>
             <div className={helpLine}>
-              <Label text="press key to bind to command" size="small" className={labelCommandGroup} />
+              <StatusPanel />
             </div>
             <div className={footerButtons}>
               <Button text="reset to default" size="small" />

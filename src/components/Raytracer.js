@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Vec3 } from 'gl-matrix';
 import type { BlockFace, Block } from '../../common/block';
 import type { Component } from '../../common/ecs/Component';

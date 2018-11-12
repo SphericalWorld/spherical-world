@@ -1,5 +1,20 @@
 // @flow strict
 import {
+  CAMERA_MOVED_EVENT,
+  CAMERA_UNLOCKED_EVENT,
+  PLAYER_MOVE_FORWARD_EVENT,
+  PLAYER_MOVE_BACKWARD_EVENT,
+  PLAYER_MOVE_LEFT_EVENT,
+  PLAYER_MOVE_RIGHT_EVENT,
+  PLAYER_JUMP_EVENT,
+  PLAYER_RUN_EVENT,
+  CAMERA_LOCK_EVENT,
+  TOGGLE_MENU_EVENT,
+  TOGGLE_INVENTORY_EVENT,
+  PLAYER_ATTACK_EVENT,
+  PLAYER_PUT_BLOCK_EVENT
+} from '../../common/constants/input/eventTypes';
+import {
   INPUT_TYPE_RANGE,
   INPUT_TYPE_ACTION,
   INPUT_TYPE_STATE,
@@ -30,7 +45,8 @@ import {
 
 // TODO: move events to separate files
 
-export const CAMERA_MOVED_EVENT = {
+export const cameraMovedEvent = {
+  action: CAMERA_MOVED_EVENT,
   type: INPUT_TYPE_RANGE,
   gameEvent: CAMERA_MOVED,
   data: ({ x, y, z }: RangeInputEvent) => ({
@@ -38,12 +54,14 @@ export const CAMERA_MOVED_EVENT = {
   }),
 };
 
-export const CAMERA_UNLOCKED_EVENT = {
+export const cameraUnlockedEvent = {
+  action: CAMERA_UNLOCKED_EVENT,
   type: INPUT_TYPE_ACTION,
   gameEvent: CAMERA_UNLOCKED,
 };
 
-export const PLAYER_MOVE_FORWARD_EVENT = {
+export const playerMoveForwardEvent = {
+  action: PLAYER_MOVE_FORWARD_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Move Forward',
   type: INPUT_TYPE_STATE,
@@ -54,7 +72,8 @@ export const PLAYER_MOVE_FORWARD_EVENT = {
   }),
 };
 
-export const PLAYER_MOVE_BACKWARD_EVENT = {
+export const playerMoveBackwardEvent = {
+  action: PLAYER_MOVE_BACKWARD_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Move Backward',
   type: INPUT_TYPE_STATE,
@@ -65,7 +84,8 @@ export const PLAYER_MOVE_BACKWARD_EVENT = {
   }),
 };
 
-export const PLAYER_MOVE_LEFT_EVENT = {
+export const playerMoveLeftEvent = {
+  action: PLAYER_MOVE_LEFT_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Left',
   type: INPUT_TYPE_STATE,
@@ -76,7 +96,8 @@ export const PLAYER_MOVE_LEFT_EVENT = {
   }),
 };
 
-export const PLAYER_MOVE_RIGHT_EVENT = {
+export const playerMoveRightEvent = {
+  action: PLAYER_MOVE_RIGHT_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Right',
   type: INPUT_TYPE_STATE,
@@ -87,7 +108,8 @@ export const PLAYER_MOVE_RIGHT_EVENT = {
   }),
 };
 
-export const PLAYER_JUMP_EVENT = {
+export const playerJumpEvent = {
+  action: PLAYER_JUMP_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Jump',
   type: INPUT_TYPE_STATE,
@@ -95,7 +117,8 @@ export const PLAYER_JUMP_EVENT = {
   onEnd: PLAYER_STOPED_JUMP,
 };
 
-export const PLAYER_RUN_EVENT = {
+export const playerRunEvent = {
+  action: PLAYER_RUN_EVENT,
   category: CATEGORY_MOVEMENT,
   caption: 'Run',
   type: INPUT_TYPE_STATE,
@@ -103,26 +126,30 @@ export const PLAYER_RUN_EVENT = {
   onEnd: PLAYER_STOPED_RUN,
 };
 
-export const CAMERA_LOCK_EVENT = {
+export const cameraLockEvent = {
+  action: CAMERA_LOCK_EVENT,
   type: INPUT_TYPE_ACTION,
   gameEvent: CAMERA_LOCKED,
 };
 
-export const TOGGLE_MENU_EVENT = {
+export const toggleMenuEvent = {
+  action: TOGGLE_MENU_EVENT,
   category: CATEGORY_INTERFACE,
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
   gameEvent: MENU_TOGGLED,
 };
 
-export const TOGGLE_INVENTORY_EVENT = {
+export const toggleInventoryEvent = {
+  action: TOGGLE_INVENTORY_EVENT,
   category: CATEGORY_INTERFACE,
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
   gameEvent: INVENTORY_TOGGLED,
 };
 
-export const PLAYER_ATTACK_EVENT = {
+export const playerAttackEvent = {
+  action: PLAYER_ATTACK_EVENT,
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Attack / Destroy block',
   type: INPUT_TYPE_STATE,
@@ -130,7 +157,8 @@ export const PLAYER_ATTACK_EVENT = {
   onEnd: PLAYER_STOPED_ATTACK,
 };
 
-export const PLAYER_PUT_BLOCK_EVENT = {
+export const playerPutBlockEvent = {
+  action: PLAYER_PUT_BLOCK_EVENT,
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Put Block',
   type: INPUT_TYPE_ACTION,
