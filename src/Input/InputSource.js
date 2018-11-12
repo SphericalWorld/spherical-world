@@ -1,6 +1,6 @@
-// @flow
-import InputEvent from './InputEvent';
+// @flow strict
+import type InputEvent from './InputEvent';
 
 export interface InputSource {
-  onEvent: (event: InputEvent) => any;
+  onEvent: (event: InputEvent) => mixed;
 }

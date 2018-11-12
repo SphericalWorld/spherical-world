@@ -1,15 +1,17 @@
 // @flow
-import InputContext from '../InputContext';
-import { KEY_ESCAPE } from '../inputSources/KeyboardSource/rawEvents';
-import { MOUSE_LEFT_BUTTON } from '../inputSources/MouseSource/rawEvents';
+import type { InputContext } from '../InputContext';
+import { createContext } from '../InputContext';
 import { CAMERA_LOCK_EVENT, TOGGLE_MENU_EVENT } from '../events';
 
-export default class GameplayMenuContext extends InputContext {
-  active = true;
+export const GAMEPLAY_MENU_CONTEXT: 'GAMEPLAY_MENU_CONTEXT' = 'GAMEPLAY_MENU_CONTEXT';
 
-  constructor() {
-    super();
-    this.events.set(MOUSE_LEFT_BUTTON, CAMERA_LOCK_EVENT);
-    this.events.set(KEY_ESCAPE, TOGGLE_MENU_EVENT);
-  }
-}
+const createGameplayMenuContext = (): InputContext => createContext({
+  type: GAMEPLAY_MENU_CONTEXT,
+  active: true,
+  eventTypes: [
+    CAMERA_LOCK_EVENT,
+    TOGGLE_MENU_EVENT,
+  ],
+});
+
+export default createGameplayMenuContext;

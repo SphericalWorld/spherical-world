@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { getElements } from '../../common/utils/flow';
 
 // keep constants in integers to be able to use shared memory for input sync in the future

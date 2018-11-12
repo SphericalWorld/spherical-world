@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { PLAYER_DESTROYED_BLOCK_TYPE } from '../../src/player/events';
 
 export type GAME_EVENT_TYPE = string;

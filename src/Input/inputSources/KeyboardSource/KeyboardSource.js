@@ -4,7 +4,7 @@ import StateInputEvent, { STATE_DOWN, STATE_UP } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';
 
 export default class KeyboardSource implements InputSource {
-  onEvent: (event: InputEvent) => any;
+  onEvent: (event: InputEvent) => mixed;
   pressedKeys: Set<string> = new Set();
 
   constructor() {

@@ -28,7 +28,7 @@
 //   }]);
 // }());
 
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
   mainPanel,
@@ -50,31 +50,26 @@ type StateProps = {|
 
 type Props = StateProps;
 
-class MainPanel extends PureComponent<Props> {
-  render() {
-    const { slots, selectedItemIndex } = this.props;
-    return (
-      <section className={mainPanelSection}>
-        <div className={mainPanel}>
-          <ul className={itemsContainer}>
-            { slots.map((slot, index) =>
-              <InventorySlot slot={slot} selected={index === selectedItemIndex} />)
-            }
-          </ul>
-          <div className={pagination}>
-            <div className={paginationControl}>
-              <div className={paginationUp} />
-              <div className={paginationDown} />
-            </div>
-            <div className={paginationPage}>
-              10
-            </div>
-          </div>
+const MainPanel = ({ slots, selectedItemIndex }: Props) => (
+  <section className={mainPanelSection}>
+    <div className={mainPanel}>
+      <ul className={itemsContainer}>
+        { slots.map((slot, index) =>
+          <InventorySlot slot={slot} selected={index === selectedItemIndex} />)
+        }
+      </ul>
+      <div className={pagination}>
+        <div className={paginationControl}>
+          <div className={paginationUp} />
+          <div className={paginationDown} />
         </div>
-      </section>
-    );
-  }
-}
+        <div className={paginationPage}>
+          10
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
 const imageSlots = (new Array(11)).fill(0).map((_, index) => ({
   count: index,

@@ -5,6 +5,7 @@ import type { Server } from '../server';
 import type { CreatePlayer } from '../player';
 import { broadcastToLinked, send } from '../network/socket';
 import { Transform, Network } from '../components/index';
+import defaultInputBindings from '../../common/constants/input/defaultInputBindings';
 
 const onSyncGameData = (server: Server, world: World) => server.events
   .filter(e => e.type === 'SYNC_GAME_DATA')
@@ -47,6 +48,9 @@ const onLogin = (server: Server, createPlayer: CreatePlayer, players) => server.
     });
     send(socket, 'LOGGED_IN', {
       id, transform, playerData,
+    });
+    send(socket, 'LOAD_CONTROL_SETTINGS', {
+      controls: defaultInputBindings,
     });
   });
 

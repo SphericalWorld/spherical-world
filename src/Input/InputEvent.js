@@ -1,5 +1,4 @@
-// @flow
-
+// @flow strict
 export default class InputEvent {
   name: string;
 

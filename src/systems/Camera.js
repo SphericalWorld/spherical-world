@@ -8,8 +8,8 @@ import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { gl, unproject } from '../engine/glEngine';
-import GameplayMainContext from '../Input/inputContexts/GameplayMainContext';
-import GameplayMenuContext from '../Input/inputContexts/GameplayMenuContext';
+import { GAMEPLAY_MAIN_CONTEXT } from '../Input/inputContexts/GameplayMainContext';
+import { GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts/GameplayMenuContext';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
@@ -62,16 +62,16 @@ export default (world: World, input: Input): System => {
   world.events
     .filter(el => el.type === CAMERA_LOCKED)
     .subscribe(() => {
-      input.deactivateContext(GameplayMenuContext);
-      input.activateContext(GameplayMainContext);
+      input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
+      input.activateContext(GAMEPLAY_MAIN_CONTEXT);
       bodyElement.requestPointerLock();
     });
 
   world.events
     .filter(el => el.type === CAMERA_UNLOCKED)
     .subscribe(() => {
-      input.deactivateContext(GameplayMainContext);
-      input.activateContext(GameplayMenuContext);
+      input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
+      input.activateContext(GAMEPLAY_MENU_CONTEXT);
     });
 
   const cameraSystem = (delta: number) => {

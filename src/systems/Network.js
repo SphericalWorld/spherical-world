@@ -1,10 +1,12 @@
 // @flow
 import type World from '../../common/ecs/World';
+import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
+import { setKey } from '../Input/Input';
 
-export default (ecs: World, network: Network, Player): System => {
+export default (ecs: World, network: Network, input: Input, Player): System => {
   const player = ecs.createSelector([Transform, Camera]);
   const events = ecs.events
     .filter(el => el.network === true)
@@ -25,6 +27,12 @@ export default (ecs: World, network: Network, Player): System => {
     .filter(e => e.type === 'SYNC_GAME_DATA')
     .subscribe(({ payload }) => {
       ecs.updateComponents([payload]);
+    });
+
+  ecs.events
+    .filter(e => e.type === 'LOAD_CONTROL_SETTINGS')
+    .subscribe(({ payload }) => {
+      payload.controls.forEach(([key, action]) => setKey(input, key, action));
     });
 
   let lastUpdate = Date.now();

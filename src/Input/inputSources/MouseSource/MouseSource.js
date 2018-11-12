@@ -10,7 +10,7 @@ import {
   MOUSE_MIDDLE_BUTTON,
   MOUSE_RIGHT_BUTTON,
   MOUSE_POINTER_UNLOCKED,
-} from './rawEvents';
+} from '../../../../common/constants/input/mouseRawEvents';
 
 const keys = [
   MOUSE_LEFT_BUTTON,
@@ -19,7 +19,7 @@ const keys = [
 ];
 
 export default class MouseSource implements InputSource {
-  onEvent: (event: InputEvent) => any;
+  onEvent: (event: InputEvent) => mixed;
   canvas: HTMLElement;
 
   constructor() {

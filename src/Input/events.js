@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import {
   INPUT_TYPE_RANGE,
   INPUT_TYPE_ACTION,

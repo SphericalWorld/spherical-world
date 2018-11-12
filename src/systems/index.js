@@ -28,5 +28,5 @@ export default (
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
   HudSystem(world, store),
-  NetworkSystem(world, network, Player),
+  NetworkSystem(world, network, input, Player),
 ];

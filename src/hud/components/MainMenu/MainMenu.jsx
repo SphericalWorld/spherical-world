@@ -12,7 +12,7 @@ import {
 } from './mainMenu.scss';
 
 type DispatchProps = {|
-  setUIState: typeof setUIState,
+  +setUIState: typeof setUIState,
 |};
 
 type Props = DispatchProps;

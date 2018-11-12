@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const KEY_A: 'KeyA' = 'KeyA';
 export const KEY_B: 'KeyB' = 'KeyB';
 export const KEY_C: 'KeyC' = 'KeyC';

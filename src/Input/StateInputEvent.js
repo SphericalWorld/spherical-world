@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import InputEvent from './InputEvent';
 
 export const STATE_DOWN: 0 = 0;

@@ -1,12 +1,17 @@
 // @flow
+import HashMap from '../../common/fp/data-structures/Map';
 import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
+import type { InputContext } from './InputContext';
 import InputEvent from './InputEvent';
-import InputContext, { activate, deactivate } from './InputContext';
+import {
+  activate, deactivate, getMappedInputEvent, setKey as setContextKey,
+} from './InputContext';
+import * as events from './events';
 
 const inputProvider = (inputContexts: InputContext[]) => {
   class Input {
-    contextsMap: Map<Function, InputContext> = new Map();
+    contextsMap: HashMap<Function, InputContext> = new HashMap();
     contexts: InputContext[] = [];
     activeContexts: InputContext[];
     inputStates: Map<string, InputEvent> = new Map();
@@ -15,15 +20,14 @@ const inputProvider = (inputContexts: InputContext[]) => {
     constructor() {
       this.contexts = inputContexts;
       for (const context of inputContexts) {
-        this.contextsMap.set(context.constructor, context);
+        this.contextsMap.set(context.type, context);
       }
       this.activeContexts = this.getActiveContexts();
     }
 
     onEvent(event: InputEvent): void {
       for (let i = 0; i < this.activeContexts.length; i += 1) {
-        this.activeContexts[i]
-          .getMappedInputEvent(event)
+        getMappedInputEvent(this.activeContexts[i].events, event)
           .map(this.dispatch);
       }
     }
@@ -33,13 +37,14 @@ const inputProvider = (inputContexts: InputContext[]) => {
     }
 
     switchContext = (activateFn: Function) => (contextConstructor: Function): void => {
-      const context = this.contextsMap.get(contextConstructor);
-      if (!context) {
-        throw new Error('Context not found');
-      }
-      activateFn(context);
-      this.activeContexts = this.getActiveContexts();
-    }
+      this.contextsMap
+        .get(contextConstructor)
+        .map((context) => {
+          this.contextsMap.set(contextConstructor, activateFn(context));
+          this.contexts = [...this.contextsMap.values()];
+          this.activeContexts = this.getActiveContexts();
+        });
+    };
 
     activateContext = this.switchContext(activate);
     deactivateContext = this.switchContext(deactivate);
@@ -64,5 +69,13 @@ const inputProvider = (inputContexts: InputContext[]) => {
 
 declare var tmp: $Call<typeof inputProvider, InputContext[]>;
 export type Input = tmp;
+
+export const setKey = (input: Input, key, actionType) => {
+  const action = events[Object.keys(events).find(e => e === actionType)];
+  const context = input.contexts.find(el => el.eventTypes.has(action));
+  if (context) {
+    setContextKey(context, key, action);
+  }
+};
 
 export default inputProvider;

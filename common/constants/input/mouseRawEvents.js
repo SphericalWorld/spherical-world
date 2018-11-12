@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const MOUSE_MOVE: 'MOUSE_MOVE' = 'MOUSE_MOVE';
 export const MOUSE_WHEEL: 'MOUSE_WHEEL' = 'MOUSE_WHEEL';
 export const MOUSE_LEFT_BUTTON: 'MOUSE_LEFT_BUTTON' = 'MOUSE_LEFT_BUTTON';

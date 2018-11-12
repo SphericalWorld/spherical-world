@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 export const createArray = <T>(length: number, filler: (() => T) | T): Array<T> => {
   const arr = new Array(length);

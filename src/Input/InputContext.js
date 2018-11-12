@@ -17,44 +17,50 @@ type MappedEvent = {|
   +category?: EVENT_CATEGORY
 |};
 
-export default class InputContext {
-  active: boolean = false;
-  events: HashMap<string, MappedEvent> = new HashMap();
+export type InputContext = {|
+  +type: any,
+  active: boolean;
+  +events: HashMap<string, MappedEvent>;
+  +eventTypes: Set<MappedEvent>,
+|}
 
-  getMappedInputEvent(inputEvent: InputEvent): Maybe<GameEvent> {
-    return this.events
-      .get(inputEvent.name)
-      .chain(({
-        type, data, gameEvent, onEnd,
-      }: MappedEvent) => {
-        const payload = data && data(inputEvent);
-        switch (type) {
-          case INPUT_TYPE_ACTION:
-            if (inputEvent.status === STATE_DOWN) {
-              return Just({ type: gameEvent, payload });
-            }
-            return Nothing;
-          case INPUT_TYPE_STATE:
-            if (inputEvent.status === STATE_DOWN) {
-              return Just({ type: gameEvent, payload });
-            }
-            return Just({ type: onEnd, payload });
-          case INPUT_TYPE_RANGE:
-            return Just({ type: gameEvent, payload });
-          default:
-            return Nothing;
+export const createContext = ({ type, active, eventTypes }: {|
+  type: any,
+  active: boolean,
+  eventTypes: $ReadOnlyArray<MappedEvent>
+|}): InputContext => ({
+  type,
+  active,
+  eventTypes: new Set(eventTypes),
+  events: new HashMap(),
+});
+
+export const activate = (context: InputContext) => ({ ...context, active: true });
+export const deactivate = (context: InputContext) => ({ ...context, active: false });
+
+export const getMappedInputEvent = (events: HashMap<string, MappedEvent>, inputEvent: InputEvent): Maybe<GameEvent> => events
+  .get(inputEvent.name)
+  .chain(({
+    type, data, gameEvent, onEnd,
+  }: MappedEvent) => {
+    const payload = data && data(inputEvent);
+    switch (type) {
+      case INPUT_TYPE_ACTION:
+        if (inputEvent.status === STATE_DOWN) {
+          return Just({ type: gameEvent, payload });
         }
-      });
-  }
+        return Nothing;
+      case INPUT_TYPE_STATE:
+        if (inputEvent.status === STATE_DOWN) {
+          return Just({ type: gameEvent, payload });
+        }
+        return Just({ type: onEnd, payload });
+      case INPUT_TYPE_RANGE:
+        return Just({ type: gameEvent, payload });
+      default:
+        return Nothing;
+    }
+  });
 
-  activate() {
-    this.active = true;
-  }
-
-  deactivate() {
-    this.active = false;
-  }
-}
-
-export const activate = (context: InputContext) => context.activate();
-export const deactivate = (context: InputContext) => context.deactivate();
+export const setKey = (context: InputContext, key, event: MappedEvent) =>
+  context.events.set(key, event);

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const CAMERA_MOVED: 'CAMERA_MOVED' = 'CAMERA_MOVED';
 export const CAMERA_LOCKED: 'CAMERA_LOCKED' = 'CAMERA_LOCKED';
 export const CAMERA_UNLOCKED: 'CAMERA_UNLOCKED' = 'CAMERA_UNLOCKED';
