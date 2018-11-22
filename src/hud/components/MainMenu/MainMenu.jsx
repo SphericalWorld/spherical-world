@@ -9,7 +9,7 @@ import { MAIN_MENU } from './mainMenuConstants';
 
 import {
   content,
-} from './mainMenu.scss';
+} from './mainMenu.module.scss';
 
 type DispatchProps = {|
   +setUIState: typeof setUIState,

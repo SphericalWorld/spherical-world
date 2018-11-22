@@ -7,7 +7,7 @@ import {
   slotItemCount,
   imageDiamond,
   imageIronIngot,
-} from './inventorySlot.scss';
+} from './inventorySlot.module.scss';
 
 export type InventorySlotDetails = {|
   +count: number;

@@ -22,7 +22,7 @@ import {
   label,
   labelFirst,
   labelCommandGroup,
-} from './keyBindings.scss';
+} from './keyBindings.module.scss';
 
 type ActionMapppingProps = {|
   +caption: string;

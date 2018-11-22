@@ -10,7 +10,7 @@ import {
   wrapper,
   buttonClose,
   childrenSection,
-} from './modalWindow.scss';
+} from './modalWindow.module.scss';
 
 type Props = {|
   +caption: string;

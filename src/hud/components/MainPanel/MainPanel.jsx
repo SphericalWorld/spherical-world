@@ -39,7 +39,7 @@ import {
   paginationPage,
   paginationControl,
   mainPanelSection,
-} from './mainPanel.scss';
+} from './mainPanel.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 

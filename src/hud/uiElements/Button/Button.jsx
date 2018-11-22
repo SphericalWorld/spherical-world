@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { button, small, big } from './button.scss';
+import { button, small, big } from './button.module.scss';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';
@@ -12,7 +12,7 @@ export type Size =
 type Props = {|
   +text: string;
   +size?: Size;
-  +onClick?: () => *;
+  +onClick?: () => mixed;
   +className?: string;
 |}
 

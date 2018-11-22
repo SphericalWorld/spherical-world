@@ -4,7 +4,7 @@ import {
   label,
   small,
   big,
-} from './label.scss';
+} from './label.module.scss';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';

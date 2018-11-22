@@ -19,7 +19,7 @@ import {
   silver,
   bronze,
   icon,
-} from './inventory.scss';
+} from './inventory.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 

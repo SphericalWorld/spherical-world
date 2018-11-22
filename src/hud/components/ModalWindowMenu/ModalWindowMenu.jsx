@@ -10,7 +10,7 @@ import {
   cornerLeftBottom,
   cornerRightTop,
   cornerRightBottom,
-} from './modalWindowMenu.scss';
+} from './modalWindowMenu.module.scss';
 
 type Props = {|
   +caption: string;

@@ -49,7 +49,6 @@ export default (ecs: World, store): System => {
     }
   }
 
-
   const hud = new (connect(mapState, mapActions, store)(Hud))();
   return delta => hud.update(delta);
 };
