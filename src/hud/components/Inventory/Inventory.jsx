@@ -33,6 +33,23 @@ type DispatchProps = {|
 
 type Props = MappedProps & DispatchProps;
 
+const Footer = () => (
+  <footer className={coins}>
+    <div className={`${coin} ${gold}`}>
+      <Label text="🔘" className={icon} />
+      <Label text="gold" className={label} />
+    </div>
+    <div className={`${coin} ${silver}`}>
+      <Label text="🔘" className={icon} />
+      <Label text="silver" className={label} />
+    </div>
+    <div className={`${coin} ${bronze}`}>
+      <Label text="🔘" className={icon} />
+      <Label text="bronze" className={label} />
+    </div>
+  </footer>
+);
+
 class Inventory extends PureComponent<Props> {
   close = () => this.props.setUIState(INVENTORY, false);
   render() {
@@ -49,20 +66,7 @@ class Inventory extends PureComponent<Props> {
               }
             </ul>
           </div>
-          <footer className={coins}>
-            <div className={`${coin} ${gold}`}>
-              <Label text="🔘" className={icon} />
-              <Label text="gold" className={label} />
-            </div>
-            <div className={`${coin} ${silver}`}>
-              <Label text="🔘" className={icon} />
-              <Label text="silver" className={label} />
-            </div>
-            <div className={`${coin} ${bronze}`}>
-              <Label text="🔘" className={icon} />
-              <Label text="bronze" className={label} />
-            </div>
-          </footer>
+          <Footer />
         </div>
       </ModalWindow>
     );
@@ -79,7 +83,6 @@ const imageSlots = (new Array(46)).fill(0).map((_, index) => ({
 }));
 
 const mapState = () => ({
-  selectedItemIndex: 3,
   slots: imageSlots.concat(getPlaceholderSlots(imageSlots.length)),
 });
 
