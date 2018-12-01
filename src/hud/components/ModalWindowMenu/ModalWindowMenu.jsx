@@ -19,7 +19,6 @@ type Props = {|
 
 const ModalWindowMenu = ({ caption, children }: Props) => (
   <div className={wrapper}>
-
     <div className={inner}>
       <header className={label}>
         {caption}
