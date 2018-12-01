@@ -48,16 +48,16 @@ type KeyBindingsProps = KeyBindingsOwnProps & DispatchProps;
 
 const ActionMappping = ({ caption, firstKey, secondKey }: ActionMapppingProps) => (
   <div className={command}>
-    <Label text={caption} className={labelFirst} />
-    <Button text={rawEventInfo[firstKey] ? rawEventInfo[firstKey].caption : 'Not bound'} size="small" />
-    <Button text={rawEventInfo[secondKey] ? rawEventInfo[secondKey].caption : 'Not bound'} size="small" />
+    <Label className={labelFirst}>{caption}</Label>
+    <Button size="small">{rawEventInfo[firstKey] ? rawEventInfo[firstKey].caption : 'Not bound'}</Button>
+    <Button size="small">{rawEventInfo[secondKey] ? rawEventInfo[secondKey].caption : 'Not bound'}</Button>
   </div>
 );
 
 const ActionCategory = ({ name, items }: ActionCategoryProps) => (
   <div>
     <article className={commandGroup}>
-      <Label text={name} size="big" className={labelCommandGroup} />
+      <Label size="big" className={labelCommandGroup}>{name}</Label>
     </article>
     { items.map(mapping => <ActionMappping key={mapping.gameEvent} {...mapping} />) }
   </div>
@@ -72,9 +72,9 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
       <ModalWindowMenu caption="Key Bindings">
         <div className={content}>
           <header className={`${command} ${header}`}>
-            <Label text="command" className={labelFirst} />
-            <Label text="key 1" className={label} />
-            <Label text="key 2" className={label} />
+            <Label className={labelFirst}>command</Label>
+            <Label className={label}>key 1</Label>
+            <Label className={label}>key 2</Label>
           </header>
           <section className={section}>
             <section>
@@ -88,11 +88,11 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
               <StatusPanel />
             </div>
             <div className={footerButtons}>
-              <Button text="reset to default" size="small" />
-              <Label text=" " className={label} />
-              <Button text="unbind key" size="small" />
-              <Button text="OK" size="small" onClick={this.close} />
-              <Button text="Cancel" size="small" onClick={this.close} />
+              <Button size="small">reset to default</Button>
+              <Label className={label} />
+              <Button size="small">unbind key</Button>
+              <Button size="small" onClick={this.close}>OK</Button>
+              <Button size="small" onClick={this.close}>Cancel</Button>
             </div>
           </footer>
         </div>

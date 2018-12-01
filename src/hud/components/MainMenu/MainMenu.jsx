@@ -29,11 +29,11 @@ class MainMenu extends PureComponent<Props> {
     return (
       <ModalWindowMenu caption="Main Menu">
         <div className={content}>
-          <Button text="return to game" onClick={this.close} />
-          <Button text="video" />
-          <Button text="audio" />
-          <Button text="key bindings" onClick={this.openKeyBindings} />
-          <Button text="exit" onClick={this.close} />
+          <Button onClick={this.close}>return to game</Button>
+          <Button>video</Button>
+          <Button>audio</Button>
+          <Button onClick={this.openKeyBindings}>key bindings</Button>
+          <Button onClick={this.close}>exit</Button>
         </div>
       </ModalWindowMenu>
     );

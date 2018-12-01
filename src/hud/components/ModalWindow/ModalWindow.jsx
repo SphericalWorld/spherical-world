@@ -15,15 +15,15 @@ import {
 type Props = {|
   +caption: string;
   +children?: Node,
-  +onClose?: () => *;
+  +onClose?: () => mixed;
 |}
 
 const ModalWindow = ({ caption, children, onClose }: Props) => (
   <div className={wrapper}>
     <div className={inner}>
       <header className={header}>
-        <Label text={caption} className={inventoryName} />
-        <Button onClick={onClose} text="X" size="small" className={buttonClose} />
+        <Label className={inventoryName}>{caption}</Label>
+        <Button onClick={onClose} size="small" className={buttonClose}>×</Button>
       </header>
       <section className={childrenSection}>
         {children}

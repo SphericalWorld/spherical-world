@@ -36,16 +36,16 @@ type Props = MappedProps & DispatchProps;
 const Footer = () => (
   <footer className={coins}>
     <div className={`${coin} ${gold}`}>
-      <Label text="🔘" className={icon} />
-      <Label text="gold" className={label} />
+      <Label className={icon}>🔘</Label>
+      <Label className={label}>gold</Label>
     </div>
     <div className={`${coin} ${silver}`}>
-      <Label text="🔘" className={icon} />
-      <Label text="silver" className={label} />
+      <Label className={icon}>🔘</Label>
+      <Label className={label}>silver</Label>
     </div>
     <div className={`${coin} ${bronze}`}>
-      <Label text="🔘" className={icon} />
-      <Label text="bronze" className={label} />
+      <Label className={icon}>🔘</Label>
+      <Label className={label}>bronze</Label>
     </div>
   </footer>
 );

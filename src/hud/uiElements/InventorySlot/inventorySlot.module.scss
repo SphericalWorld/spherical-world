@@ -9,6 +9,7 @@
 
 .slot {
   @extend %slot-style;
+  list-style-type: none;
 }
 
 .slotItem {

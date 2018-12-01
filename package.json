@@ -28,7 +28,9 @@
     "eject": "react-app-rewired eject",
     "flow": "./node_modules/flow-bin/cli.js",
     "lint": "./node_modules/eslint/bin/eslint.js --ignore-pattern=node_modules --ignore-pattern=bundle.js --ext .jsx,.js src server common addons",
-    "fix-nvm-sudo": "n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local"
+    "fix-nvm-sudo": "n=$(which node);n=${n%/bin/node}; chmod -R 755 $n/bin/*; sudo cp -r $n/{bin,lib,share} /usr/local",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "proxy": "http://localhost:1337",
   "devDependencies": {
@@ -38,6 +40,12 @@
     "@babel/plugin-transform-react-jsx": "^7.0.0",
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-flow": "^7.0.0",
+    "@storybook/addon-actions": "^4.0.9",
+    "@storybook/addon-backgrounds": "^4.0.8",
+    "@storybook/addon-links": "^4.0.9",
+    "@storybook/addons": "^4.0.9",
+    "@storybook/react": "^4.0.9",
+    "babel-loader": "^8.0.4",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-babel": "^5.2.1",

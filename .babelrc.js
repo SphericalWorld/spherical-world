@@ -16,6 +16,5 @@ module.exports = {
     // "transform-do-expressions",
     // "transform-class-properties",
     // "transform-object-rest-spread",
-  ],
-	"only": [".**", "!/node_modules/**"]
+  ]
 }

@@ -10,7 +10,7 @@ export type Size =
   | typeof SIZE_BIG;
 
 type Props = {|
-  +text: string;
+  +children?: React$Node;
   +size?: Size;
   +onClick?: () => mixed;
   +className?: string;
@@ -22,14 +22,14 @@ const sizes = {
 };
 
 const Button = ({
-  text, size = SIZE_BIG, onClick, className = '',
+  size = SIZE_BIG, onClick, className = '', children,
 }: Props) => (
   <button
     onClick={onClick}
     type="button"
     className={`${button} ${sizes[size]} ${className}`}
   >
-    {text}
+    {children}
   </button>
 );
 
