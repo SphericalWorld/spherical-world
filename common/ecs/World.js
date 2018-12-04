@@ -24,6 +24,7 @@ export default class World {
   events: EventObservable<GameEvent> = new EventObservable();
   listeners: Array<GameEvent => void> = [];
   thread: THREAD_ID;
+  lastAddedObjects = [];
 
   constructor(thread: THREAD_ID) {
     this.thread = thread;
@@ -103,7 +104,7 @@ export default class World {
     this.eventsForThreads = [];
   }
 
-  updateComponents(components) {
+  updateComponents(components: Array<any>) {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       for (const [key, data] of component.data) {
@@ -164,6 +165,7 @@ export default class World {
       const component = components[i];
       selectedComponents[component.constructor.componentName] = component;
     }
+    this.lastAddedObjects.push(selectedComponents);
     return selectedComponents;
   }
 

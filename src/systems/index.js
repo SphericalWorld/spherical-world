@@ -21,6 +21,7 @@ export default (
   input: Input,
   Player,
   store,
+  createItem,
 ): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world),
@@ -28,5 +29,5 @@ export default (
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
   HudSystem(world, store),
-  NetworkSystem(world, network, input, Player, store),
+  NetworkSystem(world, network, input, Player, store, createItem),
 ];

@@ -42,7 +42,7 @@ events
   .filter(e => e.type === PLAYER_DESTROYED_BLOCK && e)
   .map(e => e.payload)
   .subscribe(({
-    geoId, x, y, z,
+    geoId, positionInChunk: [x, y, z],
   }) => terrain.chunks
     .get(geoId)
     .map((chunk) => {
@@ -54,7 +54,7 @@ events
   .filter(e => e.type === PLAYER_PUT_BLOCK)
   .map(e => e.payload)
   .subscribe(({
-    geoId, x, y, z, blockId, flags,
+    geoId, positionInChunk: [x, y, z], blockId, flags,
   }) => terrain.chunks
     .get(geoId)
     .map((chunk) => {

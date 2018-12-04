@@ -23,6 +23,7 @@ const onPlayerPutBlock = (server: Server) => server.events
 const onPlayerDestroyedBlock = (server: Server) => server.events
   .filter(e => e.type === 'PLAYER_DESTROYED_BLOCK' && e)
   .subscribe(({ socket, payload }) => {
+    console.log(payload)
     broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', payload);
     server.terrain.removeBlockHandler(payload);
   });
@@ -77,10 +78,13 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
   const networkSystem = (delta: number) => {
     for (const { network, id, transform } of players) {
       send(network.socket, 'SYNC_GAME_DATA', {
-        type: 'Transform',
-        data: players
-          .filter(el => el.id !== id)
-          .map(el => [el.id, el.transform]),
+        components: {
+          type: 'Transform',
+          data: players
+            .filter(el => el.id !== id)
+            .map(el => [el.id, el.transform]),
+        },
+        newObjects: world.lastAddedObjects.filter(el => el.networkSync),
       });
 
       const [x, y, z] = transform.translation;
@@ -112,6 +116,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
       transform.chunkX = chunkX;
       transform.chunkZ = chunkZ;
     }
+    world.lastAddedObjects = [];
   };
   return networkSystem;
 };

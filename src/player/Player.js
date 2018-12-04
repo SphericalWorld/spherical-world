@@ -113,7 +113,7 @@ const playerProvider = (
   return (ecs.createEntity(
     data.id,
     ...[
-      new Transform(data.transform.translation[0], data.transform.translation[1], data.transform.translation[2]),
+      Transform.deserialize(data.transform),
       new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)),
       new Physics(),
       new Velocity(),

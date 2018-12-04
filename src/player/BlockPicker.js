@@ -14,7 +14,7 @@ const blockPickerProvider = (
   materialLibrary: MaterialLibrary,
   BlockRemover: CreateBlockRemover,
 ) => (id: Entity): Entity => {
-  const model = createCube(1.001);
+  const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });
 

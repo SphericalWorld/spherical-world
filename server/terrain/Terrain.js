@@ -1,5 +1,8 @@
 // @flow
+import type { Vec3 } from 'gl-matrix';
+import { vec3 } from 'gl-matrix';
 import type { Block } from '../../common/block';
+import type { CreateItem } from '../item';
 import Chunk from './Chunk';
 import ChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
@@ -11,7 +14,9 @@ type Position3D = {|
   z: number,
 |};
 
-export default class Terrain {
+export default (
+  createItem: CreateItem,
+) => class Terrain {
   locationName: string;
   chunkGenerator: ChunkGenerator;
   seed: number;
@@ -93,12 +98,12 @@ export default class Terrain {
   }
 
   putBlockHandler({
-    geoId, x, y, z, blockId, flags,
+    geoId, positionInChunk: [x, y, z], blockId, flags,
   }: {
     geoId: string,
     blockId: Block,
     flags: number,
-    ...Position3D
+    positionInChunk: Vec3
   }) {
     const chunk = this.chunks.get(geoId);
     if (!chunk) {
@@ -114,7 +119,26 @@ export default class Terrain {
     }
   }
 
-  removeBlockHandler(params) {
-    this.putBlockHandler({ ...params, blockId: 0, flags: 0 });
+  removeBlockHandler({
+    geoId, positionInChunk: [x, y, z], position,
+  }: {
+    geoId: string,
+    positionInChunk: Vec3,
+    position: Vec3,
+    ...Position3D
+  }) {
+    const chunk = this.chunks.get(geoId);
+    if (!chunk || !chunk.data[x + z * 16 + y * 256]) {
+      return;
+    }
+    chunk.data[x + z * 16 + y * 256] = 0;
+    chunk.flags[x + z * 16 + y * 256] = 0;
+    if (chunk.changesCount < 15) {
+      chunk.changesCount += 1;
+    } else {
+      chunk.changesCount = 0;
+      chunk.save();
+    }
+    createItem(null, vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)));
   }
-}
+};

@@ -16,4 +16,8 @@ export default class Transform implements Component {
     this.translation[1] = y;
     this.translation[2] = z;
   }
+
+  static deserialize(data: Transform): Transform {
+    return new Transform(data.translation[0], data.translation[1], data.translation[2]);
+  }
 }

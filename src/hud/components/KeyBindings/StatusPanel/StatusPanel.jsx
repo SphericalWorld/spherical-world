@@ -12,7 +12,7 @@ type StateProps = {|
 type Props = StateProps;
 
 const StatusPanel = ({ statusText }: Props) =>
-  <Label text={statusText} size="small" className={labelCommandGroup} />;
+  <Label size="small" className={labelCommandGroup}>{statusText}</Label>;
 
 const mapState = (state: State) => ({
   statusText: state.keyBindings.status,

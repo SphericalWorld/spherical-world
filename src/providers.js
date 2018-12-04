@@ -1,6 +1,7 @@
 // @flow
 import type { ShaderLibrary } from './engine/ShaderLibrary';
 import type Network from './network';
+import createItem from './item/Item';
 import Main from './main';
 import playerProvider from './player/Player';
 import GlTextureLibrary from './engine/Texture/TextureLibrary';
@@ -93,7 +94,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch(event => world.dispatch(event));
 
-  world.registerSystem(...systemsProvider(world, terrain, network, time, input, Player, store));
+  world.registerSystem(...systemsProvider(world, terrain, network, time, input, Player, store, createItem(world, materialLibrary)));
 
   return Main(store, network, Player, new ResourceLoader(), world, Skybox);
 };

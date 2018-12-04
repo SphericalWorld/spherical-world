@@ -17,7 +17,7 @@ export default class EventObservable<T> implements Filterable<T>, Functor<T> {
     return queue;
   }
 
-  subscribe(observer: T => any) {
+  subscribe(observer: T => mixed) {
     this.subscriptions.push(this);
     this.observer = observer;
   }

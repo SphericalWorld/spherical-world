@@ -1,4 +1,5 @@
 // @flow
+import type { Vec3 } from 'gl-matrix';
 import { gl } from '../glEngine';
 import Model from './Model';
 
@@ -82,46 +83,47 @@ const createCube = (
   size: number = 1.0,
   isReversed: boolean = false,
   isCubeMap: boolean = false,
+  [x, y, z]: Vec3 = [0, 0, 0],
 ): Model => {
   const model = new Model();
   const halfSize = size / 2;
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
   const vertices = [
     // Front face
-    0.5 - halfSize, 0.5 - halfSize, 0.5 + halfSize,
-    0.5 + halfSize, 0.5 - halfSize, 0.5 + halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 + halfSize,
-    0.5 - halfSize, 0.5 + halfSize, 0.5 + halfSize,
+    x - halfSize, y - halfSize, z + halfSize,
+    x + halfSize, y - halfSize, z + halfSize,
+    x + halfSize, y + halfSize, z + halfSize,
+    x - halfSize, y + halfSize, z + halfSize,
 
     // Back face
-    0.5 + halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 - halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 - halfSize, 0.5 + halfSize, 0.5 - halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 - halfSize,
+    x + halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
+    x + halfSize, y + halfSize, z - halfSize,
 
     // Top face
-    0.5 - halfSize, 0.5 + halfSize, 0.5 + halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 + halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 - halfSize,
-    0.5 - halfSize, 0.5 + halfSize, 0.5 - halfSize,
+    x - halfSize, y + halfSize, z + halfSize,
+    x + halfSize, y + halfSize, z + halfSize,
+    x + halfSize, y + halfSize, z - halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
 
     // Bottom face
-    0.5 - halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 + halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 + halfSize, 0.5 - halfSize, 0.5 + halfSize,
-    0.5 - halfSize, 0.5 - halfSize, 0.5 + halfSize,
+    x - halfSize, y - halfSize, z - halfSize,
+    x + halfSize, y - halfSize, z - halfSize,
+    x + halfSize, y - halfSize, z + halfSize,
+    x - halfSize, y - halfSize, z + halfSize,
 
     // Right face
-    0.5 + halfSize, 0.5 - halfSize, 0.5 + halfSize,
-    0.5 + halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 - halfSize,
-    0.5 + halfSize, 0.5 + halfSize, 0.5 + halfSize,
+    x + halfSize, y - halfSize, z + halfSize,
+    x + halfSize, y - halfSize, z - halfSize,
+    x + halfSize, y + halfSize, z - halfSize,
+    x + halfSize, y + halfSize, z + halfSize,
 
     // Left face
-    0.5 - halfSize, 0.5 - halfSize, 0.5 - halfSize,
-    0.5 - halfSize, 0.5 - halfSize, 0.5 + halfSize,
-    0.5 - halfSize, 0.5 + halfSize, 0.5 + halfSize,
-    0.5 - halfSize, 0.5 + halfSize, 0.5 - halfSize,
+    x - halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y - halfSize, z + halfSize,
+    x - halfSize, y + halfSize, z + halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);

@@ -49,7 +49,7 @@ const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> => terrain
       block: chunk.getBlock(x, y, z),
       position,
       geoId: chunk.geoId,
-      positionInChunk: { x, y, z },
+      positionInChunk: vec3.fromValues(x, y, z),
     };
   });
 

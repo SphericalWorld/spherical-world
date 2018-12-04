@@ -7,7 +7,7 @@ import { Transform, Camera } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 
-export default (ecs: World, network: Network, input: Input, Player, store): System => {
+export default (ecs: World, network: Network, input: Input, Player, store, createItem): System => {
   const player = ecs.createSelector([Transform, Camera]);
   const events = ecs.events
     .filter(el => el.network === true)
@@ -26,8 +26,11 @@ export default (ecs: World, network: Network, input: Input, Player, store): Syst
 
   ecs.events
     .filter(e => e.type === 'SYNC_GAME_DATA')
-    .subscribe(({ payload }) => {
-      ecs.updateComponents([payload]);
+    .subscribe(({ payload: { newObjects, components } }) => {
+      for (const newObject of newObjects) {
+        createItem(null, newObject);
+      }
+      ecs.updateComponents([components]);
     });
 
   ecs.events

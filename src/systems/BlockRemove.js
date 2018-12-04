@@ -28,9 +28,8 @@ const getPutBlockEvents = (world: World, picker) => world.events
       world.createEventAndDispatch(PLAYER_PUT_BLOCK, {
         flags: face,
         geoId: emptyBlock.geoId,
-        x: emptyBlock.positionInChunk.x,
-        y: emptyBlock.positionInChunk.y,
-        z: emptyBlock.positionInChunk.z,
+        position: Array.from(emptyBlock.position),
+        positionInChunk: Array.from(emptyBlock.positionInChunk),
         blockId: 128,
       }, true);
     }
@@ -71,8 +70,9 @@ export default (world: World): System => {
         visual.enabled = true;
         blockRemover.removedPart += (1 / blocksInfo[block.block].baseRemoveTime) * delta;
         if (blockRemover.removedPart >= 1) {
+          blockRemover.removedPart = 0;
           world.createEventAndDispatch(PLAYER_DESTROYED_BLOCK, {
-            geoId: block.geoId, ...block.positionInChunk,
+            geoId: block.geoId, positionInChunk: Array.from(block.positionInChunk), position: Array.from(block.position),
           }, true);
         }
       } else {

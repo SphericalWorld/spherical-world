@@ -11,7 +11,7 @@ const blockRemoverProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
 ) => (pickerId: Entity, id: ?Entity): Entity => {
-  const model = createCube(1.001);
+  const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockRemover');
   const object = new GlObject({ model, material });
   return (ecs.createEntity(

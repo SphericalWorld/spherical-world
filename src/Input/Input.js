@@ -15,7 +15,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
     contexts: InputContext[] = [];
     activeContexts: InputContext[];
     inputStates: Map<string, InputEvent> = new Map();
-    dispatchHandler: (GameEvent) => void;
+    dispatchHandler: (GameEvent) => mixed;
 
     constructor() {
       this.contexts = inputContexts;
@@ -59,7 +59,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
       this.dispatchHandler(event);
     }
 
-    onDispatch(dispatchHandler: (GameEvent) => any) {
+    onDispatch(dispatchHandler: (GameEvent) => mixed) {
       this.dispatchHandler = dispatchHandler;
     }
   }

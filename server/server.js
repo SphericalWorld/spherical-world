@@ -47,7 +47,7 @@ const onMessage = events => socket => data =>
       }
     });
 
-const serverProvider = (world: World) => class Server {
+const serverProvider = (world: World, Terrain) => class Server {
   wss: WebSocketServer;
   terrain: Terrain;
   events: EventObservable<ServerEvents> = new EventObservable();
