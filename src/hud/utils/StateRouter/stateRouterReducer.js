@@ -22,7 +22,7 @@ const onSet = (state, { stateName, value }: OnToggleData & { value: boolean }): 
   [stateName]: value,
 });
 
-export default createReducer(initialState, {
+export default createReducer<typeof initialState>(initialState, {
   [STATE_ROUTER_TOGGLE]: onToggle,
   [STATE_ROUTER_SET]: onSet,
 });

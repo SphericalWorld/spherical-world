@@ -42,12 +42,6 @@ class SimpleMaterial implements Material {
   }: MaterialOptions) {
     this.blendingMode = blendingMode;
     this.transparent = blendingMode !== BLENDING_OPAQUE;
-    if (typeof name === 'undefined') {
-      throw new Error('Material name should be provided');
-    }
-    if (!shader) {
-      throw new Error('Shader name should be provided');
-    }
     this.name = name;
     if (diffuse) {
       this.diffuse = diffuse;

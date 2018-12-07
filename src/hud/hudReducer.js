@@ -14,6 +14,6 @@ const onUpdateHudData = (state, data) => ({
   ...data,
 });
 
-export default createReducer(initialState, {
+export default createReducer<typeof initialState>(initialState, {
   [HUD_DATA_UPDATED]: onUpdateHudData,
 });

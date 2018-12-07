@@ -29,7 +29,7 @@ const initialState = {
   status: 'press key to bind to command',
 };
 
-export default createReducer(initialState, {
+export default createReducer<typeof initialState>(initialState, {
   [SET_KEY]: (state, payload) => ({
     ...state,
     keyCategories: state.keyCategories.map(category => ({

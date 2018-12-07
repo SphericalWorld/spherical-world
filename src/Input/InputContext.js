@@ -12,7 +12,7 @@ type MappedEvent = {|
   +action: string,
   +type: INPUT_TYPE,
   +gameEvent: GAME_EVENT_TYPE,
-  +data?: InputEvent => Object,
+  +data?: InputEvent => mixed,
   +onEnd?: GAME_EVENT_TYPE,
   +caption?: string,
   +category?: EVENT_CATEGORY

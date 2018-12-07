@@ -42,9 +42,9 @@ const blocks = [
   Cobblestone(),
 ];
 
-const blocksTextureInfo = createArray(256, () => (new Uint8Array(6)));
-const blocksFlags = createArray(256, () => (new Uint8Array(5)));
-const bufferInfo = createArray(256, () => createArray(6, 0));
+const blocksTextureInfo = createArray<Uint8Array>(256, () => (new Uint8Array(6)));
+const blocksFlags = createArray<Uint8Array>(256, () => (new Uint8Array(5)));
+const bufferInfo = createArray<number[]>(256, () => createArray(6, 0));
 const blocksInfo = createArray(256, Block());
 
 export const LIGHT_TRANSPARENT: 0 = 0;

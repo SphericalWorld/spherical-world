@@ -12,11 +12,12 @@ const reducers = {
   uiStates: routerReducer,
 };
 
+type $ExtractFunctionReturn = <V>(v: (...args: any) => V) => V;
+
 const combinedReducer = combineReducers(reducers);
 
 const rootReducer = reduceReducers(combinedReducer);
 
-type $ExtractFunctionReturn = <V>(v: (...args: any) => V) => V;
 export type State = $ObjMap<typeof reducers, $ExtractFunctionReturn>;
 
 export default rootReducer;

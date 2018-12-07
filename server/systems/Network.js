@@ -23,7 +23,6 @@ const onPlayerPutBlock = (server: Server) => server.events
 const onPlayerDestroyedBlock = (server: Server) => server.events
   .filter(e => e.type === 'PLAYER_DESTROYED_BLOCK' && e)
   .subscribe(({ socket, payload }) => {
-    console.log(payload)
     broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', payload);
     server.terrain.removeBlockHandler(payload);
   });

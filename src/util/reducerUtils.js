@@ -1,6 +1,8 @@
 // @flow
+type Reducer<T> = (T, any) => T;
+
 type ReducersMap<T> = {
-  [string]: (T, any) => T,
+  [string]: Reducer<T>,
 };
 
 type Action = {| +type: string, +payload: any |};
@@ -13,7 +15,7 @@ export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T, Ac
   };
 }
 
-export function reduceReducers(...reducers: Function[]) {
+export function reduceReducers<T>(...reducers: Reducer<T>[]): Reducer<T> {
   return (previous, current) =>
     reducers.reduce(
       (p, r) => r(p, current),
