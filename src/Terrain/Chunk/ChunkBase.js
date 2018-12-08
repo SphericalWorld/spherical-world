@@ -80,11 +80,4 @@ class ChunkBase<TChunk> {
   }
 }
 
-export const COLUMN: 1 = 1;
-export const ROW: 16 = 16;
-export const SLICE: 256 = 256;
-
-export const COLUMN_NESTED_CHUNK: 15 = 15;
-export const ROW_NESTED_CHUNK: 240 = 240;
-
 export default ChunkBase;

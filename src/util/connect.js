@@ -15,13 +15,11 @@ export default function connect(mapState: ?Function, mapActions: ?MapActions, st
             if (shallowEqual(prevProps, nextProps)) {
               return;
             }
+            Object.assign(this, nextProps);
             if (this.componentDidUpdate) {
-              Object.assign(this, nextProps);
               const arg = prevProps; // needed in case if update will throw and fall down to infinite loop
               prevProps = nextProps;
               this.componentDidUpdate(arg);
-            } else {
-              Object.assign(this, nextProps);
             }
           });
           Object.assign(this, prevProps);

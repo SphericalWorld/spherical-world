@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Setoid } from '../../../common/fp/algebraicDataTypes/Setoid';
 
 const PI2 = Math.PI * 2;
@@ -147,21 +147,21 @@ class Vector implements Setoid<this> {
     return out;
   }
 
-  static fromAngles = (theta: number, phi: number) =>
+  static fromAngles = (theta: number, phi: number): Vector =>
     new Vector(Math.cos(theta) * Math.cos(phi), Math.sin(phi), Math.sin(theta) * Math.cos(phi));
 
-  static randomDirection = () =>
+  static randomDirection = (): Vector =>
     Vector.fromAngles(Math.random() * PI2, Math.asin(Math.random() * 2 - 1));
 
-  static min = (a: Vector, b: Vector) =>
+  static min = (a: Vector, b: Vector): Vector =>
     new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
 
-  static max = (a: Vector, b: Vector) =>
+  static max = (a: Vector, b: Vector): Vector =>
     new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
 
   static lerp = (a: Vector, b: Vector, fraction: number) => b.subtract(a).scale(fraction).add(a);
 
-  static fromArray = (a: number[]) => new Vector(a[0], a[1], a[2]);
+  static fromArray = (a: number[]): Vector => new Vector(a[0], a[1], a[2]);
 
   static angleBetween = (a: Vector, b: Vector) => a.angleTo(b);
 

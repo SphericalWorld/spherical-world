@@ -1,7 +1,9 @@
 // @flow
 import type { BlockFace } from '../../../../common/block';
 import { getIndex } from '../../../../common/chunk';
-import { BLOCKS_IN_CHUNK, CHUNK_WIDTH, CHUNK_HEIGHT } from '../../../../common/constants/chunk';
+import {
+  BLOCKS_IN_CHUNK, CHUNK_WIDTH, CHUNK_HEIGHT, SLICE,
+} from '../../../../common/constants/chunk';
 import {
   blocksTextureInfo,
   blocksFlags,
@@ -9,7 +11,7 @@ import {
   blocksInfo,
   LIGHT_TRANSPARENT,
 } from '../../../blocks/blockInfo';
-import ChunkBase, { SLICE } from '../../../Terrain/Chunk/ChunkBase';
+import ChunkBase from '../../../Terrain/Chunk/ChunkBase';
 
 import {
   CHUNK_STATUS_LOADED,

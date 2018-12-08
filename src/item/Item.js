@@ -11,12 +11,12 @@ import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
 const SIZE = 0.2;
+const model = createCube(SIZE);
 
 const createItem = (
   ecs: World,
   materialLibrary: MaterialLibrary,
 ) => (id: Entity, { transform }: { transform: Transform }): Entity => {
-  const model = createCube(SIZE);
   const material = materialLibrary.get('skybox');
   const object = new GlObject({ model, material });
   const picker = ecs.createEntity(

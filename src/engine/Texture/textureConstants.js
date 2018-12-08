@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export const GRASS: 0 = 0;
 export const SAND: 1 = 1;
 export const STONE: 2 = 2;

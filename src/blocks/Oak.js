@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Block from './Block';
 import { OAK, OAK_TOP } from '../engine/Texture/textureConstants';
 

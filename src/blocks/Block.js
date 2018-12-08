@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import BasePropertiesComponent from './components/BasePropertiesComponent';
 
 type BaseData = $Call<typeof BasePropertiesComponent>;

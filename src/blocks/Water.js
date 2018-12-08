@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Block from './Block';
 import { WATER_STILL } from '../engine/Texture/textureConstants';
 

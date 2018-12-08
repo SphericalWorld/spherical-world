@@ -7,7 +7,7 @@ import {
   COLUMN,
   COLUMN_NESTED_CHUNK,
   SLICE,
-} from '../../../Terrain/Chunk/ChunkBase';
+} from '../../../../common/constants/chunk';
 import {
   CHUNK_STATUS_NEED_LOAD_VBO,
   CHUNK_STATUS_LOADED,

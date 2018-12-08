@@ -1,5 +1,7 @@
-// @flow
-export default function shallowEqual(objA: Object, objB: Object): boolean {
+// @flow strict
+type Json = {| +[string]: mixed |};
+
+const shallowEqual = (objA: Json, objB: Json): boolean => {
   if (objA === objB) {
     return true;
   }
@@ -20,4 +22,6 @@ export default function shallowEqual(objA: Object, objB: Object): boolean {
   }
 
   return true;
-}
+};
+
+export default shallowEqual;

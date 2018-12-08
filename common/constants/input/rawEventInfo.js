@@ -1,5 +1,6 @@
 // @flow strict
 import {
+  KEY_UNBOUND,
   KEY_A,
   KEY_B,
   KEY_C,
@@ -42,7 +43,14 @@ import {
   MOUSE_RIGHT_BUTTON,
 } from './mouseRawEvents';
 
-export default {
+export type RawEventInfo = {|
+  +caption: string,
+|}
+
+const events = {
+  [KEY_UNBOUND]: {
+    caption: 'Not Bound',
+  },
   [MOUSE_MOVE]: {
     caption: 'Mouse move',
   },
@@ -158,3 +166,7 @@ export default {
     caption: 'Left shift',
   },
 };
+
+export const getEventInfo = (name: string): RawEventInfo => (events[name] || events[KEY_UNBOUND]);
+
+export default events;

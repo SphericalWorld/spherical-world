@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Block from './Block';
 
 const Air = () => Block({

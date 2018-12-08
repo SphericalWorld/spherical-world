@@ -2,7 +2,7 @@
 import { createReducer } from '../../../util/reducerUtils';
 import * as events from '../../../Input/events';
 import { EVENT_CATEGORIES } from '../../../Input/eventTypes';
-import { SET_KEY } from './keyBindingsConstants';
+import { SET_KEY, KEY_EDITING_STARTED } from './keyBindingsConstants';
 // $FlowFixMe
 const getKeyCategories = () => (Object.values(events): $ReadOnlyArray<$Values<typeof events>>)
   .filter(event => 'caption' in event)
@@ -26,7 +26,7 @@ const getKeyCategories = () => (Object.values(events): $ReadOnlyArray<$Values<ty
 
 const initialState = {
   keyCategories: getKeyCategories(),
-  status: 'press key to bind to command',
+  status: '',
 };
 
 export default createReducer<typeof initialState>(initialState, {
@@ -36,8 +36,12 @@ export default createReducer<typeof initialState>(initialState, {
       ...category,
       items: category.items.map(item => (item.action === payload.action ? {
         ...item,
-        firstKey: payload.key,
+        ...payload,
       } : item)),
     })),
+  }),
+  [KEY_EDITING_STARTED]: (state, payload) => ({
+    ...state,
+    status: 'press key to bind to command',
   }),
 });

@@ -1,10 +1,12 @@
 // @flow
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import type { KeyPosition } from './keyBindingsTypes';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
-import rawEventInfo from '../../../../common/constants/input/rawEventInfo';
+import { getEventInfo } from '../../../../common/constants/input/rawEventInfo';
 import { KEY_BINDINGS } from './keyBindingsConstants';
+import { startEditKey } from './keyBindingsActions';
 import { setUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
@@ -26,45 +28,57 @@ import {
 
 type ActionMapppingProps = {|
   +caption: string;
-  +gameEvent: string;
+  +action: string;
   +firstKey: string;
   +secondKey: string;
+  +onSetKey: (action: string, key: KeyPosition) => mixed;
 |};
 
 type ActionCategoryProps = {|
   +name: EVENT_CATEGORY,
   +items: $ReadOnlyArray<ActionMapppingProps>,
+  +onSetKey: (action: string, key: KeyPosition) => mixed;
 |}
 
 type DispatchProps = {|
   +setUIState: typeof setUIState,
+  +startEditKey: typeof startEditKey,
 |};
 
 type KeyBindingsOwnProps = {|
   +keyCategories: $ReadOnlyArray<ActionCategoryProps>
 |};
 
-type KeyBindingsProps = KeyBindingsOwnProps & DispatchProps;
+type KeyBindingsProps = { ...KeyBindingsOwnProps, ...DispatchProps };
 
-const ActionMappping = ({ caption, firstKey, secondKey }: ActionMapppingProps) => (
+const ActionMappping = ({
+  caption, firstKey, secondKey, action, onSetKey,
+}: ActionMapppingProps) => (
   <div className={command}>
     <Label className={labelFirst}>{caption}</Label>
-    <Button size="small">{rawEventInfo[firstKey] ? rawEventInfo[firstKey].caption : 'Not bound'}</Button>
-    <Button size="small">{rawEventInfo[secondKey] ? rawEventInfo[secondKey].caption : 'Not bound'}</Button>
+    <Button onClick={() => onSetKey(action, 'first')} size="small">{getEventInfo(firstKey).caption}</Button>
+    <Button onClick={() => onSetKey(action, 'second')} size="small">{getEventInfo(secondKey).caption}</Button>
   </div>
 );
 
-const ActionCategory = ({ name, items }: ActionCategoryProps) => (
+const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
   <div>
     <article className={commandGroup}>
       <Label size="big" className={labelCommandGroup}>{name}</Label>
     </article>
-    { items.map(mapping => <ActionMappping key={mapping.gameEvent} {...mapping} />) }
+    {items.map(mapping => (
+      <ActionMappping
+        key={mapping.action}
+        onSetKey={onSetKey}
+        {...mapping}
+      />))
+    }
   </div>
 );
 
 class KeyBindings extends PureComponent<KeyBindingsProps> {
   close = () => this.props.setUIState(KEY_BINDINGS, false);
+  startEditKey = (action: string, key: KeyPosition) => this.props.startEditKey(action, key);
 
   render() {
     const { keyCategories } = this.props;
@@ -79,7 +93,8 @@ class KeyBindings extends PureComponent<KeyBindingsProps> {
           <section className={section}>
             <section>
               {
-                keyCategories.map(category => <ActionCategory key={category.name} {...category} />)
+                keyCategories.map(category =>
+                  <ActionCategory onSetKey={this.startEditKey} key={category.name} {...category} />)
               }
             </section>
           </section>
@@ -105,6 +120,7 @@ const mapState = ({ keyBindings: { keyCategories } }: State) => ({ keyCategories
 
 const mapActions = {
   setUIState,
+  startEditKey,
 };
 
 export default connect(mapState, mapActions)(KeyBindings);

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Block from './Block';
 import { COAL_ORE } from '../engine/Texture/textureConstants';
 

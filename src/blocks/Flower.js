@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 const Flower = () => ({
   lightTransparent: true,
   sightTransparent: true,

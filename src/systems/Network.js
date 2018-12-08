@@ -36,9 +36,10 @@ export default (ecs: World, network: Network, input: Input, Player, store, creat
   ecs.events
     .filter(e => e.type === 'LOAD_CONTROL_SETTINGS')
     .subscribe(({ payload }) => {
-      payload.controls.forEach(([key, action]) => {
-        setKey(input, key, action);
-        store.dispatch(setKeyRedux(key, action));
+      payload.controls.forEach(([action, firstKey, secondKey]) => {
+        setKey(input, firstKey, action);
+        setKey(input, secondKey, action);
+        store.dispatch(setKeyRedux(action, firstKey, secondKey));
       });
     });
 

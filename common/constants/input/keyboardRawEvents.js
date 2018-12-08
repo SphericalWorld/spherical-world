@@ -1,4 +1,5 @@
 // @flow strict
+export const KEY_UNBOUND: '_KEY_UNBOUND_' = '_KEY_UNBOUND_';
 export const KEY_A: 'KeyA' = 'KeyA';
 export const KEY_B: 'KeyB' = 'KeyB';
 export const KEY_C: 'KeyC' = 'KeyC';

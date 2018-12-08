@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Block from './Block';
 import { IRON_ORE } from '../engine/Texture/textureConstants';
 
