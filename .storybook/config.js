@@ -17,8 +17,9 @@ function loadStories() {
 
 addDecorator(
   withBackgrounds([
-    { name: 'main', value: '#628a8c', default: true },
+    { name: 'main', value: '#59868a', default: true },
     { name: 'white', value: '#fff' },
+    { name: 'black', value: '#000' },
   ])
 );
 

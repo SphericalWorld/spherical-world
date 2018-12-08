@@ -25,7 +25,7 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
 %slot-style {
   @extend %font-main;
   @extend %size-img;
-  background-color: $background-color-slot;
+  background-color: transparentize($background-color-slot, 0.6);
   border: $size-border solid $border-color-slot;
   border-radius: 0.7em;
   margin: 0.1em -0.11em;
