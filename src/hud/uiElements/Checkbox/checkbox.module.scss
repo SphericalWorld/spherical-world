@@ -13,29 +13,14 @@
   background-color: transparent;
   border: 0.1em solid $input-checkbox-border;
   border-radius: 0.2em;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05);
   display: inline-block;
   outline: 0;
   padding: 0.7em;
   position: relative;
 }
 
-.checkbox:active,
-.checkbox:checked:active {
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 .checkbox:checked {
   background-color: $primary;
-  // background-color: darken($primary, 1%);
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05),
-    inset 15px 10px -12px rgba(255, 255, 255, 0.1);
 }
 
 .checkbox:checked::after {
@@ -44,7 +29,7 @@
   content: '🗸';
   font-size: 1.3em;
   font-weight: bold;
-  left: 3px;
+  left: 0.1em;
   position: absolute;
   top: 0;
 }
