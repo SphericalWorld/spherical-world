@@ -1,0 +1,48 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.checkboxLabel {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.checkbox {
+  appearance: none;
+  background-color: transparent;
+  border: 0.1em solid $input-checkbox-border;
+  border-radius: 0.2em;
+  display: inline-block;
+  outline: 0;
+  padding: 0.7em;
+  position: relative;
+}
+
+.checkbox:checked {
+  background-color: $primary;
+}
+
+.checkbox:checked::after {
+  @extend %font-main;
+  color: $input-checkbox;
+  content: '🗸';
+  font-size: 1.3em;
+  font-weight: bold;
+  left: 0.1em;
+  position: absolute;
+  top: 0;
+}
+
+.big {
+  padding: 1em;
+}
+
+.big:checked::after {
+  font-size: 2em;
+  left: 0.1em;
+}
+
+.checkboxName {
+  align-self: center;
+}
