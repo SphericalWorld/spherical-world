@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import Label from '../../uiElements/Label';
-import ModalWindow from '../ModalWindow';
+import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
 import { setUIState } from '../../utils/StateRouter';
 

@@ -12,6 +12,7 @@ import CameraSystem from './Camera';
 import DrawSystem from './Draw';
 import HudSystem from './Hud';
 import NetworkSystem from './Network';
+import DropableSystem from './Dropable';
 
 export default (
   world: World,
@@ -30,4 +31,5 @@ export default (
   DrawSystem(world, terrain, time),
   HudSystem(world, store),
   NetworkSystem(world, network, input, Player, store, createItem),
+  DropableSystem(world),
 ];

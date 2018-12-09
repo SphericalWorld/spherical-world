@@ -5,7 +5,7 @@ import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import GlObject from '../engine/glObject';
 import { World } from '../../common/ecs';
 import {
-  Transform, Visual, Collider, Physics, Velocity, Gravity,
+  Transform, Visual, Collider, Physics, Velocity, Gravity, Item,
 } from '../components';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
@@ -19,7 +19,7 @@ const createItem = (
 ) => (id: Entity, { transform }: { transform: Transform }): Entity => {
   const material = materialLibrary.get('skybox');
   const object = new GlObject({ model, material });
-  const picker = ecs.createEntity(
+  const item = ecs.createEntity(
     id,
     Transform.deserialize(transform),
     new Visual(object),
@@ -31,8 +31,9 @@ const createItem = (
     new Physics(),
     new Velocity(),
     new Gravity(),
+    new Item(),
   );
-  return picker.id;
+  return item.id;
 };
 
 export default createItem;
