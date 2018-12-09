@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { InputContext } from '../InputContext';
 import { createContext } from '../InputContext';
 import {

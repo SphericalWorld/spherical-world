@@ -2,6 +2,7 @@
 import type { Maybe } from '../../common/fp/monads/maybe';
 import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
 import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
+import type { InputContexts } from './inputContexts';
 import HashMap from '../../common/fp/data-structures/Map';
 import { Just, Nothing } from '../../common/fp/monads/maybe';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
@@ -19,14 +20,14 @@ type MappedEvent = {|
 |};
 
 export type InputContext = {|
-  +type: any,
-  active: boolean;
+  +type: InputContexts,
+  +active: boolean;
   +events: HashMap<string, MappedEvent>;
   +eventTypes: Set<MappedEvent>,
 |}
 
 export const createContext = ({ type, active, eventTypes }: {|
-  type: any,
+  type: InputContexts,
   active: boolean,
   eventTypes: $ReadOnlyArray<MappedEvent>
 |}): InputContext => ({

@@ -6,5 +6,5 @@ export type THREAD_ID = number;
 export interface Thread {
   +id: THREAD_ID;
   +events: EventObservable<any>;
-  +postMessage: (message: any, ports?: any) => void;
+  +postMessage: (message: any, ports?: any) => mixed;
 }

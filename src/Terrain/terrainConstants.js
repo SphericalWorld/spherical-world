@@ -1,3 +1,3 @@
-// @flow
+// @flow strict
 export const CHUNK_LOADED: 'CHUNK_LOADED' = 'CHUNK_LOADED';
 export const TERRAIN_MIPMAP_LOADED: 'TERRAIN_MIPMAP_LOADED' = 'TERRAIN_MIPMAP_LOADED';

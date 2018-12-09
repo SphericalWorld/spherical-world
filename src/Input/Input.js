@@ -1,8 +1,9 @@
-// @flow
+// @flow strict
 import HashMap from '../../common/fp/data-structures/Map';
 import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import type { InputContext } from './InputContext';
+import type { InputContexts } from './inputContexts';
 import InputEvent from './InputEvent';
 import {
   activate, deactivate, getMappedInputEvent, setKey as setContextKey,
@@ -11,7 +12,7 @@ import * as events from './events';
 
 const inputProvider = (inputContexts: InputContext[]) => {
   class Input {
-    contextsMap: HashMap<Function, InputContext> = new HashMap();
+    contextsMap: HashMap<InputContexts, InputContext> = new HashMap();
     contexts: InputContext[] = [];
     activeContexts: InputContext[];
     inputStates: Map<string, InputEvent> = new Map();
@@ -36,15 +37,16 @@ const inputProvider = (inputContexts: InputContext[]) => {
       return this.contexts.filter(el => el.active);
     }
 
-    switchContext = (activateFn: Function) => (contextConstructor: Function): void => {
-      this.contextsMap
-        .get(contextConstructor)
-        .map((context) => {
-          this.contextsMap.set(contextConstructor, activateFn(context));
-          this.contexts = [...this.contextsMap.values()];
-          this.activeContexts = this.getActiveContexts();
-        });
-    };
+    switchContext = (activateFn: InputContext => InputContext) =>
+      (contextType: InputContexts): void => {
+        this.contextsMap
+          .get(contextType)
+          .map((context) => {
+            this.contextsMap.set(contextType, activateFn(context));
+            this.contexts = [...this.contextsMap.values()];
+            this.activeContexts = this.getActiveContexts();
+          });
+      };
 
     activateContext = this.switchContext(activate);
     deactivateContext = this.switchContext(deactivate);

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Filterable } from '../fp/algebraicDataTypes/Filterable';
 import type { Functor } from '../fp/algebraicDataTypes/Functor';
 
@@ -8,7 +8,7 @@ export const Empty = Symbol('Empty');
 
 export default class EventObservable<T> implements Filterable<T>, Functor<T> {
   subscriptions: EventObservable<*>[] = [];
-  observer: Function;
+  observer: T => mixed;
   pipeline: Function[] = [];
 
   subscribeQueue(): EventQueue<T> {

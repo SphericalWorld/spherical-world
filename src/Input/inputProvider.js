@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Input } from './Input';
 import type { InputSource } from './InputSource';
 import type { InputContext } from './InputContext';

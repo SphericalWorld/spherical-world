@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { InputSource } from '../InputSource';
 import MouseSource from './MouseSource';
 import KeyboardSource from './KeyboardSource';

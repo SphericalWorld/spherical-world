@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { InputSource } from '../../InputSource';
 import StateInputEvent, { STATE_DOWN, STATE_UP } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';

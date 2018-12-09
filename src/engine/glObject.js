@@ -4,7 +4,7 @@ import Model from './Model';
 
 type Options = {
   model: Model,
-  material: ?Material,
+  material: Material,
 };
 
 class GlObject {

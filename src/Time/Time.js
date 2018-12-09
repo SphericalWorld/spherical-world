@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 const HOURS_IN_DAY: 24 = 24;
 const MINUTES_IN_HOUR: 60 = 60;
 // const MINUTES_IN_HOUR: 60 = 1;
