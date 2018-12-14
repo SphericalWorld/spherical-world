@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import uuid from 'uuid/v1';
 import type { Entity } from './Entity';
 import type World from './World';

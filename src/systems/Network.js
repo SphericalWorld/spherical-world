@@ -7,6 +7,31 @@ import { Transform, Camera } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 
+const onLoadOtherPlayer = (ecs: World, Player) => ecs.events
+  .filter(e => e.type === 'LOAD_OTHER_PLAYER')
+  .subscribe((e) => {
+    Player(e.payload);
+  });
+
+const onSyncGameData = (ecs: World, createItem) => ecs.events
+  .filter(e => e.type === 'SYNC_GAME_DATA')
+  .subscribe(({ payload: { newObjects, components } }) => {
+    for (const newObject of newObjects) {
+      createItem(null, newObject);
+    }
+    ecs.updateComponents([components]);
+  });
+
+const onLoadControlSettings = (ecs: World, input: Input, store) => ecs.events
+  .filter(e => e.type === 'LOAD_CONTROL_SETTINGS')
+  .subscribe(({ payload }) => {
+    payload.controls.forEach(([action, firstKey, secondKey]) => {
+      setKey(input, firstKey, action);
+      setKey(input, secondKey, action);
+      store.dispatch(setKeyRedux(action, firstKey, secondKey));
+    });
+  });
+
 export default (ecs: World, network: Network, input: Input, Player, store, createItem): System => {
   const player = ecs.createSelector([Transform, Camera]);
   const events = ecs.events
@@ -18,30 +43,9 @@ export default (ecs: World, network: Network, input: Input, Player, store, creat
       ecs.dispatch({ type, payload: data });
     });
 
-  ecs.events
-    .filter(e => e.type === 'LOAD_OTHER_PLAYER')
-    .subscribe((e) => {
-      Player(e.payload);
-    });
-
-  ecs.events
-    .filter(e => e.type === 'SYNC_GAME_DATA')
-    .subscribe(({ payload: { newObjects, components } }) => {
-      for (const newObject of newObjects) {
-        createItem(null, newObject);
-      }
-      ecs.updateComponents([components]);
-    });
-
-  ecs.events
-    .filter(e => e.type === 'LOAD_CONTROL_SETTINGS')
-    .subscribe(({ payload }) => {
-      payload.controls.forEach(([action, firstKey, secondKey]) => {
-        setKey(input, firstKey, action);
-        setKey(input, secondKey, action);
-        store.dispatch(setKeyRedux(action, firstKey, secondKey));
-      });
-    });
+  onLoadOtherPlayer(ecs, Player);
+  onSyncGameData(ecs, createItem);
+  onLoadControlSettings(ecs, input, store);
 
   let lastUpdate = Date.now();
   const networkSystem = (delta: number) => {

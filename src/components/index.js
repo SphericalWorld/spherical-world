@@ -13,3 +13,4 @@ export { default as Velocity } from './Velocity';
 export { default as Visual } from './Visual';
 export { default as Joint } from './Joint';
 export { default as Item } from './Item';
+export { default as NetworkSync } from './NetworkSync';

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { GameEvent, GAME_EVENT_TYPE } from '../GameEvent/GameEvent';
 import type { Thread, THREAD_ID } from '../Thread';
 import type { Entity } from './Entity';
