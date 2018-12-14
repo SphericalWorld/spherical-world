@@ -1,10 +1,10 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
-import { setUIState } from '../../utils/StateRouter';
+import { setUIState as doSetUIState } from '../../utils/StateRouter';
 
 import {
   inventory,
@@ -28,7 +28,7 @@ type MappedProps = {|
 |};
 
 type DispatchProps = {|
-  +setUIState: typeof setUIState,
+  +setUIState: typeof doSetUIState,
 |};
 
 type Props = MappedProps & DispatchProps;
@@ -50,28 +50,25 @@ const Footer = () => (
   </footer>
 );
 
-class Inventory extends PureComponent<Props> {
-  close = () => this.props.setUIState(INVENTORY, false);
-  render() {
-    const { slots } = this.props;
-    return (
-      <ModalWindow caption="author's inventory" onClose={this.close}>
-        <div className={content}>
-          <div className={inventory}>
-            <ul className={inventorySlots}>
-              { slots.map(slot =>
-                (slot
-                  ? <InventorySlot slot={slot} />
-                  : <li className={`${slotStyle} ${empty}`} />))
-              }
-            </ul>
-          </div>
-          <Footer />
+const Inventory = ({ setUIState, slots }: Props) => {
+  const close = useCallback(() => setUIState(INVENTORY, false));
+  return (
+    <ModalWindow caption="author's inventory" onClose={close}>
+      <div className={content}>
+        <div className={inventory}>
+          <ul className={inventorySlots}>
+            { slots.map(slot =>
+              (slot
+                ? <InventorySlot slot={slot} />
+                : <li className={`${slotStyle} ${empty}`} />))
+            }
+          </ul>
         </div>
-      </ModalWindow>
-    );
-  }
-}
+        <Footer />
+      </div>
+    </ModalWindow>
+  );
+};
 
 const getPlaceholderSlots = (count: number) =>
   (new Array(count)).fill(null);
@@ -87,7 +84,7 @@ const mapState = () => ({
 });
 
 const mapActions = {
-  setUIState,
+  setUIState: doSetUIState,
 };
 
 export default connect(mapState, mapActions)(Inventory);

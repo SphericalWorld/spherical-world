@@ -1,7 +1,7 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
-import { setUIState } from '../../utils/StateRouter';
+import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import ModalWindowMenu from '../ModalWindowMenu';
 import { KEY_BINDINGS } from '../KeyBindings/keyBindingsConstants';
@@ -12,36 +12,34 @@ import {
 } from './mainMenu.module.scss';
 
 type DispatchProps = {|
-  +setUIState: typeof setUIState,
+  +setUIState: typeof doSetUIState,
 |};
 
 type Props = DispatchProps;
 
-class MainMenu extends PureComponent<Props> {
-  openKeyBindings = () => {
-    this.props.setUIState(MAIN_MENU, false);
-    this.props.setUIState(KEY_BINDINGS, true);
-  }
+const MainMenu = ({ setUIState }: Props) => {
+  const openKeyBindings = useCallback(() => {
+    setUIState(MAIN_MENU, false);
+    setUIState(KEY_BINDINGS, true);
+  });
 
-  close = () => this.props.setUIState(MAIN_MENU, false);
+  const close = useCallback(() => setUIState(MAIN_MENU, false));
 
-  render() {
-    return (
-      <ModalWindowMenu caption="Main Menu">
-        <div className={content}>
-          <Button onClick={this.close}>return to game</Button>
-          <Button>video</Button>
-          <Button>audio</Button>
-          <Button onClick={this.openKeyBindings}>key bindings</Button>
-          <Button onClick={this.close}>exit</Button>
-        </div>
-      </ModalWindowMenu>
-    );
-  }
-}
+  return (
+    <ModalWindowMenu caption="Main Menu">
+      <div className={content}>
+        <Button onClick={close}>return to game</Button>
+        <Button>video</Button>
+        <Button>audio</Button>
+        <Button onClick={openKeyBindings}>key bindings</Button>
+        <Button onClick={close}>exit</Button>
+      </div>
+    </ModalWindowMenu>
+  );
+};
 
 const mapActions = {
-  setUIState,
+  setUIState: doSetUIState,
 };
 
 export default connect(null, mapActions)(MainMenu);

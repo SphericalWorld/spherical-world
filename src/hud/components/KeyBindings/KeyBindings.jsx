@@ -1,13 +1,13 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import type { KeyPosition } from './keyBindingsTypes';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
 import { getEventInfo } from '../../../../common/constants/input/rawEventInfo';
 import { KEY_BINDINGS } from './keyBindingsConstants';
-import { startEditKey } from './keyBindingsActions';
-import { setUIState } from '../../utils/StateRouter';
+import { startEditKey as doStartEditKey } from './keyBindingsActions';
+import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
 import StatusPanel from './StatusPanel';
@@ -41,8 +41,8 @@ type ActionCategoryProps = {|
 |}
 
 type DispatchProps = {|
-  +setUIState: typeof setUIState,
-  +startEditKey: typeof startEditKey,
+  +setUIState: typeof doSetUIState,
+  +startEditKey: typeof doStartEditKey,
 |};
 
 type KeyBindingsOwnProps = {|
@@ -76,51 +76,47 @@ const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
   </div>
 );
 
-class KeyBindings extends PureComponent<KeyBindingsProps> {
-  close = () => this.props.setUIState(KEY_BINDINGS, false);
-  startEditKey = (action: string, key: KeyPosition) => this.props.startEditKey(action, key);
+const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsProps) => {
+  const close = useCallback(() => setUIState(KEY_BINDINGS, false));
 
-  render() {
-    const { keyCategories } = this.props;
-    return (
-      <ModalWindowMenu caption="Key Bindings">
-        <div className={content}>
-          <header className={`${command} ${header}`}>
-            <Label className={labelFirst}>command</Label>
-            <Label className={label}>key 1</Label>
-            <Label className={label}>key 2</Label>
-          </header>
-          <section className={section}>
-            <section>
-              {
-                keyCategories.map(category =>
-                  <ActionCategory onSetKey={this.startEditKey} key={category.name} {...category} />)
-              }
-            </section>
+  return (
+    <ModalWindowMenu caption="Key Bindings">
+      <div className={content}>
+        <header className={`${command} ${header}`}>
+          <Label className={labelFirst}>command</Label>
+          <Label className={label}>key 1</Label>
+          <Label className={label}>key 2</Label>
+        </header>
+        <section className={section}>
+          <section>
+            {
+              keyCategories.map(category =>
+                <ActionCategory onSetKey={startEditKey} key={category.name} {...category} />)
+            }
           </section>
-          <footer className={footer}>
-            <div className={helpLine}>
-              <StatusPanel />
-            </div>
-            <div className={footerButtons}>
-              <Button size="small">reset to default</Button>
-              <Label className={label} />
-              <Button size="small">unbind key</Button>
-              <Button size="small" onClick={this.close}>OK</Button>
-              <Button size="small" onClick={this.close}>Cancel</Button>
-            </div>
-          </footer>
-        </div>
-      </ModalWindowMenu>
-    );
-  }
-}
+        </section>
+        <footer className={footer}>
+          <div className={helpLine}>
+            <StatusPanel />
+          </div>
+          <div className={footerButtons}>
+            <Button size="small">reset to default</Button>
+            <Label className={label} />
+            <Button size="small">unbind key</Button>
+            <Button size="small" onClick={close}>OK</Button>
+            <Button size="small" onClick={close}>Cancel</Button>
+          </div>
+        </footer>
+      </div>
+    </ModalWindowMenu>
+  );
+};
 
 const mapState = ({ keyBindings: { keyCategories } }: State) => ({ keyCategories });
 
 const mapActions = {
-  setUIState,
-  startEditKey,
+  setUIState: doSetUIState,
+  startEditKey: doStartEditKey,
 };
 
 export default connect(mapState, mapActions)(KeyBindings);

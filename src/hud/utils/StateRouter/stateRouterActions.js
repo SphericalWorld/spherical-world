@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { STATE_ROUTER_TOGGLE, STATE_ROUTER_SET } from './stateRouterConstants';
 
 export const toggleUIState = (stateName: string) => ({
