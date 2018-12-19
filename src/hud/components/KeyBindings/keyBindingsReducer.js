@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { createReducer } from '../../../util/reducerUtils';
 import * as events from '../../../Input/events';
 import { EVENT_CATEGORIES } from '../../../Input/eventTypes';

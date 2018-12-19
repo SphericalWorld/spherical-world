@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { Just } from '../../../common/fp/monads/maybe';
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blockInfo';

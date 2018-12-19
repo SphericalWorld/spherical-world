@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Billboard from './Billboard';
 import Chunk from './Chunk';
 import Diffuse from './Diffuse';

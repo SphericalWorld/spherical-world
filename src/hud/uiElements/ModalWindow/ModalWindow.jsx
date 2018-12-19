@@ -1,15 +1,14 @@
-// @flow
+// @flow strict
 import React from 'react';
 import type { Node } from 'react';
-import Button from '../../uiElements/Button';
-import Label from '../../uiElements/Label';
+import Button from '../Button';
+import Label from '../Label';
 import {
   inner,
   inventoryName,
   header,
   wrapper,
   buttonClose,
-  childrenSection,
 } from './modalWindow.module.scss';
 
 type Props = {|
@@ -25,7 +24,7 @@ const ModalWindow = ({ caption, children, onClose }: Props) => (
         <Label className={inventoryName}>{caption}</Label>
         <Button onClick={onClose} size="small" className={buttonClose}>×</Button>
       </header>
-      <section className={childrenSection}>
+      <section>
         {children}
       </section>
     </div>

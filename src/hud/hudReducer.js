@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { createReducer } from '../util/reducerUtils';
 import { HUD_DATA_UPDATED } from './hudConstants';
 

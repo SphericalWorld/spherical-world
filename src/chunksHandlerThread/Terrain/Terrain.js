@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { ITerrainBase } from '../../Terrain/TerrainBase';
 
 const terrainProvider = (TerrainBase: typeof ITerrainBase) =>

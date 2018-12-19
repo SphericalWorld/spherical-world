@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { ChunkState } from './chunkConstants';
 import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
 import { CHUNK_STATUS_NEED_LOAD_ALL, CHUNK_STATUS_NEED_LOAD_VBO } from './chunkConstants';

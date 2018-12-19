@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Block } from './block';
 import type { Maybe } from './fp/monads/maybe';
 

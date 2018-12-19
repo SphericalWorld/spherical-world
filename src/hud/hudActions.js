@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { HUD_DATA_UPDATED } from './hudConstants';
 
 export const updateHudData = data => ({

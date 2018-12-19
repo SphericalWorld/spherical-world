@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Component } from '../../common/ecs/Component';
 import type GlObject from '../engine/glObject';
 import { THREAD_MAIN } from '../Thread/threadConstants';

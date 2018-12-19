@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { getElements } from '../../../common/utils/flow';
 
 import { gl } from '../glEngine';

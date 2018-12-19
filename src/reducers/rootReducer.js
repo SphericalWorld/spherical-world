@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { combineReducers } from 'redux';
 import { reduceReducers } from '../util/reducerUtils';
 

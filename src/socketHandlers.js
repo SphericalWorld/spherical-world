@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 const socketHandlersProvider = Player => class SocketHandlers {
   otherPlayerDisconnect(data) {

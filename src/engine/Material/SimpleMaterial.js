@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Material } from './Material';
 import { gl } from '../glEngine';
 import Texture from '../Texture/Texture';

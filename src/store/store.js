@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import configureStore from './configureStore';
 
 const store = configureStore();

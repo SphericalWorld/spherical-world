@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Entity } from '../../common/ecs/Entity';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import BlockRemover from '../components/BlockRemover';

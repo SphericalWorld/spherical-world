@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import EventObservable from '../../common/GameEvent/EventObservable';
 import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';

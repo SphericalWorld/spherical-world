@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Entity } from '../../common/ecs/Entity';
 import GlObject from '../engine/glObject';
 import { World } from '../../common/ecs';

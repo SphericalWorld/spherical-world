@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import {
   TERRAIN_MIPMAP_LOADED,
 } from './terrainConstants';

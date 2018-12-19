@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 // B combinator
 type Composer<F> = <G: Function>(g: G) => $Call<$Compose, F, G>;
 

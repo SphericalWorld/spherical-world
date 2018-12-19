@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Terrain } from '../Terrain';
 import type { System } from '../../../common/ecs/System';
 import type { World } from '../../../common/ecs';

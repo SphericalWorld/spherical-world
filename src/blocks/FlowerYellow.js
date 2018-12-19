@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import model from '../models/flowerYellow.json';
 import Block from './Block';
 import Flower from './Flower';

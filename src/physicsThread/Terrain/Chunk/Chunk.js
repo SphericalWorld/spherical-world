@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import ChunkBase from '../../../Terrain/Chunk/ChunkBase';
 
 export default class Chunk extends ChunkBase<Chunk> {

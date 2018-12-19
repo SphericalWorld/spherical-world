@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import React from 'react';
 import { Provider } from 'react-redux';
 // eslint-disable-next-line

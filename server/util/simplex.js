@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 

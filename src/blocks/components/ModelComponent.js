@@ -1,5 +1,6 @@
-// @flow
+// @flow strict
 import { getIndex } from '../../../common/chunk';
+import type { MeshJSON } from '../../engine/Model/Model';
 
 const calcLightLevels = (light: number) => [
   0.8 ** (15 - ((light >>> 12) & 0xF)),
@@ -11,7 +12,7 @@ const calcLightLevels = (light: number) => [
 export const getLight = (chunk, x: number, y: number, z: number) =>
   calcLightLevels(chunk.light[getIndex(x, y, z)]);
 
-const ModelComponent = (model: Object) => ({
+const ModelComponent = (model: MeshJSON) => ({
   renderToChunk(
     chunk,
     x: number,

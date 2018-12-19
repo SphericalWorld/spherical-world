@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Texture from '../engine/Texture/Texture';
 
 import grass from './blocks/grass_top.png';

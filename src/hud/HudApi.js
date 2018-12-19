@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 // import './services/swMouse';
 import react from 'react';
 import reactDom from 'react-dom';

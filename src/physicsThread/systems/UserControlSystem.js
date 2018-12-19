@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { vec3, quat } from 'gl-matrix';
 import { Just } from '../../../common/fp/monads/maybe';
 import { getBlock } from '../../../common/terrain';

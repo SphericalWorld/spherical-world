@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 export { default as BlockRemover } from './BlockRemover';
 export { default as Camera } from './Camera';
 export { default as Collider } from './Collider';

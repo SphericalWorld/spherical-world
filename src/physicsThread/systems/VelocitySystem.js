@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { vec3 } from 'gl-matrix';
 import type { System } from '../../../common/ecs/System';
 import type { World } from '../../../common/ecs';

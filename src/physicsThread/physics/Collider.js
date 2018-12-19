@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Vec3 } from 'gl-matrix';
 import type { RigidBody } from './RigidBody';
 import type { COLLIDER_AABB_TYPE, AABB } from './colliders/AABB';

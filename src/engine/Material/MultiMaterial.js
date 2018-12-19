@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { GlShaderProgram } from '../glShader';
 import type { TextureImageUnit } from '../Texture/Texture';
 import type { Material } from './Material';

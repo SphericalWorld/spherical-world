@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { gl } from '../../engine/glEngine';
 import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import vertexShaderData from './modelCommon.vert';

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 // (function () {
 //   angular.module('ui').controller('mainPanel', ['$scope', '$hudApi', 'swMouseService', function ($scope, $hudApi, swMouseService) {

@@ -23,7 +23,7 @@ module.exports = function override(config, env) {
     globalObject: 'this'
   };
   const assetLoaders = config.module.rules[config.module.rules.length - 1].oneOf;
-  // throw 1;
+  assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, '/home/pinkiepie/projects/spherical-world/node_modules/css-modules-flow-types-loader/dist/index.js');
   assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);
   return config;
 };

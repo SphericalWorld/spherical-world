@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 const createWebsocketMiddleware = network => ({ dispatch }) => (next) => {
   if (!next) {

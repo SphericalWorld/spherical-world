@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 const CHUNK_GENERATION_TIME = 'Chunk generation time';
 
 export const profileChunkGeneration = (

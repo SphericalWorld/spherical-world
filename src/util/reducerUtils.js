@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 type Reducer<T> = (T, any) => T;
 
 type ReducersMap<T> = {

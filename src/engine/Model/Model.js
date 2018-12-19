@@ -1,14 +1,14 @@
-// @flow
+// @flow strict
 import { gl } from '../glEngine';
 import type { Material } from '../Material/Material';
 
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
 
-type MeshJSON = {|
-  vertexPositions: number[],
-  vertexTextureCoords: number[],
-  indices: number[],
+export type MeshJSON = {|
+  +vertexPositions: number[],
+  +vertexTextureCoords: number[],
+  +indices: number[],
 |};
 
 class Model {

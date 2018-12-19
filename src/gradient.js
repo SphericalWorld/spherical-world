@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 class Gradient {
   points: number[][];
 

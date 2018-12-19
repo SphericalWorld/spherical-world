@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Monad } from '../algebraicDataTypes/Monad';
 
 class IOMonad<R> implements Monad<R> {

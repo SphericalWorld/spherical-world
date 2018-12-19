@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 
 // TODO: grab list from server
 const addonsToLoad = [

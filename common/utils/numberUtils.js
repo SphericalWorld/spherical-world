@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import compose from '../fp/combinators/compose';
 
 export const clamp = (min: number, max: number) => (value: number): number => (value > max

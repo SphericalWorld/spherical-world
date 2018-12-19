@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Maybe } from '../../common/fp/monads/maybe';
 import type ChunkBase from './Chunk/ChunkBase';
 import { getGeoId } from '../../common/chunk';

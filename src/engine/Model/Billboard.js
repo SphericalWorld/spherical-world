@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { gl } from '../glEngine';
 import Model from './Model';
 

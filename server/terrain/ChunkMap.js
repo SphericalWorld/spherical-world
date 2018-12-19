@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Functor } from '../../common/fp/algebraicDataTypes/Functor';
 import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable';
 import { createArray } from '../../common/utils/array';

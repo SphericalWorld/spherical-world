@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { promisify } from 'util';
 import fs from 'fs-extra';
 import zlib from 'zlib';

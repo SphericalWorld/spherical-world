@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { createReducer } from '../../../util/reducerUtils';
 import { STATE_ROUTER_TOGGLE, STATE_ROUTER_SET } from './stateRouterConstants';
 

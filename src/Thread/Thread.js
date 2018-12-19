@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Thread as IThread } from '../../common/Thread';
 import type { THREAD_ID } from './threadConstants';
 import EventObservable from '../../common/GameEvent/EventObservable';

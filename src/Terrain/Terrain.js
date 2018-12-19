@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { mat4 } from 'gl-matrix';
 import type { Mat4, Vec3 } from 'gl-matrix';
 import type { Material } from '../engine/Material/Material';

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 const addonProvider = store => class Addon {
   name: string;
   mainNode: HTMLElement = document.createElement('div');

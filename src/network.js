@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import zlib from 'pako';
 import EventObservable from '../common/GameEvent/EventObservable';
 

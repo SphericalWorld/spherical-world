@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Mat4 } from 'gl-matrix';
 import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';

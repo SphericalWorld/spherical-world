@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { GlShaderProgram } from './glShader';
 
 const shaderLibraryProvider = () => {

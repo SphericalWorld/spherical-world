@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Mat4 } from 'gl-matrix';
 import { mat4 } from 'gl-matrix';
 import type World from '../../common/ecs/World';

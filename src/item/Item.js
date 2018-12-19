@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs/Entity';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';

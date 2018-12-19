@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { mat4, vec3 } from 'gl-matrix';
 import { getIndex } from '../../common/chunk';
 import model from '../models/torch.json';

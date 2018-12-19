@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { createArray } from '../../common/utils/array';
 
 import Air from './Air';

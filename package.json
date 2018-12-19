@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.2.0",
     "babel-eslint": "^10.0.1",
+    "css-modules-flow-types-loader": "^1.1.1",
     "gl-matrix": "^2.8.1",
     "pako": "^1.0.7",
     "react": "^16.7.0-alpha.2",

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 // const playerProvider = (store, BlockRemover, BlockPicker, Inventory) => {
 //   @connect(mapState, mapActions, store)
 //   class Player {

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Vec3 } from 'gl-matrix';
 import type { RigidBody } from './RigidBody';
 

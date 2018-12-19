@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 import Material, { BLENDING_ADDITIVE } from '../engine/Material/SimpleMaterial';
 import TextureLibrary from '../engine/Texture/TextureLibrary';

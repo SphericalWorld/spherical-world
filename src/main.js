@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type Network from './network';
 import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';

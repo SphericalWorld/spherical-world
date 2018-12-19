@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import shallowEqual from './shallowEqual';
 
 type MapActions = () => {| [string]: Function |};

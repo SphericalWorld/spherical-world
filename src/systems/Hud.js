@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type World from '../../common/ecs/World';
 import type { System, UpdatedComponents } from '../../common/ecs/System';
 import { Transform, UserControlled } from '../components';

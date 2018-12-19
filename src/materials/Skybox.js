@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Material from '../engine/Material/SimpleMaterial';
 import type TextureLibrary from '../engine/Texture/TextureLibrary';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';

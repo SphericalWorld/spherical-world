@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Socket } from './network/socket';
 import type { Entity } from '../common/ecs/Entity';
 import type World from '../common/ecs/World';

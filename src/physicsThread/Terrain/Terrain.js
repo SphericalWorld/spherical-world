@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import Chunk from './Chunk/Chunk';
 import { CHUNK_STATUS_LOADED } from '../../Terrain/Chunk/chunkConstants';
 

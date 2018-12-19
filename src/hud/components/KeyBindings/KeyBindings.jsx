@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import type { KeyPosition } from './keyBindingsTypes';

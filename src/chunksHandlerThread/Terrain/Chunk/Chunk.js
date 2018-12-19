@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { BlockFace } from '../../../../common/block';
 import { getIndex } from '../../../../common/chunk';
 import {

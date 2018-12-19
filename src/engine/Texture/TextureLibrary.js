@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { gl } from '../glEngine';
 import Texture, { makeTexture } from './Texture';
 import { CHUNK_WIDTH, TERRAIN_SIZE } from '../../../common/constants/chunk';

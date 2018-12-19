@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import React from 'react';
 import { button, small, big } from './button.module.scss';
 

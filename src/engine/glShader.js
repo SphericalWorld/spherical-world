@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { gl } from './glEngine';
 
 type Constants = { [string]: string | number };

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { ShaderLibrary } from './engine/ShaderLibrary';
 import type Network from './network';
 import createItem from './item/Item';

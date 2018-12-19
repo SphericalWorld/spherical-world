@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
 import chain from '../../common/fp/algebraicDataTypes/Chain';

@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import model from '../models/tallgrass.json';
 import Block from './Block';
 import ModelComponent from './components/ModelComponent';

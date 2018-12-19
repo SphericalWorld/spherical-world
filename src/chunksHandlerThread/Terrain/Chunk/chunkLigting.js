@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { getIndex } from '../../../../common/chunk';
 import { SIGHT_TRANSPARENT, blocksFlags } from '../../../blocks/blockInfo';
 import {

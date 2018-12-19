@@ -1,4 +1,4 @@
-// @flow
+// @flow strict
 import { testAABBvsAABB, AABBvsAABB } from './AABB';
 
 type CollisionCheckers = [[typeof testAABBvsAABB]];
