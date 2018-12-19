@@ -74,7 +74,7 @@ class Network {
     }, 5000);
   }
 
-  emit(type: string, data?: any): void {
+  emit(type: string, data?: mixed): void {
     if (!this.connected) {
       console.log('socket disconnected');
       return;

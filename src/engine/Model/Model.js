@@ -19,7 +19,7 @@ class Model {
 
   vao: WebGLVertexArrayObject;
   // TODO: add vertex count, index count etc
-  constructor(model?: Object, scale?: number) {
+  constructor(model?: MeshJSON, scale?: number) {
     if (typeof model === 'object') {
       this.loadFromJson(model, scale);
     }

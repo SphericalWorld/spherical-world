@@ -12,7 +12,7 @@ const reducers = {
   uiStates: routerReducer,
 };
 
-type $ExtractFunctionReturn = <V>(v: (...args: any) => V) => V;
+type $ExtractFunctionReturn = <V>(v: (...args: mixed) => V) => V;
 
 const combinedReducer = combineReducers(reducers);
 
