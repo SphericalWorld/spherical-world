@@ -33,20 +33,18 @@ type DispatchProps = {|
 
 type Props = MappedProps & DispatchProps;
 
+const Coin = ({ caption, className }: { caption: string, className: string }) => (
+  <div className={`${coin} ${className}`}>
+    <Label className={icon}>🔘</Label>
+    <Label className={label}>{caption}</Label>
+  </div>
+);
+
 const Footer = () => (
   <footer className={coins}>
-    <div className={`${coin} ${gold}`}>
-      <Label className={icon}>🔘</Label>
-      <Label className={label}>gold</Label>
-    </div>
-    <div className={`${coin} ${silver}`}>
-      <Label className={icon}>🔘</Label>
-      <Label className={label}>silver</Label>
-    </div>
-    <div className={`${coin} ${bronze}`}>
-      <Label className={icon}>🔘</Label>
-      <Label className={label}>bronze</Label>
-    </div>
+    <Coin caption="gold" className={gold} />
+    <Coin caption="silver" className={silver} />
+    <Coin caption="bronze" className={bronze} />
   </footer>
 );
 
