@@ -11,8 +11,10 @@ import {
   CAMERA_LOCK_EVENT,
   TOGGLE_MENU_EVENT,
   TOGGLE_INVENTORY_EVENT,
+  INVENTORY_NEXT_ITEM,
+  INVENTORY_PREVIOUS_ITEM,
   PLAYER_ATTACK_EVENT,
-  PLAYER_PUT_BLOCK_EVENT
+  PLAYER_PUT_BLOCK_EVENT,
 } from '../../common/constants/input/eventTypes';
 import {
   INPUT_TYPE_RANGE,
@@ -42,6 +44,7 @@ import {
   PLAYER_STOPED_ATTACK,
   PLAYER_START_PUT_BLOCK,
 } from '../player/events';
+import { PREVIOUS_ITEM_SELECTED, NEXT_ITEM_SELECTED } from '../hud/components/MainPanel/mainPanelConstants';
 
 // TODO: move events to separate files
 
@@ -146,6 +149,22 @@ export const toggleInventoryEvent = {
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
   gameEvent: INVENTORY_TOGGLED,
+};
+
+export const selectNextItemEvent = {
+  action: INVENTORY_NEXT_ITEM,
+  category: CATEGORY_INTERFACE,
+  caption: 'Select next item',
+  type: INPUT_TYPE_RANGE,
+  gameEvent: NEXT_ITEM_SELECTED,
+};
+
+export const selectPreviousItemEvent = {
+  action: INVENTORY_PREVIOUS_ITEM,
+  category: CATEGORY_INTERFACE,
+  caption: 'Select previous item',
+  type: INPUT_TYPE_RANGE,
+  gameEvent: PREVIOUS_ITEM_SELECTED,
 };
 
 export const playerAttackEvent = {

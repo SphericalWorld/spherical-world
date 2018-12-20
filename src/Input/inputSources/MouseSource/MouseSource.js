@@ -5,7 +5,8 @@ import StateInputEvent, { STATE_UP, STATE_DOWN } from '../../StateInputEvent';
 import InputEvent from '../../InputEvent';
 import {
   MOUSE_MOVE,
-  MOUSE_WHEEL,
+  MOUSE_WHEEL_UP,
+  MOUSE_WHEEL_DOWN,
   MOUSE_LEFT_BUTTON,
   MOUSE_MIDDLE_BUTTON,
   MOUSE_RIGHT_BUTTON,
@@ -49,12 +50,13 @@ export default class MouseSource implements InputSource {
   }
 
   onMouseWheel = (e: WheelEvent) => {
-    this.onEvent(new RangeInputEvent(MOUSE_WHEEL, e.deltaX, e.deltaY));
+    this.onEvent(new RangeInputEvent(e.deltaY < 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN, e.deltaX, e.deltaY));
   }
 
   setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget) => {
     oldTarget.removeEventListener('mousedown', this.onMouseDown);
     oldTarget.removeEventListener('mouseup', this.onMouseUp);
+    oldTarget.removeEventListener('wheel', this.onMouseWheel);
     newTarget.addEventListener('mousedown', this.onMouseDown, false);
     newTarget.addEventListener('mouseup', this.onMouseUp, false);
     newTarget.addEventListener('wheel', this.onMouseWheel, false);

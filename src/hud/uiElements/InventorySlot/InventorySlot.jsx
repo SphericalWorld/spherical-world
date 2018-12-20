@@ -12,6 +12,7 @@ import {
 export type InventorySlotDetails = {|
   +count: number;
   +image: string;
+  +id: string;
 |};
 
 type Props = {|

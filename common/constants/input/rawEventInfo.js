@@ -37,7 +37,8 @@ import {
 } from './keyboardRawEvents';
 import {
   MOUSE_MOVE,
-  MOUSE_WHEEL,
+  MOUSE_WHEEL_UP,
+  MOUSE_WHEEL_DOWN,
   MOUSE_LEFT_BUTTON,
   MOUSE_MIDDLE_BUTTON,
   MOUSE_RIGHT_BUTTON,
@@ -54,8 +55,11 @@ const events = {
   [MOUSE_MOVE]: {
     caption: 'Mouse move',
   },
-  [MOUSE_WHEEL]: {
-    caption: 'Mouse wheel',
+  [MOUSE_WHEEL_UP]: {
+    caption: 'Mouse wheel up',
+  },
+  [MOUSE_WHEEL_DOWN]: {
+    caption: 'Mouse wheel down',
   },
   [MOUSE_LEFT_BUTTON]: {
     caption: 'Mouse Left button',

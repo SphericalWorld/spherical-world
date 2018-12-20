@@ -34,7 +34,7 @@ class GlShader {
 
 class GlVertexShader extends GlShader {
   type = gl.VERTEX_SHADER;
-  constructor(source: string, { constants = {} } = {}) {
+  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
     super(source, constants);
     this.compile();
   }
@@ -42,7 +42,7 @@ class GlVertexShader extends GlShader {
 
 class GlFragmentShader extends GlShader {
   type = gl.FRAGMENT_SHADER;
-  constructor(source: string, { constants = {} } = {}) {
+  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
     super(source, constants);
     this.compile();
   }

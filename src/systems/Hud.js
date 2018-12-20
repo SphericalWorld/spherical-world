@@ -8,6 +8,12 @@ import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
 import { connect } from '../util';
 import { updateHudData } from '../hud/hudActions';
 import { toggleUIState } from '../hud/utils/StateRouter';
+import { PREVIOUS_ITEM_SELECTED, NEXT_ITEM_SELECTED } from '../hud/components/MainPanel/mainPanelConstants';
+
+const dispatchableEventType = new Set([
+  PREVIOUS_ITEM_SELECTED,
+  NEXT_ITEM_SELECTED,
+]);
 
 const mapActions = () => ({
   updateHudData,
@@ -35,6 +41,10 @@ export default (ecs: World, store): System => {
     inventoryToggledObservable = ecs.events
       .filter(e => e.type === INVENTORY_TOGGLED)
       .subscribe(() => this.toggleUIState(INVENTORY));
+
+    uiActionObservables = ecs.events
+      .filter(e => dispatchableEventType.has(e.type))
+      .subscribe(e => store.dispatch(e));
 
     update(delta: number): ?UpdatedComponents {
       this.updateHudData({
