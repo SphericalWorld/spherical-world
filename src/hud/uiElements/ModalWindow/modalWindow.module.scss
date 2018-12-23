@@ -30,12 +30,12 @@
 }
 
 .buttonClose {
-  background-color: transparentize($alert, 0.3);
+  background-color: transparentize($alert, 0.5);
   font-size: 1.1em;
   margin: 0;
   width: 1.5em;
 }
 
 .buttonClose:hover {
-  background-color: transparentize($alert, 0.05);
+  background-color: transparentize($alert, 0.3);
 }
