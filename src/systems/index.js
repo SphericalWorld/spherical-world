@@ -4,7 +4,7 @@ import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { Time } from '../Time/Time';
 import type { System } from '../../common/ecs/System';
-import type { Terrain } from '../Terrain/Terrain';
+import type Terrain from '../Terrain/Terrain';
 import TerrainSystem from './Terrain';
 import BlockRemoveSystem from './BlockRemove';
 import DayNightCycleSystem from './DayNightCycle';

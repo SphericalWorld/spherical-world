@@ -13,7 +13,7 @@ import Transform from '../../components/Transform';
 import Physics from '../../components/Physics';
 import { createAABB } from '../physics/colliders/AABB';
 import { collide, testCollision, move } from '../physics/Collider';
-import { Terrain } from '../Terrain';
+import Terrain from '../Terrain';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
 const halfVector = vec3.fromValues(0.5, 0.5, 0.5);

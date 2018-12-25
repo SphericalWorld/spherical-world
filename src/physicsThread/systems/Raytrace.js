@@ -5,7 +5,7 @@ import type { BlockFace } from '../../../common/block';
 import type { Maybe } from '../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
 import type World from '../../../common/ecs/World';
-import type { Terrain } from '../Terrain/Terrain';
+import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../../common/ecs/System';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
 import { Nothing } from '../../../common/fp/monads/maybe';

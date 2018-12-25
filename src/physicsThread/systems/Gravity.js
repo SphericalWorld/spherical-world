@@ -2,7 +2,7 @@
 import { Just } from '../../../common/fp/monads/maybe';
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blockInfo';
-import { Terrain } from '../Terrain/Terrain';
+import Terrain from '../Terrain/Terrain';
 import Transform from '../../components/Transform';
 import type { System } from '../../../common/ecs/System';
 import { World } from '../../../common/ecs';

@@ -8,6 +8,7 @@ module.file_ext=.frag
 module.file_ext=.scss
 module.name_mapper.extension='vert' -> '<PROJECT_ROOT>/common/utils/RawTextModule.js'
 module.name_mapper.extension='frag' -> '<PROJECT_ROOT>/common/utils/RawTextModule.js'
+module.name_mapper='models\(.*\)\.json$' -> '<PROJECT_ROOT>/common/utils/MeshJSON.js'
 
 [strict]
 nonstrict-import
