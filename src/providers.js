@@ -15,11 +15,9 @@ import shadersProvider from './shaders';
 import blockRemoverProvider from './player/BlockRemover';
 import blockPickerProvider from './player/BlockPicker';
 import skyboxProvider from './skybox';
-import Chunk from './Terrain/Chunk';
 import resourceLoader from './ResourceLoader';
 import addon from './addon';
-import terrainBaseProvider from './Terrain/TerrainBase';
-import terrainProvider from './Terrain';
+import Terrain from './Terrain';
 import systemsProvider from './systems';
 
 import timeProvider from './Time/Time';
@@ -43,8 +41,7 @@ const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   return world;
 };
 
-const getTerrain = (textureLibrary, materialLibrary, TerrainBase) => {
-  const Terrain = terrainProvider(Chunk, TerrainBase);
+const getTerrain = (textureLibrary, materialLibrary) => {
   const terrain = new Terrain();
   terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
   terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
@@ -83,8 +80,7 @@ const mainProvider = async (store, network: Network, physicsThread: Worker, chun
   const BlockPicker = blockPickerProvider(world, materialLibrary, BlockRemover);
   const Skybox = skyboxProvider(world, materialLibrary);
   const time = new (timeProvider())(Date.now());
-  const TerrainBase = terrainBaseProvider(Chunk);
-  const terrain = getTerrain(textureLibrary, materialLibrary, TerrainBase);
+  const terrain = getTerrain(textureLibrary, materialLibrary);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
   // const Inventory = inventoryProvider(store);

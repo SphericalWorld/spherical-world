@@ -2,58 +2,53 @@
 import { mat4 } from 'gl-matrix';
 import type { Mat4, Vec3 } from 'gl-matrix';
 import type { Material } from '../engine/Material/Material';
+import type ChunkProgram from '../shaders/Chunk/Chunk';
 import { WATER } from '../../common/blocks';
 import { toChunkPosition, toPositionInChunk } from '../../common/chunk';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
-import { ITerrainBase } from './TerrainBase';
+import TerrainBase from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
-import type ChunkProgram from '../shaders/Chunk/Chunk';
+import Chunk from './Chunk/Chunk';
 
-const terrainProvider = (Chunk, TerrainBase: typeof ITerrainBase) =>
-  class Terrain extends TerrainBase {
-    loadTerrainMipmap: typeof loadTerrainMipmap;
-    material: Material;
-    foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
-    chunksToRender: Chunk[];
+class Terrain extends TerrainBase<Chunk> {
+  loadTerrainMipmap: typeof loadTerrainMipmap;
+  material: Material;
+  foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
+  chunksToRender: Chunk[];
 
-    loadChunk = (blocksData: ArrayBuffer, data: {
-      x: number, z: number, temperature: number[], rainfall: number[],
-    }) => {
-      let chunk = this.getChunk(data.x, data.z);
-      if (chunk.isJust === false) {
-        chunk = this.addChunk(new Chunk(this, blocksData, data.x, data.z, data.temperature, data.rainfall));
-      } else {
-        chunk = chunk.extract();
-      }
-      chunk.generateFoliageTexture();
+  loadChunk = (blocksData: ArrayBuffer, data: {
+    x: number, z: number, temperature: number[], rainfall: number[],
+  }) => {
+    let chunk = this.getChunk(data.x, data.z);
+    if (chunk.isJust === false) {
+      chunk = this.addChunk(new Chunk(this, blocksData, data.x, data.z, data.temperature, data.rainfall));
+    } else {
+      chunk = chunk.extract();
     }
+    chunk.generateFoliageTexture();
+  }
 
-    generateBiomeColorMap(texture: WebGLTexture) {
-      const fb = gl.createFramebuffer();
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
-      if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) {
-        gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, this.foliageColorMap);
-      }
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  generateBiomeColorMap(texture: WebGLTexture) {
+    const fb = gl.createFramebuffer();
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) {
+      gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, this.foliageColorMap);
     }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
 
-    makeMipMappedTextureAtlas(terrainMipMap) {
-      this.terrainMipMap = terrainMipMap;
-      // this.loadTerrainMipmap(this.terrainMipMap);
-    }
+  makeMipMappedTextureAtlas(terrainMipMap) {
+    this.terrainMipMap = terrainMipMap;
+    // this.loadTerrainMipmap(this.terrainMipMap);
+  }
 
-    generateMinimap() {
-      this.minimap = this.app.glTextureLibrary.makeTerrainMinimap(this);
-    }
-  };
-
-/* ::
-export const Terrain = terrainProvider();
-*/
-
+  generateMinimap() {
+    this.minimap = this.app.glTextureLibrary.makeTerrainMinimap(this);
+  }
+}
 
 export const getVisibleChunks = (terrain: Terrain, pMatrix: Mat4, mvMatrix: Mat4) => {
   const m = mat4.create();
@@ -80,7 +75,12 @@ const drawFog = (terrain, shader, skyColor, x, y, z) => getBlockDetails(terrain,
     }
   });
 
-export const drawOpaqueChunkData = (terrain: Terrain, cameraPosition: Vec3, skyColor: number[], globalColor: number[]) => {
+export const drawOpaqueChunkData = (
+  terrain: Terrain,
+  cameraPosition: Vec3,
+  skyColor: number[],
+  globalColor: number[],
+) => {
   const { shader } = (terrain.material: { shader: ChunkProgram });
   const { chunksToRender } = terrain;
   terrain.material.use();
@@ -105,7 +105,12 @@ export const drawOpaqueChunkData = (terrain: Terrain, cameraPosition: Vec3, skyC
   gl.activeTexture(gl.TEXTURE0);
 };
 
-export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3, skyColor: number[], globalColor: number[]) => {
+export const drawTransparentChunkData = (
+  terrain: Terrain,
+  cameraPosition: Vec3,
+  skyColor: number[],
+  globalColor: number[],
+) => {
   const { shader } = (terrain.material: { shader: ChunkProgram });
   const { chunksToRender } = terrain;
   terrain.material.use();
@@ -151,4 +156,4 @@ export const drawTransparentChunkData = (terrain: Terrain, cameraPosition: Vec3,
   gl.activeTexture(gl.TEXTURE0);
 };
 
-export default terrainProvider;
+export default Terrain;

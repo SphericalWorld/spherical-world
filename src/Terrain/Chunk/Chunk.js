@@ -4,7 +4,7 @@ import ChunkBase from './ChunkBase';
 import { gl } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
 import type ChunkProgram from '../../shaders/Chunk/Chunk';
-import type { Terrain } from '../Terrain';
+import type Terrain from '../Terrain';
 
 import Frustum from '../../engine/Frustum';
 
@@ -29,6 +29,12 @@ type GLBuffers = {
   vao: null,
 };
 
+type BufferData = {|
+  +index: number,
+  +indexCount: number,
+  +offset: number,
+|};
+
 export default class Chunk extends ChunkBase<Chunk> {
   frustum: Frustum;
   foliageTexture: WebGLTexture = null;
@@ -36,6 +42,7 @@ export default class Chunk extends ChunkBase<Chunk> {
   temperatureData: Uint8Array;
   buffers: GLBuffers;
   terrain: Terrain;
+  buffersInfo: $ReadOnlyArray<BufferData>;
 
   constructor(
     terrain: Terrain,
@@ -78,7 +85,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     return this.frustum.boxInFrustum(m);
   }
 
-  bindVBO(buffers: DataBuffers, buffersInfo) {
+  bindVBO(buffers: DataBuffers, buffersInfo: $ReadOnlyArray<BufferData>) {
     const { shader } = (this.terrain.material: { shader: ChunkProgram });
 
     if (!timeOld) {
