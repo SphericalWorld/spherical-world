@@ -23,13 +23,14 @@ export default (
   Player,
   store,
   createItem,
+  dispatchableEvents,
 ): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world),
   DayNightCycleSystem(world, time),
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
-  HudSystem(world, store),
+  HudSystem(world, store, dispatchableEvents, input),
   NetworkSystem(world, network, input, Player, store, createItem),
   DropableSystem(world),
 ];

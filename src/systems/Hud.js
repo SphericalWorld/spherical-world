@@ -1,6 +1,7 @@
 // @flow strict
 import type World from '../../common/ecs/World';
 import type { System, UpdatedComponents } from '../../common/ecs/System';
+import type { Input } from '../Input/Input';
 import { Transform, UserControlled } from '../components';
 import { MENU_TOGGLED, INVENTORY_TOGGLED } from '../hud/hudConstants';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
@@ -8,12 +9,12 @@ import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
 import { connect } from '../util';
 import { updateHudData } from '../hud/hudActions';
 import { toggleUIState } from '../hud/utils/StateRouter';
-import { PREVIOUS_ITEM_SELECTED, NEXT_ITEM_SELECTED } from '../hud/components/MainPanel/mainPanelConstants';
-
-const dispatchableEventType = new Set([
-  PREVIOUS_ITEM_SELECTED,
-  NEXT_ITEM_SELECTED,
-]);
+import {
+  GAMEPLAY_MAIN_CONTEXT,
+  GAMEPLAY_MENU_CONTEXT,
+  KEY_BINDING_CONTEXT,
+} from '../Input/inputContexts';
+import { setKey } from '../Input/Input';
 
 const mapActions = () => ({
   updateHudData,
@@ -28,7 +29,7 @@ const mapState = ({
   keyBindings,
 });
 
-export default (ecs: World, store): System => {
+export default (ecs: World, store, dispatchableEvents: Set<string>, input: Input): System => {
   class Hud {
     toggleUIState: typeof toggleUIState;
     updateHudData: typeof updateHudData;
@@ -43,7 +44,7 @@ export default (ecs: World, store): System => {
       .subscribe(() => this.toggleUIState(INVENTORY));
 
     uiActionObservables = ecs.events
-      .filter(e => dispatchableEventType.has(e.type))
+      .filter(e => dispatchableEvents.has(e.type))
       .subscribe(e => store.dispatch(e));
 
     update(delta: number): ?UpdatedComponents {
@@ -55,7 +56,15 @@ export default (ecs: World, store): System => {
     }
 
     componentDidUpdate() {
-
+      if (this.keyBindings.editing) {
+        input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
+        input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
+        input.activateContext(KEY_BINDING_CONTEXT);
+      } else {
+        input.activateContext(GAMEPLAY_MENU_CONTEXT);
+        input.deactivateContext(KEY_BINDING_CONTEXT);
+        setKey(input, this.keyBindings.key, this.keyBindings.action);
+      }
     }
   }
 

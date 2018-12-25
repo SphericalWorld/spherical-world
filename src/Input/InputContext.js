@@ -16,7 +16,8 @@ type MappedEvent = {|
   +data?: InputEvent => mixed,
   +onEnd?: GAME_EVENT_TYPE,
   +caption?: string,
-  +category?: EVENT_CATEGORY
+  +category?: EVENT_CATEGORY,
+  +dispatchable?: boolean,
 |};
 
 export type InputContext = {|

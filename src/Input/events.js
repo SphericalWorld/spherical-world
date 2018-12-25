@@ -15,6 +15,7 @@ import {
   INVENTORY_PREVIOUS_ITEM,
   PLAYER_ATTACK_EVENT,
   PLAYER_PUT_BLOCK_EVENT,
+  SET_KEY_EVENT,
 } from '../../common/constants/input/eventTypes';
 import {
   INPUT_TYPE_RANGE,
@@ -25,7 +26,7 @@ import {
   CATEGORY_COMBAT_AND_BLOCKS,
 } from './eventTypes';
 import RangeInputEvent from './RangeInputEvent';
-import { MENU_TOGGLED, INVENTORY_TOGGLED } from '../hud/hudConstants';
+import { MENU_TOGGLED, INVENTORY_TOGGLED, KEY_SELECT_BUTTON } from '../hud/hudConstants';
 import {
   CAMERA_MOVED,
   CAMERA_LOCKED,
@@ -157,6 +158,7 @@ export const selectNextItemEvent = {
   caption: 'Select next item',
   type: INPUT_TYPE_RANGE,
   gameEvent: NEXT_ITEM_SELECTED,
+  dispatchable: true,
 };
 
 export const selectPreviousItemEvent = {
@@ -165,6 +167,7 @@ export const selectPreviousItemEvent = {
   caption: 'Select previous item',
   type: INPUT_TYPE_RANGE,
   gameEvent: PREVIOUS_ITEM_SELECTED,
+  dispatchable: true,
 };
 
 export const playerAttackEvent = {
@@ -182,4 +185,12 @@ export const playerPutBlockEvent = {
   caption: 'Put Block',
   type: INPUT_TYPE_ACTION,
   gameEvent: PLAYER_START_PUT_BLOCK,
+};
+
+export const keySetEvent = {
+  action: SET_KEY_EVENT,
+  type: INPUT_TYPE_ACTION,
+  gameEvent: KEY_SELECT_BUTTON,
+  dispatchable: true,
+  data: ({ data }: { data: string }) => data,
 };

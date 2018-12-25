@@ -32,7 +32,9 @@ const onLogin = (server: Server, createPlayer: CreatePlayer, players) => server.
   .subscribe(({ socket }) => {
     // data.cookie
     const player = createPlayer(null, socket);
-    const { id, transform, playerData } = player;
+    const {
+      id, transform, playerData, inventory,
+    } = player;
     // player.terrain = this.server.terrain;
     for (const otherPlayer of players) {
       if (id !== otherPlayer.id) {
@@ -47,7 +49,7 @@ const onLogin = (server: Server, createPlayer: CreatePlayer, players) => server.
       id, transform, playerData,
     });
     send(socket, 'LOGGED_IN', {
-      id, transform, playerData,
+      id, transform, playerData, inventory,
     });
     send(socket, 'LOAD_CONTROL_SETTINGS', {
       controls: defaultInputBindings,

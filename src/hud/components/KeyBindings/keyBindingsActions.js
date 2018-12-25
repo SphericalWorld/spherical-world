@@ -9,9 +9,9 @@ export const setKey = (action: string, firstKey?: string, secondKey?: string) =>
   },
 });
 
-export const startEditKey = (action: string, key: KeyPosition) => ({
+export const startEditKey = (action: string, keyPosition: KeyPosition) => ({
   type: KEY_EDITING_STARTED,
   payload: {
-    action, key,
+    action, keyPosition,
   },
 });

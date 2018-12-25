@@ -10,9 +10,11 @@ export type BUTTON_STATUS =
 
 export default class StateInputEvent extends InputEvent {
   status: BUTTON_STATUS;
+  data: mixed;
 
-  constructor(name: string, status: BUTTON_STATUS = 0) {
+  constructor(name: string, status: BUTTON_STATUS = 0, data: mixed) {
     super(name);
     this.status = status;
+    this.data = data;
   }
 }

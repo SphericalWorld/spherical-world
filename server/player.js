@@ -6,6 +6,7 @@ import type World from '../common/ecs/World';
 import Transform from './components/Transform';
 import Network from './components/Network';
 import PlayerData from './components/PlayerData';
+import Inventory from './components/Inventory';
 
 let id = 1;
 
@@ -46,6 +47,7 @@ export const playerProvider = (
     new Transform(0, 132, 0),
     new PlayerData(`Unnamed Player ${id}`),
     new Network(socket),
+    new Inventory(),
   );
   socket.player = player;
   return player;

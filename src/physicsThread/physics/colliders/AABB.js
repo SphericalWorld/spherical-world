@@ -4,7 +4,7 @@ import { vec3 } from 'gl-matrix';
 import createManifold from '../Manifold';
 import type { Manifold } from '../Manifold';
 import type { RigidBody } from '../RigidBody';
-import type { Collider, COLLIDER_TYPE } from '../Collider';
+import type { COLLIDER_TYPE } from '../Collider';
 
 export type COLLIDER_AABB_TYPE = 0;
 export const COLLIDER_AABB: COLLIDER_AABB_TYPE = 0;
@@ -39,14 +39,15 @@ class AABBinner {
   }
 }
 
-export type AABB = {|
-  min: Vec3;
-  max: Vec3;
-  size: Vec3;
-  halfSize: Vec3;
-  center: Vec3;
-  ...$Exact<Collider>;
-|};
+export type AABB = {
+  +min: Vec3;
+  +max: Vec3;
+  +size: Vec3;
+  +halfSize: Vec3;
+  +center: Vec3;
+  +type: COLLIDER_TYPE;
+  +move: (Vec3) => void;
+};
 
 export const createAABB = (translation: Vec3, size: Vec3, objectPosition: ?Vec3): AABB =>
   new AABBinner(translation, size, objectPosition);

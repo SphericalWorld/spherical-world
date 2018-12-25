@@ -21,19 +21,7 @@ import Transform from '../../components/Transform';
 import Velocity from '../../components/Velocity';
 import UserControlled from '../../components/UserControlled';
 
-const getAngle = (x: number, z: number): number => do {
-  if (x === 0) {
-    if (z > 0) -90;
-    else if (z < 0) 90;
-  } else if (x > 0) {
-    if (z > 0) -45;
-    else if (z < 0) 45;
-  } else if (x < 0) {
-    if (z > 0) -135;
-    else if (z < 0) 135;
-    else 180;
-  }
-} | 0;
+const getAngle = (x, z) => Math.atan2(-z, x);
 
 const setMove = (userControls: UserControlled, direction, value: boolean): UserControlled => {
   switch (direction) {
@@ -94,7 +82,7 @@ export default (world: World, terrain: Terrain): System => {
       const movingX = userControls.movingForward - userControls.movingBackward;
       const movingZ = userControls.movingLeft - userControls.movingRight;
       const angle = getAngle(movingX, movingZ);
-      const rotation = quat.rotateY(quat.create(), transform.rotation, (angle * Math.PI) / 180);
+      const rotation = quat.rotateY(quat.create(), transform.rotation, angle);
 
       const v = vec3.fromValues(1, 0, 0);
       vec3.transformQuat(v, v, rotation);
