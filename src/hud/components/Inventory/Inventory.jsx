@@ -24,14 +24,14 @@ import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 
 type MappedProps = {|
-  +slots: $ReadOnlyArray<InventorySlotDetails>;
+  +slots: $ReadOnlyArray<?InventorySlotDetails>;
 |};
 
 type DispatchProps = {|
   +setUIState: typeof doSetUIState,
 |};
 
-type Props = MappedProps & DispatchProps;
+type Props = {| ...MappedProps, ...DispatchProps |};
 
 const Coin = ({ caption, className }: { caption: string, className: string }) => (
   <div className={`${coin} ${className}`}>
@@ -71,10 +71,10 @@ const Inventory = ({ setUIState, slots }: Props) => {
 const getPlaceholderSlots = (count: number) =>
   (new Array(count)).fill(null);
 
-
 const imageSlots = (new Array(46)).fill(0).map((_, index) => ({
   count: index,
   image: `${Math.random() > 0.5 ? 'diamond' : 'ironIngot'}`,
+  id: String(index),
 }));
 
 const mapState = () => ({
@@ -85,4 +85,4 @@ const mapActions = {
   setUIState: doSetUIState,
 };
 
-export default connect(mapState, mapActions)(Inventory);
+export default connect<Props, {||}, _, _, _, _>(mapState, mapActions)(Inventory);

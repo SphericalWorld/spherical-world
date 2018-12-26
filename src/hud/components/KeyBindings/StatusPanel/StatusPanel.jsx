@@ -18,4 +18,4 @@ const mapState = (state: State) => ({
   statusText: state.keyBindings.status,
 });
 
-export default connect(mapState, null)(StatusPanel);
+export default connect<Props, {||}, _, _, _, _>(mapState, null)(StatusPanel);

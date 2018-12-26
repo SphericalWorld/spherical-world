@@ -42,4 +42,4 @@ const mapActions = {
   setUIState: doSetUIState,
 };
 
-export default connect(null, mapActions)(MainMenu);
+export default connect<Props, {||}, _, _, _, _>(null, mapActions)(MainMenu);

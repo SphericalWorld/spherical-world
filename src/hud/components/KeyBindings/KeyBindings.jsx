@@ -119,4 +119,4 @@ const mapActions = {
   startEditKey: doStartEditKey,
 };
 
-export default connect(mapState, mapActions)(KeyBindings);
+export default connect<KeyBindingsProps, {||}, _, _, _, _>(mapState, mapActions)(KeyBindings);

@@ -12,7 +12,7 @@ type MappedProps = {|
   +uiStates: $PropertyType<State, 'uiStates'>
 |};
 
-type Props = OwnProps & MappedProps;
+type Props = {| ...OwnProps, ...MappedProps |};
 
 const mapState = ({
   uiStates,
@@ -24,4 +24,4 @@ const Route = ({ on, uiStates, component: Component }: Props) => (
   uiStates[on] ? <Component /> : null
 );
 
-export default connect(mapState, null)(Route);
+export default connect<Props, OwnProps, _, _, _, _>(mapState, null)(Route);

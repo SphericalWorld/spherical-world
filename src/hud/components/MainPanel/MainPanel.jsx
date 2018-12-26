@@ -48,4 +48,4 @@ const mapState = (state: State) => ({
   slots: state.mainPanel.slots,
 });
 
-export default connect(mapState, null)(MainPanel);
+export default connect<Props, {||}, _, _, _, _>(mapState, null)(MainPanel);

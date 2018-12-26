@@ -71,4 +71,4 @@ const Panel = ({
   </div>
 );
 
-export default connect(mapState)(Panel);
+export default connect<Props, {||}, _, _, _, _>(mapState)(Panel);
