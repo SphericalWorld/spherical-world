@@ -12,9 +12,7 @@ import {
   slot as slotStyle,
   coins,
   coin,
-  label,
   empty,
-  content,
   gold,
   silver,
   bronze,
@@ -36,7 +34,7 @@ type Props = {| ...MappedProps, ...DispatchProps |};
 const Coin = ({ caption, className }: { caption: string, className: string }) => (
   <div className={`${coin} ${className}`}>
     <Label className={icon}>🔘</Label>
-    <Label className={label}>{caption}</Label>
+    <Label>{caption}</Label>
   </div>
 );
 
@@ -52,7 +50,7 @@ const Inventory = ({ setUIState, slots }: Props) => {
   const close = useCallback(() => setUIState(INVENTORY, false));
   return (
     <ModalWindow caption="author's inventory" onClose={close}>
-      <div className={content}>
+      <div>
         <div className={inventory}>
           <ul className={inventorySlots}>
             { slots.map(slot =>

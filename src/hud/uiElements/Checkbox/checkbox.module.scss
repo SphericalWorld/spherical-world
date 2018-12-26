@@ -15,7 +15,6 @@
   border-radius: 0.2em;
   display: inline-block;
   outline: 0;
-  padding: 0.7em;
   position: relative;
 }
 
@@ -27,20 +26,27 @@
   @extend %font-main;
   color: $input-checkbox;
   content: '🗸';
-  font-size: 1.3em;
   font-weight: bold;
   left: 0.1em;
   position: absolute;
-  top: 0;
 }
 
 .big {
   padding: 1em;
 }
 
+.small {
+  padding: 0.7em;
+}
+
 .big:checked::after {
   font-size: 2em;
-  left: 0.1em;
+  top: 0;
+}
+
+.small:checked::after {
+  font-size: 1.3em;
+  top: 0.1em;
 }
 
 .checkboxName {
