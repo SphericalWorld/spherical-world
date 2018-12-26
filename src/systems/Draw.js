@@ -10,8 +10,7 @@ import {
 } from '../components';
 import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
-import {
-  Terrain,
+import Terrain, {
   getVisibleChunks,
   drawOpaqueChunkData,
   drawTransparentChunkData,

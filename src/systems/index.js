@@ -20,10 +20,8 @@ export default (
   network: Network,
   time: Time,
   input: Input,
-  Player,
   store,
-  createItem,
-  dispatchableEvents,
+  dispatchableEvents: Set<string>,
 ): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world),
@@ -31,6 +29,6 @@ export default (
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
   HudSystem(world, store, dispatchableEvents, input),
-  NetworkSystem(world, network, input, Player, store, createItem),
+  NetworkSystem(world, network, input, store),
   DropableSystem(world),
 ];

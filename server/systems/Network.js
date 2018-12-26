@@ -40,14 +40,8 @@ const onLogin = (server: Server, createPlayer: CreatePlayer, players) => server.
       if (id !== otherPlayer.id) {
         player.network.linkedPlayers.push(otherPlayer);
         otherPlayer.network.linkedPlayers.push(player);
-        send(socket, 'LOAD_OTHER_PLAYER', {
-          id: otherPlayer.id, transform: otherPlayer.transform, playerData: otherPlayer.playerData,
-        });
       }
     }
-    broadcastToLinked(socket.player, 'LOAD_OTHER_PLAYER', {
-      id, transform, playerData,
-    });
     send(socket, 'LOGGED_IN', {
       id, transform, playerData, inventory,
     });
@@ -85,7 +79,13 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
             .filter(el => el.id !== id)
             .map(el => [el.id, el.transform]),
         },
-        newObjects: world.lastAddedObjects.filter(el => el.networkSync),
+        newObjects: world.lastAddedObjects
+          .filter(el => el.networkSync)
+          .map(({
+            id, transform, networkSync, playerData,
+          }) => ({
+            id, transform, networkSync, playerData,
+          })),
       });
 
       const [x, y, z] = transform.translation;

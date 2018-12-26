@@ -101,7 +101,7 @@ import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import Model from '../engine/Model/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
-const playerProvider = (
+const createPlayer = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker,
@@ -128,6 +128,18 @@ const playerProvider = (
         ],
     ].filter(el => el),
   )).id;
+};
+
+
+const playerProvider = (
+  ecs: World,
+  materialLibrary: MaterialLibrary,
+  BlockPicker,
+  Inventory,
+) => {
+  const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker, Inventory);
+  ecs.registerConstructor('PLAYER', playerConstructor);
+  return playerConstructor;
 };
 
 export default playerProvider;

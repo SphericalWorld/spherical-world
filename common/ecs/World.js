@@ -13,8 +13,12 @@ type SerializedComponent = {
   data: Component;
 };
 
+type ObjectConstructor = (any) => Component;
+
 export default class World {
+  constructors: Map<string, ObjectConstructor> = new Map();
   components: Map<string, Map<string, Component>> = new Map();
+  entities: Set<string> = new Set();
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
@@ -135,6 +139,7 @@ export default class World {
         selector.components.push(selectedComponents);
       }
     }
+    this.entities.add(entityId);
   }
 
   addExistedEntity(id: Entity, ...components: SerializedComponent[]): void {
@@ -190,5 +195,9 @@ export default class World {
 
   createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean) {
     this.dispatch({ type, payload, network });
+  }
+
+  registerConstructor(name: string, constructor: ObjectConstructor) {
+    this.constructors.set(name, params => !this.entities.has(params.id) && constructor(params));
   }
 }

@@ -11,7 +11,7 @@ const createItem = (
 ) => (id: ?Entity, position: Vec3) => {
   const player = world.createEntity(
     id,
-    new NetworkSync({ name: 'item' }),
+    new NetworkSync({ name: 'ITEM' }),
     new Transform(position[0], position[1], position[2]),
   );
   return player;

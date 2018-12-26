@@ -37,7 +37,6 @@ const engineProvider = (
       network.events
         .filter(e => e.type === 'LOGGED_IN')
         .subscribe(({ payload }) => {
-          console.log(payload)
           const player = Player(payload.data, true);
           const skyBox = Skybox(player);
         });

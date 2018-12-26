@@ -1,4 +1,7 @@
 // @flow strict
+import type Chunk from '../Chunk';
+import IO from '../../../common/fp/monads/io';
+
 export interface IGenerator {
-  +generate: Function;
+  +generate: (chunk: Chunk) => IO<Chunk>;
 }

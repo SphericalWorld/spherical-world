@@ -10,13 +10,14 @@ import {
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 
+export const ITEM: 'ITEM' = 'ITEM';
 const SIZE = 0.2;
 const model = createCube(SIZE);
 
 const createItem = (
   ecs: World,
   materialLibrary: MaterialLibrary,
-) => (id: Entity, { transform }: { transform: Transform }): Entity => {
+) => ({ transform, id }: { transform: Transform, id: Entity }): Entity => {
   const material = materialLibrary.get('skybox');
   const object = new GlObject({ model, material });
   const item = ecs.createEntity(
@@ -36,4 +37,13 @@ const createItem = (
   return item.id;
 };
 
-export default createItem;
+const itemProvider = (
+  ecs: World,
+  materialLibrary: MaterialLibrary,
+) => {
+  const itemConstructor = createItem(ecs, materialLibrary);
+  ecs.registerConstructor(ITEM, itemConstructor);
+  return itemConstructor;
+};
+
+export default itemProvider;
