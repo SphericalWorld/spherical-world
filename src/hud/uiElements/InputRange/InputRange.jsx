@@ -3,12 +3,10 @@ import React, { useState } from 'react';
 import Label from '../Label';
 import {
   inputRange,
-  text,
   value,
   valueDescript,
   mark,
   markMin,
-  markMax,
 } from './inputRange.module.scss';
 
 const InputRange = () => {
@@ -23,7 +21,7 @@ const InputRange = () => {
     <div>
       <div className={mark}>
         <Label className={markMin}>{min}</Label>
-        <Label className={markMax}>{max}</Label>
+        <Label>{max}</Label>
       </div>
       <input
         type="range"
@@ -35,7 +33,7 @@ const InputRange = () => {
         className={inputRange}
       />
       <div className={valueDescript}>
-        <Label className={text}>value: </Label>
+        <Label>value: </Label>
         <Label className={value}>{activeNumber}</Label>
       </div>
     </div>
