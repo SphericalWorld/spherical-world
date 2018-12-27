@@ -79,13 +79,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
             .filter(el => el.id !== id)
             .map(el => [el.id, el.transform]),
         },
-        newObjects: world.lastAddedObjects
-          .filter(el => el.networkSync)
-          .map(({
-            id, transform, networkSync, playerData,
-          }) => ({
-            id, transform, networkSync, playerData,
-          })),
+        newObjects: world.lastAddedObjects.filter(el => el.networkSync),
       });
 
       const [x, y, z] = transform.translation;

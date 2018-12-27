@@ -2,11 +2,13 @@
 import type { Vec3, Quat } from 'gl-matrix';
 import type { Component } from '../Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
+import { Networkable } from '../../Networkable';
 
-export default class Transform implements Component {
+export default class Transform implements Component, Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'transform' = 'transform';
   static componentType: {| 'transform': Transform |};
+  static networkable = true;
 
   translation: Vec3 = [0, 0, 0];
   rotation: Quat = [0, 0, 0, 1];
@@ -19,5 +21,9 @@ export default class Transform implements Component {
 
   static deserialize(data: Transform): Transform {
     return new Transform(data.translation[0], data.translation[1], data.translation[2]);
+  }
+
+  serialize(): mixed {
+    return this;
   }
 }

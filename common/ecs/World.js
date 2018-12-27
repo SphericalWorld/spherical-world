@@ -166,11 +166,17 @@ export default class World {
     const selectedComponents = {
       id: entityId,
     };
+    const selectedComponentsNetworkable = {
+      id: entityId,
+    };
     for (let i = 0; i < components.length; i += 1) {
       const component = components[i];
       selectedComponents[component.constructor.componentName] = component;
+      if (component.constructor.networkable) {
+        selectedComponentsNetworkable[component.constructor.componentName] = component;
+      }
     }
-    this.lastAddedObjects.push(selectedComponents);
+    this.lastAddedObjects.push(selectedComponentsNetworkable);
     return selectedComponents;
   }
 
