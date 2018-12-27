@@ -11,18 +11,23 @@ import {
 
 export type InventorySlotDetails = {|
   +count: number;
-  +image: string;
+  +icon: string;
   +id: string;
 |};
 
 type Props = {|
-  +slot: InventorySlotDetails;
+  +slot?: InventorySlotDetails;
   +selected?: boolean
 |};
 
-const InventorySlot = ({ slot, selected }: Props) => (
+const images = {
+  diamond: imageDiamond,
+  ironIngot: imageIronIngot,
+};
+
+const InventorySlot = ({ slot = {}, selected }: Props) => (
   <li sw-droppable="true" className={`${slotStyle} ${String(selected && selectedSlot)}`}>
-    <div className={`${slotItem} ${slot.image === 'diamond' ? imageDiamond : imageIronIngot}`} sw-droppable="true" sw-draggable="slot" sw-item-tooltip="slot">
+    <div className={`${slotItem} ${slot.icon ? images[slot.icon] : ''}`} sw-droppable="true" sw-draggable="slot" sw-item-tooltip="slot">
       <span className={slotItemCount}>
         {slot.count}
       </span>

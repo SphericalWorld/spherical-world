@@ -96,6 +96,7 @@ import {
   Gravity,
   UserControlled,
   Visual,
+  Inventory,
 } from '../components';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import Model from '../engine/Model/Model';
@@ -117,6 +118,7 @@ const createPlayer = (
       new Physics(),
       new Velocity(),
       new Gravity(),
+      Inventory.deserialize(data.inventory),
       ...isMainPlayer
         ? [
           new UserControlled(),

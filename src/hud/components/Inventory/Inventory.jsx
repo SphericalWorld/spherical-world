@@ -1,6 +1,7 @@
 // @flow strict
 import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
+import type { State } from '../../../reducers/rootReducer';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
@@ -53,11 +54,8 @@ const Inventory = ({ setUIState, slots }: Props) => {
       <div>
         <div className={inventory}>
           <ul className={inventorySlots}>
-            { slots.map(slot =>
-              (slot
-                ? <InventorySlot slot={slot} />
-                : <li className={`${slotStyle} ${empty}`} />))
-            }
+            { slots.map(slot => <InventorySlot slot={slot || undefined} />)}
+            { slots.map(() => <li className={`${slotStyle} ${empty}`} />)}
           </ul>
         </div>
         <Footer />
@@ -66,21 +64,20 @@ const Inventory = ({ setUIState, slots }: Props) => {
   );
 };
 
-const getPlaceholderSlots = (count: number) =>
-  (new Array(count)).fill(null);
-
-const imageSlots = (new Array(46)).fill(0).map((_, index) => ({
-  count: index,
-  image: `${Math.random() > 0.5 ? 'diamond' : 'ironIngot'}`,
-  id: String(index),
-}));
-
-const mapState = () => ({
-  slots: imageSlots.concat(getPlaceholderSlots(imageSlots.length)),
+const mapState = ({
+  hudData: {
+    player: {
+      inventory: {
+        slots,
+      },
+    },
+  },
+}) => ({
+  slots,
 });
 
 const mapActions = {
   setUIState: doSetUIState,
 };
 
-export default connect<Props, {||}, _, _, _, _>(mapState, mapActions)(Inventory);
+export default connect<Props, {||}, _, _, State, _>(mapState, mapActions)(Inventory);

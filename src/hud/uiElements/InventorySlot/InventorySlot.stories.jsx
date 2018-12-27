@@ -7,7 +7,7 @@ storiesOf('InventorySlot', module)
   .add('InventorySlot', () =>
   <>
     Normal:
-    <InventorySlot slot={{ count: 1, id: '1' }} />
+    <InventorySlot slot={{ count: 1, id: '1', icon: 'ironIngot' }} />
     Selected:
-    <InventorySlot slot={{ count: 1, id: '1' }} selected />
+    <InventorySlot slot={{ count: 1, id: '1', icon: 'diamond' }} selected />
   </>);

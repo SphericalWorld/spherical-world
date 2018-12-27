@@ -5,6 +5,7 @@ import type World from '../common/ecs/World';
 import {
   Transform, Network, PlayerData, Inventory, NetworkSync,
 } from './components';
+import { createStubItems } from '../common/Inventory/Inventory';
 
 let id = 1;
 
@@ -45,7 +46,7 @@ export const playerProvider = (
     new Transform(0, 132, 0),
     new PlayerData(`Unnamed Player ${id}`),
     new Network(socket),
-    new Inventory(),
+    new Inventory({ slots: createStubItems() }),
     new NetworkSync({ name: 'PLAYER' }),
   );
   socket.player = player;

@@ -17,11 +17,19 @@ export type Slot = {|
 |};
 
 export type Inventory = {|
-  slots: Array<Slot | null>;
+  slots: $ReadOnlyArray<Slot | null>;
 |};
 
-export const createInventory = (): Inventory => ({
-  slots: [
+export const createInventory = ({
+  slots = [],
+}: {
+  slots?: $ReadOnlyArray<Slot | null>
+}): Inventory => ({
+  slots,
+});
+
+export const createStubItems = (): Array<Slot | null> =>
+  [
     null,
     {
       name: 'sand', count: 52, itemTypeId: 2, rareness: RARENESS_COMMON,
@@ -40,5 +48,4 @@ export const createInventory = (): Inventory => ({
     {
       name: 'torch', count: 10, itemTypeId: 128, rareness: RARENESS_COMMON, icon: 'torchOn',
     },
-  ],
-});
+  ];

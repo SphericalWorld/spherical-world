@@ -6,7 +6,7 @@ const initialState = {
   selectedItemIndex: 0,
   slots: (new Array(10)).fill(0).map((_, index) => ({
     count: index,
-    image: `${Math.random() > 0.5 ? 'diamond' : 'ironIngot'}`,
+    icon: `${Math.random() > 0.5 ? 'diamond' : 'ironIngot'}`,
     id: String(index),
   })),
 };

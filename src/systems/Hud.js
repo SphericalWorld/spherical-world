@@ -3,7 +3,7 @@ import type World from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import type { Input } from '../Input/Input';
 import type { Store } from '../store/store';
-import { Transform, UserControlled } from '../components';
+import { Transform, UserControlled, Inventory } from '../components';
 import { MENU_TOGGLED, INVENTORY_TOGGLED } from '../hud/hudConstants';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
 import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
@@ -55,7 +55,7 @@ export default (
   dispatchableEvents: Set<string>,
   input: Input,
 ): System => {
-  const player = ecs.createSelector([Transform, UserControlled]);
+  const player = ecs.createSelector([Transform, UserControlled, Inventory]);
   const toggleUIState = (...params) => store.dispatch(doToggleUIState(...params));
   const updateHudData = (...params) => store.dispatch(doUpdateHudData(...params));
 
@@ -68,6 +68,7 @@ export default (
     updateHudData({
       player: {
         position: player[0].transform.translation,
+        inventory: player[0].inventory.data,
       },
     });
   };

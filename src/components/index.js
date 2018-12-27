@@ -14,3 +14,4 @@ export { default as Visual } from './Visual';
 export { default as Joint } from './Joint';
 export { default as Item } from './Item';
 export { default as NetworkSync } from './NetworkSync';
+export { default as Inventory } from './Inventory';
