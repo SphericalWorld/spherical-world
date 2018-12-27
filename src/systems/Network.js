@@ -3,6 +3,7 @@ import type World from '../../common/ecs/World';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
+import type { Store } from '../store/store';
 import { Transform, Camera } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
@@ -29,7 +30,7 @@ const onLoadControlSettings = (ecs: World, input: Input, store) => ecs.events
     });
   });
 
-export default (ecs: World, network: Network, input: Input, store): System => {
+export default (ecs: World, network: Network, input: Input, store: Store): System => {
   const player = ecs.createSelector([Transform, Camera]);
   const events = ecs.events
     .filter(el => el.network === true)

@@ -1,7 +1,5 @@
 // @flow strict
-type Json = {| +[string]: mixed |};
-
-const shallowEqual = (objA: Json, objB: Json): boolean => {
+const shallowEqual = (objA: {}, objB: {}): boolean => {
   if (objA === objB) {
     return true;
   }

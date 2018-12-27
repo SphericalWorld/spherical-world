@@ -1,12 +1,13 @@
 // @flow strict
+import type { Store } from 'redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import thunk from 'redux-thunk';
-
+import type { State } from '../reducers/rootReducer';
 import rootReducer from '../reducers/rootReducer';
 
 
-export default function configureStore(preloadedState) {
+export default function configureStore(preloadedState): Store<State, any> {
   const middlewares = [thunk];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 

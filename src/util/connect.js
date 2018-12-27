@@ -1,39 +1,22 @@
 // @flow strict
+import type { Store } from 'redux';
 import shallowEqual from './shallowEqual';
 
-type MapActions = () => {| [string]: Function |};
-
-export default function connect(mapState: ?Function, mapActions: ?MapActions, store: Object) {
-  return function decorator<T: Class<any>>(Target: T) {
-    class Connected extends Target {
-      constructor(...params) {
-        super(...params);
-        if (mapState) {
-          let prevProps = mapState(store.getState(), this);
-          this[Symbol('unsubscribe')] = store.subscribe(() => {
-            const nextProps = mapState(store.getState(), this);
-            if (shallowEqual(prevProps, nextProps)) {
-              return;
-            }
-            Object.assign(this, nextProps);
-            if (this.componentDidUpdate) {
-              const arg = prevProps; // needed in case if update will throw and fall down to infinite loop
-              prevProps = nextProps;
-              this.componentDidUpdate(arg);
-            }
-          });
-          Object.assign(this, prevProps);
-          if (this.componentDidMount) {
-            this.componentDidMount();
-          }
-        }
+const connect = <A: {}, B: {}>(mapState: A => B, store: Store<A, any>): ((B => mixed) => *) => {
+  return function decorator(handler: B => mixed) {
+    let prevProps = mapState(store.getState());
+    store.subscribe(() => {
+      const nextProps = mapState(store.getState());
+      if (shallowEqual(prevProps, nextProps)) {
+        return;
       }
-    }
-    if (mapActions) {
-      for (const [key, action] of Object.entries(mapActions())) {
-        Connected.prototype[key] = (...params) => store.dispatch(action(...params));
-      }
-    }
-    return Connected;
+      const arg = prevProps; // needed in case if update will throw and fall down to infinite loop
+      prevProps = nextProps;
+      handler(arg);
+    });
+    handler(prevProps);
+    return handler;
   };
-}
+};
+
+export default connect;

@@ -1,6 +1,7 @@
 // @flow strict
 import type { ShaderLibrary } from './engine/ShaderLibrary';
 import type Network from './network';
+import type { Store } from './store/store';
 import itemProvider from './item/Item';
 import Main from './main';
 import playerProvider from './player/Player';
@@ -71,7 +72,7 @@ const getMaterials = (textureLibrary: GlTextureLibrary, shaderLibrary: ShaderLib
     .add(...materials);
 };
 
-const mainProvider = async (store, network: Network, physicsThread: Worker, chunksHandlerThread: Worker) => {
+const mainProvider = async (store: Store, network: Network, physicsThread: Worker, chunksHandlerThread: Worker) => {
   const textureLibrary = await getTextures();
   const shaderLibrary = getShaders();
   const materialLibrary = getMaterials(textureLibrary, shaderLibrary);

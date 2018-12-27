@@ -5,6 +5,7 @@ import type Network from '../network';
 import type { Time } from '../Time/Time';
 import type { System } from '../../common/ecs/System';
 import type Terrain from '../Terrain/Terrain';
+import type { Store } from '../store/store';
 import TerrainSystem from './Terrain';
 import BlockRemoveSystem from './BlockRemove';
 import DayNightCycleSystem from './DayNightCycle';
@@ -20,7 +21,7 @@ export default (
   network: Network,
   time: Time,
   input: Input,
-  store,
+  store: Store,
   dispatchableEvents: Set<string>,
 ): System[] => [
   TerrainSystem(world, network, terrain),

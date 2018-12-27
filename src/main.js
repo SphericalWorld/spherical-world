@@ -1,5 +1,6 @@
 // @flow strict
 import type Network from './network';
+import type { Store } from './store/store';
 import { initWebGL } from './engine/glEngine';
 import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
@@ -14,7 +15,7 @@ setInterval(() => {
 }, 100);
 
 const engineProvider = (
-  store,
+  store: Store,
   network: Network,
   Player,
   resourceLoader,

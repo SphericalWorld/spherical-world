@@ -105,7 +105,6 @@ const createPlayer = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker,
-  Inventory,
 ) => (data: Object, isMainPlayer: boolean = false): Entity => {
   const model = new Model(playerModel, 2);
   const material = materialLibrary.get('skybox'); // 'player'
@@ -135,9 +134,8 @@ const playerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker,
-  Inventory,
 ) => {
-  const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker, Inventory);
+  const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker);
   ecs.registerConstructor('PLAYER', playerConstructor);
   return playerConstructor;
 };
