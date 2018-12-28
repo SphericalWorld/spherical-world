@@ -26,19 +26,27 @@ import {
   labelCommandGroup,
 } from './keyBindings.module.scss';
 
-type ActionMapppingProps = {|
+type ActionMapppingMappedProps = {|
   +caption: string;
   +action: string;
   +firstKey: string;
   +secondKey: string;
+|};
+
+type ActionMapppingProps = {|
+  ...ActionMapppingMappedProps,
   +onSetKey: (action: string, key: KeyPosition) => mixed;
 |};
 
-type ActionCategoryProps = {|
+type ActionCategoryMappedProps = {|
   +name: EVENT_CATEGORY,
-  +items: $ReadOnlyArray<ActionMapppingProps>,
-  +onSetKey: (action: string, key: KeyPosition) => mixed;
+  +items: $ReadOnlyArray<ActionMapppingMappedProps>,
 |}
+
+type ActionCategoryProps = {|
+  ...ActionCategoryMappedProps;
+  +onSetKey: (action: string, key: KeyPosition) => mixed;
+|};
 
 type DispatchProps = {|
   +setUIState: typeof doSetUIState,
@@ -46,10 +54,10 @@ type DispatchProps = {|
 |};
 
 type KeyBindingsOwnProps = {|
-  +keyCategories: $ReadOnlyArray<ActionCategoryProps>
+  +keyCategories: $ReadOnlyArray<ActionCategoryMappedProps>
 |};
 
-type KeyBindingsProps = { ...KeyBindingsOwnProps, ...DispatchProps };
+type KeyBindingsProps = {| ...KeyBindingsOwnProps, ...DispatchProps |};
 
 const ActionMappping = ({
   caption, firstKey, secondKey, action, onSetKey,
@@ -112,11 +120,11 @@ const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsPro
   );
 };
 
-const mapState = ({ keyBindings: { keyCategories } }: State) => ({ keyCategories });
+const mapState = ({ keyBindings: { keyCategories } }) => ({ keyCategories });
 
 const mapActions = {
   setUIState: doSetUIState,
   startEditKey: doStartEditKey,
 };
 
-export default connect<KeyBindingsProps, {||}, _, _, _, _>(mapState, mapActions)(KeyBindings);
+export default connect<KeyBindingsProps, {||}, _, _, State, _>(mapState, mapActions)(KeyBindings);

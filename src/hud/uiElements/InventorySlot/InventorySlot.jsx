@@ -9,11 +9,11 @@ import {
   imageIronIngot,
 } from './inventorySlot.module.scss';
 
-export type InventorySlotDetails = {|
+export type InventorySlotDetails = {
   +count: number;
-  +icon: string;
+  +icon?: string;
   +id: string;
-|};
+};
 
 type Props = {|
   +slot?: InventorySlotDetails;

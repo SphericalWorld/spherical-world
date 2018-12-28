@@ -69,11 +69,12 @@ const mapState = ({
     player: {
       inventory: {
         slots,
+        items,
       },
     },
   },
 }) => ({
-  slots,
+  slots: slots.map(el => items[el || ''] || null),
 });
 
 const mapActions = {

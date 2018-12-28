@@ -16,7 +16,7 @@ import type { InventorySlotDetails } from '../../uiElements/InventorySlot/Invent
 import type { State } from '../../../reducers/rootReducer';
 
 type StateProps = {|
-  +slots: $ReadOnlyArray<InventorySlotDetails>;
+  +slots: $ReadOnlyArray<InventorySlotDetails | null>;
   +selectedItemIndex: number;
 |};
 
@@ -26,8 +26,12 @@ const MainPanel = ({ slots, selectedItemIndex }: Props) => (
   <section className={mainPanelSection}>
     <div className={mainPanel}>
       <ul className={itemsContainer}>
-        { slots.map((slot, index) =>
-          <InventorySlot key={slot.id} slot={slot} selected={index === selectedItemIndex} />)
+        { slots.map((slot, index) => (
+          <InventorySlot
+            key={index}
+            slot={slot || undefined}
+            selected={index === selectedItemIndex}
+          />))
         }
       </ul>
       <div className={pagination}>
@@ -43,9 +47,21 @@ const MainPanel = ({ slots, selectedItemIndex }: Props) => (
   </section>
 );
 
-const mapState = (state: State) => ({
-  selectedItemIndex: state.mainPanel.selectedItemIndex,
-  slots: state.mainPanel.slots,
+const mapState = ({
+  mainPanel: {
+    selectedItemIndex,
+    slots,
+  },
+  hudData: {
+    player: {
+      inventory: {
+        items,
+      },
+    },
+  },
+}) => ({
+  selectedItemIndex,
+  slots: slots.map(el => items[el || ''] || null),
 });
 
-export default connect<Props, {||}, _, _, _, _>(mapState, null)(MainPanel);
+export default connect<Props, {||}, _, _, State, _>(mapState, null)(MainPanel);

@@ -1,6 +1,6 @@
 // @flow strict
 import type { Component } from '../Component';
-import type { Inventory, Slot } from '../../Inventory/Inventory';
+import type { Inventory } from '../../Inventory/Inventory';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
 import { createInventory } from '../../Inventory/Inventory';
 import { Networkable } from '../../Networkable';
@@ -13,8 +13,8 @@ export default class InventoryComponent implements Component, Networkable {
 
   data: Inventory
 
-  constructor({ slots }: { slots: $ReadOnlyArray<Slot | null> } = {}) {
-    this.data = createInventory({ slots });
+  constructor({ slots, items }: Inventory = {}) {
+    this.data = createInventory({ slots, items });
   }
 
   serialize(): mixed {

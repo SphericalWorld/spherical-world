@@ -46,7 +46,7 @@ export const playerProvider = (
     new Transform(0, 132, 0),
     new PlayerData(`Unnamed Player ${id}`),
     new Network(socket),
-    new Inventory({ slots: createStubItems() }),
+    new Inventory(createStubItems()),
     new NetworkSync({ name: 'PLAYER' }),
   );
   socket.player = player;

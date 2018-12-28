@@ -14,12 +14,19 @@ const reducers = {
   mainPanel: mainPanelReducer,
 };
 
-type $ExtractFunctionReturn = <V>(v: (...args: mixed) => V) => V;
+type $ExtractFunctionReturn = <V, Args>(v: (...args: Args) => V) => V;
 
 const combinedReducer = combineReducers(reducers);
 
 const rootReducer = reduceReducers(combinedReducer);
 
-export type State = $ObjMap<typeof reducers, $ExtractFunctionReturn>;
+// export type State = $ObjMap<typeof reducers, $ExtractFunctionReturn>;
+
+export type State = {
+  hudData: $Call<$ExtractFunctionReturn, typeof hudReducer>,
+  keyBindings: $Call<$ExtractFunctionReturn, typeof keyBindingsReducer>,
+  uiStates: $Call<$ExtractFunctionReturn, typeof routerReducer>,
+  mainPanel: $Call<$ExtractFunctionReturn, typeof mainPanelReducer>,
+};
 
 export default rootReducer;

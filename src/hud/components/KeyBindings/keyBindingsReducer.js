@@ -18,7 +18,6 @@ const getKeyCategories = () => (Object.values(events): $ReadOnlyArray<$Values<ty
     if (!category) return categories;
     category.items.push({
       caption: event.caption,
-      category: event.category,
       firstKey: 'A',
       secondKey: 'B',
       action: event.action,

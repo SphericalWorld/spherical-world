@@ -8,7 +8,10 @@ export type Rareness =
   | typeof RARENESS_UNCOMMON
   | typeof RARENESS_RARE;
 
+export type SlotID = string;
+
 export type Slot = {|
+  +id: SlotID;
   +itemTypeId: number;
   count: number;
   +name: string;
@@ -17,35 +20,44 @@ export type Slot = {|
 |};
 
 export type Inventory = {|
-  slots: $ReadOnlyArray<Slot | null>;
+  slots: $ReadOnlyArray<SlotID | null>;
+  items: $Shape<{| [SlotID]: Slot |}>;
 |};
 
 export const createInventory = ({
   slots = [],
-}: {
-  slots?: $ReadOnlyArray<Slot | null>
-}): Inventory => ({
+  items = {},
+}: Inventory): Inventory => ({
   slots,
+  items,
 });
 
-export const createStubItems = (): Array<Slot | null> =>
-  [
+export const createStubItems = (): Inventory => ({
+  items: {
+    id1: {
+      id: 'id1', name: 'sand', count: 52, itemTypeId: 2, rareness: RARENESS_COMMON,
+    },
+    id2: {
+      id: 'id2', name: 'iron', count: 24, itemTypeId: 9, rareness: RARENESS_UNCOMMON, icon: 'ironIngot',
+    },
+    id3: {
+      id: 'id3', name: 'dirt', count: 12, itemTypeId: 1, rareness: RARENESS_COMMON,
+    },
+    id4: {
+      id: 'id4', name: 'diamonds', count: 7, itemTypeId: 100500, rareness: RARENESS_RARE, icon: 'diamond',
+    },
+    id5: {
+      id: 'id5', name: 'torch', count: 10, itemTypeId: 128, rareness: RARENESS_COMMON, icon: 'torchOn',
+    },
+  },
+  slots: [
     null,
-    {
-      name: 'sand', count: 52, itemTypeId: 2, rareness: RARENESS_COMMON,
-    },
+    'id1',
     null,
-    {
-      name: 'iron', count: 24, itemTypeId: 9, rareness: RARENESS_UNCOMMON, icon: 'ironIngot',
-    },
-    {
-      name: 'dirt', count: 12, itemTypeId: 1, rareness: RARENESS_COMMON,
-    },
+    'id2',
+    'id3',
     null,
-    {
-      name: 'diamonds', count: 7, itemTypeId: 100500, rareness: RARENESS_RARE, icon: 'diamond',
-    },
-    {
-      name: 'torch', count: 10, itemTypeId: 128, rareness: RARENESS_COMMON, icon: 'torchOn',
-    },
-  ];
+    'id4',
+    'id5',
+  ],
+});
