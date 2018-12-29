@@ -10,6 +10,7 @@ module.exports = {
     "mocha": true
   },
   "rules": {
+    "arrow-parens": "off", // incompatible with flow
     "no-bitwise": "off",
     "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
     "max-depth": ["error", 4],
