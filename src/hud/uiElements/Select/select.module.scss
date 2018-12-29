@@ -1,0 +1,23 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+
+.select {
+  background-color: transparentize($primary, 0.2);
+  border: 0;
+  border-bottom: 2px solid $primary;
+  border-radius: 0;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  margin-bottom: 1em;
+  padding: 0.25em;
+  width: 75%;
+
+  &:focus,
+  &:active {
+    outline: 0;
+  }
+}
+
