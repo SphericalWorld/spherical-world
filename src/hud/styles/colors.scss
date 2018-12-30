@@ -1,5 +1,6 @@
 $primary: #59868a;
-$secondary: #e3b891;
+$secondary: rgb(243, 209, 145);
+$secondary2: mix($primary, $secondary, 10%);
 
 $shadow: #000;
 $glass: #fff;

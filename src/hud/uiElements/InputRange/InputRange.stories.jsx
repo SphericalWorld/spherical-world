@@ -1,4 +1,4 @@
-// @flow strct
+// @flow strict
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import InputRange from './InputRange';
