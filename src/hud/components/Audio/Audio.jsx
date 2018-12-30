@@ -1,12 +1,15 @@
 // @flow strict
-import React, { PureComponent } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
+import type { State } from '../../../reducers/rootReducer';
+import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
-import { setUIState } from '../../utils/StateRouter';
-import Button from '../../uiElements/Button';
-import Label from '../../uiElements/Label';
-import Checkbox from '../../uiElements/Checkbox';
-import InputRange from '../../uiElements/InputRange';
+import {
+  Button,
+  Label,
+  Checkbox,
+  InputRange,
+} from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
 import {
   content,
@@ -22,49 +25,46 @@ import {
   volumes,
 } from './audio.module.scss';
 
-type DispatchProps = {|
-  +setUIState: typeof setUIState,
+type Props = {|
+  +setUIState: typeof doSetUIState,
 |};
 
-class Audio extends PureComponent<DispatchProps> {
-  close = () => this.props.setUIState(AUDIO, false);
-
-  render() {
-    return (
-      <ModalWindowMenu caption="Audio">
-        <div className={content}>
-          <div className={cbEnSound}>
-            <Checkbox size="big"> enable sound</Checkbox>
+const Audio = ({ setUIState }: Props) => {
+  const close = useCallback(() => setUIState(AUDIO, false));
+  return (
+    <ModalWindowMenu caption="Audio">
+      <div className={content}>
+        <div className={cbEnSound}>
+          <Checkbox size="big"> enable sound</Checkbox>
+        </div>
+        <div className={volumes}>
+          <div className={`${master} ${volume}`}>
+            <Label size="big" className={labelVolume}>Master Volume</Label>
+            <InputRange value={30} className={inputVolume} />
           </div>
-          <div className={volumes}>
-            <div className={`${master} ${volume}`}>
-              <Label size="big" className={labelVolume}>Master Volume</Label>
-              <InputRange valueNum={30} className={inputVolume} />
-            </div>
-            <div className={`${effect} ${volume}`}>
-              <Label size="big" className={labelVolume}>Effect Volume</Label>
-              <InputRange valueNum={50} className={inputVolume} />
-            </div>
-            <div className={`${ambient} ${volume}`}>
-              <Label size="big" className={labelVolume}>Ambient Volume</Label>
-              <InputRange valueNum={100} className={inputVolume} />
-            </div>
+          <div className={`${effect} ${volume}`}>
+            <Label size="big" className={labelVolume}>Effect Volume</Label>
+            <InputRange value={50} className={inputVolume} />
           </div>
-          <div className={footerButtons}>
-            <Button size="small">defaults</Button>
-            <Label className={label} />
-            <Button size="small">apply</Button>
-            <Button size="small" onClick={this.close}>accept</Button>
-            <Button size="small" onClick={this.close}>cancel</Button>
+          <div className={`${ambient} ${volume}`}>
+            <Label size="big" className={labelVolume}>Ambient Volume</Label>
+            <InputRange value={100} className={inputVolume} />
           </div>
         </div>
-      </ModalWindowMenu>
-    );
-  }
-}
-
-const mapActions = {
-  setUIState,
+        <div className={footerButtons}>
+          <Button size="small">defaults</Button>
+          <Label className={label} />
+          <Button size="small">apply</Button>
+          <Button size="small" onClick={close}>accept</Button>
+          <Button size="small" onClick={close}>cancel</Button>
+        </div>
+      </div>
+    </ModalWindowMenu>
+  );
 };
 
-export default connect(null, mapActions)(Audio);
+const mapActions = {
+  setUIState: doSetUIState,
+};
+
+export default connect<Props, {||}, _, _, State, _>(null, mapActions)(Audio);

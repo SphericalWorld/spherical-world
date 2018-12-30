@@ -1,4 +1,4 @@
-// @flow strct
+// @flow strict
 import React, { useState } from 'react';
 import {
   customSelect,
