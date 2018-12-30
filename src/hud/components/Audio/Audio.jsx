@@ -1,0 +1,70 @@
+// @flow strict
+import React, { useCallback } from 'react';
+import { connect } from 'react-redux';
+import type { State } from '../../../reducers/rootReducer';
+import { setUIState as doSetUIState } from '../../utils/StateRouter';
+import { AUDIO } from './audioConstants';
+import {
+  Button,
+  Label,
+  Checkbox,
+  InputRange,
+} from '../../uiElements';
+import ModalWindowMenu from '../ModalWindowMenu';
+import {
+  content,
+  footerButtons,
+  label,
+  cbEnSound,
+  master,
+  effect,
+  ambient,
+  volume,
+  labelVolume,
+  inputVolume,
+  volumes,
+} from './audio.module.scss';
+
+type Props = {|
+  +setUIState: typeof doSetUIState,
+|};
+
+const Audio = ({ setUIState }: Props) => {
+  const close = useCallback(() => setUIState(AUDIO, false));
+  return (
+    <ModalWindowMenu caption="Audio">
+      <div className={content}>
+        <div className={cbEnSound}>
+          <Checkbox size="big"> enable sound</Checkbox>
+        </div>
+        <div className={volumes}>
+          <div className={`${master} ${volume}`}>
+            <Label size="big" className={labelVolume}>Master Volume</Label>
+            <InputRange value={30} className={inputVolume} />
+          </div>
+          <div className={`${effect} ${volume}`}>
+            <Label size="big" className={labelVolume}>Effect Volume</Label>
+            <InputRange value={50} className={inputVolume} />
+          </div>
+          <div className={`${ambient} ${volume}`}>
+            <Label size="big" className={labelVolume}>Ambient Volume</Label>
+            <InputRange value={100} className={inputVolume} />
+          </div>
+        </div>
+        <div className={footerButtons}>
+          <Button size="small">defaults</Button>
+          <Label className={label} />
+          <Button size="small">apply</Button>
+          <Button size="small" onClick={close}>accept</Button>
+          <Button size="small" onClick={close}>cancel</Button>
+        </div>
+      </div>
+    </ModalWindowMenu>
+  );
+};
+
+const mapActions = {
+  setUIState: doSetUIState,
+};
+
+export default connect<Props, {||}, _, _, State, _>(null, mapActions)(Audio);

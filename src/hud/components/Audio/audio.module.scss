@@ -1,0 +1,59 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+%flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.content {
+  @extend %flex;
+  height: 25em;
+  padding: 2em 0.3em 0.1em;
+  position: relative;
+  width: 30em;
+}
+
+.cbEnSound {
+  padding: 0 1em;
+  /*flex: 0 1 10%;*/
+}
+
+.volumes {
+  @extend %flex;
+  flex: 0 1 90%;
+  justify-content: space-around;
+  padding: 0.1em 1em 0.5em 2.2em;
+}
+
+.labelVolume {
+  @extend %flex;
+  align-items: flex-start;
+  padding: 0.3em 0;
+  user-select: none;
+}
+
+.inputVolume {
+  padding-left: 0.5em;
+}
+
+.footerButtons {
+  border-top: $border-key-bindings;
+  display: flex;
+  /*flex: 0 1 10%;*/
+  flex-direction: row;
+  padding: 0.5em;
+}
+
+.footerButtons > * {
+  flex: 0 1 30%;
+  margin: 0;
+}
+
+.footerButtons > .label {
+  flex: 0 1 15%;
+}
+
+

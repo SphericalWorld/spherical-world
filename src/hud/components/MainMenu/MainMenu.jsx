@@ -5,6 +5,7 @@ import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import ModalWindowMenu from '../ModalWindowMenu';
 import { KEY_BINDINGS } from '../KeyBindings/keyBindingsConstants';
+import { AUDIO } from '../Audio/audioConstants';
 import { MAIN_MENU } from './mainMenuConstants';
 
 import {
@@ -23,6 +24,11 @@ const MainMenu = ({ setUIState }: Props) => {
     setUIState(KEY_BINDINGS, true);
   });
 
+  const openAudio = useCallback(() => {
+    setUIState(MAIN_MENU, false);
+    setUIState(AUDIO, true);
+  });
+
   const close = useCallback(() => setUIState(MAIN_MENU, false));
 
   return (
@@ -30,7 +36,7 @@ const MainMenu = ({ setUIState }: Props) => {
       <div className={content}>
         <Button onClick={close}>return to game</Button>
         <Button>video</Button>
-        <Button>audio</Button>
+        <Button onClick={openAudio}>audio</Button>
         <Button onClick={openKeyBindings}>key bindings</Button>
         <Button onClick={close}>exit</Button>
       </div>
