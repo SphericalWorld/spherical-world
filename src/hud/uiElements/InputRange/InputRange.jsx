@@ -3,18 +3,18 @@ import React, { useState } from 'react';
 import Label from '../Label';
 import {
   inputRange,
-  value,
+  valueLabel,
   valueDescript,
   formInputRange,
 } from './inputRange.module.scss';
 
 type Props = {|
-  +valueNum?: number;
+  +value?: number;
   +className?: string;
 |}
 
-const InputRange = ({ valueNum = 15, className = '' }: Props) => {
-  const [activeNumber, setActiveNumber] = useState(valueNum);
+const InputRange = ({ value = 15, className = '' }: Props) => {
+  const [activeNumber, setActiveNumber] = useState(value);
   const handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) =>
     setActiveNumber(parseInt(e.currentTarget.value, 10));
 
@@ -33,7 +33,7 @@ const InputRange = ({ valueNum = 15, className = '' }: Props) => {
         className={inputRange}
       />
       <div className={valueDescript}>
-        <Label className={value}>{activeNumber}</Label>
+        <Label className={valueLabel}>{activeNumber}</Label>
       </div>
     </div>
   );
