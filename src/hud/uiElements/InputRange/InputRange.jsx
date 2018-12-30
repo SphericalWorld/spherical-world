@@ -1,16 +1,20 @@
-// @flow strct
+// @flow strict
 import React, { useState } from 'react';
 import Label from '../Label';
 import {
   inputRange,
   value,
   valueDescript,
-  mark,
-  markMin,
+  formInputRange,
 } from './inputRange.module.scss';
 
-const InputRange = () => {
-  const [activeNumber, setActiveNumber] = useState(15);
+type Props = {|
+  +valueNum?: number;
+  +className?: string;
+|}
+
+const InputRange = ({ valueNum = 15, className = '' }: Props) => {
+  const [activeNumber, setActiveNumber] = useState(valueNum);
   const handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) =>
     setActiveNumber(parseInt(e.currentTarget.value, 10));
 
@@ -18,11 +22,7 @@ const InputRange = () => {
   const max = 100;
   const step = 5;
   return (
-    <div>
-      <div className={mark}>
-        <Label className={markMin}>{min}</Label>
-        <Label>{max}</Label>
-      </div>
+    <div className={`${formInputRange} ${className}`}>
       <input
         type="range"
         min={min}
@@ -33,7 +33,6 @@ const InputRange = () => {
         className={inputRange}
       />
       <div className={valueDescript}>
-        <Label>value: </Label>
         <Label className={value}>{activeNumber}</Label>
       </div>
     </div>

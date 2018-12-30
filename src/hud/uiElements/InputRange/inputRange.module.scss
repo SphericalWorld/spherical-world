@@ -3,27 +3,24 @@
 @import '../../styles/sizes';
 
 
-$track-color: $primary !default;
-$thumb-color: $secondary !default;
-$border-color-input-range: lighten($background-color-slot, 0.9);
-$radius: 1em !default;
+$track-color: transparent !default;
+$thumb-color: $primary !default;
+$radius: 0.1em !default;
 $border-width: 0.1em !default;
 
 $track-radius: $radius;
 $track-width: 100% !default;
 $track-height: 0.5em !default;
 $track-border-width: $border-width;
-$track-border-color: $border-color-input-range !default;
+$track-border-color: lighten($primary, 0.9) !default;
 
 $thumb-radius: $radius;
-$thumb-height: $track-height * 2.5;
-$thumb-width: $thumb-height * 2;
+$thumb-height: $track-height * 4;
+$thumb-width: $thumb-height * 0.5;
 $thumb-border-width: $border-width;
-$thumb-border-color: $border-color-input-range !default;
+$thumb-border-color: $primary !default;
 
 $contrast: 10% !default;
-
-$ie-bottom-track-color: darken($track-color, $contrast) !default;
 
 @mixin track {
   cursor: default;
@@ -33,9 +30,12 @@ $ie-bottom-track-color: darken($track-color, $contrast) !default;
 }
 
 @mixin thumb {
-  background: $thumb-color;
+  background: linear-gradient($primary 60%, transparent 40%);
+  background-color: rgb(0, 0, 0);
+  background-size: 1em 0.55em;
   border: $thumb-border-width solid $thumb-border-color;
   border-radius: $thumb-radius;
+  border-width: $thumb-border-width 0.15em;
   cursor: default;
   height: $thumb-height;
   width: $thumb-width;
@@ -79,31 +79,6 @@ $ie-bottom-track-color: darken($track-color, $contrast) !default;
   &::-moz-range-thumb {
     @include thumb;
   }
-
-  &::-ms-track {
-    @include track;
-    background: transparent;
-    border-color: transparent;
-    border-width: ($thumb-height / 2) 0;
-    color: transparent;
-  }
-
-  &::-ms-fill-lower {
-    background: $ie-bottom-track-color;
-    border: $track-border-width solid $track-border-color;
-    border-radius: ($track-radius * 2);
-  }
-
-  &::-ms-fill-upper {
-    background: $track-color;
-    border: $track-border-width solid $track-border-color;
-    border-radius: ($track-radius * 2);
-  }
-
-  &::-ms-thumb {
-    @include thumb;
-    margin-top: $track-height / 4;
-  }
 }
 
 .value {
@@ -111,16 +86,15 @@ $ie-bottom-track-color: darken($track-color, $contrast) !default;
 }
 
 .valueDescript {
+  flex: 1 0 10%;
+  margin-left: 1em;
   user-select: none;
 }
 
-.mark {
+.formInputRange {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  user-select: none;
+  justify-content: center;
 }
 
-.markMin {
-  margin-right: auto;
-}

@@ -1,2 +1,2 @@
-// @flow strct
+// @flow strict
 export { default } from './InputRange';
