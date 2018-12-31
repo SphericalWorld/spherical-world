@@ -6,7 +6,6 @@ import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
 import { setUIState as doSetUIState } from '../../utils/StateRouter';
-
 import {
   inventory,
   inventorySlots,
@@ -54,7 +53,14 @@ const Inventory = ({ setUIState, slots }: Props) => {
       <div>
         <div className={inventory}>
           <ul className={inventorySlots}>
-            { slots.map(slot => <InventorySlot slot={slot || undefined} />)}
+            { slots.map(slot => (
+              <InventorySlot
+                slot={slot || undefined}
+                draggable
+                draggableMeta={{ source: 'inventory' }}
+                onDrop={e => console.log(e)}
+              />
+            ))}
             { slots.map(() => <li className={`${slotStyle} ${empty}`} />)}
           </ul>
         </div>

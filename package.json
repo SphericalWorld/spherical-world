@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.2.0",
     "babel-eslint": "^10.0.1",
+    "classnames": "^2.2.6",
     "gl-matrix": "^2.8.1",
     "pako": "^1.0.7",
     "react": "16.7.0-alpha.2",
@@ -14,6 +15,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
     "redux-thunk": "^2.3.0",
+    "reselect": "^4.0.0",
     "seedrandom": "^2.4.4",
     "uuid": "^3.3.2",
     "ws": "^6.1.2",
