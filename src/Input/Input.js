@@ -4,6 +4,7 @@ import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import type { InputContext } from './InputContext';
 import type { InputContexts } from './inputContexts';
+import type { EventTypes } from '../../common/constants/input/eventTypes';
 import InputEvent from './InputEvent';
 import {
   activate, deactivate, getMappedInputEvent, setKey as setContextKey,
@@ -72,7 +73,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
 declare var tmp: $Call<typeof inputProvider, InputContext[]>;
 export type Input = tmp;
 
-export const setKey = (input: Input, key, actionType) => {
+export const setKey = (input: Input, key, actionType: EventTypes) => {
   const action = Object.values(events).find(e => e.action === actionType);
   const context = input.contexts.find(el => el.eventTypes.has(action));
   if (context) {

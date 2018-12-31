@@ -2,8 +2,8 @@
 import type { Store } from 'redux';
 import shallowEqual from './shallowEqual';
 
-const connect = <A: {}, B: {}>(mapState: A => B, store: Store<A, any>): ((B => mixed) => *) => {
-  return function decorator(handler: B => mixed) {
+const connect = <A: {}, B: {}, S>(mapState: A => B, store: Store<A, S>): ((B => mixed) => *) =>
+  (handler: B => mixed) => {
     let prevProps = mapState(store.getState());
     store.subscribe(() => {
       const nextProps = mapState(store.getState());
@@ -17,6 +17,5 @@ const connect = <A: {}, B: {}>(mapState: A => B, store: Store<A, any>): ((B => m
     handler(prevProps);
     return handler;
   };
-};
 
 export default connect;

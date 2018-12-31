@@ -41,7 +41,10 @@ export const createContext = ({ type, active, eventTypes }: {|
 export const activate = (context: InputContext) => ({ ...context, active: true });
 export const deactivate = (context: InputContext) => ({ ...context, active: false });
 
-export const getMappedInputEvent = (events: HashMap<string, MappedEvent>, inputEvent: InputEvent): Maybe<GameEvent> => events
+export const getMappedInputEvent = (
+  events: HashMap<string, MappedEvent>,
+  inputEvent: InputEvent,
+): Maybe<GameEvent> => events
   .get(inputEvent.name)
   .chain(({
     type, data, gameEvent, onEnd,

@@ -18,10 +18,8 @@ import {
 import { setKey } from '../Input/Input';
 
 const mapState = ({
-  hudData: { states },
   keyBindings,
 }) => ({
-  states,
   keyBindings,
 });
 

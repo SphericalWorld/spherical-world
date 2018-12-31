@@ -77,9 +77,12 @@ export default class Texture {
     return texture;
   }
 
-  static createFromCanvas(params: Object): Texture {
-    const glTexture = makeTexture(params.canvas, gl.TEXTURE_2D, params.type);
-    const texture = new this(null, glTexture, params.atlasId);
+  static createFromCanvas(params: {
+    canvas: HTMLCanvasElement,
+    name: string,
+  }): Texture {
+    const glTexture = makeTexture(params.canvas, gl.TEXTURE_2D);
+    const texture = new this(null, glTexture);
     texture.name = params.name;
     return texture;
   }

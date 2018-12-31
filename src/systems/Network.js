@@ -45,7 +45,7 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
   onLoadControlSettings(ecs, input, store);
 
   let lastUpdate = Date.now();
-  const networkSystem = (delta: number) => {
+  const networkSystem = () => {
     const result = [];
     if (Date.now() > lastUpdate + 100) { // TODO: replace Date.now() by global engine tick time
       lastUpdate = Date.now();
