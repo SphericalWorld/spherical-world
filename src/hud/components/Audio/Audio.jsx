@@ -16,10 +16,6 @@ import {
   footerButtons,
   label,
   cbEnSound,
-  master,
-  effect,
-  ambient,
-  volume,
   labelVolume,
   inputVolume,
   volumes,
@@ -38,15 +34,15 @@ const Audio = ({ setUIState }: Props) => {
           <Checkbox size="big"> enable sound</Checkbox>
         </div>
         <div className={volumes}>
-          <div className={`${master} ${volume}`}>
+          <div>
             <Label size="big" className={labelVolume}>Master Volume</Label>
             <InputRange value={30} className={inputVolume} />
           </div>
-          <div className={`${effect} ${volume}`}>
+          <div>
             <Label size="big" className={labelVolume}>Effect Volume</Label>
             <InputRange value={50} className={inputVolume} />
           </div>
-          <div className={`${ambient} ${volume}`}>
+          <div>
             <Label size="big" className={labelVolume}>Ambient Volume</Label>
             <InputRange value={100} className={inputVolume} />
           </div>
