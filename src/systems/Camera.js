@@ -7,11 +7,12 @@ import type { World } from '../../common/ecs';
 import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
-import { gl, unproject } from '../engine/glEngine';
+import { gl } from '../engine/glEngine';
 import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
+import { unproject } from '../../common/utils/vector';
 
 const resizeViewport = (viewport: Viewport): Viewport => {
   const width = gl.canvas.clientWidth;

@@ -32,9 +32,11 @@ const onLoadControlSettings = (ecs: World, input: Input, store) => ecs.events
 
 export default (ecs: World, network: Network, input: Input, store: Store): System => {
   const player = ecs.createSelector([Transform, Camera]);
-  const events = ecs.events
+  ecs.events
     .filter(el => el.network === true)
-    .subscribeQueue();
+    .subscribe(({ type, payload }) => {
+      network.emit(type, payload);
+    });
 
   network.events
     .subscribe(({ type, payload: { data } }) => {
@@ -55,10 +57,6 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
           .map(el => [el.id, el.transform]),
       }]);
     }
-    for (const event of events.events) {
-      network.emit(event.type, event.payload);
-    }
-    events.clear();
     return result;
   };
   return networkSystem;

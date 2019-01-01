@@ -120,25 +120,28 @@ const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, color, chunk) => {
   let s1 = 0;
   let s2f = 0;
   let s2 = 0;
+  let iRes = i;
+  let jRes = j;
+  let kRes = k;
   if (ii) {
     [s2f, s2] = getLight(i, j, k + u, chunk);
     [s1f, s1] = getLight(i, j + v, k, chunk);
-    j += v;
-    k += u;
+    jRes += v;
+    kRes += u;
   } else if (jj) {
     [s2f, s2] = getLight(i, j, k + u, chunk);
     [s1f, s1] = getLight(i + v, j, k, chunk);
-    i += v;
-    k += u;
+    iRes += v;
+    kRes += u;
   } else if (kk) {
     [s2f, s2] = getLight(i, j + u, k, chunk);
     [s1f, s1] = getLight(i + v, j, k, chunk);
-    i += v;
-    j += u;
+    iRes += v;
+    jRes += u;
   }
 
   if (s1 !== -1 || s2 !== -1) {
-    [cf, c] = getLight(i, j, k, chunk);
+    [cf, c] = getLight(iRes, jRes, kRes, chunk);
   }
   const [
     r, g, b, vGlobal,
