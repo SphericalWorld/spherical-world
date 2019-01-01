@@ -1,7 +1,6 @@
 // @flow strict
 import React, { useState } from 'react';
 import {
-  customSelect,
   select,
 } from './select.module.scss';
 
@@ -23,7 +22,7 @@ const Select = <ValueType>({ options, onSelect }: Props<ValueType>) => {
   };
 
   return (
-    <div className={customSelect}>
+    <div>
       <select className={select} onChange={handleInputChange} value={selectedValue}>
         {
         options.map((item, index) => (
