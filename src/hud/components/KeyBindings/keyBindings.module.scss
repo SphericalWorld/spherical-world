@@ -50,7 +50,7 @@
 
 .command > * {
   flex: 0 1 33%;
-  margin: 0;
+  margin: 0 0.1em;
 }
 
 .label,
@@ -86,10 +86,9 @@
 }
 
 .footerButtons > * {
-  flex: 0 1 30%;
-  margin: 0;
+  @extend %footer-buttons;
 }
 
 .footerButtons > .label {
-  flex: 0 1 15%;
+  @extend %footer-buttons-label;
 }

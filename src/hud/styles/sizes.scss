@@ -54,6 +54,8 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
     inset 0 $size-of-shadow $size-of-shadow transparentize($glass, 0.75);
 }
 
+// footer - audio, video
+
 %footer-flex {
   border-top: $border-key-bindings;
   display: flex;
@@ -61,3 +63,15 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
   flex-direction: row;
   padding: 0.5em;
 }
+
+// footerButtons - keybindings, audio, video
+
+%footer-buttons {
+  flex: 0 1 30%;
+  margin: 0 0.1em;
+}
+
+%footer-buttons-label {
+  flex: 0 1 15%;
+}
+
