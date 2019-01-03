@@ -53,3 +53,11 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
     inset 0 0 $size-of-shadow transparentize($glass, 0.75),
     inset 0 $size-of-shadow $size-of-shadow transparentize($glass, 0.75);
 }
+
+%footer-flex {
+  border-top: $border-key-bindings;
+  display: flex;
+  flex: 0 1 8%;
+  flex-direction: row;
+  padding: 0.5em;
+}

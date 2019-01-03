@@ -16,11 +16,6 @@
   width: 30em;
 }
 
-.cbEnSound {
-  padding: 0 1em;
-  /*flex: 0 1 10%;*/
-}
-
 .volumes {
   @extend %flex;
   flex: 0 1 90%;
@@ -40,11 +35,8 @@
 }
 
 .footerButtons {
-  border-top: $border-key-bindings;
-  display: flex;
-  /*flex: 0 1 10%;*/
-  flex-direction: row;
-  padding: 0.5em;
+  @extend %footer-flex;
+  flex: 0 1 7%;
 }
 
 .footerButtons > * {
