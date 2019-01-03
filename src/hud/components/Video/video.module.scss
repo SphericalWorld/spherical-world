@@ -40,12 +40,11 @@
 }
 
 .footerButtons > * {
-  flex: 0 1 30%;
-  margin: 0;
+  @extend %footer-buttons;
 }
 
 .footerButtons > .label {
-  flex: 0 1 15%;
+  @extend %footer-buttons-label;
 }
 
 
