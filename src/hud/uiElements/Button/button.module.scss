@@ -6,13 +6,10 @@
   background-color: transparentize($primary, 0.3);
   border: $px1 solid transparentize($background-main-menu, 0.5);
   border-radius: $px1*3;
-  box-shadow:
-    -0.01em 0.06em 0.06em transparentize($primary, 0.3),
-    inset 0 0.01em transparentize($glass, 0.3),
-    inset 0 0.06em 0.6em transparentize($glass, 0.3),
-    inset 0 -0.2em 1em transparentize($shadow, 0.3);
   color: $font-color-main-menu;
-  text-align: center;
+  cursor: pointer;
+  padding: 0.3em auto;
+  text-decoration: none;
   text-shadow:
     -$px1 -$px1 0 $shadow,
     $px1 -$px1 0 $shadow,
@@ -24,16 +21,12 @@
 }
 
 .button:hover {
-  background-color: transparentize($primary, 0.2);
+  background-color: transparentize($primary, 0.1);
 }
 
 .button:active {
-  box-shadow:
-    -0.01em 0.06em 0.06em transparentize($shadow, 0.5),
-    inset 0 0.01em transparentize($glass, 0.3),
-    inset 0 0.06em 0.6em transparentize($glass, 0.3),
-    inset 0 -0.2em 1em transparentize($shadow, 0.3);
-  transform: translateY(0.05em);
+  position: relative;
+  top: 1px;
 }
 
 button:focus {
