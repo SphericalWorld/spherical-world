@@ -66,12 +66,13 @@
 .footer {
   border-top: $border-key-bindings;
   display: flex;
-  flex: 0 1 15%;
+  flex: 0 1 20%;
   flex-direction: column;
   justify-content: center;
 }
 
 .helpLine {
+  flex: 0 1 25%;
   padding: 0.3em;
   user-select: none;
 }
@@ -79,6 +80,7 @@
 .footerButtons {
   border-top: $border-key-bindings;
   display: flex;
+  flex: 0 1 30%;
   flex-direction: row;
   padding: 0.5em;
 }
