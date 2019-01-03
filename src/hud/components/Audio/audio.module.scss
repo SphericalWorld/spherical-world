@@ -40,11 +40,7 @@
 }
 
 .footerButtons {
-  border-top: $border-key-bindings;
-  display: flex;
-  /*flex: 0 1 10%;*/
-  flex-direction: row;
-  padding: 0.5em;
+  @extend %footer-flex;
 }
 
 .footerButtons > * {
