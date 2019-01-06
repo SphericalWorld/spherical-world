@@ -1,5 +1,5 @@
 // @flow strict
-import React from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
@@ -15,25 +15,35 @@ import {
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
+import { swapSlots as doSwapSlots } from '../Inventory/inventoryActions';
 
-type StateProps = {|
+type MappedProps = {|
   +slots: $ReadOnlyArray<InventorySlotDetails | null>;
   +selectedItemIndex: number;
 |};
 
-type Props = StateProps;
+type DispatchProps = {|
+  +swapSlots: typeof doSwapSlots,
+|};
 
-const MainPanel = ({ slots, selectedItemIndex }: Props) => {
+type Props = {| ...MappedProps, ...DispatchProps |};
+
+const MainPanel = ({ slots, selectedItemIndex, swapSlots }: Props) => {
+  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id));
+
   return (
     <section className={mainPanelSection}>
       <div className={mainPanel}>
         <ul className={itemsContainer}>
           { slots.map((slot, index) => (
             <InventorySlot
+              position={index}
               key={index}
               slot={slot || undefined}
               selected={index === selectedItemIndex}
+              draggableMeta={{ source: 'mainPanel' }}
               draggable
+              onDrop={swap}
             />))}
         </ul>
         <div className={pagination}>
@@ -61,4 +71,8 @@ const mapState = state => ({
   slots: slotsSelector(state),
 });
 
-export default connect<Props, {||}, _, _, State, _>(mapState, null)(MainPanel);
+const mapActions = {
+  swapSlots: doSwapSlots,
+};
+
+export default connect<Props, {||}, _, _, State, _>(mapState, mapActions)(MainPanel);

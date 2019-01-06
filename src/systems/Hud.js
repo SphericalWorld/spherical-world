@@ -19,8 +19,10 @@ import { setKey } from '../Input/Input';
 
 const mapState = ({
   keyBindings,
+  hudData: { player: { inventory } },
 }) => ({
   keyBindings,
+  inventory,
 });
 
 const onMenuToggled = (events, toggleUIState) => events
@@ -35,17 +37,23 @@ const onDispatchableEvent = (events, dispatchableEvents, store) => events
   .filter(e => dispatchableEvents.has(e.type))
   .subscribe(e => store.dispatch(e));
 
-const onStateChanged = input => ({ keyBindings }) => {
-  if (keyBindings.editing) {
-    input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
-    input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
-    input.activateContext(KEY_BINDING_CONTEXT);
-  } else {
-    input.activateContext(GAMEPLAY_MENU_CONTEXT);
-    input.deactivateContext(KEY_BINDING_CONTEXT);
-    setKey(input, keyBindings.key, keyBindings.action);
-  }
-};
+const onStateChanged = (input, player) =>
+  ({ keyBindings: { editing }, inventory: inventoryOld }, { keyBindings, inventory }) => {
+    if ((inventoryOld !== inventory) && player[0]) {
+      player[0].inventory.data = inventory;
+    }
+    if (keyBindings.editing !== editing) {
+      if (keyBindings.editing) {
+        input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
+        input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
+        input.activateContext(KEY_BINDING_CONTEXT);
+      } else {
+        input.activateContext(GAMEPLAY_MENU_CONTEXT);
+        input.deactivateContext(KEY_BINDING_CONTEXT);
+        setKey(input, keyBindings.key, keyBindings.action);
+      }
+    }
+  };
 
 export default (
   ecs: World,
@@ -60,7 +68,7 @@ export default (
   onMenuToggled(ecs.events, toggleUIState);
   onInventoryToggled(ecs.events, toggleUIState);
   onDispatchableEvent(ecs.events, dispatchableEvents, store);
-  connect(mapState, store)(onStateChanged(input));
+  connect(mapState, store)(onStateChanged(input, player));
 
   return () => {
     updateHudData({

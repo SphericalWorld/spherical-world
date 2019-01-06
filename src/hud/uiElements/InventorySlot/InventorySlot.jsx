@@ -26,6 +26,7 @@ type Props = {|
   +draggable?: boolean,
   +onDrop?: any => mixed,
   +draggableMeta?: mixed,
+  +position?: number,
 |};
 
 const images = {
@@ -37,12 +38,20 @@ const SLOT: 'INVENTORY_SLOT' = 'INVENTORY_SLOT';
 
 const dragOptions = {
   active: ({ draggable, slot }) => slot && draggable,
-  item: ({ slot, draggableMeta }) => ({ id: slot && slot.id, draggableMeta }),
+  item: ({
+    slot,
+    draggableMeta,
+    position,
+  }) => ({
+    id: slot && slot.id,
+    from: position,
+    draggableMeta,
+  }),
 };
 
 const dropOptions = {
   active: ({ draggable, isDragging }) => draggable && !isDragging,
-  onDrop: ({ onDrop = () => null }) => onDrop,
+  onDrop: ({ onDrop, position }) => (data) => onDrop && onDrop({ ...data, to: position }),
 };
 
 const InventorySlot = (props: Props) => {

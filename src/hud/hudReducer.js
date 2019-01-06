@@ -4,7 +4,7 @@ import type { Inventory } from '../../common/Inventory';
 import { createReducer } from '../util/reducerUtils';
 import { HUD_DATA_UPDATED } from './hudConstants';
 
-type HUDState = {|
+export type HUDState = {|
   mainPlayerId: ?string,
   player: {
     position: Vec3,

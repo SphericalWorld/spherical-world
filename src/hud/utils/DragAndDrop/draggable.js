@@ -1,5 +1,5 @@
 // @flow strict
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dragStore from './dragStore';
 
 type Options<Props> = {|
@@ -21,9 +21,6 @@ export const useDraggable = <Props>(
 ): Result => {
   const [isDragging, setIsDragging] = useState(false);
 
-  if (!options.active(props)) {
-    return { isDragging: false, draggable: false };
-  }
   const onDragStart = (e: DragEvent) => {
     if (!e.dataTransfer) return false;
     e.dataTransfer.setData('text/plain', '');
@@ -39,6 +36,17 @@ export const useDraggable = <Props>(
     dragStore.type = '';
     return false;
   };
+
+  useEffect(
+    () => {
+      onDragEnd();
+    },
+    [props],
+  );
+
+  if (!options.active(props)) {
+    return { isDragging: false, draggable: false };
+  }
 
   return {
     draggable: true, isDragging, onDragStart, onDragEnd,

@@ -2,8 +2,8 @@
 import type { Store } from 'redux';
 import shallowEqual from './shallowEqual';
 
-const connect = <A: {}, B: {}, S>(mapState: A => B, store: Store<A, S>): ((B => mixed) => *) =>
-  (handler: B => mixed) => {
+const connect = <A: {}, B: {}, S>(mapState: A => B, store: Store<A, S>): (((B, B) => mixed) => *) =>
+  (handler: (B, B) => mixed) => {
     let prevProps = mapState(store.getState());
     store.subscribe(() => {
       const nextProps = mapState(store.getState());
@@ -12,9 +12,9 @@ const connect = <A: {}, B: {}, S>(mapState: A => B, store: Store<A, S>): ((B => 
       }
       const arg = prevProps; // needed in case if update will throw and fall down to infinite loop
       prevProps = nextProps;
-      handler(arg);
+      handler(arg, nextProps);
     });
-    handler(prevProps);
+    handler(prevProps, prevProps);
     return handler;
   };
 

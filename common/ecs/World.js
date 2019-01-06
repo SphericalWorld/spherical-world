@@ -77,8 +77,10 @@ export default class World {
     const changedData = new Map();
     this.systems
       .map(system => system(delta / 1000))
-      .filter(changedComponents => changedComponents)
       .forEach((changedComponents) => {
+        if (!changedComponents) {
+          return;
+        }
         for (const [id, ...components] of changedComponents) {
           for (const component of components) {
             let el = changedData.get(component.constructor);
