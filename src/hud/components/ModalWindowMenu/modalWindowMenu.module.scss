@@ -63,7 +63,7 @@
   @extend %font-main;
   background: transparentize($background-main-menu, 0.01);
   border: $px1*3 ridge transparentize($primary, 0.3);
-  border-radius: 0.6em;
+  border-radius: 0.2em;
   box-shadow:
     0 0.06em 0.06em transparentize($shadow, 0.3),
     inset 0 0.01em transparentize($glass, 0.3),
