@@ -55,7 +55,7 @@ const dropOptions = {
 };
 
 const InventorySlot = (props: Props) => {
-  const { slot = {}, selected } = props;
+  const { slot = {}, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, { ...props, isDragging });
 

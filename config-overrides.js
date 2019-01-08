@@ -20,7 +20,7 @@ module.exports = function override(config, env) {
   });
   config.output = {
     ...config.output,
-    globalObject: 'this'
+    globalObject: 'this',
   };
   const assetLoaders = config.module.rules[config.module.rules.length - 1].oneOf;
   assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, 'css-modules-flow-types-loader');

@@ -79,7 +79,7 @@ const calcRecursion = (
     ((y > 0) && updateIfLight(index - SLICE, lightTmp, chunk, x, y - 1, z, limit)));
 
   const calcRecursionInternal = (
-    chunk: Chunk, x: number, y: number, z: number, limit?: number,
+    chunk: Chunk, x: number, y: number, z: number, limit?: number = 0,
   ) => {
     if (!limit) {
       return;
@@ -98,7 +98,7 @@ const calcRecursion = (
     x: number,
     y: number,
     z: number,
-    limit?: number,
+    limit?: number = 0,
   ) => {
     if (!limit) {
       return;

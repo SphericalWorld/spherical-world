@@ -18,12 +18,10 @@ const drawImage = (
   center?: boolean = false,
 ) => {
   context.save();
-  if (center) {
-    x -= width / 2;
-    y -= height / 2;
+  if (!center) {
+    context.translate(x + (width / 2), y + (height / 2));
   }
 
-  context.translate(x + (width / 2), y + (height / 2));
   context.rotate((2 * Math.PI) - ((deg * Math.PI) / 180));
   const flipScale = flip ? -1 : 1;
   const flopScale = flop ? -1 : 1;
@@ -45,13 +43,6 @@ class GlTextureLibrary {
     }
     this.textureCanvas = textureCanvas;
     this.ctx = this.textureCanvas.getContext('2d');
-
-    this.animTexCount = 0;
-    for (const texture of this.textures.values()) {
-      if (texture.animation && texture.animation.atlas) {
-        this.animTexCount += 1;
-      }
-    }
   }
 
   makeTextureFromText(textToWrite: string, textSize: number = 56) {

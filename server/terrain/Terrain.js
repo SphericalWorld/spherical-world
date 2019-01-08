@@ -14,7 +14,7 @@ type Position3D = {|
   z: number,
 |};
 
-export default (
+const createTerrain = (
   createItem: CreateItem,
 ) => class Terrain {
   locationName: string;
@@ -142,3 +142,8 @@ export default (
     createItem(null, vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)));
   }
 };
+
+declare var tmp: $Call<typeof createTerrain, *>;
+export type Terrain = tmp;
+
+export default createTerrain;
