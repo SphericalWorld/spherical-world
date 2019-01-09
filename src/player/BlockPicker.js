@@ -13,14 +13,14 @@ const blockPickerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockRemover: CreateBlockRemover,
-) => (id: Entity): Entity => {
+) => (parent: Entity): Entity => {
   const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });
 
   const picker = ecs.createEntity(
-    id,
-    new Transform(0, 64, 0),
+    null,
+    new Transform(0, 64, 0, parent),
     new Visual(object),
     new Raytracer(),
     new Player(),

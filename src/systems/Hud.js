@@ -33,8 +33,8 @@ const onInventoryToggled = (events, toggleUIState) => events
   .filter(e => e.type === INVENTORY_TOGGLED)
   .subscribe(() => toggleUIState(INVENTORY));
 
-const onDispatchableEvent = (events, dispatchableEvents, store) => events
-  .filter(e => dispatchableEvents.has(e.type))
+const onDispatchableEvent = (events, store) => events
+  .filter(e => e.dispatchable)
   .subscribe(e => store.dispatch(e));
 
 const onStateChanged = (input, player) =>
@@ -58,7 +58,6 @@ const onStateChanged = (input, player) =>
 export default (
   ecs: World,
   store: Store,
-  dispatchableEvents: Set<string>,
   input: Input,
 ): System => {
   const player = ecs.createSelector([Transform, UserControlled, Inventory]);
@@ -67,7 +66,7 @@ export default (
 
   onMenuToggled(ecs.events, toggleUIState);
   onInventoryToggled(ecs.events, toggleUIState);
-  onDispatchableEvent(ecs.events, dispatchableEvents, store);
+  onDispatchableEvent(ecs.events, store);
   connect(mapState, store)(onStateChanged(input, player));
 
   return () => {

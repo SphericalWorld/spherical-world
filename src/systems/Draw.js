@@ -21,8 +21,8 @@ export default (world: World, terrain: Terrain, time: Time): System => {
   const skyboxes = world.createSelector([Transform, Visual, Skybox]);
   const cameras = world.createSelector([Camera, Transform]);
   const mvMatrixStack = [];
-  let mvMatrix: Mat4 = null;
-  let pMatrix: Mat4 = null;
+  let mvMatrix: Mat4 = mat4.create();
+  let pMatrix: Mat4 = mat4.create();
   let currentShader: GlShaderProgram = null;
   const skyColorGradient: Gradient = new Gradient([[0, 0x8cd3ff], [33, 0xffe899], [53, 0xff8b56], [87, 0x1C1C7C], [100, 0x1a1a1a]]);
   const lightColorGradient: Gradient = new Gradient([[0, 0xFFFFFF], [15, 0xEDEDC9], [28, 0xffffd8], [40, 0xDBBB48], [57, 0x893C18], [71, 0x41035B], [87, 0x1C1C5B], [100, 0x1a1a1a]]);
@@ -56,8 +56,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
 
   const drawSystem = () => {
     const [{ camera, transform: cameraPosition }] = cameras;
-    mvMatrix = camera.mvMatrix;
-    pMatrix = camera.viewport.pMatrix;
+    ({ mvMatrix, viewport: { pMatrix } } = camera);
 
     const chunksToRender = getVisibleChunks(terrain, pMatrix, mvMatrix);
     // terrain.material.shader.use()

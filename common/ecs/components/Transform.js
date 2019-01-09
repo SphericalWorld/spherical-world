@@ -4,6 +4,8 @@ import type { Component } from '../Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
 
+const PARENT = Symbol('parent');
+
 export default class Transform implements Component, Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'transform' = 'transform';
@@ -12,11 +14,13 @@ export default class Transform implements Component, Networkable {
 
   translation: Vec3 = [0, 0, 0];
   rotation: Quat = [0, 0, 0, 1];
+  [PARENT]: any;
 
-  constructor(x: number = 0, y: number = 0, z: number = 0) {
+  constructor(x: number = 0, y: number = 0, z: number = 0, parent?: any) {
     this.translation[0] = x;
     this.translation[1] = y;
     this.translation[2] = z;
+    this[PARENT] = parent;
   }
 
   static deserialize(data: Transform): Transform {
@@ -25,5 +29,9 @@ export default class Transform implements Component, Networkable {
 
   serialize(): mixed {
     return this;
+  }
+
+  getParent() {
+    return this[PARENT];
   }
 }

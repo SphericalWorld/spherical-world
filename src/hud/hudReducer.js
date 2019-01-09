@@ -19,6 +19,7 @@ const initialState = {
     inventory: {
       items: {},
       slots: [],
+      selectedItem: null,
     },
   },
 };

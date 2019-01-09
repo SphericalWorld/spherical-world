@@ -73,7 +73,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
 declare var tmp: $Call<typeof inputProvider, InputContext[]>;
 export type Input = tmp;
 
-export const setKey = (input: Input, key, actionType: EventTypes) => {
+export const setKey = (input: Input, key: string, actionType: EventTypes) => {
   const action = Object.values(events).find(e => e.action === actionType);
   const context = input.contexts.find(el => el.eventTypes.has(action));
   if (context) {

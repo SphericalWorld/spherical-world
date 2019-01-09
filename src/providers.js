@@ -12,7 +12,6 @@ import shaderLibraryProvider from './engine/ShaderLibrary';
 import materialLibraryProvider from './engine/Material/MaterialLibrary';
 import materialsProvider from './materials';
 import shadersProvider from './shaders';
-// import inventoryProvider from './player/Inventory';
 import blockRemoverProvider from './player/BlockRemover';
 import blockPickerProvider from './player/BlockPicker';
 import skyboxProvider from './skybox';
@@ -25,7 +24,6 @@ import timeProvider from './Time/Time';
 import { World } from '../common/ecs';
 
 import * as componentsProvider from './components';
-import * as events from './Input/events';
 
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
 
@@ -84,15 +82,13 @@ const mainProvider = async (store: Store, network: Network, physicsThread: Worke
   const terrain = getTerrain(textureLibrary, materialLibrary);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
-  // const Inventory = inventoryProvider(store);
   const Player = playerProvider(world, materialLibrary, BlockPicker);
   itemProvider(world, materialLibrary);
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch(event => world.dispatch(event));
-  const dispatchableEvents = new Set(Object.values(events).filter(e => e.dispatchable).map(e => e.gameEvent));
-  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store, dispatchableEvents));
+  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
 
   return Main(store, network, Player, new ResourceLoader(), world, Skybox);
 };

@@ -7,7 +7,7 @@ import type { State } from '../reducers/rootReducer';
 import rootReducer from '../reducers/rootReducer';
 
 
-export default function configureStore(preloadedState): Store<State, any> {
+export default function configureStore(preloadedState: ?State): Store<State, any> {
   const middlewares = [thunk];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 

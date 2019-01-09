@@ -25,12 +25,25 @@ const getPutBlockEvents = (world: World, picker) => world.events
   .subscribe(() => {
     const { emptyBlock, face } = picker[0].raytracer;
     if (emptyBlock) {
+      const inventory = picker[0].transform.getParent().inventory.data;
+      const item = inventory.items[inventory.selectedItem];
+      if (!item || !item.count) {
+        return;
+      }
+      item.count -= 1;
+      if (!item.count) {
+        const { [inventory.selectedItem]: toRemove, ...newItems } = inventory.items;
+        inventory.items = newItems;
+      } else {
+        inventory.items = { ...inventory.items };
+      }
       world.createEventAndDispatch(PLAYER_PUT_BLOCK, {
         flags: face,
         geoId: emptyBlock.geoId,
         position: Array.from(emptyBlock.position),
         positionInChunk: Array.from(emptyBlock.positionInChunk),
-        blockId: 128,
+        blockId: item.itemTypeId,
+        itemId: item.id,
       }, true);
     }
   });

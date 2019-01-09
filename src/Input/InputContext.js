@@ -47,26 +47,26 @@ export const getMappedInputEvent = (
 ): Maybe<GameEvent> => events
   .get(inputEvent.name)
   .chain(({
-    type, data, gameEvent, onEnd,
+    type, data, gameEvent, onEnd, dispatchable,
   }: MappedEvent) => {
     const payload = data && data(inputEvent);
     switch (type) {
       case INPUT_TYPE_ACTION:
         if (inputEvent.status === STATE_DOWN) {
-          return Just({ type: gameEvent, payload });
+          return Just({ type: gameEvent, payload, dispatchable });
         }
         return Nothing;
       case INPUT_TYPE_STATE:
         if (inputEvent.status === STATE_DOWN) {
-          return Just({ type: gameEvent, payload });
+          return Just({ type: gameEvent, payload, dispatchable });
         }
-        return Just({ type: onEnd, payload });
+        return Just({ type: onEnd, payload, dispatchable });
       case INPUT_TYPE_RANGE:
-        return Just({ type: gameEvent, payload });
+        return Just({ type: gameEvent, payload, dispatchable });
       default:
         return Nothing;
     }
   });
 
-export const setKey = (context: InputContext, key, event: MappedEvent) =>
+export const setKey = (context: InputContext, key: string, event: MappedEvent) =>
   context.events.set(key, event);

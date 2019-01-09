@@ -12,7 +12,7 @@ const putBlock = (
   plane: number,
 ): boolean => {
   const index = getIndex(x, y, z);
-  chunk.flags[index] = this.getFlags(plane);
+  chunk.flags[index] = identity(plane);
   if ((y !== 0) && (chunk.blocks[index - SLICE] !== 128)) {
     chunk.blocks[index] = value;
   }

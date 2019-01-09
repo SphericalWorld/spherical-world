@@ -13,8 +13,8 @@ export default class InventoryComponent implements Component, Networkable {
 
   data: Inventory
 
-  constructor({ slots, items }: Inventory = {}) {
-    this.data = createInventory({ slots, items });
+  constructor({ slots, items, selectedItem }: Inventory = {}) {
+    this.data = createInventory({ slots, items, selectedItem });
   }
 
   serialize(): mixed {

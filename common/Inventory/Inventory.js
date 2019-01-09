@@ -22,14 +22,17 @@ export type Slot = {|
 export type Inventory = {|
   slots: $ReadOnlyArray<SlotID | null>;
   items: $Shape<{| [SlotID]: Slot |}>;
+  selectedItem: ?SlotID;
 |};
 
 export const createInventory = ({
   slots = [],
   items = {},
+  selectedItem,
 }: Inventory): Inventory => ({
   slots,
   items,
+  selectedItem,
 });
 
 export const createStubItems = (): Inventory => ({
@@ -60,4 +63,5 @@ export const createStubItems = (): Inventory => ({
     'id4',
     'id5',
   ],
+  selectedItem: 'id1',
 });

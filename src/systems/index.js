@@ -22,14 +22,13 @@ export default (
   time: Time,
   input: Input,
   store: Store,
-  dispatchableEvents: Set<string>,
 ): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world),
   DayNightCycleSystem(world, time),
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
-  HudSystem(world, store, dispatchableEvents, input),
+  HudSystem(world, store, input),
   NetworkSystem(world, network, input, store),
   DropableSystem(world),
 ];

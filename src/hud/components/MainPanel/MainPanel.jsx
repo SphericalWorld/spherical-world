@@ -1,5 +1,5 @@
 // @flow strict
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
@@ -15,7 +15,10 @@ import {
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
-import { swapSlots as doSwapSlots } from '../Inventory/inventoryActions';
+import {
+  swapSlots as doSwapSlots,
+  selectInventoryItem as doSelectInventoryItem,
+} from '../Inventory/inventoryActions';
 
 type MappedProps = {|
   +slots: $ReadOnlyArray<InventorySlotDetails | null>;
@@ -24,12 +27,23 @@ type MappedProps = {|
 
 type DispatchProps = {|
   +swapSlots: typeof doSwapSlots,
+  +selectInventoryItem: typeof doSelectInventoryItem,
 |};
 
 type Props = {| ...MappedProps, ...DispatchProps |};
 
-const MainPanel = ({ slots, selectedItemIndex, swapSlots }: Props) => {
+const MainPanel = ({
+  slots, selectedItemIndex, swapSlots, selectInventoryItem,
+}: Props) => {
   const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id));
+  useEffect(
+    () => {
+      if (slots[selectedItemIndex]) {
+        selectInventoryItem(slots[selectedItemIndex].id);
+      }
+    },
+    [selectedItemIndex, slots],
+  );
 
   return (
     <section className={mainPanelSection}>
@@ -73,6 +87,7 @@ const mapState = state => ({
 
 const mapActions = {
   swapSlots: doSwapSlots,
+  selectInventoryItem: doSelectInventoryItem,
 };
 
 export default connect<Props, {||}, _, _, State, _>(mapState, mapActions)(MainPanel);

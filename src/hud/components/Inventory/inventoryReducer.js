@@ -1,13 +1,14 @@
 // @flow strict
 import type { Inventory } from '../../../../common/Inventory';
 import { createReducer } from '../../../util/reducerUtils';
-import { SWAP_INVENTORY_SLOTS } from './inventoryConstants';
+import { SWAP_INVENTORY_SLOTS, INVENTORY_ITEM_SELECTED } from './inventoryConstants';
 
 type InventoryState = Inventory
 
 const initialState = {
   items: {},
   slots: [],
+  selectedItem: null,
 };
 
 const swap = (arr, from, to) => {
@@ -23,6 +24,12 @@ const onUpdateHudData = (state, data) => ({
   slots: swap(state.slots, data.from, data.to),
 });
 
+const onInventoryItemSelected = (state, selectedItem) => ({
+  ...state,
+  selectedItem,
+});
+
 export default createReducer<InventoryState>(initialState, {
   [SWAP_INVENTORY_SLOTS]: onUpdateHudData,
+  [INVENTORY_ITEM_SELECTED]: onInventoryItemSelected,
 });

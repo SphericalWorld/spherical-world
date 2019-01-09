@@ -82,7 +82,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
         newObjects: world.lastAddedObjects.filter(el => el.networkSync),
       });
 
-      const [x, y, z] = transform.translation;
+      const [x,, z] = transform.translation;
 
       const chunkX = Math.floor(x / 16) * 16;
       const chunkZ = Math.floor(z / 16) * 16;

@@ -1,11 +1,10 @@
 // @flow strict
-// const playerProvider = (store, BlockRemover, BlockPicker, Inventory) => {
+// const playerProvider = (store, BlockRemover, BlockPicker) => {
 //   @connect(mapState, mapActions, store)
 //   class Player {
 //     name: string;
 //
 //     blockRemover: BlockRemover;
-//     inventory: Inventory;
 //
 //     static instances = [];
 
@@ -30,9 +29,6 @@
 //       this.hp = 7500;
 //       this.mana = 6500;
 //       this.maxMana = 10000;
-//       this.inventory = new Inventory();
-//
-//       this.selectedItem = this.inventory.items[0].slots[7];
 //
 //       this.hudBillboard = new GlObject({ material: 'qwe'});
 //       this.hudBillboard.model = Player.hudBillboardModel;
@@ -46,15 +42,6 @@
 //
 //       this.nicknameTexture = this.textureLibrary.makeTextureFromText(this.name);
 //       this.hudBillboard.texture = this.nicknameTexture;
-//     }
-//
-//     putBlock(geoId, x, y, z, plane) {
-//       if (this.selectedItem.count > 0) {
-//         this.selectedItem.count--;
-//         if (this.selectedItem.count === 0) {
-//           delete this.selectedItem;
-//         }
-//       }
 //     }
 //
 //     drawHud() {
@@ -109,8 +96,7 @@ const createPlayer = (
 ) => (data: Object, isMainPlayer: boolean = false): Entity => {
   const model = new Model(playerModel, 2);
   const material = materialLibrary.get('skybox'); // 'player'
-  const blockPicker = BlockPicker();
-  return (ecs.createEntity(
+  const player = ecs.createEntity(
     data.id,
     ...[
       Transform.deserialize(data.transform),
@@ -128,7 +114,10 @@ const createPlayer = (
           new Visual(new GlObject({ model, material })),
         ],
     ].filter(el => el),
-  )).id;
+  );
+
+  const blockPicker = BlockPicker(player);
+  return player.id;
 };
 
 

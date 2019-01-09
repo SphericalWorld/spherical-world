@@ -1,5 +1,5 @@
 // @flow strict
-import { SWAP_INVENTORY_SLOTS } from './inventoryConstants';
+import { SWAP_INVENTORY_SLOTS, INVENTORY_ITEM_SELECTED } from './inventoryConstants';
 import {
   SWAP_MAIN_PANEL_ITEMS,
   DELETE_MAIN_PANEL_ITEMS,
@@ -46,3 +46,8 @@ export const swapSlots = (
     });
   }
 };
+
+export const selectInventoryItem = (itemId: string) => ({
+  type: INVENTORY_ITEM_SELECTED,
+  payload: itemId,
+});

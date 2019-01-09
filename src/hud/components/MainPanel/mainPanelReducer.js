@@ -14,9 +14,11 @@ type MainPanel = {|
   slots: $ReadOnlyArray<SlotID | null>;
 |}
 
+const mockSlots = ['id1', 'id2', 'id3', 'id4', 'id5', null, null, null, null, null];
+
 const initialState = {
   selectedItemIndex: 0,
-  slots: (new Array(10)).fill(null),
+  slots: mockSlots, // (new Array(10)).fill(null),
 };
 
 const swap = (arr, from, to) => {
