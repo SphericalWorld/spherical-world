@@ -1,7 +1,6 @@
 // @flow strict
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type { Simplex3D } from '../../util/simplex';
 import type Chunk from '../Chunk';
 import {
   TORCH, COBBLESTONE, AIR, WATER,
@@ -11,7 +10,7 @@ import IO from '../../../common/fp/monads/io';
 const PRNG = seedrandom.alea;
 
 type Generator = {|
-  +simplex: Simplex3D;
+  +simplex: Simplex;
   +height: number;
 |};
 
@@ -65,7 +64,7 @@ const generateRoom = (generator, chunk: Chunk) => {
 
 // TODO use Maybe monad?
 const generateTreasury = (seed: number) => {
-  const simplex = new Simplex(PRNG(seed));
+  const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {
     simplex,
     height: 5,

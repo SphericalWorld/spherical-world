@@ -3,7 +3,6 @@ import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type { Simplex3D } from '../../util/simplex';
 import type Chunk from '../Chunk';
 import IO from '../../../common/fp/monads/io';
 import { randomize } from '../../../common/utils/vector';
@@ -11,7 +10,7 @@ import { randomize } from '../../../common/utils/vector';
 const PRNG = seedrandom.alea;
 
 type Generator = {|
-  +simplex: Simplex3D;
+  +simplex: Simplex;
   +height: number;
 |};
 
@@ -74,7 +73,15 @@ const branch = (
     const newPosition = vec3.add(vec3.create(), position, newDirection);
     runRecursion(newPosition, newDirection, BRANCH_LENGTH);
 
-    const newDirection2 = vec3.negate(vec3.create(), vec3.scaleAndAdd(vec3.create(), newDirection, direction, -2 * vec3.dot(newDirection, direction)));
+    const newDirection2 = vec3.negate(
+      vec3.create(),
+      vec3.scaleAndAdd(
+        vec3.create(),
+        newDirection,
+        direction,
+        -2 * vec3.dot(newDirection, direction),
+      ),
+    );
     const newPosition2 = vec3.add(vec3.create(), position, newDirection2);
     runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
 
@@ -85,7 +92,7 @@ const branch = (
 };
 
 const generateTree = (seed: number) => {
-  const simplex = new Simplex(PRNG(seed));
+  const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {
     simplex,
     height: 5,
