@@ -11,8 +11,11 @@ import {
   imageIronIngot,
   dragging,
   dragOver,
+  animateIncrease,
+  animateDecrease,
 } from './inventorySlot.module.scss';
 import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
+import useCSSTransition from '../../utils/CSSTransition';
 
 export type InventorySlotDetails = {
   +count: number;
@@ -54,10 +57,16 @@ const dropOptions = {
   onDrop: ({ onDrop, position }) => (data) => onDrop && onDrop({ ...data, to: position }),
 };
 
+const transitionOptions = {
+  duration: 200,
+  onChange: (oldVal, newVal) => (oldVal < newVal ? animateIncrease : animateDecrease),
+};
+
 const InventorySlot = (props: Props) => {
   const { slot = {}, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, { ...props, isDragging });
+  const { className } = useCSSTransition(slot.count, transitionOptions);
 
   return (
     <li
@@ -78,7 +87,7 @@ const InventorySlot = (props: Props) => {
           )}
           sw-item-tooltip="slot"
         >
-          <span className={slotItemCount}>
+          <span className={classnames(slotItemCount, className)}>
             {slot.count}
           </span>
         </div>
