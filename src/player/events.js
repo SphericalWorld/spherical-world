@@ -26,7 +26,5 @@ type Event<Type, Payload> = {
 
 export type PLAYER_DESTROYED_BLOCK_TYPE = Event<typeof PLAYER_DESTROYED_BLOCK, {
   +geoId: string,
-  +x: number,
-  +y: number,
-  +z: number,
+  +positionInChunk: [number, number, number],
 }>

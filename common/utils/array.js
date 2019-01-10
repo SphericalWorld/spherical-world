@@ -14,3 +14,11 @@ export const createArray = <T>(length: number, filler: (() => T) | T): Array<T> 
 
   return arr;
 };
+
+export const swap = <T>(arr: $ReadOnlyArray<T>, from: number, to: number): $ReadOnlyArray<T> => {
+  const copy = arr.slice();
+  const tmp = copy[from];
+  copy[from] = copy[to];
+  copy[to] = tmp;
+  return copy;
+};

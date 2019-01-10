@@ -1,6 +1,7 @@
 // @flow strict
 import type { SlotID } from '../../../../common/Inventory';
 import { createReducer } from '../../../util/reducerUtils';
+import { swap } from '../../../../common/utils/array';
 import {
   PREVIOUS_ITEM_SELECTED,
   NEXT_ITEM_SELECTED,
@@ -19,14 +20,6 @@ const mockSlots = ['id1', 'id2', 'id3', 'id4', 'id5', null, null, null, null, nu
 const initialState = {
   selectedItemIndex: 0,
   slots: mockSlots, // (new Array(10)).fill(null),
-};
-
-const swap = (arr, from, to) => {
-  const copy = arr.slice();
-  const tmp = copy[from];
-  copy[from] = copy[to];
-  copy[to] = tmp;
-  return copy;
 };
 
 const setItem = (arr, from, value) => {

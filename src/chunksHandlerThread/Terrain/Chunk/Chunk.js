@@ -412,14 +412,16 @@ export default class Chunk extends ChunkBase<Chunk> {
     } else {
       this.blocks[getIndex(x, y, z)] = value;
     }
-    if (placed) {
-      if (!blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
-        while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
-          this.calcGlobalRecursionRemove(x, y, z);
-          y -= 1;
-        }
-      }
-      this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+    if (!placed) {
+      return;
+    }
+    this.state = CHUNK_STATUS_NEED_LOAD_VBO;
+    if (blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
+      return;
+    }
+    while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
+      this.calcGlobalRecursionRemove(x, y, z);
+      y -= 1;
     }
   }
 

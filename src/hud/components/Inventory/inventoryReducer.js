@@ -2,6 +2,7 @@
 import type { Inventory } from '../../../../common/Inventory';
 import { createReducer } from '../../../util/reducerUtils';
 import { SWAP_INVENTORY_SLOTS, INVENTORY_ITEM_SELECTED } from './inventoryConstants';
+import { swap } from '../../../../common/utils/array';
 
 type InventoryState = Inventory
 
@@ -9,14 +10,6 @@ const initialState = {
   items: {},
   slots: [],
   selectedItem: null,
-};
-
-const swap = (arr, from, to) => {
-  const copy = arr.slice();
-  const tmp = copy[from];
-  copy[from] = copy[to];
-  copy[to] = tmp;
-  return copy;
 };
 
 const onUpdateHudData = (state, data) => ({

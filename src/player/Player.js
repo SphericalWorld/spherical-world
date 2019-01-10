@@ -4,8 +4,6 @@
 //   class Player {
 //     name: string;
 //
-//     blockRemover: BlockRemover;
-//
 //     static instances = [];
 
 //     static addToPlayers(player: Player) {
