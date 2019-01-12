@@ -2,6 +2,12 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
+@keyframes selectedSlotAnimation {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
 %size-img {
   height: $size-slot;
   width: $size-slot;
@@ -29,6 +35,22 @@
 .selectedSlot {
   .slotInner {
     box-shadow: $selected-slot 0 0 $size-of-shadow $size-of-shadow/3 inset, $selected-slot 0 0 $size-of-shadow/3 0;
+  }
+}
+
+.selectedSlot {
+  .slotInner::after {
+    animation: selectedSlotAnimation 600ms ease forwards;
+    border-radius: 0.5em;
+    box-shadow: $selected-slot-animated 0 0 $size-of-shadow*3 $size-of-shadow/3 inset;
+    content: '';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    will-change: opacity;
+    // z-index: -1;
   }
 }
 
