@@ -1,0 +1,12 @@
+@import '../../../../styles/fonts';
+@import '../../../../styles/colors';
+@import '../../../../styles/sizes';
+
+.defaultColor {
+  color: $item-color-common;
+}
+
+.text {
+  font-family: 'Raleway',sans-serif;
+  font-size: 1em;
+}

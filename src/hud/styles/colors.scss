@@ -17,6 +17,7 @@ $font-color-main-shadow: #000;
 $background-color-slot: #05544a;
 $border-color-slot: #113436;
 $selected-slot: #bccdd6;
+$selected-slot-animated: #1ca7f1;
 $hover-slot: lighten(darken($primary, 10%), 40%);
 
 $border-pagination-page: 0.1em solid $border-color-slot;
@@ -28,3 +29,7 @@ $border-inventory: 0.15em ridge darken($primary, 0.75);
 
 $input-checkbox: #fff;
 $input-checkbox-border: darken($primary, 20%);
+
+$item-color-common: #e9e9e9;
+$item-color-uncommon: #219b44;
+$item-color-rare: #4f92d1;

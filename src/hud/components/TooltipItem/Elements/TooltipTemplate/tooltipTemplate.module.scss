@@ -1,0 +1,17 @@
+@import '../../../../styles/fonts';
+@import '../../../../styles/colors';
+@import '../../../../styles/sizes';
+
+.templateTooltip {
+  @extend %tooltip-font-item-stats;
+  color: $item-color-common;
+  padding: 0.4em;
+}
+
+.labelTooltip {
+  margin: 0 0.3em;
+}
+
+.valueTooltip {
+  margin-left: 0.1em;
+}

@@ -1,0 +1,22 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.toolTipGrid {
+
+  background: transparentize($background-main-menu, 0.1);
+  border: 0.1em groove transparentize($primary, 0.5);
+  border-radius: 0.2em;
+  box-shadow: inset 0 $size-of-shadow-main-menu/5 $size-of-shadow-main-menu/3 transparentize($glass, 0.75);
+  display: grid;
+  grid-template-areas:
+    '. name name image .'
+    '. damage damage damage .'
+    '. attackSpeed attackSpeed attackSpeed .'
+    'description description description description description'
+    '. . . . .';
+  grid-template-columns: 0.9em 1.5fr 1.5fr 2fr 0.9em;
+  // grid-template-rows: auto auto auto auto;
+  padding: 0.3em 0;
+  width: 15em;
+}
