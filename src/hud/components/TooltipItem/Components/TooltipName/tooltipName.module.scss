@@ -1,0 +1,23 @@
+@import '../../../../styles/fonts';
+@import '../../../../styles/colors';
+@import '../../../../styles/sizes';
+
+.common {
+  color: $item-color-common;
+}
+
+.uncommon {
+  color: $item-color-uncommon;
+}
+
+.rare {
+  color: $item-color-rare;
+}
+
+.gridArea {
+  @extend %tooltip-font-name;
+  align-items: center;
+  display: flex;
+  grid-area: name;
+  padding: 0 0.5em;
+}

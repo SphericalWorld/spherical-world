@@ -1,0 +1,27 @@
+@import '../../../../styles/fonts';
+@import '../../../../styles/colors';
+@import '../../../../styles/sizes';
+
+.imageTooltip {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.gridArea {
+  grid-area: image;
+}
+
+.imgItem {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 3em;
+  width: 3em;
+}
+
+.imageDiamond {
+  background-image: url('/items/diamond.png');
+}
+
+.imageIronIngot {
+  background-image: url('/items/iron_ingot.png');
+}

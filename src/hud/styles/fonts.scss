@@ -14,3 +14,22 @@ $arrow-down: '\25BC';
     2px 0 1px $font-color-main-shadow,
     0 -2px 1px $font-color-main-shadow;
 }
+
+%tooltip-font-name {
+  font-size: 1.2em;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+%tooltip-font-item-stats {
+  font-size: 1em;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+%tooltip-font-description {
+  color: $item-color-common;
+  font-size: 0.9em;
+  font-weight: 200;
+  text-align: justify;
+}
