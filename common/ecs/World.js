@@ -18,7 +18,7 @@ type ObjectConstructor = (any) => Component;
 export default class World {
   constructors: Map<string, ObjectConstructor> = new Map();
   components: Map<string, Map<string, Component>> = new Map();
-  entities: Set<string> = new Set();
+  entities: Set<Entity> = new Set();
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
@@ -29,6 +29,8 @@ export default class World {
   listeners: Array<GameEvent => void> = [];
   thread: THREAD_ID;
   lastAddedObjects = [];
+  lastDeletedObjects = [];
+  objects: Map<Entity, any> = new Map();
 
   constructor(thread: THREAD_ID) {
     this.thread = thread;
@@ -167,10 +169,13 @@ export default class World {
     this.registerEntity(entityId, components.map(el => ({ type: el.constructor.name, data: el })));
     const selectedComponents = {
       id: entityId,
+      children: [],
     };
     const selectedComponentsNetworkable = {
       id: entityId,
+      children: [],
     };
+    this.objects.set(entityId, selectedComponents);
     for (let i = 0; i < components.length; i += 1) {
       const component = components[i];
       selectedComponents[component.constructor.componentName] = component;
@@ -182,7 +187,7 @@ export default class World {
     return selectedComponents;
   }
 
-  deleteEntity(id: Entity): void {
+  deleteEntity(id: Entity, dispatchable: boolean = true): void {
     for (const registry of this.components.values()) {
       const component = registry.get(id);
       if (component) {
@@ -192,7 +197,20 @@ export default class World {
     }
     for (const selector of this.selectors) {
       const index = selector.components.findIndex(el => el.id === id);
-      selector.components.splice(index, 1); // TODO: seems like it should be linked list with pool
+      if (index !== -1) {
+        selector.components.splice(index, 1); // TODO: seems like it should be linked list with pool
+      }
+    }
+    if (dispatchable) {
+      this.lastDeletedObjects.push(id);
+    }
+    const object = this.objects.get(id);
+    if (!object) {
+      return;
+    }
+
+    for (let index = 0; index < object.children.length; index += 1) {
+      this.deleteEntity(object.children[index].id, false);
     }
   }
 

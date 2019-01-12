@@ -2,9 +2,11 @@
 import type { Vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs/Entity';
 import type World from '../../common/ecs/World';
-
-import Transform from '../components/Transform';
-import NetworkSync from '../components/NetworkSync';
+import {
+  Transform,
+  NetworkSync,
+  Item,
+} from '../components';
 
 const createItem = (
   world: World,
@@ -13,6 +15,7 @@ const createItem = (
     id,
     new NetworkSync({ name: 'ITEM' }),
     new Transform(position[0], position[1], position[2]),
+    new Item(),
   );
   return player;
 };

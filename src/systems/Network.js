@@ -10,12 +10,15 @@ import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindings
 
 const onSyncGameData = (ecs: World) => ecs.events
   .filter(e => e.type === 'SYNC_GAME_DATA')
-  .subscribe(({ payload: { newObjects, components } }) => {
+  .subscribe(({ payload: { newObjects, deletedObjects, components } }) => {
     for (const newObject of newObjects) {
       const constructor = ecs.constructors.get(newObject.networkSync.name);
       if (constructor) {
         constructor(newObject);
       }
+    }
+    for (const deletedObject of deletedObjects) {
+      ecs.deleteEntity(deletedObject, false);
     }
     ecs.updateComponents([components]);
   });

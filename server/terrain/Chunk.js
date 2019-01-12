@@ -40,6 +40,11 @@ const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
   return chunkTo;
 };
 
+type ChunkMetaData = {|
+  objectsGenerated: boolean,
+  dataLength: number,
+|}
+
 class Chunk {
   terrain: Terrain;
   +x: number;
@@ -188,7 +193,7 @@ class Chunk {
     return this;
   }
 
-  async saveMeta(meta: Object): Promise<Chunk> {
+  async saveMeta(meta: ChunkMetaData): Promise<Chunk> {
     await outputFile(this.metaPath, JSON.stringify(meta));
     return this;
   }

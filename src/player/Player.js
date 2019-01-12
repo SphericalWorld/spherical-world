@@ -54,12 +54,6 @@
 //         gl.disable(gl.BLEND);
 //       }
 //     }
-//
-//     destroy() {
-//       clearInterval(this.removingInterval);
-//       clearTimeout(this.removingTimeout);
-//       delete this.constructor.instances[this.id];
-//     }
 //   }
 //
 //   return Player;
@@ -115,6 +109,8 @@ const createPlayer = (
   );
 
   const blockPicker = BlockPicker(player);
+  player.children.push(blockPicker);
+
   return player.id;
 };
 

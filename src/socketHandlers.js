@@ -1,10 +1,6 @@
 // @flow strict
 
 const socketHandlersProvider = Player => class SocketHandlers {
-  otherPlayerDisconnect(data) {
-    Player.instances[data.id].destroy();
-  }
-
   otherPlayerStartRemoveBlock(data) {
     Player.instances[data.id].blockRemover.x = data.x;
     Player.instances[data.id].blockRemover.y = data.y;

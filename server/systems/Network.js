@@ -80,6 +80,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
             .map(el => [el.id, el.transform]),
         },
         newObjects: world.lastAddedObjects.filter(el => el.networkSync),
+        deletedObjects: world.lastDeletedObjects,
       });
 
       const [x,, z] = transform.translation;
@@ -112,6 +113,7 @@ export default (world: World, server: Server, createPlayer: CreatePlayer): Syste
       transform.chunkZ = chunkZ;
     }
     world.lastAddedObjects = [];
+    world.lastDeletedObjects = [];
   };
   return networkSystem;
 };

@@ -6,6 +6,7 @@ import type { CreatePlayer } from '../player';
 
 import NetworkSystem from './Network';
 import PlayerSystem from './Player';
+import DropableSystem from './Dropable';
 
 export default (
   world: World,
@@ -14,4 +15,5 @@ export default (
 ): System[] => [
   NetworkSystem(world, server, createPlayer),
   PlayerSystem(world, server),
+  DropableSystem(world),
 ];

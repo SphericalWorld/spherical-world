@@ -16,11 +16,6 @@ export default class Player {
     id += 1;
   }
 
-  addLink(player) {
-    this.linkedPlayers.push(player);
-    player.linkedPlayers.push(this);
-  }
-
   destroy() {
     this.broadcastToLinked('OTHER_PLAYER_DISCONNECT', { id: this.id });
   }

@@ -10,7 +10,7 @@ import { createCube } from '../engine/Model';
 const blockRemoverProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
-) => (pickerId: Entity, id: ?Entity): Entity => {
+) => (pickerId: Entity, id: ?Entity): any => {
   const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockRemover');
   const object = new GlObject({ model, material });
@@ -20,7 +20,7 @@ const blockRemoverProvider = (
     new Visual(object),
     new BlockRemover(),
     new Joint(pickerId),
-  )).id;
+  ));
 };
 
 export type CreateBlockRemover = $Call<typeof blockRemoverProvider, *, *>;
