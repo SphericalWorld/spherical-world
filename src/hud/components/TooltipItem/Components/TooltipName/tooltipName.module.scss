@@ -2,18 +2,6 @@
 @import '../../../../styles/colors';
 @import '../../../../styles/sizes';
 
-.common {
-  color: $item-color-common;
-}
-
-.uncommon {
-  color: $item-color-uncommon;
-}
-
-.rare {
-  color: $item-color-rare;
-}
-
 .gridArea {
   @extend %tooltip-font-name;
   align-items: center;

@@ -4,7 +4,6 @@ import TooltipText from '../../Elements/TooltipText';
 import {
   descriptionTooltip,
   gridArea,
-  descriptionText,
 } from './tooltipDescription.module.scss';
 
 
@@ -15,11 +14,14 @@ type Props = {
 const TooltipDescription = ({
   description,
 }: Props) => (
-  <TooltipText className={`${descriptionTooltip} ${gridArea}`}>
-    <span className={descriptionText}>
-      {description}
-    </span>
-  </TooltipText>
+  typeof description !== 'undefined'
+  && (
+    <TooltipText className={`${descriptionTooltip} ${gridArea}`}>
+      <span>
+        {description}
+      </span>
+    </TooltipText>
+  )
 );
 
 export default TooltipDescription;

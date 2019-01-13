@@ -8,9 +8,9 @@ const item = {
   rareness: 2,
   damage: 2,
   speedAttack: 30,
-  image: 'diamond',
+  icon: 'diamond',
   attackSpeed: 319,
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat enim ex, in dignissim felis gravida vitae. Etiam elementum arcu tempus euismod commodo. Fusce lobortis dui nec bibendum consequat. Sed mollis enim sed justo tempor facilisis.',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat enim ex, in dignissim felis gravida vitae.',
 };
 
 storiesOf('Tooltip', module)

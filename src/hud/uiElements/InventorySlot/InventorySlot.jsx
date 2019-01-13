@@ -8,8 +8,6 @@ import {
   slotItem,
   slot as slotStyle,
   slotItemCount,
-  imageDiamond,
-  imageIronIngot,
   dragging,
   dragOver,
   animateIncrease,
@@ -19,6 +17,7 @@ import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
 import useCSSTransition from '../../utils/CSSTransition';
 import TooltipTrigger from '../../components/Tooltip';
 import TooltipItem from '../../components/TooltipItem';
+import { getIcon } from '../../utils/CSSHelpers';
 
 type Props = {|
   +slot?: Slot;
@@ -28,12 +27,6 @@ type Props = {|
   +draggableMeta?: mixed,
   +position?: number,
 |};
-
-const images = {
-  diamond: imageDiamond,
-  ironIngot: imageIronIngot,
-  _no_image_: '',
-};
 
 const SLOT: 'INVENTORY_SLOT' = 'INVENTORY_SLOT';
 
@@ -86,7 +79,7 @@ const InventorySlotFilled = (props: InventorySlotFilledProps) => {
           className={classnames(
             slotItem,
             isDragging && dragging,
-            slot && images[icon],
+            slot && getIcon(icon),
             canDrop && dragOver,
           )}
         >

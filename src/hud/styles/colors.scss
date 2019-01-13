@@ -33,3 +33,9 @@ $input-checkbox-border: darken($primary, 20%);
 $item-color-common: #e9e9e9;
 $item-color-uncommon: #219b44;
 $item-color-rare: #4f92d1;
+
+@mixin tooltip-border($color) {
+  border: 0.1em groove $color;
+  box-shadow: inset 0 0.3em 0.4em transparentize($color, 0.75);
+}
+
