@@ -15,14 +15,14 @@ const images = {
 };
 
 type Props = {
-  +image: string;
+  +icon: string;
 }
 
 const TooltipImage = ({
-  image,
+  icon,
 }: Props) => (
   <TooltipText className={`${imageTooltip} ${gridArea}`}>
-    <div className={`${images[image]} ${imgItem}`} />
+    <div className={`${images[icon]} ${imgItem}`} />
   </TooltipText>
 );
 

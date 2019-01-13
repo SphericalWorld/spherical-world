@@ -16,6 +16,8 @@ import {
 } from './inventorySlot.module.scss';
 import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
 import useCSSTransition from '../../utils/CSSTransition';
+import TooltipTrigger from '../../components/Tooltip';
+import TooltipItem from '../../components/TooltipItem';
 
 export type InventorySlotDetails = {
   +count: number;
@@ -62,6 +64,10 @@ const transitionOptions = {
   onChange: (oldVal, newVal) => (oldVal < newVal ? animateIncrease : animateDecrease),
 };
 
+const Tooltip = (item) => (
+  <TooltipItem item={item} />
+);
+
 const InventorySlot = (props: Props) => {
   const { slot = {}, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
@@ -76,22 +82,24 @@ const InventorySlot = (props: Props) => {
         selected && selectedSlot,
       )}
     >
-      <div className={slotInner}>
-        <div
-          {...draggableProps}
-          className={classnames(
-            slotItem,
-            isDragging && dragging,
-            slot.icon && images[slot.icon],
-            canDrop && dragOver,
-          )}
-          sw-item-tooltip="slot"
-        >
-          <span className={classnames(slotItemCount, className)}>
-            {slot.count}
-          </span>
+      <TooltipTrigger tooltip={Tooltip} tooltipProps={slot}>
+        <div className={slotInner}>
+          <div
+            {...draggableProps}
+            className={classnames(
+              slotItem,
+              isDragging && dragging,
+              slot.icon && images[slot.icon],
+              canDrop && dragOver,
+            )}
+            sw-item-tooltip="slot"
+          >
+            <span className={classnames(slotItemCount, className)}>
+              {slot.count}
+            </span>
+          </div>
         </div>
-      </div>
+      </TooltipTrigger>
     </li>
   );
 };

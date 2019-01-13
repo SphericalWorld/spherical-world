@@ -14,6 +14,6 @@ const item = {
 };
 
 storiesOf('Tooltip', module)
-  .add('Tooltip', () => (
+  .add('Tooltip item', () => (
     <Tooltip item={item} />
   ));

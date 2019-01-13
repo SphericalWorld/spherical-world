@@ -12,5 +12,5 @@ const item = {
 
 storiesOf('TooltipImage', module)
   .add('TooltipImage', () => (
-    <TooltipImage image={item.image} />
+    <TooltipImage icon={item.image} />
   ));
