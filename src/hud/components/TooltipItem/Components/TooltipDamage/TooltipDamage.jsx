@@ -6,9 +6,9 @@ import {
 } from './tooltipDamage.module.scss';
 
 
-type Props = {|
+type Props = {
   +damage: number;
-|}
+}
 
 const TooltipDamage = ({
   damage,

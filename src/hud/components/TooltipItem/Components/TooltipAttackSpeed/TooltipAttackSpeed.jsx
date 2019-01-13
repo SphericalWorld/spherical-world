@@ -6,9 +6,9 @@ import {
 } from './tooltipAttackSpeed.module.scss';
 
 
-type Props = {|
+type Props = {
   +attackSpeed: number;
-|}
+}
 
 const TooltipAttackSpeed = ({
   attackSpeed,

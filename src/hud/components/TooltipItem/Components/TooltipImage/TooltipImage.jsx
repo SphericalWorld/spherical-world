@@ -14,9 +14,9 @@ const images = {
   ironIngot: imageIronIngot,
 };
 
-type Props = {|
+type Props = {
   +image: string;
-|}
+}
 
 const TooltipImage = ({
   image,
