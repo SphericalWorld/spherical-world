@@ -8,9 +8,9 @@ import {
 } from './tooltipDescription.module.scss';
 
 
-type Props = {|
+type Props = {
   +description: string;
-|}
+}
 
 const TooltipDescription = ({
   description,

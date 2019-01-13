@@ -15,10 +15,10 @@ const colors = [
   rare,
 ];
 
-type Props = {|
+type Props = {
   +name: string;
   +rareness: Rareness;
-|}
+}
 
 const TooltipName = ({
   name, rareness,
