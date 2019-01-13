@@ -22,7 +22,7 @@ const ModalWindow = ({ caption, children, onClose }: Props) => (
     <div className={inner}>
       <header className={header}>
         <Label className={inventoryName}>{caption}</Label>
-        <Button onClick={onClose} size="small" className={buttonClose}>×</Button>
+        <Button onClick={onClose} size="small" className={buttonClose}>❌</Button>
       </header>
       <section>
         {children}
