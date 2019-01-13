@@ -8,7 +8,16 @@ import TooltipImage from './Components/TooltipImage';
 import TooltipAttackSpeed from './Components/TooltipAttackSpeed';
 import {
   toolTipGrid,
+  common,
+  uncommon,
+  rare,
 } from './tooltip.module.scss';
+
+const colors = [
+  common,
+  uncommon,
+  rare,
+];
 
 const TooltipDefinitions = [
   TooltipName,
@@ -34,7 +43,7 @@ type Props = {|
 const Tooltip = ({
   item,
 }: Props) => (
-  <div className={toolTipGrid}>
+  <div className={`${colors[item.rareness]} ${toolTipGrid}`}>
     {
       TooltipDefinitions.map(Component => <Component {...item} />)
     }

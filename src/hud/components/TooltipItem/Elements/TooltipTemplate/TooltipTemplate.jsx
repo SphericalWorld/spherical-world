@@ -17,6 +17,8 @@ type Props = {|
 const TooltipTemplate = ({
   value, name, className = '',
 }: Props) => (
+  typeof value !== 'undefined'
+  && (
   <TooltipText className={`${templateTooltip} ${className}`}>
     <div>
       <span className={labelTooltip}>
@@ -28,6 +30,7 @@ const TooltipTemplate = ({
       </span>
     </div>
   </TooltipText>
+  )
 );
 
 export default TooltipTemplate;

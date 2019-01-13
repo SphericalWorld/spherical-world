@@ -16,20 +16,20 @@ $arrow-down: '\25BC';
 }
 
 %tooltip-font-name {
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: 800;
   text-transform: capitalize;
 }
 
 %tooltip-font-item-stats {
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 800;
   text-transform: capitalize;
 }
 
 %tooltip-font-description {
   color: $item-color-common;
-  font-size: 0.9em;
+  font-size: 0.7em;
   font-weight: 200;
   text-align: justify;
 }

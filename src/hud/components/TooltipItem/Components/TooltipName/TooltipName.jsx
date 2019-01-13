@@ -2,18 +2,10 @@
 import React from 'react';
 import type { Rareness } from '../../../../../../common/Inventory/Inventory';
 import TooltipText from '../../Elements/TooltipText';
+import { getRarenessColor } from '../../../../utils/CSSHelpers';
 import {
   gridArea,
-  common,
-  uncommon,
-  rare,
 } from './tooltipName.module.scss';
-
-const colors = [
-  common,
-  uncommon,
-  rare,
-];
 
 type Props = {
   +name: string;
@@ -23,7 +15,7 @@ type Props = {
 const TooltipName = ({
   name, rareness,
 }: Props) => (
-  <TooltipText className={`${colors[rareness]} ${gridArea}`}>
+  <TooltipText className={`${getRarenessColor(rareness)} ${gridArea}`}>
     {name}
   </TooltipText>
 );
