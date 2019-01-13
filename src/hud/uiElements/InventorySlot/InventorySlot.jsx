@@ -1,6 +1,7 @@
 // @flow strict
 import React, { memo } from 'react';
 import classnames from 'classnames';
+import { type Slot } from '../../../../common/Inventory';
 import {
   selectedSlot,
   slotInner,
@@ -19,14 +20,8 @@ import useCSSTransition from '../../utils/CSSTransition';
 import TooltipTrigger from '../../components/Tooltip';
 import TooltipItem from '../../components/TooltipItem';
 
-export type InventorySlotDetails = {
-  +count: number;
-  +icon?: string;
-  +id: string;
-};
-
 type Props = {|
-  +slot?: InventorySlotDetails;
+  +slot?: Slot;
   +selected?: boolean,
   +draggable?: boolean,
   +onDrop?: any => mixed,
@@ -37,6 +32,7 @@ type Props = {|
 const images = {
   diamond: imageDiamond,
   ironIngot: imageIronIngot,
+  _no_image_: '',
 };
 
 const SLOT: 'INVENTORY_SLOT' = 'INVENTORY_SLOT';
@@ -68,11 +64,56 @@ const Tooltip = (item) => (
   <TooltipItem item={item} />
 );
 
+type InventorySlotFilledProps = {|
+  +slot: Slot;
+  +isDragging: boolean,
+  +canDrop: boolean,
+  +draggableProps: mixed,
+|};
+
+const InventorySlotFilled = (props: InventorySlotFilledProps) => {
+  const {
+    slot, isDragging, draggableProps, canDrop,
+  } = props;
+  const { icon = '_no_image_' } = slot;
+  const { className } = useCSSTransition(slot.count, transitionOptions);
+
+  return (
+    <TooltipTrigger tooltip={Tooltip} tooltipProps={slot}>
+      <div className={slotInner}>
+        <div
+          {...draggableProps}
+          className={classnames(
+            slotItem,
+            isDragging && dragging,
+            slot && images[icon],
+            canDrop && dragOver,
+          )}
+        >
+          <span className={classnames(slotItemCount, className)}>
+            {slot.count}
+          </span>
+        </div>
+      </div>
+    </TooltipTrigger>
+  );
+};
+
+const InventorySlotEmpty = ({ canDrop }: {| canDrop: boolean |}) => (
+  <div className={slotInner}>
+    <div
+      className={classnames(
+        slotItem,
+        canDrop && dragOver,
+      )}
+    />
+  </div>
+);
+
 const InventorySlot = (props: Props) => {
-  const { slot = {}, selected = false } = props;
+  const { slot, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, { ...props, isDragging });
-  const { className } = useCSSTransition(slot.count, transitionOptions);
 
   return (
     <li
@@ -82,24 +123,16 @@ const InventorySlot = (props: Props) => {
         selected && selectedSlot,
       )}
     >
-      <TooltipTrigger tooltip={Tooltip} tooltipProps={slot}>
-        <div className={slotInner}>
-          <div
-            {...draggableProps}
-            className={classnames(
-              slotItem,
-              isDragging && dragging,
-              slot.icon && images[slot.icon],
-              canDrop && dragOver,
-            )}
-            sw-item-tooltip="slot"
-          >
-            <span className={classnames(slotItemCount, className)}>
-              {slot.count}
-            </span>
-          </div>
-        </div>
-      </TooltipTrigger>
+      {slot ? (
+        <InventorySlotFilled
+          slot={slot}
+          draggableProps={draggableProps}
+          isDragging={isDragging}
+          canDrop={canDrop}
+        />
+      ) : (
+        <InventorySlotEmpty canDrop={canDrop} />
+      )}
     </li>
   );
 };

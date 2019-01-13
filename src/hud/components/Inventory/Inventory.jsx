@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import type { State } from '../../../reducers/rootReducer';
+import { type Slot } from '../../../../common/Inventory';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
@@ -21,10 +22,9 @@ import {
   icon,
 } from './inventory.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
-import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
 
 type MappedProps = {|
-  +slots: $ReadOnlyArray<?InventorySlotDetails>;
+  +slots: $ReadOnlyArray<?Slot>;
 |};
 
 type DispatchProps = {|

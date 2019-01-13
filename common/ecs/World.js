@@ -31,6 +31,7 @@ export default class World {
   lastAddedObjects = [];
   lastDeletedObjects = [];
   objects: Map<Entity, any> = new Map();
+  changedData: Map<Component, Map<string, Component>>;
 
   constructor(thread: THREAD_ID) {
     this.thread = thread;
@@ -76,25 +77,26 @@ export default class World {
   }
 
   update(delta: number): void {
-    const changedData = new Map();
+    this.changedData = new Map();
     this.systems
-      .map(system => system(delta / 1000))
-      .forEach((changedComponents) => {
+      .map(system => {
+        const changedComponents = system(delta / 1000);
         if (!changedComponents) {
           return;
         }
         for (const [id, ...components] of changedComponents) {
           for (const component of components) {
-            let el = changedData.get(component.constructor);
+            let el = this.changedData.get(component.constructor);
             if (!el) {
               el = new Map();
-              changedData.set(component.constructor, el);
+              this.changedData.set(component.constructor, el);
             }
             el.set(id, component);
           }
         }
       });
-    const changedDataArray = [...changedData.entries()];
+
+    const changedDataArray = [...this.changedData.entries()];
     for (const thread of this.threads) {
       const componentsToUpdate = changedDataArray
         .filter(([constructor]) => constructor.threads.includes(thread.id))

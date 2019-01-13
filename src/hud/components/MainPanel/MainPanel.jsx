@@ -13,7 +13,7 @@ import {
   mainPanelSection,
 } from './mainPanel.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
-import type { InventorySlotDetails } from '../../uiElements/InventorySlot/InventorySlot';
+import { type Slot } from '../../../../common/Inventory';
 import type { State } from '../../../reducers/rootReducer';
 import {
   swapSlots as doSwapSlots,
@@ -21,7 +21,7 @@ import {
 } from '../Inventory/inventoryActions';
 
 type MappedProps = {|
-  +slots: $ReadOnlyArray<InventorySlotDetails | null>;
+  +slots: $ReadOnlyArray<Slot | null>;
   +selectedItemIndex: number;
 |};
 

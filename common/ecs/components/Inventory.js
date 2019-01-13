@@ -1,27 +1,32 @@
 // @flow strict
 import type { Component } from '../Component';
-import type { Inventory } from '../../Inventory/Inventory';
+import type { Inventory as InventoryData } from '../../Inventory/Inventory';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
 import { createInventory } from '../../Inventory/Inventory';
 import { Networkable } from '../../Networkable';
 
-export default class InventoryComponent implements Component, Networkable {
+export default class Inventory implements Component, Networkable {
   static threads = [THREAD_MAIN];
   static componentName: 'inventory' = 'inventory';
-  static componentType: {| 'inventory': InventoryComponent |};
+  static componentType: {| 'inventory': Inventory |};
   static networkable = true;
 
-  data: Inventory
+  data: InventoryData;
 
-  constructor({ slots, items, selectedItem }: Inventory = {}) {
+  constructor({ slots, items, selectedItem }: InventoryData = {}) {
     this.data = createInventory({ slots, items, selectedItem });
   }
 
   serialize(): mixed {
-    return this;
+    const { slots, items } = this.data;
+    return {
+      data: {
+        slots, items,
+      },
+    };
   }
 
-  static deserialize(serialized: InventoryComponent): InventoryComponent {
+  static deserialize(serialized: Inventory): Inventory {
     const instance = new this(serialized.data);
     return instance;
   }

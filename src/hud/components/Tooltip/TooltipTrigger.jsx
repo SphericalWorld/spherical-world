@@ -7,7 +7,7 @@ import { tooltip, wrapper, hidden } from './tooltip.module.scss';
 
 type Props<P> = {|
   +children: Node,
-  +tooltip: (P) => React$Element<"div">,
+  +tooltip: (P) => React$Element<*>,
   +tooltipProps?: P,
 |};
 

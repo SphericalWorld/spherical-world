@@ -20,11 +20,11 @@ const TooltipDefinitions = [
 
 type ItemType = {
   +name: string,
-  +rareness: Rareness,
-  +damage: number,
-  +image: string,
-  +description: string,
-  +attackSpeed: number,
+  +rareness?: Rareness,
+  +damage?: number,
+  +icon?: string,
+  +description?: string,
+  +attackSpeed?: number,
 }
 
 type Props = {|

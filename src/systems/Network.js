@@ -20,7 +20,7 @@ const onSyncGameData = (ecs: World) => ecs.events
     for (const deletedObject of deletedObjects) {
       ecs.deleteEntity(deletedObject, false);
     }
-    ecs.updateComponents([components]);
+    ecs.updateComponents(components);
   });
 
 const onLoadControlSettings = (ecs: World, input: Input, store) => ecs.events

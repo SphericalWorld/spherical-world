@@ -7,6 +7,7 @@ import type { CreatePlayer } from '../player';
 import NetworkSystem from './Network';
 import PlayerSystem from './Player';
 import DropableSystem from './Dropable';
+import NetworkSyncSystem from './NetworkSync';
 
 export default (
   world: World,
@@ -16,4 +17,5 @@ export default (
   NetworkSystem(world, server, createPlayer),
   PlayerSystem(world, server),
   DropableSystem(world),
+  NetworkSyncSystem(world, server),
 ];

@@ -1,4 +1,6 @@
 // @flow strict
+import uuid from 'uuid/v1';
+
 export const RARENESS_COMMON: 0 = 0;
 export const RARENESS_UNCOMMON: 1 = 1;
 export const RARENESS_RARE: 2 = 2;
@@ -15,24 +17,52 @@ export type Slot = {|
   +itemTypeId: number;
   count: number;
   +name: string;
-  +rareness: Rareness;
+  +rareness?: Rareness;
   +icon?: string;
 |};
 
 export type Inventory = {|
-  slots: $ReadOnlyArray<SlotID | null>;
+  slots: Array<SlotID | null>;
   items: $Shape<{| [SlotID]: Slot |}>;
-  selectedItem: ?SlotID;
+  selectedItem?: SlotID;
 |};
 
 export const createInventory = ({
   slots = [],
   items = {},
-  selectedItem,
+  selectedItem = '',
 }: Inventory): Inventory => ({
   slots,
   items,
   selectedItem,
+});
+
+export const putItem = ({ slots, items }: Inventory, item: Slot) => {
+  const freeSlot = slots.findIndex(slot => !slot);
+  if (freeSlot === -1) return;
+  slots[freeSlot] = item.id;
+  items[item.id] = item;
+};
+
+export const createSlot = ({
+  itemTypeId,
+  count = 0,
+  name,
+  rareness,
+  icon,
+}: {|
+  +itemTypeId: number;
+  count: number;
+  +name: string;
+  +rareness?: Rareness;
+  +icon?: string;
+|}): Slot => ({
+  id: uuid(),
+  itemTypeId,
+  count,
+  name,
+  rareness,
+  icon,
 });
 
 export const createStubItems = (): Inventory => ({

@@ -131,6 +131,7 @@ const createTerrain = (
     if (!chunk || !chunk.data[x + z * 16 + y * 256]) {
       return;
     }
+    const blockType = chunk.data[x + z * 16 + y * 256];
     chunk.data[x + z * 16 + y * 256] = 0;
     chunk.flags[x + z * 16 + y * 256] = 0;
     if (chunk.changesCount < 15) {
@@ -139,7 +140,13 @@ const createTerrain = (
       chunk.changesCount = 0;
       chunk.save();
     }
-    createItem(null, vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)));
+    createItem(
+      null,
+      vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)),
+      {
+        itemTypeId: blockType, count: 1, name: '', id: 'slot',
+      },
+    );
   }
 };
 
