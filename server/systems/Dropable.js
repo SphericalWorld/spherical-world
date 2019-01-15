@@ -34,7 +34,7 @@ export default (world: World): System => {
         const itemData = item.inventory.data;
         let inventorySlot = findItemToAdd(inventory, itemData.items.slot);
         if (!inventorySlot) {
-          inventorySlot = createSlot({ count: 0, itemTypeId: itemData.items.slot.itemTypeId });
+          inventorySlot = createSlot({ count: 0, itemTypeId: itemData.items.slot.itemTypeId, name: '' });
           putItem(inventory.data, inventorySlot);
         }
         inventorySlot.count += 1;

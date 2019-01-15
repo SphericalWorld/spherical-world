@@ -82,10 +82,10 @@ const getChunkNear = (j: number, k: number, chunk) => {
 };
 
 const getLight = (i: number, j: number, k: number, chunk) => {
-  let chunkNear;
-  ({ j, k, chunkNear } = getChunkNear(j, k, chunk));
-  const index = getIndex(j, i, k);
-  if (blocksFlags[chunkNear.blocks[index]][LIGHT_TRANSPARENT] || blocksFlags[chunkNear.blocks[index]][4]) {
+  const { j: jNear, k: kNear, chunkNear } = getChunkNear(j, k, chunk);
+  const index = getIndex(jNear, i, kNear);
+  const block = chunkNear.blocks[index];
+  if (blocksFlags[block][LIGHT_TRANSPARENT] || blocksFlags[block][4]) {
     return [1, chunkNear.light[index]];
   }
   return [0, -1];
@@ -233,10 +233,6 @@ export default class Chunk extends ChunkBase<Chunk> {
     super(binaryData, x, z);
 
     this.terrainMipMap = null;
-
-    this.rainfallData = new Uint8Array(256);
-    this.temperatureData = new Uint8Array(256);
-
     const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
       x + this.x,
       y,

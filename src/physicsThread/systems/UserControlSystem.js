@@ -80,8 +80,8 @@ export default (world: World, terrain: Terrain): System => {
 
 
     if (userControls.movingForward || userControls.movingBackward || userControls.movingLeft || userControls.movingRight) {
-      const movingX = userControls.movingForward - userControls.movingBackward;
-      const movingZ = userControls.movingLeft - userControls.movingRight;
+      const movingX = Number(userControls.movingForward) - Number(userControls.movingBackward);
+      const movingZ = Number(userControls.movingLeft) - Number(userControls.movingRight);
       const angle = getAngle(movingX, movingZ);
       const rotation = quat.rotateY(quat.create(), transform.rotation, angle);
 
@@ -101,7 +101,6 @@ export default (world: World, terrain: Terrain): System => {
     }
 
     getBlock(terrain)(...transform.translation)
-      .alt(Just(0))
       .map((block) => {
         if (blocksInfo[block].needPhysics && userControls.isJumping && velocity.linear[1] === 0) {
           velocity.linear[1] += 5;

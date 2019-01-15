@@ -3,7 +3,7 @@ import WebSocket, { Server as WebSocketServer } from 'ws';
 import type World from '../common/ecs/World';
 import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
-import Terrain from './terrain/Terrain';
+import type { Terrain as ITerrain } from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
 
 const send = ws => (data): void => {
@@ -34,8 +34,8 @@ type ServerEvents = {|
 |} // TODO: change to enum for simplified refinements
 
 const onMessage = events => socket => data =>
-  parseJson(data)
-    .map((message: Message) => {
+  parseJson<Message>(data)
+    .map(message => {
       if (typeof message.type === 'string') {
         events.emit({
           type: message.type,
@@ -47,9 +47,9 @@ const onMessage = events => socket => data =>
       }
     });
 
-const serverProvider = (world: World, Terrain) => class Server {
+const serverProvider = (world: World, Terrain: ITerrain) => class Server {
   wss: WebSocketServer;
-  terrain: Terrain;
+  terrain: ITerrain;
   events: EventObservable<ServerEvents> = new EventObservable();
 
   constructor() {
@@ -85,7 +85,7 @@ const serverProvider = (world: World, Terrain) => class Server {
   }
 };
 
-declare var tmp: $Call<typeof serverProvider, *>;
+declare var tmp: $Call<typeof serverProvider, *, *>;
 export type Server = tmp;
 
 export default serverProvider;

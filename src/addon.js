@@ -9,11 +9,11 @@ const addonProvider = store => class Addon {
     this.loaded = true;
     this.mainNode.setAttribute('id', `addon-${this.name}`);
 
-    this.scriptsNode = document.createElement('div');
-
-    this.mainNode.appendChild(this.scriptsNode);
-
-    document.getElementById('addons').appendChild(this.mainNode);
+    const node = document.getElementById('addons');
+    if (!node) {
+      throw new Error('node not found');
+    }
+    node.appendChild(this.mainNode);
   }
 
   removeFromGame() {

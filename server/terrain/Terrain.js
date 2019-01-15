@@ -3,8 +3,9 @@ import type { Vec3 } from 'gl-matrix';
 import { vec3 } from 'gl-matrix';
 import type { Block } from '../../common/block';
 import type { CreateItem } from '../item';
+import type { ChunkGenerator } from './ChunkGenerator';
 import Chunk from './Chunk';
-import ChunkGenerator from './ChunkGenerator';
+import createChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 import { send } from '../network/socket';
 
@@ -25,7 +26,7 @@ const createTerrain = (
   constructor(locationName: string, seed: number) {
     this.locationName = locationName;
     this.seed = seed;
-    this.chunkGenerator = ChunkGenerator(this.seed);
+    this.chunkGenerator = createChunkGenerator(this.seed);
   }
 
   addChunk(chunk: Chunk): void {

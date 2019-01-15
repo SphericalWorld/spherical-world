@@ -21,7 +21,7 @@ export default class Collider implements Component {
   static componentType: {| 'collider': Collider |};
 
   shape: TCollider;
-  threadData: Array<any>;
+  threadData: Array<Vec3>;
   type: COLLIDER_TYPE;
 
   constructor(type: COLLIDER_TYPE, ...params: Array<Vec3>) {

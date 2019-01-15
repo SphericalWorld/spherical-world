@@ -7,13 +7,10 @@ import {
 } from './components';
 import { createStubItems } from '../common/Inventory/Inventory';
 
-let id = 1;
-
 export default class Player {
   constructor() {
     this.locationName = 'steppe';
     this.party = [];
-    id += 1;
   }
 
   destroy() {

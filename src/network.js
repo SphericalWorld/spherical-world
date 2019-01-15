@@ -1,12 +1,12 @@
 // @flow strict
-import zlib from 'pako';
+import { inflate } from 'pako';
 import EventObservable from '../common/GameEvent/EventObservable';
 
 type NetworkEvent = {
   +type: string;
   +payload: {
     +data: Object;
-    +binaryData: ?ArrayBuffer;
+    +binaryData: ?Uint8Array;
   };
 }
 
@@ -15,7 +15,7 @@ class Network {
   connection: WebSocket;
   connected = false;
   pingDescriptor: IntervalID;
-  requestBinaryData: ?ArrayBuffer;
+  requestBinaryData: ?Uint8Array;
   host: string = `ws://${window.location.hostname}`;
   port: number = 8080;
   events: EventObservable<NetworkEvent> = new EventObservable();
@@ -29,7 +29,7 @@ class Network {
   requestBinaryData = null;
 
   processBinaryData(data: ArrayBuffer) {
-    this.requestBinaryData = zlib.inflate(new Uint8Array(data));
+    this.requestBinaryData = inflate(new Uint8Array(data));
   }
 
   processAction(message: MessageEvent) {
@@ -55,8 +55,10 @@ class Network {
           this.processBinaryData(message.data);
           return;
         }
-        const parsedMessage = JSON.parse(message.data);
-        this.processAction(parsedMessage);
+        if (typeof message.data === 'string') {
+          const parsedMessage = JSON.parse(message.data);
+          this.processAction(parsedMessage);
+        }
       };
     });
     this.connected = true;

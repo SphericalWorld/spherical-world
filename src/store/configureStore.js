@@ -22,7 +22,7 @@ export default function configureStore(preloadedState: ?State): Store<State, any
   );
 
   if (process.env.NODE_ENV !== 'production') {
-    if (module.hot) {
+    if ('hot' in module) {
       module.hot.accept('../reducers/rootReducer', () => {
         const newRootReducer = require('../reducers/rootReducer').default;
         store.replaceReducer(newRootReducer);

@@ -18,7 +18,7 @@ const resourceLoaderProvider = Addon => class ResourceLoader {
     let manifest = await (await fetch(`${this.addonServerInfo.host}/addons/${addonName}/package.json`)).text();
     manifest = JSON.parse(manifest);
     const addon = new Addon(addonName, manifest);
-    await this.loadAddonScripts(addon.name, addon.manifest.main, addon.scriptsNode);
+    await this.loadAddonScripts(addon.name, addon.manifest.main, addon.mainNode);
   }
 
   async loadAddons() {

@@ -1,5 +1,4 @@
 // @flow strict
-import { Just } from '../../../common/fp/monads/maybe';
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blockInfo';
 import Terrain from '../Terrain/Terrain';
@@ -17,7 +16,6 @@ export default (ecs: World, terrain: Terrain): System => {
     for (const { id, velocity, transform } of components) {
       let acceleration = 9.81;
       getBlock(terrain)(...transform.translation)
-        .alt(Just(0))
         .map((block) => {
           acceleration *= blocksInfo[block].fallAcceleration;
           velocity.linear[1] -= (acceleration * delta);
