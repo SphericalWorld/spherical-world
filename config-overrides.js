@@ -1,17 +1,38 @@
-const { getBabelLoader } = require('react-app-rewired');
 const path = require('path');
 const babelConfig = require('./.babelrc');
 
+const getBabelLoader = config => {
+  const babelLoaderFilter = rule =>
+    rule.loader
+    && rule.loader.includes('babel')
+    && rule.options
+    && rule.options.plugins;
+
+  let loaders = config.module.rules.find(rule => Array.isArray(rule.oneOf))
+    .oneOf;
+
+  let babelLoader = loaders.find(babelLoaderFilter);
+
+  if (!babelLoader) {
+    loaders = loaders.reduce((ldrs, rule) => ldrs.concat(rule.use || []), []);
+    babelLoader = loaders.find(babelLoaderFilter);
+  }
+  return babelLoader;
+};
+
 module.exports = function override(config, env) {
-  getBabelLoader(config.module.rules).options.presets = babelConfig.presets;
-  getBabelLoader(config.module.rules).options.plugins = babelConfig.plugins;
-  getBabelLoader(config.module.rules).include = [getBabelLoader(config.module.rules).include, path.resolve(__dirname, 'common')];
+  const { module: { rules } } = config;
+  const assetLoaders = rules[rules.length - 1].oneOf;
+
+  getBabelLoader(config).options.presets = babelConfig.presets;
+  getBabelLoader(config).options.plugins = babelConfig.plugins;
+  getBabelLoader(config).include = [getBabelLoader(config).include, path.resolve(__dirname, 'common')];
   // throw 1;
   config.resolve.plugins.splice(
     config.resolve.plugins.indexOf(config.resolve.plugins.find(el => el.constructor.name === 'ModuleScopePlugin')),
     1,
   );
-  config.module.rules.unshift({
+  rules.unshift({
     test: /\.(vert|frag)$/,
     use: { loader: 'raw-loader' },
   }, {
@@ -22,7 +43,6 @@ module.exports = function override(config, env) {
     ...config.output,
     globalObject: 'this',
   };
-  const assetLoaders = config.module.rules[config.module.rules.length - 1].oneOf;
   assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, 'css-modules-flow-types-loader');
   assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);
   return config;
