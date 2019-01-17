@@ -6,7 +6,6 @@ $arrow-down: '\25BC';
 %font-main {
   color: $font-color-main;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
   font-weight: bold;
   text-shadow:
     -2px 0 1px $font-color-main-shadow,
@@ -16,7 +15,7 @@ $arrow-down: '\25BC';
 }
 
 %tooltip-font-name {
-  font-size: 1em;
+  font-size: 1.1em;
   font-weight: 800;
   text-transform: capitalize;
 }
