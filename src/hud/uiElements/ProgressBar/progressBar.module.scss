@@ -1,0 +1,65 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.progressBar {
+  background-color: $progress-bar-background;
+  border-radius: 0.4em;
+  height: 1em;
+  margin-right: auto;
+  padding: 0.2em;
+  position: relative;
+  width: 100%;
+}
+
+.progressBar span {
+  border-radius: 0.3em;
+  display: inline-block;
+  height: 100%;
+  transition: width 0.4s ease-in-out;
+}
+
+.fullHP {
+  background-color: $full-hp-color;
+}
+
+.lowHp {
+  background-color: $low-hp-color;
+}
+
+.mana {
+  background-color: $mana-color;
+}
+
+.labelValue {
+  @extend %font-main;
+  font-weight: 100;
+  left: 50%;
+  position: absolute;
+}
+
+.percentInfo {
+  background-color: lighten($progress-bar-background, 10%);
+  border-radius: 5px;
+  height: 1em;
+  margin-left: -1em;
+  padding: 0.2em;
+  padding-left: 1.2em;
+}
+
+.labelPercent {
+  @extend %font-main;
+  align-items: center;
+  display: flex;
+  font-weight: 100;
+  height: 100%;
+  justify-content: center;
+  white-space: nowrap;
+}
