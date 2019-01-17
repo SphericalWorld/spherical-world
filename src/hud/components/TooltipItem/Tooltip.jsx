@@ -29,7 +29,7 @@ const TooltipDefinitions = [
 
 type ItemType = {
   +name: string,
-  +rareness?: Rareness,
+  +rareness: Rareness,
   +damage?: number,
   +icon?: string,
   +description?: string,
