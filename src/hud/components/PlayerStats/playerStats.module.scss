@@ -1,0 +1,52 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+%border-stats {
+  border: 0.2em ridge $primary;
+}
+
+%border-inside-stats {
+  border-top: 0.1em ridge $primary;
+}
+
+.content {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.stats {
+  width: 15em;
+}
+
+.statsInner {
+  @extend %border-stats;
+  border-radius: 0.6em;
+}
+
+.hp {
+  @extend %border-inside-stats;
+}
+
+.mana {
+  @extend %border-inside-stats;
+}
+
+.name {
+  text-align: center;
+}
+
+.imgPlayer {
+  @extend %border-stats;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border-radius: 1em;
+  box-shadow:
+    inset 0 0 0 0.5em #60b88d,
+    inset 0 0 0 1em #90cdaf,
+    inset 0 0 0 2em #bfe3d1;
+  height: 5em;
+  margin-left: -0.1em;
+  width: 5em;
+}
