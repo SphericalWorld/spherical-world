@@ -2,18 +2,11 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
-%border-stats {
-  border: 0.2em ridge $primary;
-}
-
-%border-inside-stats {
-  border-top: 0.1em ridge $primary;
-}
-
 .content {
   align-items: center;
   display: flex;
   flex-direction: row;
+  margin: 1em 2em;
 }
 
 .stats {
@@ -21,16 +14,7 @@
 }
 
 .statsInner {
-  @extend %border-stats;
   border-radius: 0.6em;
-}
-
-.hp {
-  @extend %border-inside-stats;
-}
-
-.mana {
-  @extend %border-inside-stats;
 }
 
 .name {
@@ -38,7 +22,6 @@
 }
 
 .imgPlayer {
-  @extend %border-stats;
   background-repeat: no-repeat;
   background-size: 100%;
   border-radius: 1em;
