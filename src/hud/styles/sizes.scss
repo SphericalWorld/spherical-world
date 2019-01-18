@@ -28,6 +28,7 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
   background-color: transparentize($background-color-slot, 0.6);
   border: $size-border solid $border-color-slot;
   border-radius: 0.7em;
+  font-size: 0.8em;
   margin: 0.1em -0.11em;
 }
 

@@ -1,9 +1,7 @@
 // @flow strict
 import React from 'react';
 import {
-  Button,
   Label,
-  Select,
   ProgressBar,
 } from '../../uiElements';
 import {
@@ -11,8 +9,6 @@ import {
   stats,
   statsInner,
   name,
-  hp,
-  mana,
   imgPlayer,
 } from './playerStats.module.scss';
 
@@ -24,11 +20,11 @@ const PlayerStats = () => (
         <div className={name}>
           <Label size="big">Players Name</Label>
         </div>
-        <div className={hp}>
+        <div>
           <ProgressBar currentValue={70} maxValue={100} />
         </div>
-        <div className={mana}>
-          <ProgressBar kind="mana" currentValue={203} maxValue={320} />
+        <div>
+          <ProgressBar type="mana" currentValue={203} maxValue={320} />
         </div>
       </div>
     </div>
