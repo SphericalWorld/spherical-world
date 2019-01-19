@@ -79,7 +79,8 @@ const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
         key={mapping.action}
         onSetKey={onSetKey}
         {...mapping}
-      />))
+      />
+    ))
     }
   </div>
 );

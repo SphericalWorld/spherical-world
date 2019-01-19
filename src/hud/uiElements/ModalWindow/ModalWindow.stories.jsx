@@ -17,4 +17,5 @@ storiesOf('Modal Window', module)
           )
         }
       </ModalWindow>
-    </>));
+    </>
+  ));

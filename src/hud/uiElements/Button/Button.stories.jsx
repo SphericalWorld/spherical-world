@@ -12,4 +12,5 @@ storiesOf('Button', module)
       <br />
       Small button:
       <Button size="small" onClick={action('clicked')}>small</Button>
-    </>));
+    </>
+  ));

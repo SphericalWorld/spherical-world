@@ -15,8 +15,9 @@ const items = [
 ];
 
 storiesOf('Select', module)
-  .add('Select', () =>
-  <>
-    <br />
-    <Select options={items} onSelect={value => action(`selected ${String(value)}`)} />
-  </>);
+  .add('Select', () => (
+    <>
+      <br />
+      <Select options={items} onSelect={value => action(`selected ${String(value)}`)} />
+    </>
+  ));

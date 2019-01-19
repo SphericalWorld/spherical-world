@@ -6,7 +6,7 @@ import { playerProvider } from './player';
 import serverProvider from './server';
 import systemsProvider from './systems';
 import * as componentsProvider from './components';
-import Terrain from './terrain/Terrain';
+import createTerrain from './terrain/Terrain';
 
 const createECS = () => {
   const world = new World(THREAD_MAIN);
@@ -18,7 +18,7 @@ const createECS = () => {
 const mainProvider = () => {
   const world = createECS();
   const createPlayer = playerProvider(world);
-  const Server = serverProvider(world, Terrain(createItem(world)));
+  const Server = serverProvider(world, createTerrain(createItem(world)));
   const server = new Server();
   world.registerSystem(...systemsProvider(world, server, createPlayer));
   return server;

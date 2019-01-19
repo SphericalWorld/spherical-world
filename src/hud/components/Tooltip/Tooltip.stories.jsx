@@ -15,4 +15,5 @@ storiesOf('Tooltip', module)
           hover to show tooltip
         </TooltipTrigger>
       </div>
-    </>));
+    </>
+  ));

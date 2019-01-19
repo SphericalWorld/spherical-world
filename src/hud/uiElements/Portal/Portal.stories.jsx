@@ -18,4 +18,5 @@ storiesOf('Portal', module)
           <div>child in a portal with passed props</div>
         </Portal>
       </div>
-    </>));
+    </>
+  ));

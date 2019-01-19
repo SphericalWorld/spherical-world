@@ -9,4 +9,5 @@ storiesOf('Checkbox', module)
       <Checkbox size="big"> CheckBox Big</Checkbox>
       <br />
       <Checkbox size="small"> CheckBox small</Checkbox>
-    </>));
+    </>
+  ));

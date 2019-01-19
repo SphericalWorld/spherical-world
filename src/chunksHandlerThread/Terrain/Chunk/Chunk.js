@@ -62,7 +62,9 @@ const getLightColor = (light, c, cf, s1, s1f, s2, s2f) => {
   ];
 };
 
-const getChunkNear = (j: number, k: number, chunk) => {
+const getChunkNear = (jOrig: number, kOrig: number, chunk) => {
+  let j = jOrig;
+  let k = kOrig;
   let chunkNear = chunk;
   if (j === -1) {
     j = 15;
