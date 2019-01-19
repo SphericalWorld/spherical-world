@@ -3,8 +3,16 @@ import { getIndex } from '../../../common/chunk';
 import identity from '../../../common/fp/combinators/identity';
 import { SLICE } from '../../../common/constants/chunk';
 
+export type ChunkData = {
+  +flags: Uint8Array,
+  +blocks: Uint8Array,
+  +light: Uint16Array,
+  +x: number,
+  +z: number,
+}
+
 export type RenderToChunk = (
-  chunk: any,
+  chunk: ChunkData,
   x: number,
   y: number,
   z: number,
@@ -16,7 +24,7 @@ export type RenderToChunk = (
 ) => number;
 
 const putBlock = (
-  chunk,
+  chunk: ChunkData,
   x: number,
   y: number,
   z: number,

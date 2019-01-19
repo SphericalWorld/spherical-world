@@ -326,12 +326,14 @@ export default class Chunk extends ChunkBase<Chunk> {
       }
       buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
     }
-    const buffersData = buffers.reduce((prev, curr) => ({
+    const concatedBuffersData = buffers.reduce((prev, curr) => ({
       vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
       indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
     }), createBuffers());
-    buffersData.vertexBuffer = new Float32Array(buffersData.vertexBuffer).buffer;
-    buffersData.indexBuffer = new Uint16Array(buffersData.indexBuffer).buffer;
+    const buffersData = {
+      vertexBuffer: new Float32Array(concatedBuffersData.vertexBuffer).buffer,
+      indexBuffer: new Uint16Array(concatedBuffersData.indexBuffer).buffer,
+    };
     self.postMessage({
       type: 'UPDATE_COMPONENTS',
       payload: {

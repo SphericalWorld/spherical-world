@@ -1,5 +1,8 @@
 // @flow strict
-import BasePropertiesComponent, { type RenderToChunk } from './components/BasePropertiesComponent';
+import BasePropertiesComponent, {
+  type RenderToChunk,
+  type ChunkData,
+} from './components/BasePropertiesComponent';
 
 export type BlockData = {|
   id: number,
@@ -27,7 +30,7 @@ export type BlockData = {|
     east: number,
   },
   putBlock: (
-    chunk,
+    chunk: ChunkData,
     x: number,
     y: number,
     z: number,
