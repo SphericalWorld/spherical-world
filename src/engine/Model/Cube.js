@@ -3,151 +3,135 @@ import type { Vec3 } from 'gl-matrix';
 import { gl } from '../glEngine';
 import Model from './Model';
 
-const textureCoordsNormal = [
-  // Front face
-  0.0, 0.0,
-  1.0, 0.0,
-  1.0, 1.0,
-  0.0, 1.0,
+const getTextureCoords = () => {
+  const textureCoordinates = new Float32Array(48);
+  for (let index = 0; index < 48; index += 8) {
+    textureCoordinates[index] = 0;
+    textureCoordinates[index + 1] = 0;
+    textureCoordinates[index + 2] = 0;
+    textureCoordinates[index + 3] = 1;
+    textureCoordinates[index + 4] = 1;
+    textureCoordinates[index + 5] = 0;
+    textureCoordinates[index + 6] = 1;
+    textureCoordinates[index + 7] = 1;
+  }
+  return textureCoordinates;
+};
 
-  // Back face
-  1.0, 0.0,
-  1.0, 1.0,
-  0.0, 1.0,
-  0.0, 0.0,
-
-  // Top face
-  0.0, 1.0,
-  0.0, 0.0,
-  1.0, 0.0,
-  1.0, 1.0,
-
-  // Bottom face
-  1.0, 1.0,
-  0.0, 1.0,
-  0.0, 0.0,
-  1.0, 0.0,
-
-  // Right face
-  1.0, 0.0,
-  1.0, 1.0,
-  0.0, 1.0,
-  0.0, 0.0,
-
-  // Left face
-  0.0, 0.0,
-  1.0, 0.0,
-  1.0, 1.0,
-  0.0, 1.0,
-];
+const textureCoordsNormal = getTextureCoords();
 
 const textureCoordsCubeMap = [
-  // Front face
-  0.25, 0.50,
-  0.50, 0.50,
-  0.50, 0.25,
-  0.25, 0.25,
-
-  // Back face
-  0.75, 0.50,
-  1.00, 0.50,
-  1.00, 0.25,
-  0.75, 0.25,
-
   // Top face
   0.25, 0.25,
+  0.25, 0.00,
   0.50, 0.25,
   0.50, 0.00,
-  0.25, 0.00,
 
   // Bottom face
   0.25, 0.75,
+  0.25, 0.50,
   0.50, 0.75,
   0.50, 0.50,
+
+  // Front face
   0.25, 0.50,
+  0.25, 0.25,
+  0.50, 0.50,
+  0.50, 0.25,
+
+  // Back face
+  0.75, 0.50,
+  0.75, 0.25,
+  1.00, 0.50,
+  1.00, 0.25,
 
   // Right face
   0.50, 0.50,
+  0.50, 0.25,
   0.75, 0.50,
   0.75, 0.25,
-  0.50, 0.25,
 
   // Left face
   0.00, 0.50,
+  0.00, 0.25,
   0.25, 0.50,
   0.25, 0.25,
-  0.00, 0.25,
 ];
+
+const getIndices = () => {
+  let indices = [];
+  for (let index = 0; index < 6; index += 1) {
+    indices = indices.concat([0, 3, 1, 0, 2, 3].map(el => el + index * 4));
+  }
+  return indices;
+};
+
+const cubeVertexIndices = new Uint16Array(getIndices());
+const reversedCubeVertexIndices = new Uint16Array(getIndices().reverse());
 
 const createCube = (
   size: number = 1.0,
   isReversed: boolean = false,
   isCubeMap: boolean = false,
   [x, y, z]: Vec3 = [0, 0, 0],
+  textureCoordinates?: Float32Array,
 ): Model => {
   const model = new Model();
   const halfSize = size / 2;
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);
   const vertices = [
-    // Front face
-    x - halfSize, y - halfSize, z + halfSize,
-    x + halfSize, y - halfSize, z + halfSize,
-    x + halfSize, y + halfSize, z + halfSize,
-    x - halfSize, y + halfSize, z + halfSize,
-
-    // Back face
-    x + halfSize, y - halfSize, z - halfSize,
-    x - halfSize, y - halfSize, z - halfSize,
-    x - halfSize, y + halfSize, z - halfSize,
-    x + halfSize, y + halfSize, z - halfSize,
-
     // Top face
     x - halfSize, y + halfSize, z + halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
     x + halfSize, y + halfSize, z + halfSize,
     x + halfSize, y + halfSize, z - halfSize,
-    x - halfSize, y + halfSize, z - halfSize,
 
     // Bottom face
     x - halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y - halfSize, z + halfSize,
     x + halfSize, y - halfSize, z - halfSize,
     x + halfSize, y - halfSize, z + halfSize,
+
+    // Front face
     x - halfSize, y - halfSize, z + halfSize,
+    x - halfSize, y + halfSize, z + halfSize,
+    x + halfSize, y - halfSize, z + halfSize,
+    x + halfSize, y + halfSize, z + halfSize,
+
+    // Back face
+    x + halfSize, y - halfSize, z - halfSize,
+    x + halfSize, y + halfSize, z - halfSize,
+    x - halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
 
     // Right face
     x + halfSize, y - halfSize, z + halfSize,
+    x + halfSize, y + halfSize, z + halfSize,
     x + halfSize, y - halfSize, z - halfSize,
     x + halfSize, y + halfSize, z - halfSize,
-    x + halfSize, y + halfSize, z + halfSize,
 
     // Left face
     x - halfSize, y - halfSize, z - halfSize,
+    x - halfSize, y + halfSize, z - halfSize,
     x - halfSize, y - halfSize, z + halfSize,
     x - halfSize, y + halfSize, z + halfSize,
-    x - halfSize, y + halfSize, z - halfSize,
   ];
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indexBuffer);
-  const cubeVertexIndices = [
-    0, 1, 2, 0, 2, 3, // Front face
-    4, 5, 6, 4, 6, 7, // Back face
-    8, 9, 10, 8, 10, 11, // Top face
-    12, 13, 14, 12, 14, 15, // Bottom face
-    16, 17, 18, 16, 18, 19, // Right face
-    20, 21, 22, 20, 22, 23, // Left face
-  ];
-  if (isReversed) {
-    cubeVertexIndices.reverse();
-  }
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeVertexIndices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, isReversed ? reversedCubeVertexIndices : cubeVertexIndices, gl.STATIC_DRAW);
   model.elementsCount = 36;
 
   gl.bindBuffer(gl.ARRAY_BUFFER, model.texCoordBuffer);
   const textureCoords = isCubeMap
     ? textureCoordsCubeMap
     : textureCoordsNormal;
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoords), gl.STATIC_DRAW);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array(textureCoordinates || textureCoords),
+    gl.STATIC_DRAW,
+  );
   return model;
 };
 

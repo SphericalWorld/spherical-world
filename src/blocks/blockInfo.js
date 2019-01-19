@@ -1,9 +1,8 @@
 // @flow strict
-import typeof BasePropertiesComponent from './components/BasePropertiesComponent';
 import { createArray } from '../../common/utils/array';
 
 import Air from './Air';
-import Block from './Block';
+import Block, { type BlockData } from './Block';
 import Clay from './Clay';
 import CoalOre from './CoalOre';
 import Cobblestone from './Cobblestone';
@@ -46,7 +45,7 @@ const blocks = [
 const blocksTextureInfo = createArray<Uint8Array>(256, () => (new Uint8Array(6)));
 const blocksFlags = createArray<Uint8Array>(256, () => (new Uint8Array(5)));
 const bufferInfo = createArray<number[]>(256, () => createArray(6, 0));
-const blocksInfo = createArray<$Call<BasePropertiesComponent, *>>(256, Block());
+const blocksInfo = createArray<BlockData>(256, Block());
 
 export const LIGHT_TRANSPARENT: 0 = 0;
 export const SIGHT_TRANSPARENT: 1 = 1;

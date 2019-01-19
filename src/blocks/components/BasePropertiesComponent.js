@@ -3,6 +3,18 @@ import { getIndex } from '../../../common/chunk';
 import identity from '../../../common/fp/combinators/identity';
 import { SLICE } from '../../../common/constants/chunk';
 
+export type RenderToChunk = (
+  chunk: any,
+  x: number,
+  y: number,
+  z: number,
+  {
+    vertexBuffer: number[],
+    indexBuffer: number[],
+    vertexCount: number,
+  },
+) => number;
+
 const putBlock = (
   chunk,
   x: number,
@@ -45,8 +57,7 @@ const BasePropertiesComponent = () => ({
     east: 0,
   },
   putBlock,
-  getFlags: identity,
-  renderToChunk: null,
+  getFlags: (identity: number => number),
 });
 
 export default BasePropertiesComponent;

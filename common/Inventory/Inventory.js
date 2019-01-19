@@ -24,12 +24,6 @@ export type Slot = {|
 export type Inventory = {|
   slots: Array<SlotID | null>;
   items: $Shape<{| [SlotID]: Slot |}>;
-  selectedItem: ?SlotID;
-|};
-
-export type InventoryParams = {|
-  slots: Array<SlotID | null>;
-  items: $Shape<{| [SlotID]: Slot |}>;
   selectedItem?: ?SlotID;
 |};
 
@@ -37,7 +31,7 @@ export const createInventory = ({
   slots = [],
   items = {},
   selectedItem = null,
-}: InventoryParams): Inventory => ({
+}: Inventory): Inventory => ({
   slots,
   items,
   selectedItem,

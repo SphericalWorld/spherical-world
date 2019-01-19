@@ -1,6 +1,6 @@
 // @flow strict
 import { promisify } from 'util';
-import fs from 'fs-extra';
+import { readFile, outputFile } from 'fs-extra';
 import zlib from 'zlib';
 import type ChunkMap from './ChunkMap';
 import type { Terrain } from './Terrain';
@@ -13,16 +13,6 @@ import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
-
-const {
-  readFile,
-  outputFile,
-  appendFile,
-}: {
-  readFile: (string) => Promise<Buffer>,
-  outputFile: (string, Buffer | string) => Promise<void>,
-} = fs;
-
 const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {

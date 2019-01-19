@@ -32,8 +32,8 @@ import {
 } from './chunkLigting';
 
 type ChunkBuffers = {|
-  +vertexBuffer: number[],
-  +indexBuffer: number[],
+  vertexBuffer: number[],
+  indexBuffer: number[],
   vertexCount: number,
 |}
 
@@ -287,8 +287,8 @@ export default class Chunk extends ChunkBase<Chunk> {
       const k = (index >>> 4) & 0xF;
       const block = this.blocks[index];
       if (block) {
-        if (typeof blocksInfo[block].renderToChunk === 'function') { // TODO: MODEL
-          buffers[bufferInfo[block][0]].vertexCount += blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]], buffers);
+        if (blocksInfo[block].renderToChunk) { // TODO: MODEL
+          buffers[bufferInfo[block][0]].vertexCount += blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
         } else {
           this.createTopPlane(block, i, j, k, buffers);
           this.createBottomPlane(block, i, j, k, buffers);

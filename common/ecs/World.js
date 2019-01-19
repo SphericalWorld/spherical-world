@@ -22,7 +22,7 @@ export default class World {
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
-  componentTypes: Map<string, typeof Component> = new Map();
+  componentTypes: Map<string, Class<Component>> = new Map();
   selectors: EntitySelector<typeof Component[]>[] = [];
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
@@ -31,7 +31,7 @@ export default class World {
   lastAddedObjects = [];
   lastDeletedObjects = [];
   objects: Map<Entity, any> = new Map();
-  changedData: Map<Component, Map<string, Component>>;
+  changedData: Map<Class<Component>, Map<string, Component>>;
 
   constructor(thread: THREAD_ID) {
     this.thread = thread;
@@ -67,10 +67,10 @@ export default class World {
     }
   }
 
-  createSelector<T: Component[]>(
+  createSelector<T: $ReadOnlyArray<Class<Component>>>(
     includeComponents: T,
-    excludeComponents?: (typeof Component)[],
-  ): $Call<transform, T>[] {
+    excludeComponents?: Class<Component>[],
+  ): $ReadOnlyArray<$Call<transform, T>> {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
     return selector.components;
