@@ -8,7 +8,8 @@ type SelectorFunction = (Entity) => boolean;
 
 type Z<T> = $PropertyType<T, 'componentType'>;
 
-declare function inner<A>([A]): { ...Z<A>, id: Entity };
+declare function inner<A>([]): { id: Entity };
+declare function inner<A>([A]): { ...Z<A>, id: Entity }; // eslint-disable-line max-len, no-redeclare
 declare function inner<A, B>([A, B]): { ...Z<A>, ...Z<B>, id: Entity }; // eslint-disable-line max-len, no-redeclare
 declare function inner<A, B, C>([A, B, C]): { ...Z<A>, ...Z<B>, ...Z<C>, id: Entity }; // eslint-disable-line max-len, no-redeclare
 declare function inner<A, B, C, D>([A, B, C, D]): { ...Z<A>, ...Z<B>, ...Z<C>, ...Z<D>, id: Entity }; // eslint-disable-line max-len, no-redeclare
@@ -20,6 +21,7 @@ declare function inner<A, B, C, D, E, F, G, H, I>([A, B, C, D, E, F, G, H, I]): 
 declare function inner<A, B, C, D, E, F, G, H, I, J>([A, B, C, D, E, F, G, H, I, J]): { ...Z<A>, ...Z<B>, ...Z<C>, ...Z<D>, ...Z<E>, ...Z<F>, ...Z<G>, ...Z<H>, ...Z<I>, ...Z<J>, id: Entity }; // eslint-disable-line max-len, no-redeclare
 
 export type transform = typeof inner;
+export type GameObject<T> = $Call<transform, T>;
 
 export class EntitySelector<T> {
   includeComponents: T;

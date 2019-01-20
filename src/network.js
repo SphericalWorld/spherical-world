@@ -65,7 +65,6 @@ class Network {
   }
 
   start(): void {
-    this.emit('loadGameData');
     this.pingDescriptor = setInterval(() => {
       let timeOld = Date.now();
       this.emit('PING', () => {

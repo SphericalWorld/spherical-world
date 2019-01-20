@@ -1,9 +1,9 @@
 // @flow strict
 import type { Socket } from './network/socket';
-import type { Entity } from '../common/ecs/Entity';
+import type { GameObject } from '../common/ecs';
 import type World from '../common/ecs/World';
 import {
-  Transform, Network, PlayerData, Inventory, NetworkSync,
+  Transform, Network, PlayerData, Inventory, NetworkSync, Camera,
 } from './components';
 import { createStubItems } from '../common/Inventory/Inventory';
 
@@ -30,17 +30,30 @@ export default class Player {
   }
 }
 
+type SerializedPlayerData = GameObject<[typeof Transform, typeof Inventory, typeof Camera]>;
+
 export const playerProvider = (
   world: World,
-) => (id: Entity, socket: Socket) => {
-  const player = world.createEntity(
-    id,
-    new Transform(0, 132, 0),
-    new PlayerData(`Unnamed Player ${id}`),
-    new Network(socket),
-    new Inventory(createStubItems()),
-    new NetworkSync({ name: 'PLAYER' }),
-  );
+) => (playerData: ?SerializedPlayerData, socket: Socket) => {
+  const player = playerData
+    ? world.createEntity(
+      playerData.id,
+      Transform.deserialize(playerData.transform),
+      new PlayerData(`Unnamed Player ${playerData.id}`),
+      new Network(socket),
+      Inventory.deserialize(playerData.inventory),
+      new NetworkSync({ name: 'PLAYER' }),
+      Camera.deserialize(playerData.camera),
+    )
+    : world.createEntity(
+      null,
+      new Transform(0, 132, 0),
+      new PlayerData('Unnamed Player'),
+      new Network(socket),
+      new Inventory(createStubItems()),
+      new NetworkSync({ name: 'PLAYER' }),
+      new Camera(),
+    );
   socket.player = player;
   return player;
 };

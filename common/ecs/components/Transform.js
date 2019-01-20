@@ -24,7 +24,9 @@ export default class Transform implements Component, Networkable {
   }
 
   static deserialize(data: Transform): Transform {
-    return new Transform(data.translation[0], data.translation[1], data.translation[2]);
+    const res = new Transform(data.translation[0], data.translation[1], data.translation[2]);
+    res.rotation = data.rotation;
+    return res;
   }
 
   serialize(): mixed {

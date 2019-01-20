@@ -58,6 +58,10 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
         type: 'Transform',
         data: player
           .map(el => [el.id, el.transform]),
+      }, {
+        type: 'Camera',
+        data: player
+          .map(el => [el.id, el.camera.serialize()]),
       }]);
     }
     return result;

@@ -100,7 +100,7 @@ const createPlayer = (
       ...isMainPlayer
         ? [
           new UserControlled(),
-          new Camera(),
+          Camera.deserialize(data.camera),
         ]
         : [
           new Visual(new GlObject({ model, material })),

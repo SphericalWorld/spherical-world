@@ -38,18 +38,19 @@ const engineProvider = (
       network.events
         .filter(e => e.type === 'LOGGED_IN')
         .subscribe(({ payload }) => {
+          localStorage.setItem('userId', payload.data.id);
           const player = Player(payload.data, true);
           const skyBox = Skybox(player);
         });
 
       network.events
         .filter(e => e.type === 'GAME_START')
-        .subscribe(({ payload }) => {
+        .subscribe(() => {
           resourceLoader.loadAddons();
           requestAnimationFrame(this.gameCycle);
         });
 
-      network.emit('LOGIN', { cookie: 12345 });
+      network.emit('LOGIN', { cookie: 12345, userId: localStorage.getItem('userId') });
 
       Player.hudBillboardModel = createBillboard(2.0);
 
