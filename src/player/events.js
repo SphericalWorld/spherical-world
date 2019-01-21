@@ -19,9 +19,10 @@ export const PLAYER_DESTROYED_BLOCK: 'PLAYER_DESTROYED_BLOCK' = 'PLAYER_DESTROYE
 export const PLAYER_START_PUT_BLOCK: 'PLAYER_START_PUT_BLOCK' = 'PLAYER_START_PUT_BLOCK';
 export const PLAYER_PUT_BLOCK: 'PLAYER_PUT_BLOCK' = 'PLAYER_PUT_BLOCK';
 
-type Event<Type, Payload> = {
+type Event<Type, Payload, Network = false> = {
   +type: Type,
   +payload: Payload,
+  +network: Network,
 }
 
 export type PLAYER_DESTROYED_BLOCK_TYPE = Event<typeof PLAYER_DESTROYED_BLOCK, {

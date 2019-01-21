@@ -10,7 +10,9 @@ type SyncEvent = {
     newObjects: $ReadOnlyArray<NetworkSync>,
     components: $ReadOnlyArray<empty>
   },
+  +network?: boolean,
 }
+
 export type GameEvent =
   | {
     +type: 'GAME_EVENT_TYPE';

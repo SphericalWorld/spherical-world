@@ -60,7 +60,11 @@ export const getVisibleChunks = (terrain: Terrain, pMatrix: Mat4, mvMatrix: Mat4
 
 const getBlockDetails = (terrain, x, y, z) => terrain
   .getChunk(toChunkPosition(x), toChunkPosition(z))
-  .map(chunk => chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z)));
+  .map(chunk => chunk.getBlock(
+    toPositionInChunk(x),
+    y + PLAYER_CAMERA_HEIGHT,
+    toPositionInChunk(z),
+  ));
 
 const drawFog = (terrain, shader, skyColor, x, y, z) => getBlockDetails(terrain, x, y, z)
   .map((blockInDown) => {

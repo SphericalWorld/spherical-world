@@ -42,14 +42,14 @@ const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> => terrain
   .getChunk(toChunkPosition(x), toChunkPosition(z))
   .map((chunk) => {
     const position = vec3.fromValues(x, y, z);
-    x = toPositionInChunk(x);
-    z = toPositionInChunk(z);
+    const xInChunk = toPositionInChunk(x);
+    const zInChunk = toPositionInChunk(z);
 
     return {
-      block: chunk.getBlock(x, y, z),
+      block: chunk.getBlock(xInChunk, y, zInChunk),
       position,
       geoId: chunk.geoId,
-      positionInChunk: vec3.fromValues(x, y, z),
+      positionInChunk: vec3.fromValues(xInChunk, y, zInChunk),
     };
   });
 

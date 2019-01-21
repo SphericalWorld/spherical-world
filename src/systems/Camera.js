@@ -53,6 +53,8 @@ const getCameraMovements = (world: World) => world.events
   .filter(el => el.type === CAMERA_MOVED)
   .subscribeQueue();
 
+const sumCameraMovements = ([x, y], { payload }) => ([x + payload.x, y + payload.y]);
+
 export default (world: World, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);
   const bodyElement = document.getElementsByTagName('body')[0];
@@ -74,8 +76,8 @@ export default (world: World, input: Input): System => {
       input.activateContext(GAMEPLAY_MENU_CONTEXT);
     });
 
-  const cameraSystem = (delta: number) => {
-    const movement = cameraMovements.events.reduce(([x, y], { payload }) => ([x + payload.x, y + payload.y]), [0, 0]);
+  const cameraSystem = () => {
+    const movement = cameraMovements.events.reduce(sumCameraMovements, [0, 0]);
     const [{ id, transform, camera }] = cameras;
     camera.viewport = resizeViewport(camera.viewport);
 
@@ -93,7 +95,11 @@ export default (world: World, input: Input): System => {
 
     // console.log(rotation)
     mat4.fromQuat(camera.mvMatrix, rotation);
-    mat4.translate(camera.mvMatrix, camera.mvMatrix, [-translation[0], -translation[1] - PLAYER_CAMERA_HEIGHT, -translation[2]]);
+    mat4.translate(camera.mvMatrix, camera.mvMatrix, [
+      -translation[0],
+      -translation[1] - PLAYER_CAMERA_HEIGHT,
+      -translation[2],
+    ]);
     cameraMovements.clear();
 
     const sight = vec3.create();

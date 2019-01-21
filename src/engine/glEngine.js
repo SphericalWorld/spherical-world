@@ -4,7 +4,19 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error();
 }
 
-export const gl: WebGLRenderingContext = canvas.getContext('webgl2', { antialias: false });
+type WebGLVertexArrayObject = {||};
+
+type WebGL2Additions = {
+  +bindVertexArray: (context: ?WebGLVertexArrayObject) => void,
+  +createVertexArray: () => WebGLVertexArrayObject,
+}
+
+type WebGL2Context = WebGLRenderingContext & WebGL2Additions;
+
+const gl: ?WebGL2Context = (canvas.getContext('webgl2', { antialias: false }): WebGLRenderingContext);
+if (!gl) {
+  throw new Error('Can not initialize webgl2 context');
+}
 
 export function initWebGL() {
   try {
@@ -16,3 +28,5 @@ export function initWebGL() {
     alert('Unable to initialize WebGL. Your browser may not support it.');
   }
 }
+
+export { gl };

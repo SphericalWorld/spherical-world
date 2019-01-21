@@ -27,7 +27,7 @@ export class EntitySelector<T> {
   includeComponents: T;
   excludeComponents: Class<Component>[];
   selectorFunction: SelectorFunction;
-  components: $Call<transform, T>[] = [];
+  components: GameObject<T>[] = [];
 
   constructor(world: World, includeComponents: T, excludeComponents: Class<Component>[] = []) {
     this.includeComponents = includeComponents;

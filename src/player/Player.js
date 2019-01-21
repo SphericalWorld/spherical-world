@@ -3,21 +3,10 @@
 //   @connect(mapState, mapActions, store)
 //   class Player {
 //     name: string;
-//
-//     static instances = [];
-
-//     static addToPlayers(player: Player) {
-//       this.instances[player.id] = player;
-//     }
-//
 //     constructor(params, app) {
 //       this.blockRemovingSpeed = 2;
 //
 //       this.fallSpeed = 0;
-//       if (typeof params === 'object') {
-//         Object.assign(this, params);
-//       }
-//       this.constructor.addToPlayers(this);
 //       this.name = 'unnamed player';
 //
 //       this.level = 3;
@@ -62,10 +51,9 @@
 // export default playerProvider;
 
 import { vec3 } from 'gl-matrix';
-import type { Entity } from '../../common/ecs/Entity';
+import { type Entity, type GameObject, World } from '../../common/ecs';
 import GlObject from '../engine/glObject';
 import playerModel from '../models/player.json';
-import { World } from '../../common/ecs';
 import {
   Transform,
   Camera,
@@ -80,19 +68,31 @@ import {
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import Model from '../engine/Model/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
+import type { CreateBlockPicker } from './BlockPicker';
+
+type playerData = GameObject<[
+  typeof Transform,
+  typeof Inventory,
+  typeof Camera,
+]>;
 
 const createPlayer = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker,
-) => (data: Object, isMainPlayer: boolean = false): Entity => {
+) => (data: playerData, isMainPlayer: boolean = false): Entity => {
   const model = new Model(playerModel, 2);
   const material = materialLibrary.get('skybox'); // 'player'
   const player = ecs.createEntity(
     data.id,
     ...[
       Transform.deserialize(data.transform),
-      new Collider(COLLIDER_AABB, vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)),
+      new Collider(
+        COLLIDER_AABB,
+        vec3.create(),
+        vec3.fromValues(0.8, 1.8, 0.8),
+        vec3.fromValues(0.4, 0, 0.4),
+      ),
       new Physics(),
       new Velocity(),
       new Gravity(),
@@ -118,7 +118,7 @@ const createPlayer = (
 const playerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
-  BlockPicker,
+  BlockPicker: CreateBlockPicker,
 ) => {
   const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker);
   ecs.registerConstructor('PLAYER', playerConstructor);

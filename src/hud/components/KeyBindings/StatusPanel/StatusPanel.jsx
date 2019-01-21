@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import type { State } from '../../../../reducers/rootReducer';
 import Label from '../../../uiElements/Label';
-import { labelCommandGroup } from './statusPanel.scss';
+import { labelCommandGroup } from './statusPanel.module.scss';
 
 type StateProps = {|
   +statusText: string,

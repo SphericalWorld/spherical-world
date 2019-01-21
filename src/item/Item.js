@@ -45,7 +45,13 @@ const createItem = (
 }: {
   transform: Transform, id: Entity, inventory: Inventory,
 }): Entity => {
-  const model = createCube(SIZE, undefined, undefined, undefined, getTextureCoords(inventory.data.items.slot.itemTypeId));
+  const model = createCube(
+    SIZE,
+    undefined,
+    undefined,
+    undefined,
+    getTextureCoords(inventory.data.items.slot.itemTypeId),
+  );
   const material = materialLibrary.get('blocksDropable');
   const object = new GlObject({ model, material });
   const item = ecs.createEntity(

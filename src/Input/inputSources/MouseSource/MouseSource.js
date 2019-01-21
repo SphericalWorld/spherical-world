@@ -50,7 +50,11 @@ export default class MouseSource implements InputSource {
   }
 
   onMouseWheel = (e: WheelEvent) => {
-    this.onEvent(new RangeInputEvent(e.deltaY < 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN, e.deltaX, e.deltaY));
+    this.onEvent(new RangeInputEvent(
+      e.deltaY < 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN,
+      e.deltaX,
+      e.deltaY,
+    ));
   }
 
   setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget) => {

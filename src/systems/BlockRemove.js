@@ -61,7 +61,9 @@ export default (world: World): System => {
   getPutBlockEvents(world, picker);
 
   const raytracerRegistry = world.components.get('Raytracer');
-
+  if (!raytracerRegistry) {
+    throw new Error();
+  }
   const blockRemove = (delta: number) => {
     for (const {
       visual, blockRemover, id, joint,
@@ -85,7 +87,9 @@ export default (world: World): System => {
         if (blockRemover.removedPart >= 1) {
           blockRemover.removedPart = 0;
           world.createEventAndDispatch(PLAYER_DESTROYED_BLOCK, {
-            geoId: block.geoId, positionInChunk: Array.from(block.positionInChunk), position: Array.from(block.position),
+            geoId: block.geoId,
+            positionInChunk: Array.from(block.positionInChunk),
+            position: Array.from(block.position),
           }, true);
         }
       } else {

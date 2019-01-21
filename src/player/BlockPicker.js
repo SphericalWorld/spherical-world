@@ -13,7 +13,7 @@ const blockPickerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockRemover: CreateBlockRemover,
-) => (parent: Entity): any => {
+) => (parent: Entity) => {
   const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });
@@ -29,5 +29,7 @@ const blockPickerProvider = (
   picker.children.push(blockRemover);
   return picker;
 };
+
+export type CreateBlockPicker = $Call<typeof blockPickerProvider, *, *, *>;
 
 export default blockPickerProvider;

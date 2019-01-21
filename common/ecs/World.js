@@ -9,9 +9,20 @@ import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 
 type SerializedComponent = {
-  type: string;
-  data: Component;
+  +type: string;
+  data: [Entity, Component][];
 };
+
+type ComponentStatics = {
+  +threadsConstructors: ComponentStatics => void,
+};
+
+declare class ComponentWithStatics<T: string> {
+  static threadsConstructors: ComponentWithStatics<T> => string,
+  static componentName: T;
+  static networkable?: boolean;
+  static componentType: { [T]: this };
+}
 
 type ObjectConstructor = (any) => Component;
 
@@ -22,8 +33,8 @@ export default class World {
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
-  componentTypes: Map<string, Class<Component>> = new Map();
-  selectors: EntitySelector<typeof Component[]>[] = [];
+  componentTypes: Map<string, Class<Component> & ComponentStatics> = new Map();
+  selectors: EntitySelector<$ReadOnlyArray<typeof Component>>[] = [];
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
   listeners: Array<GameEvent => void> = [];
@@ -114,7 +125,7 @@ export default class World {
     this.eventsForThreads = [];
   }
 
-  updateComponents(components: Array<any>) {
+  updateComponents(components: Array<SerializedComponent>) {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       for (const [key, data] of component.data) {
@@ -179,9 +190,9 @@ export default class World {
     };
     this.objects.set(entityId, selectedComponents);
     for (let i = 0; i < components.length; i += 1) {
-      const component = components[i];
+      const component: ComponentWithStatics<string> = components[i];
       selectedComponents[component.constructor.componentName] = component;
-      if (component.constructor.networkable) {
+      if (component.constructor.networkable === true) {
         selectedComponentsNetworkable[component.constructor.componentName] = component;
       }
     }
