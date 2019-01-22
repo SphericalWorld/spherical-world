@@ -55,11 +55,19 @@ const sendChunks = (server, player) => {
   }
 };
 
+const serialize = ({ id, ...data }) => Object.assign(
+  { id }, ...Object
+    .entries(data)
+    .filter(([, value]) => value.constructor.networkable)
+    .map(([key, value]) => ({ [key]: value })),
+);
+
 const onLogin = (
   server: Server,
   ds: DataStorage,
   createPlayer: CreatePlayer,
   players,
+  world,
 ) => server.events
   .filter(e => e.type === 'LOGIN' && e)
   .subscribe(async ({ socket, payload }) => {
@@ -79,6 +87,11 @@ const onLogin = (
       }
     }
     sendChunks(server, player);
+    send(socket, 'SYNC_GAME_DATA', {
+      newObjects: [...world.objects.values()]
+        .filter(el => el.networkSync && el.id !== id)
+        .map(serialize),
+    });
     send(socket, 'LOGGED_IN', {
       id, transform, playerData, inventory, camera,
     });
@@ -99,7 +112,7 @@ export default (
   onSyncGameData(server, world);
   onPlayerPutBlock(server);
   onPlayerDestroyedBlock(server);
-  onLogin(server, ds, createPlayer, players);
+  onLogin(server, ds, createPlayer, players, world);
 
   const networkSystem = () => {};
   return networkSystem;

@@ -221,6 +221,7 @@ export default class World {
     if (!object) {
       return;
     }
+    this.objects.delete(id);
 
     for (let index = 0; index < object.children.length; index += 1) {
       this.deleteEntity(object.children[index].id, false);

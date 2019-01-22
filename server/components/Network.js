@@ -23,4 +23,7 @@ export default class Network implements Component {
         .filter(el => el.id !== this.socket.player.id);
     }
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  toJSON() {}
 }

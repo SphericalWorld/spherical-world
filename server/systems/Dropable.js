@@ -9,6 +9,8 @@ import {
   PlayerData,
 } from '../components';
 import { createSlot, putItem } from '../../common/Inventory';
+import { type DataStorage, updateGameObject } from '../dataStorage';
+import { throttle } from '../../common/utils';
 
 const findItemToAdd = (inventory, item) => {
   for (const slot of inventory.data.slots) {
@@ -22,11 +24,14 @@ const findItemToAdd = (inventory, item) => {
   return null;
 };
 
-export default (world: World): System => {
+export default (world: World, ds: DataStorage): System => {
   const dropableItems = world.createSelector([Transform, Item, Inventory]);
   const players = world.createSelector([Transform, Inventory, PlayerData]);
-  const dropableSystem = () =>
-    players.map(({ id, transform, inventory }) => {
+  const syncData = throttle(() => { updateGameObject(ds)(...dropableItems); }, 2000);
+
+  const dropableSystem = () => {
+    syncData();
+    return players.map(({ id, transform, inventory }) => {
       const item = dropableItems.find(
         ({ transform: { translation } }) => vec3.distance(translation, transform.translation) < 1,
       );
@@ -43,5 +48,6 @@ export default (world: World): System => {
       }
       return [];
     });
+  };
   return dropableSystem;
 };

@@ -17,6 +17,6 @@ export default (
 ): System[] => [
   NetworkSystem(world, server, ds, createPlayer),
   PlayerSystem(world, server, ds),
-  DropableSystem(world),
+  DropableSystem(world, ds),
   NetworkSyncSystem(world, server),
 ];
