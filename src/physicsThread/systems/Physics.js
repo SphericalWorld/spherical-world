@@ -48,7 +48,7 @@ const calculateMovement = (terrain: Terrain) => {
         });
         vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
         move(collider.shape, translation);
-        velocity.linear[manifold.normal.find(el => el)] = 0;
+        vec3.mul(velocity.linear, velocity.linear, manifold.inversedNormal);
       }
     });
 };

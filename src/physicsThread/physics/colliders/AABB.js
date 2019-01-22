@@ -66,14 +66,14 @@ export const AABBvsAABB = (a: RigidBody, b: RigidBody): Manifold => {
   if (zOverlap < yOverlap && zOverlap < xOverlap) {
     return createManifold(a, b, zOverlap, normal[2] < 0
       ? vec3.set(normal, 0, 0, -1)
-      : vec3.set(normal, 0, 0, 1));
+      : vec3.set(normal, 0, 0, 1), vec3.fromValues(1, 1, 0));
   }
   if (xOverlap < yOverlap) {
     return createManifold(a, b, xOverlap, normal[0] < 0
       ? vec3.set(normal, -1, 0, 0)
-      : vec3.set(normal, 1, 0, 0));
+      : vec3.set(normal, 1, 0, 0), vec3.fromValues(0, 1, 1));
   }
   return createManifold(a, b, yOverlap, normal[1] < 0
     ? vec3.set(normal, 0, -1, 0)
-    : vec3.set(normal, 0, 1, 0));
+    : vec3.set(normal, 0, 1, 0), vec3.fromValues(1, 0, 1));
 };

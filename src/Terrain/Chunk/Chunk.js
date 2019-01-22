@@ -116,7 +116,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
 
     gl.enableVertexAttribArray(shader.aBlockData);
-    gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20); // TODO: maybe float to uint
+    gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20);
 
     gl.enableVertexAttribArray(shader.aVertexColor);
     gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);

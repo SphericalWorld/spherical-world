@@ -1,7 +1,6 @@
 // @flow strict
 import { vec3, quat } from 'gl-matrix';
 import type Terrain from '../Terrain';
-import { Just } from '../../../common/fp/monads/maybe';
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blockInfo';
 import {
