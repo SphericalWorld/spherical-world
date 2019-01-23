@@ -31,15 +31,50 @@ import {
   calcRecursionGlobalRemove,
 } from './chunkLigting';
 
+type VectorArray<T> = {
+  data: T,
+  index: number,
+  push(...number[]) : void,
+}
+
 type ChunkBuffers = {|
-  vertexBuffer: number[],
-  indexBuffer: number[],
+  vertexBuffer: VectorArray<Float32Array>,
+  indexBuffer: VectorArray<Uint16Array>,
   vertexCount: number,
 |}
 
-const createBuffers = (): ChunkBuffers => ({
-  vertexBuffer: [],
-  indexBuffer: [],
+const POOL_SIZE = 50000;
+const vertexPool = new Float32Array(POOL_SIZE * 4 * 3);
+const vertexPool2 = new Float32Array(POOL_SIZE * 4);
+const vertexPool3 = new Float32Array(POOL_SIZE * 4);
+
+const indexPool = new Uint16Array(POOL_SIZE * 3);
+const indexPool2 = new Uint16Array(POOL_SIZE);
+const indexPool3 = new Uint16Array(POOL_SIZE);
+
+// don't move buffers to helper function, it will me polymorphic, not monomorphic and performance
+// will drop significally
+const createBuffers = (vertexBuffer, indexBuffer): ChunkBuffers => ({
+  vertexBuffer: {
+    data: vertexBuffer,
+    index: 0,
+    push(...data) {
+      for (let index = 0; index < data.length; index += 1) {
+        this.data[this.index] = data[index];
+        this.index += 1;
+      }
+    },
+  },
+  indexBuffer: {
+    data: indexBuffer,
+    index: 0,
+    push(...data) {
+      for (let index = 0; index < data.length; index += 1) {
+        this.data[this.index] = data[index];
+        this.index += 1;
+      }
+    },
+  },
   vertexCount: 0,
 });
 
@@ -219,7 +254,7 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
   buffer.vertexCount += 4;
 };
 
-type CreatePlane = $Call<typeof createPlane, Chunk, number[][], number, number, number, number, number>;
+type CreatePlane = $Call<typeof createPlane, *, *, *, *, *, *, *>;
 
 export default class Chunk extends ChunkBase<Chunk> {
   minimap: Uint8Array = new Uint8Array(256 * 3);
@@ -281,7 +316,11 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   calcVBO() {
-    const buffers = [createBuffers(), createBuffers(), createBuffers()];
+    const buffers = [
+      createBuffers(vertexPool, indexPool),
+      createBuffers(vertexPool2, indexPool2),
+      createBuffers(vertexPool3, indexPool3),
+    ];
 
     for (let index = SLICE; index < BLOCKS_IN_CHUNK; index += 1) {
       const i = index >>> 8;
@@ -315,24 +354,29 @@ export default class Chunk extends ChunkBase<Chunk> {
       index: 2,
       offset: 0,
     }];
-    let offset = 0;
-    for (let i = 0; i < buffers.length; i += 1) {
-      buffersInfo[i].indexCount = buffers[i].indexBuffer.length;
-    }
+    let offset = buffers[0].indexBuffer.index;
+    let offset2 = buffers[0].vertexBuffer.index;
+    let offset3 = buffers[0].vertexCount;
+    buffersInfo[0].indexCount = buffers[0].indexBuffer.index;
+
     for (let i = 1; i < buffers.length; i += 1) {
-      offset += buffers[i - 1].vertexCount;
-      for (let j = 0; j < buffers[i].indexBuffer.length; j += 1) {
-        buffers[i].indexBuffer[j] += offset;
+      const { indexBuffer, vertexBuffer } = buffers[i];
+      buffersInfo[i].indexCount = indexBuffer.index;
+      for (let index = 0; index < indexBuffer.index; index += 1) {
+        indexPool[index + offset] = indexBuffer.data[index] + offset3;
+      }
+      for (let index = 0; index < vertexBuffer.index; index += 1) {
+        vertexPool[index + offset2] = vertexBuffer.data[index];
       }
       buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
+      offset += indexBuffer.index;
+      offset2 += vertexBuffer.index;
+      offset3 += buffers[i].vertexCount;
     }
-    const concatedBuffersData = buffers.reduce((prev, curr) => ({
-      vertexBuffer: prev.vertexBuffer.concat(curr.vertexBuffer),
-      indexBuffer: prev.indexBuffer.concat(curr.indexBuffer),
-    }), createBuffers());
+
     const buffersData = {
-      vertexBuffer: new Float32Array(concatedBuffersData.vertexBuffer).buffer,
-      indexBuffer: new Uint16Array(concatedBuffersData.indexBuffer).buffer,
+      vertexBuffer: vertexPool.slice(0, offset2 + buffers[2].vertexBuffer.index).buffer,
+      indexBuffer: indexPool.slice(0, offset + buffers[2].indexBuffer.index).buffer,
     };
     self.postMessage({
       type: 'UPDATE_COMPONENTS',
