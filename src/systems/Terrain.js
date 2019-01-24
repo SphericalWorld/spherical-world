@@ -20,9 +20,13 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => networ
     for (let i = 0; i < payload.binaryData.byteLength; i += 1) {
       viewNew[i] = viewOld[i];
     }
+
+    const lightData = new SharedArrayBuffer(payload.binaryData.byteLength * 2); // eslint-disable-line no-undef
     // console.log(data, viewNew)
-    terrain.loadChunk(data, payload.data);
-    ecs.createEventAndDispatch(CHUNK_LOADED, { data, x: payload.data.x, z: payload.data.z });
+    terrain.loadChunk(data, lightData, payload.data);
+    ecs.createEventAndDispatch(CHUNK_LOADED, {
+      data, lightData, x: payload.data.x, z: payload.data.z,
+    });
   });
 
 const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events

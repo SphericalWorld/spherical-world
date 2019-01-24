@@ -18,12 +18,12 @@ class Terrain extends TerrainBase<Chunk> {
   foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
   chunksToRender: Chunk[];
 
-  loadChunk = (blocksData: ArrayBuffer, data: {
+  loadChunk = (blocksData: ArrayBuffer, lightData: ArrayBuffer, data: {
     x: number, z: number, temperature: number[], rainfall: number[],
   }) => {
     let chunk = this.getChunk(data.x, data.z);
     if (chunk.isJust === false) {
-      chunk = this.addChunk(new Chunk(this, blocksData, data.x, data.z, data.temperature, data.rainfall));
+      chunk = this.addChunk(new Chunk(this, blocksData, lightData, data.x, data.z, data.temperature, data.rainfall));
     } else {
       chunk = chunk.extract();
     }

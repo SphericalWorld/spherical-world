@@ -26,7 +26,7 @@ events
   .subscribe(({ payload: data }) => {
     let chunk = terrain.getChunk(data.x, data.z);
     if (chunk.isJust === false) {
-      chunk = terrain.addChunk(new Chunk(data.data, data.x, data.z));
+      chunk = terrain.addChunk(new Chunk(data.data, data.lightData, data.x, data.z));
     } else {
       chunk = chunk.extract();
     }

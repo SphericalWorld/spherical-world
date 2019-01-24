@@ -10,9 +10,10 @@ export default class DiffuseProgram extends GlShaderProgram {
   fragmentShader = new GlFragmentShader(fragmentShaderData);
 
   attributes = ['aVertexPosition', 'aTextureCoord'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting'];
+  uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting', 'uGlobalColor'];
 
   uTexture: WebGLUniformLocation;
+  uGlobalColor: WebGLUniformLocation;
 
   constructor() {
     super();

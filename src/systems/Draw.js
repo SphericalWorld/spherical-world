@@ -15,6 +15,7 @@ import Terrain, {
   drawOpaqueChunkData,
   drawTransparentChunkData,
 } from '../Terrain/Terrain';
+import { getLight } from '../../common/terrain';
 
 export default (world: World, terrain: Terrain, time: Time): System => {
   const components = world.createSelector([Transform, Visual], [Skybox]);
@@ -76,7 +77,9 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     const draw = (position: Transform, visual: Visual): void => {
       useShader(visual.glObject.material.shader);
       visual.glObject.material.use();
-      gl.uniform4f(currentShader.uLighting, 1, 1, 1, 1);
+      getLight(terrain)(...position.translation)
+        .map(light => gl.uniform4f(currentShader.uLighting, ...light));
+      gl.uniform4f(currentShader.uGlobalColor, ...globalColor);
       mvPushMatrix();
       mat4.translate(mvMatrix, mvMatrix, position.translation);
       mat4.multiply(mvMatrix, mvMatrix, mat4.fromQuat(mat4.create(), position.rotation));

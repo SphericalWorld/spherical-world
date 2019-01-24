@@ -20,16 +20,17 @@ class ChunkBase<TChunk> {
   surroundingChunks: TChunk[] = [];
   hasSurroundingChunks: boolean = false;
   blocks: Uint8Array;
-  light: Uint16Array = new Uint16Array(BLOCKS_IN_CHUNK);
+  light: Uint16Array;
   flags: Uint8Array;
 
   static BUFFERS_COUNT: number = 3;
 
-  constructor(blocksData: ArrayBuffer, x: number, z: number) {
+  constructor(blocksData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
     this.x = x;
     this.z = z;
     this.geoId = getGeoId(x, z);
     this.blocks = new Uint8Array(blocksData, 0, BLOCKS_IN_CHUNK);
+    this.light = new Uint16Array(lightData, 0, BLOCKS_IN_CHUNK);
     this.flags = new Uint8Array(blocksData, BLOCKS_IN_CHUNK);
   }
 
