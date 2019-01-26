@@ -14,6 +14,7 @@ export default class MultiMaterial implements Material {
   layers: Layer[] = [];
   name: string;
   shader: GlShaderProgram;
+  transparent: boolean = false;
 
   constructor({
     name,

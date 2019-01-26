@@ -16,6 +16,7 @@ import Terrain, {
   drawTransparentChunkData,
 } from '../Terrain/Terrain';
 import { getLight } from '../../common/terrain';
+import type SkyboxProgram from '../shaders/Skybox';
 
 export default (world: World, terrain: Terrain, time: Time): System => {
   const components = world.createSelector([Transform, Visual], [Skybox]);
@@ -97,7 +98,9 @@ export default (world: World, terrain: Terrain, time: Time): System => {
 
     for (const { transform, visual, skybox } of skyboxes) {
       useShader(visual.glObject.material.shader);
+      // eslint-disable-next-line no-unused-expressions
       visual.glObject.material.use();
+      currentShader = ((currentShader: any): SkyboxProgram);
 
       gl.uniform1f(currentShader.uTime, time.dayPercent);
       gl.uniform4f(currentShader.uLighting, ...skyColor);

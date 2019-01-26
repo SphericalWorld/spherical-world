@@ -1,6 +1,7 @@
 // @flow strict
 import { gl } from '../glEngine';
 import type { Material } from '../Material/Material';
+import { type TexturableShader } from '../../shaders/TexturableShader';
 
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
@@ -26,7 +27,7 @@ class Model {
   }
 
   createVBO(material: Material) {
-    const { shader } = material;
+    const { shader } = (material: { shader: TexturableShader });
     this.vao = gl.createVertexArray();
     gl.bindVertexArray(this.vao);
     gl.enableVertexAttribArray(shader.aVertexPosition);

@@ -11,6 +11,7 @@ import { gl } from '../engine/glEngine';
 import TerrainBase from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import Chunk from './Chunk/Chunk';
+import { Just } from '../../common/fp/monads/maybe';
 
 class Terrain extends TerrainBase<Chunk> {
   loadTerrainMipmap: typeof loadTerrainMipmap;
@@ -21,13 +22,15 @@ class Terrain extends TerrainBase<Chunk> {
   loadChunk = (blocksData: ArrayBuffer, lightData: ArrayBuffer, data: {
     x: number, z: number, temperature: number[], rainfall: number[],
   }) => {
-    let chunk = this.getChunk(data.x, data.z);
-    if (chunk.isJust === false) {
-      chunk = this.addChunk(new Chunk(this, blocksData, lightData, data.x, data.z, data.temperature, data.rainfall));
-    } else {
-      chunk = chunk.extract();
-    }
-    chunk.generateFoliageTexture();
+    this.getChunk(data.x, data.z)
+      .alt(
+        Just(
+          this.addChunk(new Chunk(
+            this, blocksData, lightData, data.x, data.z, data.temperature, data.rainfall,
+          )),
+        ),
+      )
+      .map(chunk => chunk.generateFoliageTexture());
   }
 
   generateBiomeColorMap(texture: WebGLTexture) {

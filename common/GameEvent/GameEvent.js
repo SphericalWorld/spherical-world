@@ -18,6 +18,7 @@ export type GameEvent =
     +type: 'GAME_EVENT_TYPE';
     // +payload?: any;
     +network?: boolean;
+    +dispatchable: boolean;
   }
   | PLAYER_DESTROYED_BLOCK_TYPE
   | SyncEvent

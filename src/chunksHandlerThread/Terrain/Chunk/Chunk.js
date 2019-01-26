@@ -450,11 +450,12 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   putBlock(x: number, y: number, z: number, value: number, face: BlockFace) {
+    const index = getIndex(x, y, z);
     let placed = true;
     if (blocksInfo[value]) {
       placed = blocksInfo[value].putBlock(this, x, y, z, value, face);
     } else {
-      this.blocks[getIndex(x, y, z)] = value;
+      this.blocks[index] = value;
     }
     if (!placed) {
       return;
@@ -463,10 +464,11 @@ export default class Chunk extends ChunkBase<Chunk> {
     if (blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
       return;
     }
-    while ((y > -1) && (!this.blocks[getIndex(x, y, z)])) {
+    while ((y > -1) && (!this.blocks[index])) {
       this.calcGlobalRecursionRemove(x, y, z);
       y -= 1;
     }
+    this.calcGlobalRecursion(x, y, z);
   }
 
   removeBlock(x: number, y: number, z: number) {

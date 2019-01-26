@@ -1,10 +1,11 @@
 // @flow strict
 import { gl } from '../../engine/glEngine';
 import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
+import { type TexturableShader } from '../TexturableShader';
 import vertexShaderData from './diffuseAnimated.vert';
 import fragmentShaderData from './diffuseAnimated.frag';
 
-export default class DiffuseAnimatedProgram extends GlShaderProgram {
+export default class DiffuseAnimatedProgram extends GlShaderProgram implements TexturableShader {
   name = 'diffuseAnimated';
   vertexShader = new GlVertexShader(vertexShaderData);
   fragmentShader = new GlFragmentShader(fragmentShaderData);
@@ -14,6 +15,8 @@ export default class DiffuseAnimatedProgram extends GlShaderProgram {
 
   uTexture: WebGLUniformLocation;
   uFrame: WebGLUniformLocation;
+  aVertexPosition = 0;
+  aTextureCoord = 0;
 
   constructor() {
     super();

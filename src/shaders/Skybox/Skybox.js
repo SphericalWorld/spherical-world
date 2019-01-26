@@ -11,6 +11,10 @@ export default class SkyboxProgram extends GlShaderProgram {
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTime', 'uLighting', 'uTexture', 'uSunPosition'];
 
+  uTime: WebGLUniformLocation;
+  uLighting: WebGLUniformLocation;
+  uSunPosition: WebGLUniformLocation;
+
   constructor() {
     super();
     this.link();
