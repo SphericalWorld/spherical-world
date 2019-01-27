@@ -98,8 +98,7 @@ export default (world: World, terrain: Terrain): System => {
     } else {
       vec3.set(userControls.velocity, 0, 0, 0);
     }
-
-    getBlock(terrain)(...transform.translation)
+    getBlock(terrain)(transform.translation[0], transform.translation[1] - 1, transform.translation[2])
       .map((block) => {
         if (blocksInfo[block].needPhysics && userControls.isJumping && velocity.linear[1] === 0) {
           velocity.linear[1] += 5;

@@ -15,7 +15,7 @@ const skyboxProvider = (ecs: World, materialLibrary: MaterialLibrary) =>
     const object = new GlObject({ model, material });
     return (ecs.createEntity(
       id,
-      new Transform(0, 64, 0),
+      new Transform(),
       new Visual(object),
       new Skybox(),
       new Joint(playerId),

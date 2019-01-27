@@ -22,11 +22,11 @@ const onPlayerPutBlock = (server: Server) => server.events
     server.terrain.putBlockHandler(payload);
   });
 
-const onPlayerDestroyedBlock = (server: Server) => server.events
+const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) => server.events
   .filter(e => e.type === 'PLAYER_DESTROYED_BLOCK' && e)
   .subscribe(({ socket, payload }) => {
     broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', payload);
-    server.terrain.removeBlockHandler(payload);
+    saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(payload));
   });
 
 const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket) => {
@@ -111,7 +111,7 @@ export default (
 
   onSyncGameData(server, world);
   onPlayerPutBlock(server);
-  onPlayerDestroyedBlock(server);
+  onPlayerDestroyedBlock(server, ds);
   onLogin(server, ds, createPlayer, players, world);
 
   const networkSystem = () => {};

@@ -16,7 +16,7 @@ const blockRemoverProvider = (
   const object = new GlObject({ model, material });
   return (ecs.createEntity(
     id,
-    new Transform(0, 64, 0),
+    new Transform(),
     new Visual(object),
     new BlockRemover(),
     new Joint(pickerId),

@@ -1,4 +1,5 @@
 // @flow strict
+import { vec3 } from 'gl-matrix';
 import type { Socket } from './network/socket';
 import type { GameObject } from '../common/ecs';
 import type World from '../common/ecs/World';
@@ -47,7 +48,7 @@ export const playerProvider = (
     )
     : world.createEntity(
       null,
-      new Transform(0, 132, 0),
+      new Transform(vec3.fromValues(0, 65, 0)),
       new PlayerData('Unnamed Player'),
       new Network(socket),
       new Inventory(createStubItems()),

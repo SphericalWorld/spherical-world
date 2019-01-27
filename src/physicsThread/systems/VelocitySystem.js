@@ -21,6 +21,7 @@ export default (ecs: World): System => {
     } of controlledComponents) {
       vec3.scaleAndAdd(transform.translation, transform.translation, userControlled.velocity, delta);
       vec3.scaleAndAdd(transform.translation, transform.translation, velocity.linear, delta);
+
       result.push([id, transform]);
     }
 

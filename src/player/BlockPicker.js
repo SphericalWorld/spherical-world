@@ -1,4 +1,5 @@
 // @flow strict
+import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs/Entity';
 import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
 import type { CreateBlockRemover } from './BlockRemover';
@@ -20,7 +21,7 @@ const blockPickerProvider = (
 
   const picker = ecs.createEntity(
     null,
-    new Transform(0, 64, 0, parent),
+    new Transform(vec3.create(), parent),
     new Visual(object),
     new Raytracer(),
     new Player(),

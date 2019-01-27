@@ -141,7 +141,7 @@ const createTerrain = (
       chunk.changesCount = 0;
       chunk.save();
     }
-    createItem(
+    return createItem(
       null,
       vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)),
       {

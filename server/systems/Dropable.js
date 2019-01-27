@@ -9,8 +9,11 @@ import {
   PlayerData,
 } from '../components';
 import { createSlot, putItem } from '../../common/Inventory';
-import { type DataStorage, updateGameObject } from '../dataStorage';
+import {
+  type DataStorage, updateGameObject, getAllGameObjects, deleteGameObject,
+} from '../dataStorage';
 import { throttle } from '../../common/utils';
+import { deserializeItem } from '../item';
 
 const findItemToAdd = (inventory, item) => {
   for (const slot of inventory.data.slots) {
@@ -27,7 +30,11 @@ const findItemToAdd = (inventory, item) => {
 export default (world: World, ds: DataStorage): System => {
   const dropableItems = world.createSelector([Transform, Item, Inventory]);
   const players = world.createSelector([Transform, Inventory, PlayerData]);
-  const syncData = throttle(() => { updateGameObject(ds)(...dropableItems); }, 2000);
+  const syncData = throttle(() => { updateGameObject(ds, 'dropableItems')(...dropableItems); }, 2000);
+  const deleteItem = deleteGameObject(ds, 'dropableItems');
+
+  getAllGameObjects(ds, 'dropableItems')()
+    .then(items => items.forEach(deserializeItem(world)));
 
   const dropableSystem = () => {
     syncData();
@@ -44,6 +51,7 @@ export default (world: World, ds: DataStorage): System => {
         }
         inventorySlot.count += 1;
         world.deleteEntity(item.id);
+        deleteItem(item.id);
         return [id, transform, inventory];
       }
       return [];

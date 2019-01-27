@@ -16,7 +16,7 @@ const createItem = (
   const player = world.createEntity(
     id,
     new NetworkSync({ name: 'ITEM' }),
-    new Transform(position[0], position[1], position[2]),
+    new Transform(position),
     new Item(),
     new Inventory({
       slots: [],
@@ -24,6 +24,19 @@ const createItem = (
         slot,
       },
     }),
+  );
+  return player;
+};
+
+export const deserializeItem = (
+  world: World,
+) => ({ id, transform, inventory }: {id: Entity, transform: Transform, inventory: Inventory}) => {
+  const player = world.createEntity(
+    id,
+    new NetworkSync({ name: 'ITEM' }),
+    Transform.deserialize(transform),
+    new Item(),
+    Inventory.deserialize(inventory),
   );
   return player;
 };

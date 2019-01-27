@@ -14,9 +14,9 @@ const serializeComponents = (components) => components
     type: data.constructor.componentName,
   }));
 
-export const saveGameObject = (ds: DataStorage) => async (...objects: GameObject<[]>[]) => {
+export const saveGameObject = (ds: DataStorage, collectionName: string = 'gameObjects') => async (...objects: GameObject<[]>[]) => {
   if (!objects.length) return;
-  const collection = ds.db.connection.db('sphericalWorld').collection('gameObjects');
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   await collection.insert(objects.map(({ id, ...components }) => ({
     _id: id,
     id,
@@ -24,9 +24,9 @@ export const saveGameObject = (ds: DataStorage) => async (...objects: GameObject
   })));
 };
 
-export const updateGameObject = (ds: DataStorage) => async (...objects: GameObject<[]>[]) => {
+export const updateGameObject = (ds: DataStorage, collectionName: string = 'gameObjects') => async (...objects: GameObject<[]>[]) => {
   if (!objects.length) return;
-  const collection = ds.db.connection.db('sphericalWorld').collection('gameObjects');
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   await collection.bulkWrite(objects.map(({ id, ...components }) => ({
     updateOne: {
       filter: { _id: id },
@@ -45,4 +45,18 @@ export const getGameObject = (ds: DataStorage) => async (id: Entity) => {
     throw new Error('object not found');
   }
   return Object.assign({ id }, ...rawObject.components.map(({ data, type }) => ({ [type]: data })));
+};
+
+export const getAllGameObjects = (ds: DataStorage, collectionName: string = 'gameObjects') => async () => {
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
+  const cursor = collection.find();
+  const items = await cursor.toArray();
+  return items.map(rawObject => Object.assign({ id: rawObject.id }, ...rawObject.components.map(({ data, type }) => ({ [type]: data }))));
+};
+
+export const deleteGameObject = (ds: DataStorage, collectionName: string = 'gameObjects') => {
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
+  return async (id: Entity) => {
+    await collection.deleteOne({ _id: id });
+  };
 };

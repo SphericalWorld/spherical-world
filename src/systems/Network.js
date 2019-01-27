@@ -57,7 +57,7 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
       network.emit('SYNC_GAME_DATA', [{
         type: 'Transform',
         data: player
-          .map(el => [el.id, el.transform]),
+          .map(el => [el.id, el.transform.serialize()]),
       }, {
         type: 'Camera',
         data: player
