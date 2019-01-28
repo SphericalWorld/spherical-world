@@ -3,8 +3,7 @@
 @import '../../styles/sizes';
 
 .content {
-  display: flex;
-  flex-direction: column;
+  @extend %flex-column;
   justify-content: space-around;
   margin: 1.6em 1.3em;
   width: 20em;

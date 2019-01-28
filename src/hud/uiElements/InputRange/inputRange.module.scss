@@ -20,8 +20,6 @@ $thumb-width: $thumb-height * 0.5;
 $thumb-border-width: $border-width;
 $thumb-border-color: $primary !default;
 
-$contrast: 10% !default;
-
 @mixin track {
   cursor: default;
   height: $track-height;
@@ -92,9 +90,8 @@ $contrast: 10% !default;
 }
 
 .formInputRange {
+  @extend %flex-row;
   align-items: center;
-  display: flex;
-  flex-direction: row;
   justify-content: center;
 }
 

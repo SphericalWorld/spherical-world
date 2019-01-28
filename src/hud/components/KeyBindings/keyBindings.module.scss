@@ -3,8 +3,7 @@
 @import '../../styles/sizes';
 
 %flex {
-  display: flex;
-  flex-direction: column;
+  @extend %flex-column;
   justify-content: space-between;
 }
 
@@ -23,8 +22,7 @@
 }
 
 .commandGroup {
-  display: flex;
-  flex-direction: row;
+  @extend %flex-row;
   justify-content: flex-start;
   padding: 0.6em;
 }
@@ -38,7 +36,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0 0.5em;
-  scrollbar-color: $primary transparent;
+  scroll-behavior: $primary transparent;
 }
 
 .section::-webkit-scrollbar {
@@ -55,9 +53,8 @@
 }
 
 .command {
+  @extend %flex-row;
   align-items: baseline;
-  display: flex;
-  flex-direction: row;
   justify-content: center;
   margin: 0.3em 0;
 }
@@ -78,10 +75,9 @@
 }
 
 .footer {
+  @extend %flex-column;
   border-top: $border-key-bindings;
-  display: flex;
   flex: 0 1 20%;
-  flex-direction: column;
   justify-content: center;
 }
 
@@ -92,10 +88,9 @@
 }
 
 .footerButtons {
+  @extend %flex-row;
   border-top: $border-key-bindings;
-  display: flex;
   flex: 0 1 30%;
-  flex-direction: row;
   padding: 0.5em;
 }
 

@@ -3,9 +3,8 @@
 @import '../../styles/sizes';
 
 .content {
+  @extend %flex-row;
   align-items: center;
-  display: flex;
-  flex-direction: row;
   margin: 1em 2em;
 }
 

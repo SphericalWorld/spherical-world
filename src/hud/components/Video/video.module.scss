@@ -3,8 +3,7 @@
 @import '../../styles/sizes';
 
 %flex {
-  display: flex;
-  flex-direction: column;
+  @extend %flex-column;
   justify-content: space-between;
 }
 

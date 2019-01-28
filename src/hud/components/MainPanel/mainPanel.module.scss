@@ -8,22 +8,17 @@
 }
 
 .mainPanelSection {
+  @extend %flex-row;
   cursor: default;
-  display: flex;
-  flex-direction: row;
   justify-content: center;
 }
 
 .mainPanel {
-  background: transparentize($primary, 0.15);
-  border: 0.1em ridge transparentize($primary, 0.75);
+  @extend %flex-row;
+  @extend %inventory;
+  border: 0.1em ridge $primary-20p;
   border-radius: $size-of-shadow $size-of-shadow 0 0;
   bottom: 0;
-  box-shadow:
-    inset 0 0 $size-of-shadow transparentize($glass, 0.75),
-    inset 0 $size-of-shadow $size-of-shadow transparentize($glass, 0.75);
-  display: flex;
-  flex-direction: row;
   margin: 0 auto;
   overflow: visible;
   padding: 0.3em;
@@ -32,24 +27,21 @@
 }
 
 .itemsContainer {
-  display: flex;
-  flex-direction: row;
+  @extend %flex-row;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
 .pagination {
-  display: flex;
-  flex-direction: row;
+  @extend %flex-row;
   height: $size-pagination;
   margin: auto;
   width: $size-pagination / 1.3;
 }
 
 .paginationControl {
-  display: flex;
-  flex-direction: column;
+  @extend %flex-column;
   height: 100%;
   margin: auto;
   text-align: center;

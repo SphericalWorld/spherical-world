@@ -4,7 +4,7 @@
 
 
 .select {
-  background-color: transparentize($primary, 0.2);
+  background-color: $primary-80p;
   border: 0;
   border-bottom: 2px solid $primary;
   border-radius: 0;
