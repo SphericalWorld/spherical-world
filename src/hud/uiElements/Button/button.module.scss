@@ -4,7 +4,7 @@
 
 .button {
   background-color: transparentize($primary, 0.3);
-  border: $px1 solid transparentize($background-main-menu, 0.5);
+  border: $px1 solid transparentize($shadow, 0.5);
   border-radius: $px1*3;
   color: $font-color-main-menu;
   cursor: pointer;

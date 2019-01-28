@@ -1,9 +1,12 @@
 $primary: #59868a;
 $secondary: #cce4cf;
-$secondary2: mix($primary, $secondary, 10%);
+
+$primary-80p: transparentize($primary, 0.2);
+$primary-20p: transparentize($primary, 0.8);
 
 $shadow: #000;
-$glass: #fff;
+$white-shadow: #fff;
+
 $background-main-menu: #000;
 $font-color-main-menu: #fff;
 
@@ -22,8 +25,8 @@ $hover-slot: lighten(darken($primary, 10%), 40%);
 
 $border-pagination-page: 0.1em solid $border-color-slot;
 
-$border-key-bindings: 0.4em ridge transparentize($primary, 0.75);
-$font-color-key-bindings-header: #ff0;
+$border-key-bindings: 0.4em ridge $primary-20p;
+$font-color-key-bindings-header: #e2e200;
 
 $border-inventory: 0.15em ridge darken($primary, 0.75);
 
@@ -41,6 +44,6 @@ $item-color-rare: #4f92d1;
 
 $full-hp-color: #0f9b02;
 $low-hp-color: #9b0202;
-$mana-color: #b203d4;
+$mana-color: #00f;
 
 $progress-bar-background: #1a1a1a;

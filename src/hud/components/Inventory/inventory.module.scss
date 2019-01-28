@@ -8,7 +8,7 @@
 
 .inventorySlots {
   align-items: center;
-  box-shadow: inset 0 0 5em 0.1em transparentize($glass, 0.45);
+  box-shadow: inset 0 0 5em 0.1em transparentize($white-shadow, 0.45);
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -21,26 +21,20 @@
   margin: -0.11em;
 }
 
-%size-img {
-  height: $size-slot;
-  width: $size-slot;
-}
-
 .slot {
   @extend %slot-style;
 }
 
 .slot.empty {
   background-color: transparent;
-  border: $size-border solid transparentize($border-color-slot, 1);
+  border: $size-border solid transparent;
   height: 0;
 }
 
 .coins {
   @extend %inventory;
+  @extend %flex-row;
   border-top: $border-inventory;
-  display: flex;
-  flex-direction: row;
   justify-content: flex-end;
   padding: 0.5em;
   user-select: none;
