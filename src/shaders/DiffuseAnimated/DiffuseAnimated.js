@@ -7,8 +7,6 @@ import fragmentShaderData from './diffuseAnimated.frag';
 
 export default class DiffuseAnimatedProgram extends GlShaderProgram implements TexturableShader {
   name = 'diffuseAnimated';
-  vertexShader = new GlVertexShader(vertexShaderData);
-  fragmentShader = new GlFragmentShader(fragmentShaderData);
 
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting', 'uFrame'];
@@ -19,7 +17,7 @@ export default class DiffuseAnimatedProgram extends GlShaderProgram implements T
   aTextureCoord = 0;
 
   constructor() {
-    super();
+    super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
     this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);

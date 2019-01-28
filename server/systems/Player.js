@@ -14,6 +14,11 @@ export default (world: World, server: Server, ds: DataStorage): System => {
 
   const playerSystem = (delta: number) => {
     syncData();
+    const res = [];
+    for (const { id, transform } of players) {
+      res.push([id, transform]);
+    }
+    return res;
   };
   return playerSystem;
 };

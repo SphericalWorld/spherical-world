@@ -58,8 +58,17 @@ class GlShaderProgram {
   uPMatrix: WebGLUniformLocation;
   uMVMatrix: WebGLUniformLocation;
 
-  constructor() {
+  constructor(vertexShader: GlVertexShader, fragmentShader: GlFragmentShader) {
     this.program = gl.createProgram();
+    this.vertexShader = vertexShader;
+    this.fragmentShader = fragmentShader;
+
+    gl.attachShader(this.program, this.vertexShader.shader);
+    gl.attachShader(this.program, this.fragmentShader.shader);
+    gl.linkProgram(this.program);
+    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
+      throw new Error('Shader linking error');
+    }
   }
 
   async load() {
@@ -73,12 +82,6 @@ class GlShaderProgram {
   }
 
   link() {
-    gl.attachShader(this.program, this.vertexShader.shader);
-    gl.attachShader(this.program, this.fragmentShader.shader);
-    gl.linkProgram(this.program);
-    if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
-      throw new Error('Shader linking error');
-    }
     for (const attribute of this.attributes) {
       this.setAttribLocation(attribute);
     }

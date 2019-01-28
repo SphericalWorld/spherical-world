@@ -92,7 +92,7 @@ class GlTextureLibrary {
   }
 
   makeTextureAtlasOverlay(): Texture {
-    return this.makeTextureAtlasBase('terrainOverlay', texture => texture.meta && texture.meta.overlay);
+    return this.makeTextureAtlasBase('terrainOverlay', texture => (texture.meta && texture.meta.overlay) || false);
   }
 
   makeChunkMinimap(data: Uint8Array): ImageData {

@@ -5,9 +5,6 @@ import fragmentShaderData from './skybox.frag';
 
 export default class SkyboxProgram extends GlShaderProgram {
   name = 'skybox';
-  vertexShader = new GlVertexShader(vertexShaderData);
-  fragmentShader = new GlFragmentShader(fragmentShaderData);
-
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTime', 'uLighting', 'uTexture', 'uSunPosition'];
 
@@ -16,7 +13,7 @@ export default class SkyboxProgram extends GlShaderProgram {
   uSunPosition: WebGLUniformLocation;
 
   constructor() {
-    super();
+    super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
     this.link();
   }
 }

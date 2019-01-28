@@ -14,10 +14,6 @@ export default class Player {
     this.party = [];
   }
 
-  destroy() {
-    this.broadcastToLinked('OTHER_PLAYER_DISCONNECT', { id: this.id });
-  }
-
   static startRemoveBlock(ws, data) {
     if ((typeof data === 'object') && (typeof data.x === 'number') && (typeof data.y === 'number') && (typeof data.z === 'number')) {
       ws.player.broadcastToLinked('OTHER_PLAYER_START_REMOVE_BLOCK', {

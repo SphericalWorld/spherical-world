@@ -12,7 +12,7 @@ import {
 
 const createItem = (
   world: World,
-) => (id: ?Entity, position: Vec3, slot: Slot) => {
+) => (id: Entity | null, position: Vec3, slot: Slot) => {
   const player = world.createEntity(
     id,
     new NetworkSync({ name: 'ITEM' }),

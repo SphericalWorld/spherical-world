@@ -30,17 +30,26 @@ const imageByDataURL = async (src: string): Promise<HTMLImageElement> => {
   });
 };
 
+type TextureMeta = {|
+  +overlay: boolean,
+|};
+
 export default class Texture {
   image: HTMLImageElement;
   glTexture: WebGLTexture;
   atlasId: ?number = null;
   name: string;
   target: number = gl.TEXTURE_2D;
-  meta: ?Object;
+  meta: ?TextureMeta;
   animated: boolean = false;
   frames: number = 0;
 
-  constructor(image: HTMLImageElement, glTexture: WebGLTexture, meta?: Object, atlasId?: number) {
+  constructor(
+    image: HTMLImageElement,
+    glTexture: WebGLTexture,
+    meta?: TextureMeta,
+    atlasId?: number,
+  ) {
     this.image = image;
     this.glTexture = glTexture;
     if (typeof atlasId === 'number') {
@@ -53,7 +62,11 @@ export default class Texture {
     gl.bindTexture(this.target, this.glTexture);
   }
 
-  static makeAnimatedTexture(textureImage: HTMLImageElement | HTMLCanvasElement, target: number, type: number = gl.RGBA): WebGLTexture {
+  static makeAnimatedTexture(
+    textureImage: HTMLImageElement | HTMLCanvasElement,
+    target: number,
+    type: number = gl.RGBA,
+  ): WebGLTexture {
     const texture: WebGLTexture = gl.createTexture();
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
     gl.bindTexture(target, texture);
@@ -87,19 +100,31 @@ export default class Texture {
     return texture;
   }
 
-  static async create(dataUrl: string, params: Object): Promise<Texture> {
+  static async create(dataUrl: string, {
+    animated = false,
+    type,
+    meta,
+    name,
+    atlasId,
+  }: {
+    animated?: boolean,
+    type?: number,
+    meta?: TextureMeta,
+    name: string,
+    atlasId?: number,
+  }): Promise<Texture> {
     const image = await imageByDataURL(dataUrl);
-    const target = params.animated
+    const target = animated
       ? gl.TEXTURE_2D_ARRAY
       : gl.TEXTURE_2D;
 
-    const glTexture = params.animated
-      ? this.makeAnimatedTexture(image, target, params.type)
-      : makeTexture(image, target, params.type);
-    const texture = new this(image, glTexture, params.meta, params.atlasId);
-    texture.name = params.name;
-    texture.animated = params.animated;
-    if (params.animated) {
+    const glTexture = animated
+      ? this.makeAnimatedTexture(image, target, type)
+      : makeTexture(image, target, type);
+    const texture = new this(image, glTexture, meta, atlasId);
+    texture.name = name;
+    texture.animated = animated;
+    if (animated) {
       texture.frames = image.height / image.width;
     }
     texture.target = target;

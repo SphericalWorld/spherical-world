@@ -11,6 +11,7 @@ type SyncEvent = {
     components: $ReadOnlyArray<empty>
   },
   +network?: boolean,
+  +dispatchable: boolean;
 }
 
 export type GameEvent =

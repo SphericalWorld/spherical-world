@@ -171,8 +171,10 @@ export default class World {
     this.registerEntity(id, components);
   }
 
-  createEntity<T: Component[]>(id: ?Entity, ...components: T): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
-    const entityId = id || EntityManager.generateId();
+  createEntity<T: Component[]>(id: Entity | null, ...components: T): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
+    const entityId = id !== null
+      ? id
+      : EntityManager.generateId();
     for (const thread of this.threads) {
       const componentsToAdd = components
         .filter(el => el.constructor.threads.includes(thread.id))

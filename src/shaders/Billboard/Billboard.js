@@ -6,8 +6,6 @@ import fragmentShaderData from './billboard.frag';
 
 export default class BillboardProgram extends GlShaderProgram {
   name = 'billboard';
-  vertexShader = new GlVertexShader(vertexShaderData);
-  fragmentShader = new GlFragmentShader(fragmentShaderData);
 
   attributes = ['aVertexPosition', 'aTextureCoord'];
   uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture', 'uLighting'];
@@ -15,7 +13,7 @@ export default class BillboardProgram extends GlShaderProgram {
   uTexture: WebGLUniformLocation;
 
   constructor() {
-    super();
+    super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
     this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);

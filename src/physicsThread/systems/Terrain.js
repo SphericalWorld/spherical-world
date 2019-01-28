@@ -15,8 +15,6 @@ const onChunkAdd = (ecs: World, terrain: Terrain) => ecs.events
 export default (ecs: World, terrain: Terrain): System => {
   onChunkAdd(ecs, terrain);
 
-  const terrainSystem = (delta: number) => {
-    // console.log(delta)
-  };
+  const terrainSystem = () => {};
   return terrainSystem;
 };

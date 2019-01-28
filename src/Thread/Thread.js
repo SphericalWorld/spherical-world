@@ -17,7 +17,7 @@ class Thread implements IThread {
     };
   }
 
-  postMessage(message: any, ports?: any): void {
+  postMessage(message: mixed, ports?: any): void {
     this.thread.postMessage(message, ports);
   }
 }

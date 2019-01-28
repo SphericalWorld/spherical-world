@@ -26,7 +26,7 @@ const blockPickerProvider = (
     new Raytracer(),
     new Player(),
   );
-  const blockRemover = BlockRemover(picker.id);
+  const blockRemover = BlockRemover(picker.id, null);
   picker.children.push(blockRemover);
   return picker;
 };

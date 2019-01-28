@@ -8,6 +8,7 @@ import Thread from '../Thread';
 import Chunk from './Terrain/Chunk';
 import { Just } from '../../common/fp/monads/maybe';
 
+// eslint-disable-next-line no-restricted-globals
 const thread = new Thread(THREAD_CHUNK_HANDLER, self);
 
 const terrain = new Terrain();
