@@ -26,7 +26,7 @@ declare class ComponentWithStatics<T: string> {
 
 type ObjectConstructor = (any) => Component;
 
-export default class World {
+export class World {
   constructors: Map<string, ObjectConstructor> = new Map();
   components: Map<string, Map<string, Component>> = new Map();
   entities: Set<Entity> = new Set();

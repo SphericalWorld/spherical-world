@@ -14,6 +14,9 @@ const serializeComponents = (components) => components
     type: data.constructor.componentName,
   }));
 
+const deserializeGameObject = (rawObject) =>
+  Object.assign({ id: rawObject.id }, ...rawObject.components.map(({ data, type }) => ({ [type]: data })));
+
 export const saveGameObject = (ds: DataStorage, collectionName: string = 'gameObjects') => async (...objects: GameObject<[]>[]) => {
   if (!objects.length) return;
   const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
@@ -44,14 +47,14 @@ export const getGameObject = (ds: DataStorage) => async (id: Entity) => {
   if (!rawObject) {
     throw new Error('object not found');
   }
-  return Object.assign({ id }, ...rawObject.components.map(({ data, type }) => ({ [type]: data })));
+  return deserializeGameObject(rawObject);
 };
 
 export const getAllGameObjects = (ds: DataStorage, collectionName: string = 'gameObjects') => async () => {
   const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   const cursor = collection.find();
   const items = await cursor.toArray();
-  return items.map(rawObject => Object.assign({ id: rawObject.id }, ...rawObject.components.map(({ data, type }) => ({ [type]: data }))));
+  return items.map(deserializeGameObject);
 };
 
 export const deleteGameObject = (ds: DataStorage, collectionName: string = 'gameObjects') => {

@@ -21,6 +21,7 @@ module.exports = {
     "jsx-a11y/label-has-associated-control": "off",
     "react/require-default-props": "off", // just broken rule, false positives everywhere
     "react/default-props-match-prop-types": "off", // same here
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.stories.jsx"]}]
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.stories.jsx"]}],
+    "import/prefer-default-export": "off",
   },
 };

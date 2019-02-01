@@ -1,5 +1,5 @@
 // @flow strict
-import World from '../common/ecs/World';
+import { World } from '../common/ecs/World';
 import { THREAD_MAIN } from '../src/Thread/threadConstants';
 import createItem from './item';
 import { playerProvider } from './player';

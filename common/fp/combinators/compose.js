@@ -1,7 +1,7 @@
 // @flow strict
 // B combinator
-type Composer<F> = <G: Function>(g: G) => $Call<$Compose, F, G>;
+type Composer<A, B> = <C>(g: C => A) => $Call<$Compose, A => B, C => A>;
 
-const compose = <F: Function>(f: F): Composer<F> => g => x => f(g(x));
+const compose = <A, B>(f: A => B): Composer<A, B> => g => x => f(g(x));
 
 export default compose;

@@ -1,7 +1,7 @@
 // @flow strict
 import type { Vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs/Entity';
-import type World from '../../common/ecs/World';
+import type { World } from '../../common/ecs/World';
 import { type Slot } from '../../common/Inventory';
 import {
   Transform,
