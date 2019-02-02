@@ -45,5 +45,10 @@ module.exports = function override(config, env) {
   };
   assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, 'css-modules-flow-types-loader');
   assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);
+  if (env === 'production') {
+    config.mode = 'development';
+    config.optimization.minimize = false;
+    config.plugins[0].options.minify.minifyJS = false;
+  }
   return config;
 };
