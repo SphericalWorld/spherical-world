@@ -1,10 +1,10 @@
 // @flow strict
-import Material, { BLENDING_TRANSPARENT } from '../engine/Material/SimpleMaterial';
+import { SimpleMaterial, BLENDING_TRANSPARENT } from '../engine/Material/SimpleMaterial';
 import TextureLibrary from '../engine/Texture/TextureLibrary';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) =>
-  new Material({
+  new SimpleMaterial({
     name: 'blockSelector',
     diffuse: textureLibrary.get('blockSelector'),
     blendingMode: BLENDING_TRANSPARENT,

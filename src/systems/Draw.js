@@ -1,7 +1,6 @@
 // @flow strict
-import type { Mat4 } from 'gl-matrix';
-import { mat4 } from 'gl-matrix';
-import type World from '../../common/ecs/World';
+import { type Mat4, mat4 } from 'gl-matrix';
+import { type World } from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import { gl } from '../engine/glEngine';
 import { GlShaderProgram } from '../engine/glShader';

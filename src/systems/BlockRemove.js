@@ -1,6 +1,6 @@
 // @flow strict
 import { vec3 } from 'gl-matrix';
-import type World from '../../common/ecs/World';
+import { type World } from '../../common/ecs/World';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from '../../common/ecs/System';
 import {

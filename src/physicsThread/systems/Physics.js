@@ -102,7 +102,7 @@ export default (ecs: World, terrain: Terrain): System => {
       if (!joint.parentTransform) {
         joint.parentTransform = transformRegistry.get(joint.parent);
       }
-      vec3.copy(transform.translation, joint.parentTransform.translation);
+      vec3.add(transform.translation, joint.parentTransform.translation, joint.distance);
       result.push([id, transform]);
     }
     return result;

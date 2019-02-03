@@ -6,9 +6,6 @@
 //     constructor(params, app) {
 //       this.blockRemovingSpeed = 2;
 //
-//       this.fallSpeed = 0;
-//       this.name = 'unnamed player';
-//
 //       this.level = 3;
 //       this.exp = 200;
 //       this.expForLevel = 250;
@@ -16,29 +13,18 @@
 //       this.hp = 7500;
 //       this.mana = 6500;
 //       this.maxMana = 10000;
-//
-//       this.hudBillboard = new GlObject({ material: 'qwe'});
-//       this.hudBillboard.model = Player.hudBillboardModel;
-//
 //       setInterval(() => {
 //         this.exp += 1;
 //         if (this.exp === this.expForLevel) {
 //           this.exp = 0;
 //         }
 //       }, 200);
-//
-//       this.nicknameTexture = this.textureLibrary.makeTextureFromText(this.name);
-//       this.hudBillboard.texture = this.nicknameTexture;
 //     }
 //
 //     drawHud() {
 //       if (this.hudBillboard) {
 //         gl.enable(gl.BLEND);
 //         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-//
-//         this.hudBillboard.x = this.x;
-//         this.hudBillboard.y = this.y + 1.2;
-//         this.hudBillboard.z = this.z;
 //         this.hudBillboard.draw();
 //         gl.disable(gl.BLEND);
 //       }
@@ -70,7 +56,7 @@ import Model from '../engine/Model/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 import type { CreateBlockPicker } from './BlockPicker';
 
-type playerData = GameObject<[
+type PlayerData = GameObject<[
   typeof Transform,
   typeof Inventory,
   typeof Camera,
@@ -80,8 +66,9 @@ const createPlayer = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker,
-) => (data: playerData, isMainPlayer: boolean = false): Entity => {
-  const model = new Model(playerModel, 2);
+  createTextBillboard,
+) => (data: PlayerData, isMainPlayer: boolean = false): Entity => {
+  const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
   const player = ecs.createEntity(
     data.id,
@@ -107,7 +94,7 @@ const createPlayer = (
         ],
     ].filter(el => el),
   );
-
+  createTextBillboard(player.id, vec3.fromValues(0, 2, 0), data.playerData.name);
   const blockPicker = BlockPicker(player);
   player.children.push(blockPicker);
 
@@ -119,8 +106,9 @@ const playerProvider = (
   ecs: World,
   materialLibrary: MaterialLibrary,
   BlockPicker: CreateBlockPicker,
+  createTextBillboard,
 ) => {
-  const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker);
+  const playerConstructor = createPlayer(ecs, materialLibrary, BlockPicker, createTextBillboard);
   ecs.registerConstructor('PLAYER', playerConstructor);
   return playerConstructor;
 };

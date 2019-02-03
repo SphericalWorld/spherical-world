@@ -1,5 +1,5 @@
 // @flow strict
-import type World from '../../common/ecs/World';
+import { type World } from '../../common/ecs/World';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';

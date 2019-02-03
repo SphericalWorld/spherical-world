@@ -1,8 +1,7 @@
 // @flow strict
-import type { GlShaderProgram } from '../glShader';
-import type { TextureImageUnit } from '../Texture/Texture';
-import type { Material } from './Material';
-import { TextureImageUnits } from '../Texture/Texture';
+import { type GlShaderProgram } from '../glShader';
+import { type Material } from './Material';
+import { type TextureImageUnit, TextureImageUnits } from '../Texture/Texture';
 import { gl } from '../glEngine';
 
 type Layer = {|
@@ -12,7 +11,7 @@ type Layer = {|
 
 export default class MultiMaterial implements Material {
   layers: Layer[] = [];
-  name: string;
+  name: ?string;
   shader: GlShaderProgram;
   transparent: boolean = false;
 

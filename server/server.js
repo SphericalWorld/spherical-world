@@ -1,6 +1,6 @@
 // @flow strict
 import WebSocket, { Server as WebSocketServer } from 'ws';
-import type World from '../common/ecs/World';
+import { type World } from '../common/ecs/World';
 import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
 import type { Terrain as ITerrain } from './terrain/Terrain';

@@ -47,21 +47,30 @@ class GlTextureLibrary {
 
   makeTextureFromText(textToWrite: string, textSize: number = 56) {
     this.ctx.font = `bold ${textSize}px monospace`;
-    this.textureCanvas.width = 2 ** Math.ceil(Math.log(this.ctx.measureText(textToWrite).width) / Math.log(2));
-    this.textureCanvas.height = 2 ** Math.ceil(Math.log(2 * textSize) / Math.log(2));
+    this.textureCanvas.width = 2 ** Math.ceil(Math.log2(this.ctx.measureText(textToWrite).width));
+    this.textureCanvas.height = 2 ** Math.ceil(Math.log2(2 * textSize));
     if (this.textureCanvas.width > this.textureCanvas.height) {
       this.textureCanvas.height = this.textureCanvas.width;
     } else {
       this.textureCanvas.width = this.textureCanvas.height;
     }
+    this.ctx.translate(this.textureCanvas.width / 2, this.textureCanvas.height / 2);
+    this.ctx.rotate((2 * Math.PI) - ((180 * Math.PI) / 180));
+    this.ctx.scale(-1, 1);
+
+    this.ctx.translate(-this.textureCanvas.width / 2, -this.textureCanvas.height / 2);
+
     this.ctx.fillStyle = '#FFF0';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
     this.ctx.fillStyle = '#FFF';
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
     this.ctx.font = `bold ${textSize}px monospace`;
+
     this.ctx.fillText(textToWrite, this.textureCanvas.width / 2, this.textureCanvas.height / 2);
-    return makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA);
+
+    return new Texture(null, makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA));
   }
 
   makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {

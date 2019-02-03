@@ -2,7 +2,6 @@
 import type Network from './network';
 import type { Store } from './store/store';
 import { initWebGL } from './engine/glEngine';
-import { createBillboard } from './engine/Model';
 import HUD from './hud/HudApi';
 import { World } from '../common/ecs';
 
@@ -51,9 +50,6 @@ const engineProvider = (
         });
 
       network.emit('LOGIN', { cookie: 12345, userId: localStorage.getItem('userId') });
-
-      Player.hudBillboardModel = createBillboard(2.0);
-
       network.start();
     }
 
@@ -102,16 +98,6 @@ const engineProvider = (
       //   if (Player.instances[i] !== this.player) {
       //     this.mvPushMatrix();
       //     Player.instances[i].draw();
-      //     this.mvPopMatrix();
-      //   }
-      // }
-      //
-      // this.useShader('billboard');
-      //
-      // for (const i in Player.instances) {
-      //   if (Player.instances[i] !== this.player) {
-      //     this.mvPushMatrix();
-      //     Player.instances[i].drawHud();
       //     this.mvPopMatrix();
       //   }
       // }

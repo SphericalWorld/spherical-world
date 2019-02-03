@@ -20,15 +20,15 @@ type BlendingMode =
   | typeof BLENDING_MODULATE;
 
 type MaterialOptions = {
-  name: string,
+  name?: string,
   diffuse?: Texture,
   blendingMode?: BlendingMode,
   shader: GlShaderProgram,
 };
 
-class SimpleMaterial implements Material {
+export class SimpleMaterial implements Material {
   diffuse: Texture;
-  name: string;
+  name: ?string;
   blendingMode: BlendingMode;
   shader: GlShaderProgram;
   transparent = false;
@@ -42,7 +42,7 @@ class SimpleMaterial implements Material {
   }: MaterialOptions) {
     this.blendingMode = blendingMode;
     this.transparent = blendingMode !== BLENDING_OPAQUE;
-    this.name = name;
+    this.name = name !== '' ? name : null;
     if (diffuse) {
       this.diffuse = diffuse;
     }
@@ -71,7 +71,3 @@ class SimpleMaterial implements Material {
     // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
   }
 }
-
-export type MaterialFactory = () => SimpleMaterial;
-
-export default SimpleMaterial;

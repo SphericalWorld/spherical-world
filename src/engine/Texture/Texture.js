@@ -1,6 +1,5 @@
 // @flow strict
-import type { getElements } from '../../../common/utils/flow';
-
+import { type getElements } from '../../../common/utils/flow';
 import { gl } from '../glEngine';
 
 export const makeTexture = (

@@ -1,5 +1,5 @@
 // @flow strict
-import type { Material } from './Material';
+import { type Material } from './Material';
 
 const materialLibraryProvider = () => {
   class MaterialLibrary {

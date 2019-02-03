@@ -30,6 +30,7 @@ import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/thre
 import inputProvider from './Input/inputProvider';
 import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
+import { textBillboardProvider } from './gameObjects';
 
 const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
   const world = new World(THREAD_MAIN);
@@ -82,7 +83,8 @@ const mainProvider = async (store: Store, network: Network, physicsThread: Worke
   const terrain = getTerrain(textureLibrary, materialLibrary);
   const Addon = addon(store);
   const ResourceLoader = resourceLoader(Addon);
-  const Player = playerProvider(world, materialLibrary, BlockPicker);
+  const createTextBillboard = textBillboardProvider(world, shaderLibrary, textureLibrary);
+  const Player = playerProvider(world, materialLibrary, BlockPicker, createTextBillboard);
   itemProvider(world, materialLibrary);
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();

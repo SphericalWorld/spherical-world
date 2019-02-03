@@ -1,8 +1,8 @@
 // @flow strict
-import type { GlShaderProgram } from '../glShader';
+import { type GlShaderProgram } from '../glShader';
 
 export interface Material {
-  name: string;
+  name: ?string;
   shader: GlShaderProgram;
   transparent: boolean;
 

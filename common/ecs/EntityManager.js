@@ -1,7 +1,7 @@
 // @flow strict
 import uuid from 'uuid/v1';
 import type { Entity } from './Entity';
-import type World from './World';
+import { type World } from './World';
 import { Component } from './Component';
 
 type SelectorFunction = (Entity) => boolean;
