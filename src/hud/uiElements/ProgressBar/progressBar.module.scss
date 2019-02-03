@@ -67,7 +67,7 @@
 }
 
 .percentInfo {
-  background-color: lighten($progress-bar-background, 10%);
+  background-color: $progress-bar-background-percent;
   border-radius: 5px;
   height: 1em;
   margin-left: -1em;
@@ -77,10 +77,8 @@
 
 .labelPercent {
   @extend %font-main;
-  align-items: center;
-  display: flex;
+  @extend %alignment-text-in-div;
   font-weight: 100;
   height: 100%;
-  justify-content: center;
   white-space: nowrap;
 }

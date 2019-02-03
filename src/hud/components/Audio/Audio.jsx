@@ -13,6 +13,7 @@ import {
 import ModalWindowMenu from '../ModalWindowMenu';
 import {
   content,
+  inner,
   footerButtons,
   label,
   cbEnSound,
@@ -29,22 +30,24 @@ const Audio = ({ setUIState }: Props) => {
   const close = useCallback(() => setUIState(AUDIO, false));
   return (
     <ModalWindowMenu caption="Audio">
-      <div className={content}>
-        <div className={cbEnSound}>
-          <Checkbox size="big"> enable sound</Checkbox>
-        </div>
-        <div className={volumes}>
-          <div>
-            <Label size="big" className={labelVolume}>Master Volume</Label>
-            <InputRange value={30} className={inputVolume} />
+      <div className={inner}>
+        <div className={content}>
+          <div className={cbEnSound}>
+            <Checkbox size="big"> enable sound</Checkbox>
           </div>
-          <div>
-            <Label size="big" className={labelVolume}>Effect Volume</Label>
-            <InputRange value={50} className={inputVolume} />
-          </div>
-          <div>
-            <Label size="big" className={labelVolume}>Ambient Volume</Label>
-            <InputRange value={100} className={inputVolume} />
+          <div className={volumes}>
+            <div>
+              <Label size="big" className={labelVolume}>Master Volume</Label>
+              <InputRange value={30} className={inputVolume} />
+            </div>
+            <div>
+              <Label size="big" className={labelVolume}>Effect Volume</Label>
+              <InputRange value={50} className={inputVolume} />
+            </div>
+            <div>
+              <Label size="big" className={labelVolume}>Ambient Volume</Label>
+              <InputRange value={100} className={inputVolume} />
+            </div>
           </div>
         </div>
         <div className={footerButtons}>

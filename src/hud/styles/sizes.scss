@@ -64,7 +64,6 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
 %footer-flex {
   @extend %flex-row;
   border-top: $border-key-bindings;
-  flex: 0 1 8%;
   padding: 0.5em;
 }
 
@@ -75,4 +74,27 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
 
 %footer-buttons-label {
   flex: 0 1 15%;
+}
+
+%grid-main-menu {
+  display: grid;
+  grid-template-areas:
+    ' header '
+    ' mainContent '
+    ' helpline '
+    ' footer ';
+  grid-template-rows:
+    [main-start] 3em
+    [content-start] auto [content-end] 
+    2em [helpLine-end]
+    3em [main-end];
+  height: 25em;
+  padding: 2em 0.3em 0.1em;
+  width: 30em;
+}
+
+%alignment-text-in-div {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }

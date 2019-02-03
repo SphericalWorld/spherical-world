@@ -7,38 +7,34 @@
   justify-content: space-between;
 }
 
+.inner {
+  @extend %grid-main-menu;
+}
+
 .content {
-  @extend %flex;
-  height: 25em;
-  padding: 2em 0.3em 0.1em;
-  position: relative;
-  width: 30em;
+  grid-area: mainContent;
+  grid-row: auto / span 3;
 }
 
-.cbEnSound {
-  padding: 0 1em;
-}
-
-.volumes {
-  @extend %flex;
-  flex: 0 1 90%;
-  justify-content: space-around;
-  padding: 0.1em 1em 0.5em 2.2em;
-}
-
-.labelVolume {
-  @extend %flex;
-  align-items: flex-start;
-  padding: 0.3em 0;
-  user-select: none;
-}
-
+.cbEnSound,
 .inputVolume {
   padding-left: 0.5em;
 }
 
+.volumes {
+  @extend %flex;
+  height: 90%;
+  justify-content: space-evenly;
+}
+
+.labelVolume {
+  padding: 0.3em 0;
+  user-select: none;
+}
+
 .footerButtons {
   @extend %footer-flex;
+  grid-area: footer;
 }
 
 .footerButtons > * {

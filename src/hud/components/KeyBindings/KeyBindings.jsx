@@ -16,7 +16,6 @@ import {
   content,
   command,
   header,
-  footer,
   section,
   commandGroup,
   helpLine,
@@ -104,17 +103,15 @@ const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsPro
             }
           </section>
         </section>
-        <footer className={footer}>
-          <div className={helpLine}>
-            <StatusPanel />
-          </div>
-          <div className={footerButtons}>
-            <Button size="small">reset to default</Button>
-            <Label className={label} />
-            <Button size="small">unbind key</Button>
-            <Button size="small" onClick={close}>OK</Button>
-            <Button size="small" onClick={close}>Cancel</Button>
-          </div>
+        <div className={helpLine}>
+          <StatusPanel />
+        </div>
+        <footer className={footerButtons}>
+          <Button size="small">reset to default</Button>
+          <Label className={label} />
+          <Button size="small">unbind key</Button>
+          <Button size="small" onClick={close}>OK</Button>
+          <Button size="small" onClick={close}>Cancel</Button>
         </footer>
       </div>
     </ModalWindowMenu>
