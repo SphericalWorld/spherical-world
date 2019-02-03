@@ -1,49 +1,50 @@
-$primary: #59868a;
-$secondary: #cce4cf;
+$primary: hsl(185, 22%, 45%);
+$secondary: hsl(127, 31%, 85%);
 
 $primary-80p: transparentize($primary, 0.2);
 $primary-20p: transparentize($primary, 0.8);
 
-$shadow: #000;
-$white-shadow: #fff;
+$shadow: hsl(0, 0%, 0%);
+$white-shadow: hsl(0, 0%, 100%);
 
-$background-main-menu: #000;
-$font-color-main-menu: #fff;
+$background-main-menu: hsl(0, 0%, 0%);
+$font-color-main-menu: hsl(0, 0%, 100%);
 
 $success: #0f0;
 $warning: #fa0;
 $alert: #f00;
 
-$font-color-main: #fff;
-$font-color-main-shadow: #000;
+$font-color-main: hsl(0, 0%, 100%);
+$font-color-main-shadow: hsl(0, 0%, 0%);
 
-$background-color-slot: #05544a;
-$border-color-slot: #113436;
-$selected-slot: #bccdd6;
-$selected-slot-animated: #1ca7f1;
+$background-color-slot: hsl(172, 89%, 17%);
+$border-color-slot: hsl(183, 52%, 14%);
+$selected-slot: hsl(201, 24%, 79%);
+$selected-slot-animated: hsl(201, 88%, 53%);
 $hover-slot: lighten(darken($primary, 10%), 40%);
 
 $border-pagination-page: 0.1em solid $border-color-slot;
 
 $border-key-bindings: 0.4em ridge $primary-20p;
-$font-color-key-bindings-header: #e2e200;
+$font-color-key-bindings-header: hsl(60, 100%, 44%);
 
 $border-inventory: 0.15em ridge darken($primary, 0.75);
 
-$input-checkbox: #fff;
+$input-checkbox: hsl(0, 0%, 100%);
 $input-checkbox-border: darken($primary, 20%);
 
-$item-color-common: #e9e9e9;
-$item-color-uncommon: #219b44;
-$item-color-rare: #4f92d1;
+$item-color-common: hsl(0, 0%, 91%);
+$item-color-uncommon: hsl(137, 65%, 37%);
+$item-color-rare: hsl(209, 59%, 56%);
 
 @mixin tooltip-border($color) {
   border: 0.1em groove $color;
   box-shadow: inset 0 0.3em 0.4em transparentize($color, 0.75);
 }
 
-$full-hp-color: #0f9b02;
-$low-hp-color: #9b0202;
-$mana-color: #00f;
+$full-hp-color: hsl(115, 97%, 31%);
+$low-hp-color: hsl(0, 97%, 31%);
+$mana-color: hsl(240, 100%, 50%);
 
-$progress-bar-background: #1a1a1a;
+$progress-bar-background: hsl(0, 0%, 10%);
+$progress-bar-background-percent: hsl(0, 0%, 20%);

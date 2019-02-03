@@ -2,22 +2,14 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
-%flex {
-  @extend %flex-column;
-  justify-content: space-between;
-}
-
 .content {
-  @extend %flex;
-  height: 30em;
-  padding: 1.8em 0.2em 0.1em;
-  position: relative;
+  @extend %grid-main-menu;
   width: 40em;
 }
 
 .header {
   border-bottom: $border-key-bindings;
-  flex: 0 1 5%;
+  grid-area: header;
   user-select: none;
 }
 
@@ -32,7 +24,7 @@
 }
 
 .section {
-  flex: 0 1 80%;
+  grid-area: mainContent;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 0 0.5em;
@@ -74,24 +66,16 @@
   text-align: left;
 }
 
-.footer {
-  @extend %flex-column;
-  border-top: $border-key-bindings;
-  flex: 0 1 20%;
-  justify-content: center;
-}
-
 .helpLine {
-  flex: 0 1 25%;
-  padding: 0.3em;
+  @extend %alignment-text-in-div;
+  border-top: $border-key-bindings;
+  grid-area: helpline;
   user-select: none;
 }
 
 .footerButtons {
-  @extend %flex-row;
-  border-top: $border-key-bindings;
-  flex: 0 1 30%;
-  padding: 0.5em;
+  @extend %footer-flex;
+  grid-area: footer;
 }
 
 .footerButtons > * {
