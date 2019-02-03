@@ -6,8 +6,6 @@ import HashMap from '../../common/fp/data-structures/Map';
 
 class Terrain<Chunk: ChunkBase> {
   chunks: HashMap<string, Chunk> = new HashMap();
-  size: number;
-  halfSize: number;
   playerX: number;
   playerZ: number;
 

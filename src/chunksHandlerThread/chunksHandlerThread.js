@@ -6,7 +6,6 @@ import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';
 import Terrain from './Terrain';
 import Thread from '../Thread';
 import Chunk from './Terrain/Chunk';
-import { Just } from '../../common/fp/monads/maybe';
 
 // eslint-disable-next-line no-restricted-globals
 const thread = new Thread(THREAD_CHUNK_HANDLER, self);
@@ -25,13 +24,11 @@ thread.events
 
 events
   .filter(e => e.type === 'CHUNK_LOADED')
-  .subscribe(({ payload: data }) => terrain
-    .getChunk(data.x, data.z)
-    .alt(Just(terrain.addChunk(new Chunk(data.data, data.lightData, data.x, data.z))))
-    .map(chunk => {
-      chunk.prepareLight();
-      chunk.updateState();
-    }));
+  .subscribe(({ payload: data }) => {
+    const chunk = terrain.addChunk(new Chunk(data.data, data.lightData, data.x, data.z));
+    chunk.prepareLight();
+    chunk.updateState();
+  });
 
 // TODO: combine place and remove
 events

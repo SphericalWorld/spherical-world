@@ -47,7 +47,7 @@ export default (ecs: World, network: Network, terrain: Terrain): System => {
 
   const terrainSystem = () => {
     const [{ transform }] = player;
-    // terrain.chunks = filterFarChunks(this.oldPosition, transform.translation, terrain.chunks);
+    terrain.chunks = filterFarChunks(oldPosition, transform.translation, terrain.chunks);
     vec3.copy(oldPosition, transform.translation);
   };
   return terrainSystem;

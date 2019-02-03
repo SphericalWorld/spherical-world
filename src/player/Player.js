@@ -1,6 +1,5 @@
 // @flow strict
 // const playerProvider = (store, BlockRemover, BlockPicker) => {
-//   @connect(mapState, mapActions, store)
 //   class Player {
 //     name: string;
 //     constructor(params, app) {
@@ -20,16 +19,6 @@
 //         }
 //       }, 200);
 //     }
-//
-//     drawHud() {
-//       if (this.hudBillboard) {
-//         gl.enable(gl.BLEND);
-//         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-//         this.hudBillboard.draw();
-//         gl.disable(gl.BLEND);
-//       }
-//     }
-//   }
 //
 //   return Player;
 // };
