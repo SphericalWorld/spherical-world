@@ -26,7 +26,7 @@ $hover-slot: lighten(darken($primary, 10%), 40%);
 $border-pagination-page: 0.1em solid $border-color-slot;
 
 $border-key-bindings: 0.4em ridge $primary-20p;
-$font-color-key-bindings-header: hsl(60, 100%, 44%);
+$font-color-key-bindings-header: hsl(60, 100%, 50%);
 
 $border-inventory: 0.15em ridge darken($primary, 0.75);
 
@@ -42,9 +42,13 @@ $item-color-rare: hsl(209, 59%, 56%);
   box-shadow: inset 0 0.3em 0.4em transparentize($color, 0.75);
 }
 
-$full-hp-color: hsl(115, 97%, 31%);
-$low-hp-color: hsl(0, 97%, 31%);
-$mana-color: hsl(240, 100%, 50%);
+$full-hp-color: hsl(120, 100%, 30%);
+$low-hp-color: hsl(0, 100%, 30%);
+$mana-color: hsl(240, 100%, 30%);
 
 $progress-bar-background: hsl(0, 0%, 10%);
 $progress-bar-background-percent: hsl(0, 0%, 20%);
+
+$button-menu-top: hsla(0, 0%, 0%, 0.1);
+$button-menu-bottom: hsla(0, 10%, 100%, 0.1);
+$button-menu-border: hsla(0, 0%, 90%, 0.8);

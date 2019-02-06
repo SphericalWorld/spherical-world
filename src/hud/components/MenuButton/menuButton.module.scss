@@ -1,0 +1,41 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.wrapper {
+  bottom: 0.5em;
+  pointer-events: all;
+  position: absolute;
+  right: 1em;
+}
+
+.buttonMenu {
+  background-color: transparent;
+  background-image: linear-gradient($button-menu-top, $button-menu-bottom);
+  border: 0.05em solid $button-menu-border;
+  border-radius: 0.3em;
+  cursor: pointer;
+  display: block;
+  padding: 0.5em;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.buttonMenu:active {
+  position: relative;
+  top: 1px;
+}
+
+.innerButtonMenu > * {
+  background: $button-menu-border;
+  border-radius: 0.1em;
+  display: block;
+  height: 0.25em;
+  margin: 0.2em;
+  width: 2em;
+  z-index: 1;
+}
+
+.buttonMenu:hover {
+  background-image: linear-gradient($button-menu-bottom, $button-menu-top);
+}

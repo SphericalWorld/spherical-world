@@ -37,7 +37,6 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
   justify-content: center;
   left: 0;
   margin: auto;
-  pointer-events: all;
   position: absolute;
   right: 0;
   text-align: center;
@@ -89,7 +88,7 @@ $size-of-half-corner: $size-of-corner/$sqrt2;
     2em [helpLine-end]
     3em [main-end];
   height: 25em;
-  padding: 2em 0.3em 0.1em;
+  padding: 1.5em 0.3em 0.1em;
   width: 30em;
 }
 
