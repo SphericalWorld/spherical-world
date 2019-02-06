@@ -9,6 +9,7 @@ import { INVENTORY } from './components/Inventory/inventoryConstants';
 import MainMenu from './components/MainMenu';
 import MainPanel from './components/MainPanel/MainPanel';
 import PlayerStats from './components/PlayerStats/PlayerStats';
+import MenuButton from './components/MenuButton/MenuButton';
 import KeyBindings from './components/KeyBindings/KeyBindings';
 import Audio from './components/Audio/Audio';
 import Video from './components/Video/Video';
@@ -23,6 +24,7 @@ const Hud = () => (
     <Route on={VIDEO} component={Video} />
     <MainPanel />
     <PlayerStats />
+    <MenuButton />
   </div>
 );
 

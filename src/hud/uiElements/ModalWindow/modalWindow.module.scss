@@ -11,6 +11,7 @@
   background: transparentize(lighten($primary, 10%), 0.15);
   border: 0.1em ridge $primary-20p;
   justify-content: space-around;
+  pointer-events: all;
   width: 39em;
 }
 
