@@ -10,8 +10,7 @@
 }
 
 .buttonMenu {
-  background-color: transparent;
-  background-image: linear-gradient($button-menu-top, $button-menu-bottom);
+  background-color: $button-menu-top;
   border: 0.05em solid $button-menu-border;
   border-radius: 0.3em;
   cursor: pointer;
@@ -37,5 +36,5 @@
 }
 
 .buttonMenu:hover {
-  background-image: linear-gradient($button-menu-bottom, $button-menu-top);
+  background-color: $button-menu-bottom;
 }
