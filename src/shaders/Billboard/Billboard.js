@@ -19,3 +19,5 @@ export default class BillboardProgram extends GlShaderProgram {
     gl.uniform1i(this.uTexture, 0);
   }
 }
+
+export const billboard = new BillboardProgram();

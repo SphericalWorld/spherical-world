@@ -1,19 +1,18 @@
 // @flow strict
 import { vec3 } from 'gl-matrix';
-import type { Entity } from '../../common/ecs/Entity';
-import type { MaterialLibrary } from '../engine/Material/MaterialLibrary';
-import GlObject from '../engine/glObject';
-import { World } from '../../common/ecs';
 import {
-  Transform, Visual, Collider, Physics, Velocity, Gravity, Item, Inventory,
-} from '../components';
+  World, GameObject, React, type Entity,
+} from '../../common/ecs';
+import {
+  Transform, Visual, Collider, Physics, Velocity, Gravity, Item as ItemComponent, Inventory,
+} from '../components/react';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
-
 
 import {
   blocksTextureInfo,
 } from '../blocks/blockInfo';
+import { materialLibrary, GlObject } from '../engine';
 
 export const ITEM: 'ITEM' = 'ITEM';
 const SIZE = 0.2;
@@ -36,15 +35,15 @@ const getTextureCoords = (block) => {
   return textureCoordinates;
 };
 
+type Props = {|
+  +id: Entity,
+  +transform: Transform,
+  +inventory: Inventory,
+|};
 
-const createItem = (
-  ecs: World,
-  materialLibrary: MaterialLibrary,
-) => ({
+export const Item = ({
   transform, id, inventory,
-}: {
-  transform: Transform, id: Entity, inventory: Inventory,
-}): Entity => {
+}: Props) => {
   const model = createCube(
     SIZE,
     undefined,
@@ -54,28 +53,27 @@ const createItem = (
   );
   const material = materialLibrary.get('blocksDropable');
   const object = new GlObject({ model, material });
-  const item = ecs.createEntity(
-    id,
-    Transform.deserialize(transform),
-    new Visual(object),
-    new Collider(
-      COLLIDER_AABB,
-      vec3.create(),
-      vec3.fromValues(SIZE, SIZE, SIZE),
-    ),
-    new Physics(),
-    new Velocity(),
-    new Gravity(),
-    new Item(),
+  return (
+    <GameObject id={id}>
+      <Transform {...transform} />
+      <Visual object={object} />
+      <Collider
+        type={COLLIDER_AABB}
+        params={[
+          vec3.create(),
+          vec3.fromValues(SIZE, SIZE, SIZE),
+        ]}
+      />
+      <Physics />
+      <Velocity />
+      <Gravity />
+      <ItemComponent />
+    </GameObject>
   );
-  return item.id;
 };
 
-const itemProvider = (
-  ecs: World,
-  materialLibrary: MaterialLibrary,
-) => {
-  const itemConstructor = createItem(ecs, materialLibrary);
+const itemProvider = (ecs: World) => {
+  const itemConstructor = Item;
   ecs.registerConstructor(ITEM, itemConstructor);
   return itemConstructor;
 };

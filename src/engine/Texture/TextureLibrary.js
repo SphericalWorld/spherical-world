@@ -31,46 +31,20 @@ const drawImage = (
   context.restore();
 };
 
+const textureCanvas = document.getElementById('texture-canvas');
+if (!(textureCanvas instanceof HTMLCanvasElement)) {
+  throw new Error('Fatal error: texture canvas not found');
+}
+const ctx = textureCanvas.getContext('2d');
+
 class GlTextureLibrary {
   textures: Map<string, Texture> = new Map();
   textureCanvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
 
   constructor() {
-    const textureCanvas = document.getElementById('texture-canvas');
-    if (!(textureCanvas instanceof HTMLCanvasElement)) {
-      throw new Error('Fatal error: texture canvas not found');
-    }
     this.textureCanvas = textureCanvas;
-    this.ctx = this.textureCanvas.getContext('2d');
-  }
-
-  makeTextureFromText(textToWrite: string, textSize: number = 56) {
-    this.ctx.font = `bold ${textSize}px monospace`;
-    this.textureCanvas.width = 2 ** Math.ceil(Math.log2(this.ctx.measureText(textToWrite).width));
-    this.textureCanvas.height = 2 ** Math.ceil(Math.log2(2 * textSize));
-    if (this.textureCanvas.width > this.textureCanvas.height) {
-      this.textureCanvas.height = this.textureCanvas.width;
-    } else {
-      this.textureCanvas.width = this.textureCanvas.height;
-    }
-    this.ctx.translate(this.textureCanvas.width / 2, this.textureCanvas.height / 2);
-    this.ctx.rotate((2 * Math.PI) - ((180 * Math.PI) / 180));
-    this.ctx.scale(-1, 1);
-
-    this.ctx.translate(-this.textureCanvas.width / 2, -this.textureCanvas.height / 2);
-
-    this.ctx.fillStyle = '#FFF0';
-    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-    this.ctx.fillStyle = '#FFF';
-    this.ctx.textAlign = 'center';
-    this.ctx.textBaseline = 'middle';
-    this.ctx.font = `bold ${textSize}px monospace`;
-
-    this.ctx.fillText(textToWrite, this.textureCanvas.width / 2, this.textureCanvas.height / 2);
-
-    return new Texture(null, makeTexture(this.textureCanvas, gl.TEXTURE_2D, gl.RGBA));
+    this.ctx = ctx;
   }
 
   makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {
@@ -212,5 +186,34 @@ class GlTextureLibrary {
     return this;
   }
 }
+
+
+export const makeTextureFromText = (textToWrite: string, textSize: number = 56): Texture => {
+  ctx.font = `bold ${textSize}px monospace`;
+  textureCanvas.width = 2 ** Math.ceil(Math.log2(ctx.measureText(textToWrite).width));
+  textureCanvas.height = 2 ** Math.ceil(Math.log2(2 * textSize));
+  if (textureCanvas.width > textureCanvas.height) {
+    textureCanvas.height = textureCanvas.width;
+  } else {
+    textureCanvas.width = textureCanvas.height;
+  }
+  ctx.translate(textureCanvas.width / 2, textureCanvas.height / 2);
+  ctx.rotate((2 * Math.PI) - ((180 * Math.PI) / 180));
+  ctx.scale(-1, 1);
+
+  ctx.translate(-textureCanvas.width / 2, -textureCanvas.height / 2);
+
+  ctx.fillStyle = '#FFF0';
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  ctx.fillStyle = '#FFF';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = `bold ${textSize}px monospace`;
+
+  ctx.fillText(textToWrite, textureCanvas.width / 2, textureCanvas.height / 2);
+
+  return new Texture(null, makeTexture(textureCanvas, gl.TEXTURE_2D, gl.RGBA));
+};
 
 export default GlTextureLibrary;

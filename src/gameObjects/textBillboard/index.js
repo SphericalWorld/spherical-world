@@ -1,2 +1,2 @@
 // @flow strict
-export { textBillboardProvider } from './textBillboard';
+export { TextBillboard } from './TextBillboard';

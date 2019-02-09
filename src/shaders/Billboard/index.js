@@ -1,2 +1,2 @@
 // @flow strict
-export { default } from './Billboard';
+export { default, billboard } from './Billboard';

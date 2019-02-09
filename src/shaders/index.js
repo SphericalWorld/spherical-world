@@ -1,12 +1,12 @@
 // @flow strict
-import Billboard from './Billboard';
+import { billboard } from './Billboard';
 import Chunk from './Chunk';
 import Diffuse from './Diffuse';
 import DiffuseAnimated from './DiffuseAnimated';
 import Skybox from './Skybox';
 
 const shadersProvider = () => [
-  new Billboard(),
+  billboard,
   new Chunk(),
   new Diffuse(),
   new DiffuseAnimated(),

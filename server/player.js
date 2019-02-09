@@ -1,7 +1,7 @@
 // @flow strict
 import { vec3 } from 'gl-matrix';
 import type { Socket } from './network/socket';
-import type { GameObject } from '../common/ecs';
+import type { GameObject } from '../common/ecs/EntityManager';
 import { type World } from '../common/ecs/World';
 import {
   Transform, Network, PlayerData, Inventory, NetworkSync, Camera,

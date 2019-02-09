@@ -40,3 +40,15 @@ export default class Transform implements Component, Networkable {
     return this[PARENT];
   }
 }
+
+/**
+ * Contains positional data, such as coordinates and rotation
+ * @param {Vec3} translation 3D world coordinates
+ * @param {Entity} parent parent object in hierarchy
+ */
+export const TransformComponent = ({
+  translation, parent,
+}: {|
+  translation?: Vec3, parent?: any,
+|}) =>
+  new Transform(translation, parent);

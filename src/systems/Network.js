@@ -1,5 +1,5 @@
 // @flow strict
-import { type World } from '../../common/ecs/World';
+import { type World, React } from '../../common/ecs';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
@@ -12,9 +12,9 @@ const onSyncGameData = (ecs: World) => ecs.events
   .filter(e => e.type === 'SYNC_GAME_DATA')
   .subscribe(({ payload: { newObjects, deletedObjects = [], components = [] } }) => {
     for (const newObject of newObjects) {
-      const constructor = ecs.constructors.get(newObject.networkSync.name);
-      if (constructor) {
-        constructor(newObject);
+      const Constructor = ecs.constructors.get(newObject.networkSync.name);
+      if (Constructor) {
+        React.render(() => <Constructor {...newObject} />, ecs);
       }
     }
     for (const deletedObject of deletedObjects) {

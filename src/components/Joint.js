@@ -19,3 +19,12 @@ export default class Joint implements Component {
     this.distance = distance;
   }
 }
+
+/**
+ * Component which bounds its entity to parent entity and move together with parent
+ * @param {Entity} parent entity to which Joint will be attached
+ * @param {Vec3} distance position in ***parent*** coordinates, where Joint entity will be located.
+ * Position of Joint will be sum of parent position and ***distance***
+ */
+export const JointComponent = ({ parent, distance }: {parent: Entity, distance?: Vec3}) =>
+  new Joint(parent, distance);

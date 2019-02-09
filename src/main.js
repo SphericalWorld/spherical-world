@@ -3,7 +3,9 @@ import type Network from './network';
 import type { Store } from './store/store';
 import { initWebGL } from './engine/glEngine';
 import HUD from './hud/HudApi';
-import { World } from '../common/ecs';
+import { World, React, render } from '../common/ecs';
+import { Player } from './player/Player';
+import { Skybox } from './Skybox';
 
 let tex = 0;
 setInterval(() => {
@@ -16,10 +18,8 @@ setInterval(() => {
 const engineProvider = (
   store: Store,
   network: Network,
-  Player,
   resourceLoader,
   ecs: World,
-  Skybox,
 ) => {
   class Engine {
     ecs: World = ecs;
@@ -38,8 +38,8 @@ const engineProvider = (
         .filter(e => e.type === 'LOGGED_IN')
         .subscribe(({ payload }) => {
           localStorage.setItem('userId', payload.data.id);
-          const player = Player(payload.data, true);
-          const skyBox = Skybox(player);
+          render(() => <Player {...payload.data} isMainPlayer />, ecs);
+          render(() => <Skybox parent={payload.data.id} />, ecs);
         });
 
       network.events

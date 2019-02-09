@@ -1,29 +1,21 @@
 // @flow strict
 import { type Material } from './Material';
 
-const materialLibraryProvider = () => {
-  class MaterialLibrary {
-    materials: Map<string, Material> = new Map();
+export class MaterialLibrary {
+  materials: Map<string, Material> = new Map();
 
-    get(materialName: string): Material {
-      const material = this.materials.get(materialName);
-      if (!material) {
-        throw Error(`Material ${materialName} is not registered`);
-      }
-      return material;
+  get(materialName: string): Material {
+    const material = this.materials.get(materialName);
+    if (!material) {
+      throw Error(`Material ${materialName} is not registered`);
     }
-
-    add(...materials: Material[]): this {
-      for (const material of materials) {
-        this.materials.set(material.name, material);
-      }
-      return this;
-    }
+    return material;
   }
-  return MaterialLibrary;
-};
 
-declare var tmp: $Call<typeof materialLibraryProvider>;
-export type MaterialLibrary = tmp;
-
-export default materialLibraryProvider;
+  add(...materials: Material[]): this {
+    for (const material of materials) {
+      this.materials.set(material.name, material);
+    }
+    return this;
+  }
+}
