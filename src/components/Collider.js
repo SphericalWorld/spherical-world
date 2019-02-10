@@ -29,3 +29,17 @@ export default class Collider implements Component {
     this.type = type;
   }
 }
+
+
+/**
+ * Component to specify object shape to detect collisions
+ * @param {COLLIDER_TYPE} type type of the shape to detect collisions
+ * @param {Array<Vec3>} params params to collider shape constructor.
+ */
+export const ColliderComponent = ({
+  type, params,
+}: {|
+  type: COLLIDER_TYPE, params?: Array<Vec3>,
+|}) =>
+  // $FlowFixMe
+  new Collider(type, ...params);

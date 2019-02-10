@@ -1,5 +1,5 @@
 // @flow strict
-import { type World, React } from '../../common/ecs';
+import { type World, React, render } from '../../common/ecs';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
@@ -14,7 +14,7 @@ const onSyncGameData = (ecs: World) => ecs.events
     for (const newObject of newObjects) {
       const Constructor = ecs.constructors.get(newObject.networkSync.name);
       if (Constructor) {
-        React.render(() => <Constructor {...newObject} />, ecs);
+        render(() => <Constructor {...newObject} />, ecs);
       }
     }
     for (const deletedObject of deletedObjects) {

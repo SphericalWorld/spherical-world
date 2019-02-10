@@ -1,2 +1,2 @@
 // @flow strict
-export { default } from '../../common/ecs/components/Item';
+export { default, ItemComponent } from '../../common/ecs/components/Item';

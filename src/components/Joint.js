@@ -26,5 +26,6 @@ export default class Joint implements Component {
  * @param {Vec3} distance position in ***parent*** coordinates, where Joint entity will be located.
  * Position of Joint will be sum of parent position and ***distance***
  */
-export const JointComponent = ({ parent, distance }: {parent: Entity, distance?: Vec3}) =>
+export const JointComponent = ({ parent, distance }: {| parent: Entity, distance?: Vec3 |}) =>
+  // $FlowFixMe
   new Joint(parent, distance);

@@ -31,3 +31,13 @@ export default class Inventory implements Component, Networkable {
     return instance;
   }
 }
+
+/**
+* Component to store inventory data
+* @param {SlotID[]} slots array with ids of items in the inventory
+* @param {{[SlotID]: SlotID}} items items stored in the inventory.
+* @param {SlotID} selectedItem item currently selected to perform action with
+*/
+export const InventoryComponent = (data: InventoryData) =>
+  // $FlowFixMe
+  new Inventory(data);

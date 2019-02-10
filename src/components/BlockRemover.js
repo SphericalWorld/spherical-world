@@ -13,3 +13,10 @@ export default class BlockRemover implements Component {
   removedPart: number = 0.0;
   position: Vec3 = vec3.create();
 }
+
+/**
+ * Component to allow entity to destroy blocks. Used to destroy blocks by players
+ */
+export const BlockRemoverComponent = (_: {||}) =>
+  // $FlowFixMe
+  new BlockRemover();

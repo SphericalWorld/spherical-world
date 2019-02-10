@@ -7,3 +7,10 @@ export default class Item implements Component {
   static componentName: 'item' = 'item';
   static componentType: {| 'item': Item |};
 }
+
+/**
+ * Component to mark entity a pickable item
+ */
+export const ItemComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Item();

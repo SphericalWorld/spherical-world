@@ -7,3 +7,10 @@ export default class Physics implements Component {
   static componentName: 'physics' = 'physics';
   static componentType: {| 'physics': Physics |};
 }
+
+/**
+ * Component to mark Entity as affected by Physics System
+ */
+export const PhysicsComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Physics();

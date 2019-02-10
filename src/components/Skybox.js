@@ -10,3 +10,10 @@ export default class Skybox implements Component {
 
   sunPosition: Vec3 = [0, 0, 0];
 }
+
+/**
+ * Component to keep skybox-related data
+ */
+export const SkyboxComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Skybox();

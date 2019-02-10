@@ -51,4 +51,5 @@ export const TransformComponent = ({
 }: {|
   translation?: Vec3, parent?: any,
 |}) =>
+  // $FlowFixMe
   new Transform(translation, parent);

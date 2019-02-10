@@ -17,3 +17,10 @@ export default class UserControlled implements Component {
   isJumping = false;
   velocity: Vec3 = vec3.create();
 }
+
+/**
+ * Component to make entity controllable by user inputs
+ */
+export const UserControlledComponent = (_: {||}) =>
+  // $FlowFixMe
+  new UserControlled();

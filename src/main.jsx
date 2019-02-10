@@ -93,14 +93,6 @@ const engineProvider = (
       // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
       // this.useShader('diffuse');
-      //
-      // for (const i in Player.instances) {
-      //   if (Player.instances[i] !== this.player) {
-      //     this.mvPushMatrix();
-      //     Player.instances[i].draw();
-      //     this.mvPopMatrix();
-      //   }
-      // }
     }
   }
   return Engine;

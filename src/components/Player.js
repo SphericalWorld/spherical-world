@@ -7,3 +7,11 @@ export default class Player implements Component {
   static componentName = 'player';
   static componentType: {| 'player': Player |};
 }
+
+/**
+ * Component to mark Entity as related to current player, to distinguish entities controlled by
+ * the player in case if same components have different logic for current player and others
+ */
+export const PlayerComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Player();

@@ -19,3 +19,11 @@ export default class NetworkSync implements Component, Networkable {
     return this;
   }
 }
+
+/**
+ * Component to mark entity syncable between client and server
+ * @param {name} string name of the object constructor to use for deserializing
+ */
+export const NetworkSyncComponent = ({ name }: {| name: string |}) =>
+  // $FlowFixMe
+  new NetworkSync({ name });

@@ -1,7 +1,6 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
-import { vec3 } from 'gl-matrix';
-import type { Component } from '../../common/ecs/Component';
+import { type Vec3, vec3 } from 'gl-matrix';
+import { type Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 
 export default class Velocity implements Component {
@@ -12,9 +11,15 @@ export default class Velocity implements Component {
   linear: Vec3 = vec3.create();
   // angular: Vec3 = [0, 0, 0];
 
-  constructor(x: number = 0, y: number = 0, z: number = 0) {
-    this.linear[0] = x;
-    this.linear[1] = y;
-    this.linear[2] = z;
+  constructor(linear: Vec3 = vec3.create()) {
+    this.linear = linear;
   }
 }
+
+/**
+ * Component with info about velocity
+ * @param {Vec3} linear linear velocity
+ */
+export const VelocityComponent = ({ linear }: {| linear?: Vec3 |}) =>
+  // $FlowFixMe
+  new Velocity(linear);

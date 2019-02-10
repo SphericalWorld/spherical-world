@@ -27,3 +27,10 @@ export default class Raytracer implements Component {
 
   emptyBlock: ?BlockDetails;
 }
+
+/**
+ * Component to change position of Entity by moving it to 3D world cursor position
+ */
+export const RaytracerComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Raytracer();

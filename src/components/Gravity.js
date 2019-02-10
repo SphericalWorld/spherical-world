@@ -7,3 +7,10 @@ export default class Gravity implements Component {
   static componentName = 'gravity';
   static componentType: {| 'gravity': Gravity |};
 }
+
+/**
+ * Component to mark Entity as affected by gravity
+ */
+export const GravityComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Gravity();

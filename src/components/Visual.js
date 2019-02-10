@@ -16,3 +16,11 @@ export default class Visual implements Component {
     this.glObject = glObject;
   }
 }
+
+/**
+ * Component with data to render Entity in 3D game world
+ * @param {GlObject} glObject object with visual data to render
+ */
+export const VisualComponent = ({ object }: {| object: GlObject |}) =>
+  // $FlowFixMe
+  new Visual(object);

@@ -45,3 +45,10 @@ export default class Camera implements Component, Networkable {
     return instance;
   }
 }
+
+/**
+ * Component to store data about Camera
+ */
+export const CameraComponent = (_: {||}) =>
+  // $FlowFixMe
+  new Camera();
