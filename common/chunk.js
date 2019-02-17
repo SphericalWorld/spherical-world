@@ -1,5 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
+import { type Vec3 } from 'gl-matrix';
 import { TERRAIN_HALF_SIZE_IN_BLOCKS } from './constants/chunk';
 import HashMap from './fp/data-structures/Map';
 // const k = index >>> 8;

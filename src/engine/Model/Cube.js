@@ -1,5 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
+import { type Vec3 } from 'gl-matrix';
 import { gl } from '../glEngine';
 import Model from './Model';
 

@@ -1,7 +1,8 @@
 // @flow strict
-import type { Mat4, Vec3 } from 'gl-matrix';
-import { mat4, vec3 } from 'gl-matrix';
-import type { Component } from '../Component';
+import {
+  type Mat4, mat4, type Vec3, vec3,
+} from 'gl-matrix';
+import { type Component } from '../Component';
 import { Networkable } from '../../Networkable';
 
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';

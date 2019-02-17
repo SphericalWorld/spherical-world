@@ -2,9 +2,15 @@
 import { type getElements } from '../../../common/utils/flow';
 import { gl } from '../glEngine';
 
+type TextureTarget =
+  | typeof gl.TEXTURE_2D
+  | typeof gl.TEXTURE_CUBE_MAP
+  | typeof gl.TEXTURE_3D
+  | typeof gl.TEXTURE_2D_ARRAY;
+
 export const makeTexture = (
   textureImage: HTMLImageElement | HTMLCanvasElement,
-  target: number,
+  target: TextureTarget,
   type: number = gl.RGBA,
 ): WebGLTexture => {
   const texture: WebGLTexture = gl.createTexture();
@@ -38,7 +44,7 @@ export default class Texture {
   glTexture: WebGLTexture;
   atlasId: ?number = null;
   name: string;
-  target: number = gl.TEXTURE_2D;
+  target: TextureTarget = gl.TEXTURE_2D;
   meta: ?TextureMeta;
   animated: boolean = false;
   frames: number = 0;
@@ -63,7 +69,7 @@ export default class Texture {
 
   static makeAnimatedTexture(
     textureImage: HTMLImageElement | HTMLCanvasElement,
-    target: number,
+    target: TextureTarget,
     type: number = gl.RGBA,
   ): WebGLTexture {
     const texture: WebGLTexture = gl.createTexture();

@@ -1,5 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
+import { type Vec3 } from 'gl-matrix';
 import type { Inventory } from '../../common/Inventory';
 import { createReducer } from '../util/reducerUtils';
 import { HUD_DATA_UPDATED } from './hudConstants';

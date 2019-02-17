@@ -1,6 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
-import { vec3 } from 'gl-matrix';
+import { type Vec3, vec3 } from 'gl-matrix';
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type Chunk from '../Chunk';

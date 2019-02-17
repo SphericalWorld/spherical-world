@@ -25,7 +25,7 @@ const getPutBlockEvents = (world: World, picker) => world.events
   .subscribe(() => {
     const { emptyBlock, face } = picker[0].raytracer;
     if (emptyBlock) {
-      const inventory = picker[0].transform.getParent().inventory.data;
+      const inventory = world.objects.get(picker[0].transform.parent).inventory.data;
       const item = inventory.items[inventory.selectedItem];
       if (!item || !item.count) {
         return;

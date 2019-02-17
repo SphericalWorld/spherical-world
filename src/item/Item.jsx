@@ -73,9 +73,7 @@ export const Item = ({
 };
 
 const itemProvider = (ecs: World) => {
-  const itemConstructor = Item;
-  ecs.registerConstructor(ITEM, itemConstructor);
-  return itemConstructor;
+  ecs.registerConstructor(ITEM, Item);
 };
 
 export default itemProvider;

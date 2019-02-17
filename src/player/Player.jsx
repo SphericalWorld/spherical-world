@@ -58,10 +58,10 @@ type Props = {|
 
 export const Player = ({
   id, transform, inventory, playerData, isMainPlayer = false,
-}: Props): Entity => {
+}: Props) => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
-  const player = (
+  return (
     <GameObject id={id}>
       <Transform {...transform} />
       <Collider
@@ -94,19 +94,14 @@ export const Player = ({
           </>
         )
       }
+      <BlockPicker parent={id} />
     </GameObject>
   );
-  const blockPicker = <BlockPicker parent={player} />;
-  player.children.push(blockPicker);
-
-  return player.id;
 };
 
 
 const playerProvider = (ecs: World) => {
-  const playerConstructor = Player;
-  ecs.registerConstructor('PLAYER', playerConstructor);
-  return playerConstructor;
+  ecs.registerConstructor('PLAYER', Player);
 };
 
 export default playerProvider;

@@ -1,6 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
-import { vec3 } from 'gl-matrix';
+import { type Vec3, vec3 } from 'gl-matrix';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
 import { Just, Nothing } from '../../../common/fp/monads/maybe';
 import { blocksFlags, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';

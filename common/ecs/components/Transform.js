@@ -1,10 +1,9 @@
 // @flow strict
 import { type Vec3, type Quat, vec3 } from 'gl-matrix';
 import { type Component } from '../Component';
+import { type Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
-
-const PARENT = Symbol('parent');
 
 const ZERO_VECTOR = vec3.create();
 
@@ -16,11 +15,11 @@ export default class Transform implements Component, Networkable {
 
   translation: Vec3 = vec3.create();
   rotation: Quat = [0, 0, 0, 1];
-  [PARENT]: any;
+  parent: ?Entity;
 
-  constructor(translation: Vec3 = ZERO_VECTOR, parent?: any) {
+  constructor(translation: Vec3 = ZERO_VECTOR, parent?: Entity) {
     vec3.copy(this.translation, translation);
-    this[PARENT] = parent;
+    this.parent = parent;
   }
 
   static deserialize(data: Transform): Transform {
@@ -35,10 +34,6 @@ export default class Transform implements Component, Networkable {
       rotation: Array.from(this.rotation),
     };
   }
-
-  getParent() {
-    return this[PARENT];
-  }
 }
 
 /**
@@ -49,7 +44,7 @@ export default class Transform implements Component, Networkable {
 export const TransformComponent = ({
   translation, parent,
 }: {|
-  translation?: Vec3, parent?: any,
+  translation?: Vec3, parent?: Entity,
 |}) =>
   // $FlowFixMe
   new Transform(translation, parent);

@@ -1,6 +1,5 @@
 // @flow strict
-import type { Vec3 } from 'gl-matrix';
-import { vec3 } from 'gl-matrix';
+import { type Vec3, vec3 } from 'gl-matrix';
 import type Network from '../network';
 import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../common/ecs/System';

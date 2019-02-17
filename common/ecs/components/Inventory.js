@@ -1,8 +1,7 @@
 // @flow strict
-import type { Component } from '../Component';
-import type { Inventory as InventoryData } from '../../Inventory/Inventory';
+import { type Component } from '../Component';
+import { type Inventory as InventoryData, createInventory } from '../../Inventory/Inventory';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
-import { createInventory } from '../../Inventory/Inventory';
 import { Networkable } from '../../Networkable';
 
 export default class Inventory implements Component, Networkable {

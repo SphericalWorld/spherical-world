@@ -1,5 +1,5 @@
 // @flow strict
-import type { Component } from '../Component';
+import { type Component } from '../Component';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
 
 export default class Item implements Component {
