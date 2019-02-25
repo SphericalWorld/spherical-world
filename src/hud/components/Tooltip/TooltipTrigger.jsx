@@ -31,8 +31,8 @@ const getOffset = (triggerRef: Ref, tooltipRef: Ref) => {
 const TooltipTrigger = <P>({ children, tooltip: Tooltip, tooltipProps = {} }: Props<P>) => {
   const [isHidden, setHidden] = useState(true);
   const [style, setStyle] = useState({});
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement | null>(null);
+  const tooltipRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(
     () => {
