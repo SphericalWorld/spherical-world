@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 // const playerProvider = (store, BlockRemover, BlockPicker) => {
 //   class Player {
@@ -31,6 +32,7 @@ import {
 } from '../../common/ecs';
 import playerModel from '../models/player.json';
 import {
+  type TransformProps,
   Transform,
   Camera,
   Collider,
@@ -39,6 +41,7 @@ import {
   Gravity,
   UserControlled,
   Visual,
+  type InventoryProps,
   Inventory,
 } from '../components/react';
 import Model from '../engine/Model';
@@ -49,9 +52,8 @@ import { materialLibrary, GlObject } from '../engine';
 
 type Props = {|
   id: Entity,
-  transform: Transform,
-  inventory: Inventory,
-  camera: Camera,
+  transform: TransformProps,
+  inventory: InventoryProps,
   playerData: any,
   isMainPlayer: boolean,
 |};
@@ -61,6 +63,7 @@ export const Player = ({
 }: Props) => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
+
   return (
     <GameObject id={id}>
       <Transform {...transform} />
@@ -77,22 +80,18 @@ export const Player = ({
       <Gravity />
       <Inventory {...inventory.data} />
       { isMainPlayer
-        ? (
-          <>
-            <UserControlled />
-            <Camera />
-          </>
-        )
-        : (
-          <>
-            <Visual object={new GlObject({ model, material })} />
-            <TextBillboard
-              parent={id}
-              position={vec3.fromValues(0, 2, 0)}
-              text={playerData.name}
-            />
-          </>
-        )
+        ? [
+          <UserControlled />,
+          <Camera />,
+        ]
+        : [
+          <Visual object={new GlObject({ model, material })} />,
+          <TextBillboard
+            parent={id}
+            position={vec3.fromValues(0, 2, 0)}
+            text={playerData.name}
+          />,
+        ]
       }
       <BlockPicker parent={id} />
     </GameObject>

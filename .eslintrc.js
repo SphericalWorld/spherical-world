@@ -23,5 +23,6 @@ module.exports = {
     "react/default-props-match-prop-types": "off", // same here
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.stories.jsx"]}],
     "import/prefer-default-export": "off",
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }]
   },
 };

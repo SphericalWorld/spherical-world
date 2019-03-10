@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import { type Vec3 } from 'gl-matrix';
 import {

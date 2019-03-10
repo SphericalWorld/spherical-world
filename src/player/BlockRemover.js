@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import {
   BlockRemover as BlockRemoverComponent, Transform, Visual, Joint,

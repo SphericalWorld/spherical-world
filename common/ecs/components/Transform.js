@@ -36,6 +36,10 @@ export default class Transform implements Component, Networkable {
   }
 }
 
+export type TransformProps = {|
+  translation?: Vec3, parent?: Entity,
+|};
+
 /**
  * Contains positional data, such as coordinates and rotation
  * @param {Vec3} translation 3D world coordinates
@@ -43,8 +47,6 @@ export default class Transform implements Component, Networkable {
  */
 export const TransformComponent = ({
   translation, parent,
-}: {|
-  translation?: Vec3, parent?: Entity,
-|}) =>
+}: TransformProps) =>
   // $FlowFixMe
   new Transform(translation, parent);

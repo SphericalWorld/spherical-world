@@ -35,7 +35,7 @@ const App = () => (
 export async function start() {
   const mainProvider = require('./providers').default;
 
-  const Main = await mainProvider(store, network, physicsThread, chunksHandlerThread);
+  const Main = await mainProvider(store, network, { physicsThread, chunksHandlerThread });
   return new Main();
 }
 

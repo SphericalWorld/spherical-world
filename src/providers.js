@@ -26,7 +26,12 @@ import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
 import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
 
-const createECS = (physicsThread: Worker, chunksHandlerThread: Worker) => {
+type Threads = {|
+  +physicsThread: Worker,
+  +chunksHandlerThread: Worker
+|};
+
+const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
   const world = new World(THREAD_MAIN);
   world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
   world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
@@ -64,11 +69,11 @@ const getMaterials = () => {
     .add(...materials);
 };
 
-const mainProvider = async (store: Store, network: Network, physicsThread: Worker, chunksHandlerThread: Worker) => {
+const mainProvider = async (store: Store, network: Network, threads: Threads) => {
   await getTextures();
   getShaders();
   getMaterials();
-  const world = createECS(physicsThread, chunksHandlerThread);
+  const world = createECS(threads);
   const time = new (timeProvider())(Date.now());
   const terrain = getTerrain();
   const Addon = addon(store);

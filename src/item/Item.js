@@ -1,17 +1,23 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import { vec3 } from 'gl-matrix';
 import {
   World, GameObject, React, type Entity,
 } from '../../common/ecs';
 import {
-  Transform, Visual, Collider, Physics, Velocity, Gravity, Item as ItemComponent, Inventory,
+  type TransformProps,
+  Transform,
+  Visual,
+  Collider,
+  Physics,
+  Velocity,
+  Gravity,
+  Item as ItemComponent,
+  type InventoryProps,
 } from '../components/react';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
-
-import {
-  blocksTextureInfo,
-} from '../blocks/blockInfo';
+import { blocksTextureInfo } from '../blocks/blockInfo';
 import { materialLibrary, GlObject } from '../engine';
 
 export const ITEM: 'ITEM' = 'ITEM';
@@ -37,8 +43,8 @@ const getTextureCoords = (block) => {
 
 type Props = {|
   +id: Entity,
-  +transform: Transform,
-  +inventory: Inventory,
+  +transform: TransformProps,
+  +inventory: InventoryProps,
 |};
 
 export const Item = ({

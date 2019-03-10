@@ -144,7 +144,7 @@ const createTerrain = (
       null,
       vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)),
       {
-        itemTypeId: blockType, count: 1, name: '', id: 'slot',
+        itemTypeId: blockType, count: 1, name: 'block', id: 'slot',
       },
     );
   }

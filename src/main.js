@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import type Network from './network';
 import type { Store } from './store/store';

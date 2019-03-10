@@ -17,3 +17,5 @@ export {
   NetworkSyncComponent as NetworkSync,
   InventoryComponent as Inventory,
 } from '../index';
+export type { TransformProps } from '../Transform';
+export type { InventoryProps } from '../Inventory';

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import GlObject from '../engine/glObject';
 import { React, GameObject, type Entity } from '../../common/ecs';

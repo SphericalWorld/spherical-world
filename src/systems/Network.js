@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 // @flow strict
 import { type World, React, render } from '../../common/ecs';
 import type { Input } from '../Input/Input';
