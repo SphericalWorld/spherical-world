@@ -46,7 +46,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     return mvMatrix;
   };
 
-  const useShader = (shader: GlShaderProgram) => {
+  const runShader = (shader: GlShaderProgram) => {
     if (currentShader === shader) {
       return;
     }
@@ -61,7 +61,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
 
     const chunksToRender = getVisibleChunks(terrain, pMatrix, mvMatrix);
     // terrain.material.shader.use()
-    useShader(terrain.material.shader);
+    runShader(terrain.material.shader);
     gl.uniform1f(terrain.material.shader.uTime, time.currentTimeFromStart / 1000); // TODO remove
 
     let skyColor = Math.floor(skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
@@ -75,7 +75,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     drawOpaqueChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     const draw = (position: Transform, visual: Visual): void => {
-      useShader(visual.glObject.material.shader);
+      runShader(visual.glObject.material.shader);
       visual.glObject.material.use();
       getLight(terrain)(...position.translation)
         .map(light => gl.uniform4f(currentShader.uLighting, ...light));
@@ -96,7 +96,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     }
 
     for (const { transform, visual, skybox } of skyboxes) {
-      useShader(visual.glObject.material.shader);
+      runShader(visual.glObject.material.shader);
       // eslint-disable-next-line no-unused-expressions
       visual.glObject.material.use();
       currentShader = ((currentShader: any): SkyboxProgram);
@@ -114,7 +114,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     }
     gl.enable(gl.BLEND);
 
-    useShader(terrain.material.shader);
+    runShader(terrain.material.shader);
     drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     for (const { transform, visual } of components) {
