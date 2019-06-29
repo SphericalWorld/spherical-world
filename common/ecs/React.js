@@ -39,9 +39,9 @@ export const createElement: React$CreateElement = <Props: { id: Entity }, T: Pro
     }
     return res;
   }
-  const { id = null } = origProps === null ? {} : origProps;
+  const { id = null, ...rest } = origProps === null ? {} : origProps;
   const world = useContext(worlds);
-  const element = world.createEntity(id, ...children.flat().filter(el => !el.id));
+  const element = world.createEntity(id, ...Object.values(rest), ...children.flat().filter(el => !el.id));
   return element;
 };
 
