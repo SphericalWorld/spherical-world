@@ -18,7 +18,7 @@ if (!gl) {
   throw new Error('Can not initialize webgl2 context');
 }
 
-export function initWebGL() {
+export const initWebGL = () => {
   try {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.enable(gl.DEPTH_TEST);
@@ -27,6 +27,6 @@ export function initWebGL() {
   } catch (e) {
     alert('Unable to initialize WebGL. Your browser may not support it.');
   }
-}
+};
 
 export { gl };

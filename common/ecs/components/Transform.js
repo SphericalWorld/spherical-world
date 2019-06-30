@@ -1,11 +1,14 @@
 // @flow strict
-import { type Vec3, type Quat, vec3 } from 'gl-matrix';
+import {
+  type Vec3, type Quat, vec3, quat,
+} from 'gl-matrix';
 import { type Component } from '../Component';
 import { type Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
 
 const ZERO_VECTOR = vec3.create();
+const ZERO_QUAT = quat.create();
 
 export default class Transform implements Component, Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
@@ -14,11 +17,13 @@ export default class Transform implements Component, Networkable {
   static networkable = true;
 
   translation: Vec3 = vec3.create();
-  rotation: Quat = [0, 0, 0, 1];
+  rotation: Quat = quat.create();
   parent: ?Entity;
 
-  constructor(translation: Vec3 = ZERO_VECTOR, parent?: Entity) {
+  constructor(translation: Vec3 = ZERO_VECTOR, rotation: Quat = ZERO_QUAT, parent?: Entity) {
     vec3.copy(this.translation, translation);
+    quat.copy(this.rotation, rotation);
+
     this.parent = parent;
   }
 
@@ -37,7 +42,7 @@ export default class Transform implements Component, Networkable {
 }
 
 export type TransformProps = {|
-  translation?: Vec3, parent?: Entity,
+  translation?: Vec3, parent?: Entity, rotation?: Quat
 |};
 
 /**
@@ -46,7 +51,7 @@ export type TransformProps = {|
  * @param {Entity} parent parent object in hierarchy
  */
 export const TransformComponent = ({
-  translation, parent,
+  translation, parent, rotation,
 }: TransformProps) =>
   // $FlowFixMe
-  new Transform(translation, parent);
+  new Transform(translation, rotation, parent);

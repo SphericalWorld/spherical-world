@@ -50,6 +50,7 @@ export default class Camera implements Component, Networkable {
 /**
  * Component to store data about Camera
  */
-export const CameraComponent = (_: {||}) =>
+export const CameraComponent = (props: {||}) =>
   // $FlowFixMe
-  new Camera();
+  // console.log(_) || new Camera();
+  Camera.deserialize(props);

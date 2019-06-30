@@ -32,11 +32,11 @@ const App = () => (
   </Provider>
 );
 
-export async function start() {
+export const start = async () => {
   const mainProvider = require('./providers').default;
 
   const Main = await mainProvider(store, network, { physicsThread, chunksHandlerThread });
   return new Main();
-}
+};
 
 export default App;

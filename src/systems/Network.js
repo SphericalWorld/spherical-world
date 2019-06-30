@@ -15,6 +15,7 @@ const onSyncGameData = (ecs: World) => ecs.events
     for (const newObject of newObjects) {
       const Constructor = ecs.constructors.get(newObject.networkSync.name);
       if (Constructor) {
+        console.log(newObject)
         render(() => <Constructor {...newObject} />, ecs);
       }
     }

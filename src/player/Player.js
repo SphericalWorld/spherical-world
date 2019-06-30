@@ -59,7 +59,7 @@ type Props = {|
 |};
 
 export const Player = ({
-  id, transform, inventory, playerData, isMainPlayer = false,
+  id, transform, inventory, playerData, camera, isMainPlayer = false,
 }: Props) => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
@@ -82,7 +82,7 @@ export const Player = ({
       { isMainPlayer
         ? [
           <UserControlled />,
-          <Camera />,
+          <Camera {...camera} />,
         ]
         : [
           <Visual object={new GlObject({ model, material })} />,
