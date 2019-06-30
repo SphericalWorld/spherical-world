@@ -3,7 +3,8 @@ module.exports = {
   "parser": "babel-eslint",
   "plugins": [
     "babel",
-    "flowtype"
+    "flowtype",
+    "react-hooks"
   ],
   "env": {
     "browser": true,
@@ -23,6 +24,8 @@ module.exports = {
     "react/default-props-match-prop-types": "off", // same here
     "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/*.stories.jsx"]}],
     "import/prefer-default-export": "off",
-    "func-style": ["error", "expression", { "allowArrowFunctions": true }]
+    "func-style": ["error", "expression", { "allowArrowFunctions": true }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error"
   },
 };

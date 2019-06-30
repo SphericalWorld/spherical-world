@@ -50,8 +50,8 @@ const Footer = () => (
 );
 
 const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
-  const close = useCallback(() => setUIState(INVENTORY, false));
-  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'));
+  const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
+  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [swapSlots]);
 
   return (
     <ModalWindow caption="author's inventory" onClose={close}>

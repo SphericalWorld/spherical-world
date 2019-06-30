@@ -85,7 +85,7 @@ const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
 );
 
 const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsProps) => {
-  const close = useCallback(() => setUIState(KEY_BINDINGS, false));
+  const close = useCallback(() => setUIState(KEY_BINDINGS, false), [setUIState]);
 
   return (
     <ModalWindowMenu caption="Key Bindings">

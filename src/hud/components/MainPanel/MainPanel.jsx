@@ -35,14 +35,14 @@ type Props = {| ...MappedProps, ...DispatchProps |};
 const MainPanel = ({
   slots, selectedItemIndex, swapSlots, selectInventoryItem,
 }: Props) => {
-  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id));
+  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id), [swapSlots]);
   useEffect(
     () => {
       if (slots[selectedItemIndex]) {
         selectInventoryItem(slots[selectedItemIndex].id);
       }
     },
-    [selectedItemIndex, slots],
+    [selectInventoryItem, selectedItemIndex, slots],
   );
 
   return (
@@ -58,7 +58,8 @@ const MainPanel = ({
               draggableMeta={{ source: 'mainPanel' }}
               draggable
               onDrop={swap}
-            />))}
+            />
+          ))}
         </ul>
         <div className={pagination}>
           <div className={paginationControl}>

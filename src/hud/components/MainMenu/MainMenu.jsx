@@ -23,19 +23,19 @@ const MainMenu = ({ setUIState }: Props) => {
   const openKeyBindings = useCallback(() => {
     setUIState(MAIN_MENU, false);
     setUIState(KEY_BINDINGS, true);
-  });
+  }, [setUIState]);
 
   const openAudio = useCallback(() => {
     setUIState(MAIN_MENU, false);
     setUIState(AUDIO, true);
-  });
+  }, [setUIState]);
 
   const openVideo = useCallback(() => {
     setUIState(MAIN_MENU, false);
     setUIState(VIDEO, true);
-  });
+  }, [setUIState]);
 
-  const close = useCallback(() => setUIState(MAIN_MENU, false));
+  const close = useCallback(() => setUIState(MAIN_MENU, false), [setUIState]);
 
   return (
     <ModalWindowMenu caption="Main Menu">

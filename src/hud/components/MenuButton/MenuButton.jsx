@@ -17,7 +17,7 @@ type DispatchProps = {|
 type Props = {| ...DispatchProps |};
 
 const MenuButton = ({ toggleUIState }: Props) => {
-  const toggle = useCallback(() => toggleUIState(MAIN_MENU));
+  const toggle = useCallback(() => toggleUIState(MAIN_MENU), [toggleUIState]);
 
   return (
     <div className={wrapper}>

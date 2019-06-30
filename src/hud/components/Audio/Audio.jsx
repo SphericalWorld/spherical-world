@@ -27,7 +27,7 @@ type Props = {|
 |};
 
 const Audio = ({ setUIState }: Props) => {
-  const close = useCallback(() => setUIState(AUDIO, false));
+  const close = useCallback(() => setUIState(AUDIO, false), [setUIState]);
   return (
     <ModalWindowMenu caption="Audio">
       <div className={inner}>

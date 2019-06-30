@@ -35,7 +35,7 @@ const display = [
 
 
 const Video = ({ setUIState }: Props) => {
-  const close = useCallback(() => setUIState(VIDEO, false));
+  const close = useCallback(() => setUIState(VIDEO, false), [setUIState]);
   return (
     <ModalWindowMenu caption="Video">
       <div className={content}>

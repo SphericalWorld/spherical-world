@@ -23,6 +23,7 @@ const useCSSTransition = <T>(value: T, {
         setClassName(defaultClassName);
       }, duration));
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [className],
   );
 
