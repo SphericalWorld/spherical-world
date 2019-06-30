@@ -45,7 +45,7 @@ const Tooltip = ({
 }: Props) => (
   <div className={`${colors[item.rareness]} ${toolTipGrid}`}>
     {
-      TooltipDefinitions.map(Component => <Component {...item} />)
+      TooltipDefinitions.map((Component, index) => <Component key={index} {...item} />)
     }
   </div>
 );

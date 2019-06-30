@@ -55,6 +55,9 @@ export default (world: World, terrain: Terrain): System => {
     .subscribeQueue();
 
   const userControlSystem = (delta: number) => {
+    if (!components.length) {
+      return;
+    }
     const [{
       id, transform, velocity, userControlled: userControls,
     }] = components;

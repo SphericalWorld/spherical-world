@@ -62,7 +62,7 @@ events
     }));
 
 // eslint-disable-next-line
-self.registerMessageHandler("TERRAIN_MIPMAP_LOADED", ({ payload }) => {
-  // throw JSON.stringify(data);
-  terrain.makeMipMappedTextureAtlas(payload.mipmap);
-});
+// self.registerMessageHandler("TERRAIN_MIPMAP_LOADED", ({ payload }) => {
+//   // throw JSON.stringify(data);
+//   terrain.makeMipMappedTextureAtlas(payload.mipmap);
+// });
