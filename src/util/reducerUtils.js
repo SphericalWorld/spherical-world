@@ -5,7 +5,7 @@ type ReducersMap<T> = {
   [string]: Reducer<T>,
 };
 
-type Action = {| +type: string, +payload: any |};
+type Action = {| +type: string, +payload: mixed |};
 
 export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (T | void, Action) => T {
   return (state = initialState, { type, payload }) => {

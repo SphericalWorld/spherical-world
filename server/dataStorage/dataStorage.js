@@ -1,7 +1,7 @@
 // @flow strict
 import { type DB } from '../database';
 import { Serializable } from '../../common/Serializable';
-import { type Entity, type GameObject } from '../../common/ecs';
+import { type Entity, typeof GameObject } from '../../common/ecs';
 
 export type DataStorage = {|
   +db: DB;

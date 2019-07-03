@@ -6,14 +6,12 @@ import type ChunkProgram from '../shaders/Chunk/Chunk';
 import { WATER } from '../../common/blocks';
 import { toChunkPosition, toPositionInChunk } from '../../common/chunk';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
-import { loadTerrainMipmap } from './terrainActions';
 import { gl } from '../engine/glEngine';
 import TerrainBase from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import Chunk from './Chunk/Chunk';
 
 class Terrain extends TerrainBase<Chunk> {
-  loadTerrainMipmap: typeof loadTerrainMipmap;
   material: Material;
   foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
   chunksToRender: Chunk[];
@@ -34,15 +32,6 @@ class Terrain extends TerrainBase<Chunk> {
       gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, this.foliageColorMap);
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-  }
-
-  makeMipMappedTextureAtlas(terrainMipMap) {
-    this.terrainMipMap = terrainMipMap;
-    // this.loadTerrainMipmap(this.terrainMipMap);
-  }
-
-  generateMinimap() {
-    this.minimap = this.app.glTextureLibrary.makeTerrainMinimap(this);
   }
 }
 

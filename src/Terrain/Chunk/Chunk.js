@@ -55,7 +55,6 @@ export default class Chunk extends ChunkBase<Chunk> {
   ) {
     super(blocksData, lightData, x, z);
     this.terrain = terrain;
-    this.terrainMipMap = null;
     this.rainfallData = new Uint8Array(rainfallData);
     this.temperatureData = new Uint8Array(temperatureData);
 

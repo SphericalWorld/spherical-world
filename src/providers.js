@@ -43,7 +43,7 @@ const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
 const getTerrain = () => {
   const terrain = new Terrain();
   terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
-  terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
+  // terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
   terrain.material = materialLibrary.get('terrain');
   return terrain;
 };

@@ -269,7 +269,6 @@ export default class Chunk extends ChunkBase<Chunk> {
   constructor(binaryData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
     super(binaryData, lightData, x, z);
 
-    this.terrainMipMap = null;
     const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
       x + this.x,
       y,
@@ -411,7 +410,7 @@ export default class Chunk extends ChunkBase<Chunk> {
           this.light[index] = lightLevel;
           y -= 1;
         }
-        const index = getIndex(x, y, z);
+        // const index = getIndex(x, y, z);
 
         // this.minimap[(x + z * 16) * 3] = this.terrainMipMap[blocksTextureInfo[this.blocks[index]][0]][0];
         // this.minimap[(x + z * 16) * 3 + 1] = this.terrainMipMap[blocksTextureInfo[this.blocks[index]][0]][1];

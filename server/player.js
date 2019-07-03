@@ -8,25 +8,6 @@ import {
 } from './components';
 import { createStubItems } from '../common/Inventory/Inventory';
 
-export default class Player {
-  constructor() {
-    this.locationName = 'steppe';
-    this.party = [];
-  }
-
-  static startRemoveBlock(ws, data) {
-    if ((typeof data === 'object') && (typeof data.x === 'number') && (typeof data.y === 'number') && (typeof data.z === 'number')) {
-      ws.player.broadcastToLinked('OTHER_PLAYER_START_REMOVE_BLOCK', {
-        id: ws.player.id, x: data.x, y: data.y, z: data.z,
-      });
-    }
-  }
-
-  static stopRemoveBlock(ws) {
-    ws.player.broadcastToLinked('OTHER_PLAYER_STOP_REMOVE_BLOCK', { id: ws.player.id });
-  }
-}
-
 type SerializedPlayerData = GameObject<[typeof Transform, typeof Inventory, typeof Camera]>;
 
 export const playerProvider = (

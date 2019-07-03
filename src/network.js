@@ -2,13 +2,13 @@
 import { inflate } from 'pako';
 import EventObservable from '../common/GameEvent/EventObservable';
 
-type NetworkEvent = {
+type NetworkEvent = {|
   +type: string;
-  +payload: {
-    +data: Object;
+  +payload: {|
+    +data: mixed;
     +binaryData: ?Uint8Array;
-  };
-}
+  |};
+|};
 
 class Network {
   latency: number = 0;
