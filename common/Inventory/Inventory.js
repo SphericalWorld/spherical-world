@@ -1,5 +1,5 @@
 // @flow strict
-import uuid from 'uuid/v1';
+import {v4 as uuid} from 'uuid';
 
 export const RARENESS_COMMON: 0 = 0;
 export const RARENESS_UNCOMMON: 1 = 1;
