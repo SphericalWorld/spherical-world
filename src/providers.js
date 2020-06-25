@@ -25,6 +25,7 @@ import inputProvider from './Input/inputProvider';
 import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
 import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
+import { initHudAPI } from './hud/HudApi';
 
 type Threads = {|
   +physicsThread: Worker,
@@ -85,8 +86,9 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch(event => world.dispatch(event));
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
+  initHudAPI(store);
 
-  return Main(store, network, new ResourceLoader(), world);
+  return Main(network, new ResourceLoader(), world);
 };
 
 export default mainProvider;

@@ -417,7 +417,6 @@ export default class Chunk extends ChunkBase<Chunk> {
         // this.minimap[(x + z * 16) * 3 + 2] = this.terrainMipMap[blocksTextureInfo[this.blocks[index]][0]][2];
       }
     }
-    postMessage({ type: 'CHUNK_LOADED_MINIMAP', data: { geoId: this.geoId, minimap: this.minimap } });
   }
 
   calcGlobalLight() {

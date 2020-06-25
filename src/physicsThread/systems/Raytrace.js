@@ -122,7 +122,7 @@ export default (ecs: World, terrain: Terrain): System => {
           raytracer.emptyBlock = traceResult.emptyBlock;
           raytracer.face = traceResult.face;
           vec3.copy(transform.translation, traceResult.block.position);
-          result.push([id, transform, raytracer]);
+          result.push([id, raytracer]);
         });
     }
     return result;

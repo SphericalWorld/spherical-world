@@ -59,7 +59,6 @@ export default class Chunk extends ChunkBase<Chunk> {
     this.temperatureData = new Uint8Array(temperatureData);
 
     this.frustum = new Frustum([[x, 0, z], [x + 16, 256, z + 16]]);
-    this.minimap = null;
   }
 
   generateFoliageTexture() {

@@ -3,24 +3,6 @@ import type { Functor } from '../../common/fp/algebraicDataTypes/Functor';
 import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable';
 import { createArray } from '../../common/utils/array';
 
-// ((
-//   callbackfn: (
-//     previousValue: T,
-//     currentValue: T,
-//     currentIndex: number,
-//     array: Array<T>
-//   ) => T,
-//   initialValue: void
-// ) => T) & (<U>(
-//   callbackfn: (
-//     previousValue: U,
-//     currentValue: T,
-//     currentIndex: number,
-//     array: Array<T>
-//   ) => U,
-//   initialValue: U
-// ) => U)
-
 export default class ChunkMap<A> implements Functor<A>, Foldable<A> {
   data: A[];
 

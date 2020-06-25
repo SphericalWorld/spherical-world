@@ -7,6 +7,7 @@ import type { transform } from './EntityManager';
 import { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
+import { Transform } from '../../src/components';
 
 type SerializedComponent = {
   +type: string;
@@ -61,6 +62,10 @@ export class World {
             this.events.emit(payload.events[i]);
           }
         }
+      } else if (type === 'dataArray') {
+        console.log(123123, payload,  this.componentTypes)
+        this.componentTypes.forEach(component => {component.memory = payload})
+        // thi
       }
     });
   }
@@ -132,6 +137,7 @@ export class World {
         const componentForUpdate = componentRegistry.get(key);
         if (componentForUpdate) {
           Object.assign(componentForUpdate, data);
+          // console.log(componentForUpdate, data)
         }
       }
     }
@@ -162,7 +168,12 @@ export class World {
   addExistedEntity(id: Entity, ...components: SerializedComponent[]): void {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
-      component.data = Object.assign(Reflect.construct(constructor, []), component.data);
+      console.log(component.type === 'Transform')
+      if (component.type !== 'Transform'){
+        component.data = Object.assign(Reflect.construct(constructor, []), component.data);
+      } else {
+        component.data = new Transform(component.data.translation, component.data.rotation, component.data.parent, component.data.offset)
+      }
       const threadConstructor = constructor.threadsConstructors && constructor.threadsConstructors[this.thread];
       if (threadConstructor) {
         threadConstructor(component.data);

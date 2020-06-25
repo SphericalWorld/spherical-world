@@ -15,12 +15,23 @@ export default class Transform implements Component, Networkable {
   static componentName: 'transform' = 'transform';
   static componentType: {| 'transform': Transform |};
   static networkable = true;
+  static memory: SharedArrayBuffer;
 
-  translation: Vec3 = vec3.create();
-  rotation: Quat = quat.create();
+  translation: Vec3;
+  rotation: Quat;
   parent: ?Entity;
+  offset: number;
 
-  constructor(translation: Vec3 = ZERO_VECTOR, rotation: Quat = ZERO_QUAT, parent?: Entity) {
+  constructor(translation: Vec3 = ZERO_VECTOR, rotation: Quat = ZERO_QUAT, parent?: Entity, offset: number) {
+    const mem = new Int32Array(Transform.memory);
+    if (!offset) {
+      mem[0] += 8 * 3 + 8 * 4;
+    }
+    this.offset = offset || mem[0];
+
+    this.translation = new Float64Array(Transform.memory, this.offset, 3)
+    this.rotation = new Float64Array(Transform.memory, this.offset+ 8 * 3, 4)
+
     vec3.copy(this.translation, translation);
     quat.copy(this.rotation, rotation);
 
@@ -28,8 +39,7 @@ export default class Transform implements Component, Networkable {
   }
 
   static deserialize(data: Transform): Transform {
-    const res = new Transform(data.translation);
-    res.rotation = data.rotation;
+    const res = new Transform(data.translation, data.rotation);
     return res;
   }
 
@@ -41,9 +51,12 @@ export default class Transform implements Component, Networkable {
   }
 }
 
+Transform.memory = new ArrayBuffer(1024 * 1024)
+
 export type TransformProps = {|
   translation?: Vec3, parent?: Entity, rotation?: Quat
 |};
+
 
 /**
  * Contains positional data, such as coordinates and rotation

@@ -88,8 +88,7 @@ export default (ecs: World, terrain: Terrain): System => {
   const collideWithTerrainPApplied = collideWithTerrain(terrain);
   const transformRegistry = ecs.components.get('Transform');
 
-  const physicsSystem = (delta: number) => {
-    const result = [];
+  return (delta: number) => {
     for (const {
       transform, velocity, collider,
     } of components) {
@@ -102,9 +101,6 @@ export default (ecs: World, terrain: Terrain): System => {
         joint.parentTransform = transformRegistry.get(joint.parent);
       }
       vec3.add(transform.translation, joint.parentTransform.translation, joint.distance);
-      result.push([id, transform]);
     }
-    return result;
   };
-  return physicsSystem;
 };

@@ -3,7 +3,6 @@
 import type Network from './network';
 import type { Store } from './store/store';
 import { initWebGL } from './engine/glEngine';
-import HUD from './hud/HudApi';
 import { World, React, render } from '../common/ecs';
 import { Player } from './player/Player';
 import { Skybox } from './Skybox';
@@ -17,7 +16,6 @@ setInterval(() => {
 }, 100);
 
 const engineProvider = (
-  store: Store,
   network: Network,
   resourceLoader,
   ecs: World,
@@ -33,7 +31,6 @@ const engineProvider = (
     async init() {
       await network.connect();
       initWebGL();
-      this.hud = new HUD(store);
 
       network.events
         .filter(e => e.type === 'LOGGED_IN')

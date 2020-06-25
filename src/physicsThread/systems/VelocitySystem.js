@@ -11,21 +11,15 @@ export default (ecs: World): System => {
   const controlledComponents = ecs.createSelector([Transform, Velocity, UserControlled]);
 
   const velocitySystem = (delta: number) => {
-    const result = [];
     for (const { id, transform, velocity } of components) {
       vec3.scaleAndAdd(transform.translation, transform.translation, velocity.linear, delta);
-      result.push([id, transform]);
     }
     for (const {
       id, transform, velocity, userControlled,
     } of controlledComponents) {
       vec3.scaleAndAdd(transform.translation, transform.translation, userControlled.velocity, delta);
       vec3.scaleAndAdd(transform.translation, transform.translation, velocity.linear, delta);
-
-      result.push([id, transform]);
     }
-
-    return result;
   };
   return velocitySystem;
 };

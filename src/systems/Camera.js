@@ -114,7 +114,7 @@ export default (world: World, input: Input): System => {
 
     camera.worldPosition = worldPositionNear;
     camera.sight = sight;
-    return [[id, transform, camera]];
+    return [[id, camera]];
   };
   return cameraSystem;
 };
