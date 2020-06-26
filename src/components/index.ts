@@ -7,7 +7,10 @@ export { default as Player, PlayerComponent } from './Player';
 export { default as Raytracer, RaytracerComponent } from './Raytracer';
 export { default as Skybox, SkyboxComponent } from './Skybox';
 export { default as Transform, TransformComponent } from './Transform';
-export { default as UserControlled, UserControlledComponent } from './UserControlled';
+export {
+  default as UserControlled,
+  UserControlledComponent,
+} from './UserControlled';
 export { default as Velocity, VelocityComponent } from './Velocity';
 export { default as Visual, VisualComponent } from './Visual';
 export { default as Joint, JointComponent } from './Joint';

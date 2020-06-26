@@ -14,8 +14,10 @@ type ColorComponentBitShifts =
   | typeof BLUE_COLOR_BIT_SHIFT
   | typeof SUN_COLOR_BIT_SHIFT;
 
-export const getColorComponent = (light: number, shift: ColorComponentBitShifts) =>
-  (0.8 ** (15 - ((light >>> shift) & 0xF)));
+export const getColorComponent = (
+  light: number,
+  shift: ColorComponentBitShifts,
+) => 0.8 ** (15 - ((light >>> shift) & 0xf));
 
 export const getColorComponents = (light: number) => [
   getColorComponent(light, RED_LIGHT_BIT_SHIFT),
@@ -24,10 +26,16 @@ export const getColorComponents = (light: number) => [
   getColorComponent(light, SUN_COLOR_BIT_SHIFT),
 ];
 
-export const getBlock = terrain => (x: number, y: number, z: number): Maybe<Block> => terrain
-  .getChunk(toChunkPosition(x), toChunkPosition(z))
-  .map(chunk =>
-    chunk.getBlock(toPositionInChunk(x), Math.floor(y), toPositionInChunk(z)));
+export const getBlock = (terrain) => (
+  x: number,
+  y: number,
+  z: number,
+): Maybe<Block> =>
+  terrain
+    .getChunk(toChunkPosition(x), toChunkPosition(z))
+    .map((chunk) =>
+      chunk.getBlock(toPositionInChunk(x), Math.floor(y), toPositionInChunk(z)),
+    );
 
 /**
  * Return light level at given `WORLD` coordinates
@@ -37,11 +45,17 @@ export const getBlock = terrain => (x: number, y: number, z: number): Maybe<Bloc
  * @param {number} z in world coordinates
  * @returns {(x: number, y: number, z: number) => Maybe<vec3>} value of light at given position
  */
-export const getLight = terrain => (x: number, y: number, z: number): Maybe<vec3> => terrain
-  .getChunk(toChunkPosition(x), toChunkPosition(z))
-  .map(chunk =>
-    getColorComponents(chunk.light[
-      getIndex(toPositionInChunk(x),
-        Math.floor(y),
-        toPositionInChunk(z))
-    ]));
+export const getLight = (terrain) => (
+  x: number,
+  y: number,
+  z: number,
+): Maybe<vec3> =>
+  terrain
+    .getChunk(toChunkPosition(x), toChunkPosition(z))
+    .map((chunk) =>
+      getColorComponents(
+        chunk.light[
+          getIndex(toPositionInChunk(x), Math.floor(y), toPositionInChunk(z))
+        ],
+      ),
+    );

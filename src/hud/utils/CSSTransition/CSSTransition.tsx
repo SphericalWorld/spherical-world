@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 
 type Props<T> = Readonly<{
-  onChange: (T, T) => string,
-  defaultClassName?: string,
-  duration: number,
+  onChange: (T, T) => string;
+  defaultClassName?: string;
+  duration: number;
 }>;
 
-const useCSSTransition = <T extends any>(value: T, {
-  onChange,
-  defaultClassName,
-  duration,
-}: Props<T>) => {
+const useCSSTransition = <T extends any>(
+  value: T,
+  { onChange, defaultClassName, duration }: Props<T>,
+) => {
   const [state, setState] = useState(value);
   const [className, setClassName] = useState(defaultClassName);
   const [timeoutId, setTimeoutId] = useState();
@@ -18,9 +17,11 @@ const useCSSTransition = <T extends any>(value: T, {
   useEffect(
     () => {
       clearTimeout(timeoutId);
-      setTimeoutId(setTimeout(() => {
-        setClassName(defaultClassName);
-      }, duration));
+      setTimeoutId(
+        setTimeout(() => {
+          setClassName(defaultClassName);
+        }, duration),
+      );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [className],

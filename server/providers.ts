@@ -20,7 +20,11 @@ const mainProvider = async () => {
   const world = createECS();
   const createPlayer = playerProvider(world);
   const db = await createDatabase({
-    host: 'mongo', port: 27017, authDB: 'admin', user: 'root', password: 'example',
+    host: 'mongo',
+    port: 27017,
+    authDB: 'admin',
+    user: 'root',
+    password: 'example',
   });
   const ds = createDataStorage(db);
   const Server = serverProvider(world, createTerrain(createItem(world)));

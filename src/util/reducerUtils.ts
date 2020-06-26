@@ -1,12 +1,15 @@
 type Reducer<T> = (T, any) => T;
 
 type ReducersMap<T> = {
-  [string]: Reducer<T>,
+  [string]: Reducer<T>;
 };
 
-type Action = Readonly<{ type: string, payload: unknown }>;
+type Action = Readonly<{ type: string; payload: unknown }>;
 
-export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (state: T | void, action: Action) => T {
+export function createReducer<T>(
+  initialState: T,
+  fnMap: ReducersMap<T>,
+): (state: T | void, action: Action) => T {
   return (state = initialState, { type, payload }) => {
     const handler = fnMap[type];
 
@@ -16,10 +19,7 @@ export function createReducer<T>(initialState: T, fnMap: ReducersMap<T>): (state
 
 export function reduceReducers<T>(...reducers: Reducer<T>[]): Reducer<T> {
   return (previous, current) =>
-    reducers.reduce(
-      (p, r) => r(p, current),
-      previous,
-    );
+    reducers.reduce((p, r) => r(p, current), previous);
 }
 
 export function createConditionalSliceReducer(sliceName: string, fnMap) {

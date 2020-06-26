@@ -8,15 +8,13 @@ if (!portalRoot) {
 }
 
 type Props = Readonly<{
-  children: ReactNode,
+  children: ReactNode;
 }>;
 
 const Portal = ({ children, ...props }: Props, ref) =>
   ReactDOM.createPortal(
     <div {...props}>
-      <div ref={ref}>
-        {children}
-      </div>
+      <div ref={ref}>{children}</div>
     </div>,
     portalRoot,
   );

@@ -5,4 +5,4 @@ export const THREAD_CHUNK_HANDLER: 2 = 2;
 export type THREAD_ID =
   | typeof THREAD_MAIN
   | typeof THREAD_PHYSICS
-  | typeof THREAD_CHUNK_HANDLER
+  | typeof THREAD_CHUNK_HANDLER;

@@ -32,61 +32,74 @@ type ActionMapppingMappedProps = {
 };
 
 type ActionMapppingProps = SpreadTypes<
-  ActionMapppingMappedProps, {
+  ActionMapppingMappedProps,
+  {
     onSetKey: (action: string, key: KeyPosition) => unknown;
   }
 >;
 
 type ActionCategoryMappedProps = {
-  name: EVENT_CATEGORY,
-  items: ReadonlyArray<ActionMapppingMappedProps>,
-}
+  name: EVENT_CATEGORY;
+  items: ReadonlyArray<ActionMapppingMappedProps>;
+};
 
 type ActionCategoryProps = SpreadTypes<
-  ActionCategoryMappedProps, {
+  ActionCategoryMappedProps,
+  {
     onSetKey: (action: string, key: KeyPosition) => unknown;
   }
 >;
 
 type DispatchProps = {
-  setUIState: typeof doSetUIState,
-  startEditKey: typeof doStartEditKey,
+  setUIState: typeof doSetUIState;
+  startEditKey: typeof doStartEditKey;
 };
 
 type KeyBindingsOwnProps = {
-  keyCategories: ReadonlyArray<ActionCategoryMappedProps>
+  keyCategories: ReadonlyArray<ActionCategoryMappedProps>;
 };
 
 type KeyBindingsProps = SpreadTypes<KeyBindingsOwnProps, DispatchProps>;
 
 const ActionMappping = ({
-  caption, firstKey, secondKey, action, onSetKey,
+  caption,
+  firstKey,
+  secondKey,
+  action,
+  onSetKey,
 }: ActionMapppingProps) => (
   <div className={command}>
     <Label className={labelFirst}>{caption}</Label>
-    <Button onClick={() => onSetKey(action, 'first')} size="small">{getEventInfo(firstKey).caption}</Button>
-    <Button onClick={() => onSetKey(action, 'second')} size="small">{getEventInfo(secondKey).caption}</Button>
+    <Button onClick={() => onSetKey(action, 'first')} size="small">
+      {getEventInfo(firstKey).caption}
+    </Button>
+    <Button onClick={() => onSetKey(action, 'second')} size="small">
+      {getEventInfo(secondKey).caption}
+    </Button>
   </div>
 );
 
 const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
   <div>
     <article className={commandGroup}>
-      <Label size="big" className={labelCommandGroup}>{name}</Label>
+      <Label size="big" className={labelCommandGroup}>
+        {name}
+      </Label>
     </article>
-    {items.map(mapping => (
-      <ActionMappping
-        key={mapping.action}
-        onSetKey={onSetKey}
-        {...mapping}
-      />
-    ))
-    }
+    {items.map((mapping) => (
+      <ActionMappping key={mapping.action} onSetKey={onSetKey} {...mapping} />
+    ))}
   </div>
 );
 
-const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsProps) => {
-  const close = useCallback(() => setUIState(KEY_BINDINGS, false), [setUIState]);
+const KeyBindings = ({
+  keyCategories,
+  setUIState,
+  startEditKey,
+}: KeyBindingsProps) => {
+  const close = useCallback(() => setUIState(KEY_BINDINGS, false), [
+    setUIState,
+  ]);
 
   return (
     <ModalWindowMenu caption="Key Bindings">
@@ -98,10 +111,13 @@ const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsPro
         </header>
         <section className={section}>
           <section>
-            {
-              keyCategories.map(category =>
-                <ActionCategory onSetKey={startEditKey} key={category.name} {...category} />)
-            }
+            {keyCategories.map((category) => (
+              <ActionCategory
+                onSetKey={startEditKey}
+                key={category.name}
+                {...category}
+              />
+            ))}
           </section>
         </section>
         <div className={helpLine}>
@@ -111,8 +127,12 @@ const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsPro
           <Button size="small">reset to default</Button>
           <Label className={label} />
           <Button size="small">unbind key</Button>
-          <Button size="small" onClick={close}>OK</Button>
-          <Button size="small" onClick={close}>Cancel</Button>
+          <Button size="small" onClick={close}>
+            OK
+          </Button>
+          <Button size="small" onClick={close}>
+            Cancel
+          </Button>
         </footer>
       </div>
     </ModalWindowMenu>
@@ -126,4 +146,7 @@ const mapActions = {
   startEditKey: doStartEditKey,
 };
 
-export default connect<KeyBindingsProps, {}, _, _, State, _>(mapState, mapActions)(KeyBindings);
+export default connect<KeyBindingsProps, {}, _, _, State, _>(
+  mapState,
+  mapActions,
+)(KeyBindings);

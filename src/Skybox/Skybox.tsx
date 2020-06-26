@@ -1,14 +1,17 @@
 import type { Entity } from '../../common/ecs';
-import { React, GameObject} from '../../common/ecs';
+import { React, GameObject } from '../../common/ecs';
 import {
-  Transform, Visual, Skybox as SkyboxComponent, Joint,
+  Transform,
+  Visual,
+  Skybox as SkyboxComponent,
+  Joint,
 } from '../components/react';
 import { createCube } from '../engine/Model';
 import { materialLibrary, GlObject } from '../engine';
 
 type Props = Readonly<{
-  parent: Entity,
-}>
+  parent: Entity;
+}>;
 
 export const Skybox = ({ parent }: Props) => {
   const model = createCube(1000, true, true);

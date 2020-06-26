@@ -15,7 +15,7 @@ const network = new Network();
 
 // TODO: proper memory allocator
 const data = new SharedArrayBuffer(1024 * 1024 * 10); // eslint-disable-line no-undef
-physicsThread.postMessage({type: 'dataArray', payload: data})
+physicsThread.postMessage({ type: 'dataArray', payload: data });
 Transform.memory = data;
 // console.log(data);
 // componentsProvider.Transform.memory = data
@@ -29,9 +29,7 @@ const App = () => (
       </section>
       <canvas id="glcanvas">
         Your browser doesn&apos;t appear to support the HTML5
-        <code>
-          &lt;canvas&gt;
-        </code>
+        <code>&lt;canvas&gt;</code>
         element.
       </canvas>
       <canvas id="texture-canvas" />
@@ -42,7 +40,10 @@ const App = () => (
 export const start = async () => {
   const mainProvider = require('./providers').default;
 
-  const Main = await mainProvider(store, network, { physicsThread, chunksHandlerThread });
+  const Main = await mainProvider(store, network, {
+    physicsThread,
+    chunksHandlerThread,
+  });
   return new Main();
 };
 

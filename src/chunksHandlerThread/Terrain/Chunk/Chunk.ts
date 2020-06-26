@@ -1,7 +1,10 @@
 import type { BlockFace } from '../../../../common/block';
 import { getIndex } from '../../../../common/chunk';
 import {
-  BLOCKS_IN_CHUNK, CHUNK_WIDTH, CHUNK_HEIGHT, SLICE,
+  BLOCKS_IN_CHUNK,
+  CHUNK_WIDTH,
+  CHUNK_HEIGHT,
+  SLICE,
 } from '../../../../common/constants/chunk';
 import {
   blocksTextureInfo,
@@ -31,16 +34,16 @@ import {
 } from './chunkLigting';
 
 type VectorArray<T> = {
-  data: T,
-  index: number,
-  push(...items: number[]) : void,
-}
+  data: T;
+  index: number;
+  push(...items: number[]): void;
+};
 
 type ChunkBuffers = {
-  vertexBuffer: VectorArray<Float32Array>,
-  indexBuffer: VectorArray<Uint16Array>,
-  vertexCount: number,
-}
+  vertexBuffer: VectorArray<Float32Array>;
+  indexBuffer: VectorArray<Uint16Array>;
+  vertexCount: number;
+};
 
 const POOL_SIZE = 50000;
 const vertexPool = new Float32Array(POOL_SIZE * 4 * 3);
@@ -77,17 +80,37 @@ const createBuffers = (vertexBuffer, indexBuffer): ChunkBuffers => ({
   vertexCount: 0,
 });
 
-const getColorComponent = (light: number, c: number, cf: number, s1: number, s1f: number, s2: number, s2f: number, count: number, halfCount: number, shift: number) =>
-  0.8 ** (halfCount - (((
-    (light >>> shift) & 0xF)
-    + (s1f ? ((s1 >>> shift) & 0xF) : 0)
-    + (s2f ? ((s2 >>> shift) & 0xF) : 0)
-    + (cf ? ((c >>> shift) & 0xF) : 0)
-  ) / count));
+const getColorComponent = (
+  light: number,
+  c: number,
+  cf: number,
+  s1: number,
+  s1f: number,
+  s2: number,
+  s2f: number,
+  count: number,
+  halfCount: number,
+  shift: number,
+) =>
+  0.8 **
+  (halfCount -
+    (((light >>> shift) & 0xf) +
+      (s1f ? (s1 >>> shift) & 0xf : 0) +
+      (s2f ? (s2 >>> shift) & 0xf : 0) +
+      (cf ? (c >>> shift) & 0xf : 0)) /
+      count);
 
-const getLightColor = (light: number, c: number, cf: number, s1: number, s1f: number, s2: number, s2f: number) => {
+const getLightColor = (
+  light: number,
+  c: number,
+  cf: number,
+  s1: number,
+  s1f: number,
+  s2: number,
+  s2f: number,
+) => {
   const count = 1 + s1f + s2f + cf;
-  const halfCount = 17 - (count / 2);
+  const halfCount = 17 - count / 2;
   return [
     getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 12),
     getColorComponent(light, c, cf, s1, s1f, s2, s2f, count, halfCount, 8),
@@ -127,11 +150,17 @@ const getLight = (i: number, j: number, k: number, chunk) => {
   return [0, -1];
 };
 
-const addDefaultVertex = (i, j, k, u, v) => ([
-  j + (i ? v : k ? u : (j < 0 ? 1 : 0)),
-  ((j || k) ? v : (i < 0 ? 1 : 0)),
-  k + ((i || j) ? u : (k < 0 ? 1 : 0)),
-]);
+const addDefaultVertex = (
+  i: number,
+  j: number,
+  k: number,
+  u: number,
+  v: number,
+) => [
+  j + (i ? v : k ? u : j < 0 ? 1 : 0),
+  j || k ? v : i < 0 ? 1 : 0,
+  k + (i || j ? u : k < 0 ? 1 : 0),
+];
 
 const addPlane = (i: number, j: number, k: number): number[][] => [
   addDefaultVertex(i, j, k, 0, 0),
@@ -149,7 +178,17 @@ const basePlanes = [
   addPlane(0, 0, 1),
 ];
 
-const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, color, chunk) => {
+const addVertex = (u, v) => (
+  i: number,
+  j: number,
+  k: number,
+  ii: number,
+  jj: number,
+  kk: number,
+  light,
+  color,
+  chunk,
+) => {
   let c = 0;
   let cf = 0;
   let s1f = 0;
@@ -179,9 +218,7 @@ const addVertex = (u, v) => (i, j, k, ii, jj, kk, light, color, chunk) => {
   if (s1 !== -1 || s2 !== -1) {
     [cf, c] = getLight(iRes, jRes, kRes, chunk);
   }
-  const [
-    r, g, b, vGlobal,
-  ] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
+  const [r, g, b, vGlobal] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
 
   return [r, g, b, vGlobal * color];
 };
@@ -191,12 +228,23 @@ const addVertexTR = addVertex(-1, 1);
 const addVertexBL = addVertex(1, -1);
 const addVertexBR = addVertex(1, 1);
 
-const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i, j, k, buffers) => {
+const createPlane = (
+  chunk,
+  planes,
+  ii: number,
+  jj: number,
+  kk: number,
+  planeIndex: number,
+  color,
+) => (block, i: number, j: number, k: number, buffers) => {
   const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, chunk);
   const indexNear = getIndex(jNear, i + ii, kNear);
   const blockNear = chunkNear.blocks[indexNear];
 
-  if (!(blocksFlags[blockNear][1]) || (blocksFlags[block][4] && (block === blockNear))) {
+  if (
+    !blocksFlags[blockNear][1] ||
+    (blocksFlags[block][4] && block === blockNear)
+  ) {
     return;
   }
   const buffer = buffers[bufferInfo[block][planeIndex]];
@@ -212,28 +260,32 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
     plane[0] + j,
     plane[1] + i,
     plane[2] + k,
-    textureU, textureV,
+    textureU,
+    textureV,
     block,
     ...addVertexTL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[3] + j,
     plane[4] + i,
     plane[5] + k,
-    textureU, textureV + (1 / 16),
+    textureU,
+    textureV + 1 / 16,
     block,
     ...addVertexTR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[6] + j,
     plane[7] + i,
     plane[8] + k,
-    textureU + (1 / 16), textureV,
+    textureU + 1 / 16,
+    textureV,
     block,
     ...addVertexBL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[9] + j,
     plane[10] + i,
     plane[11] + k,
-    textureU + (1 / 16), textureV + (1 / 16),
+    textureU + 1 / 16,
+    textureV + 1 / 16,
     block,
     ...addVertexBR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
   );
@@ -247,13 +299,11 @@ const createPlane = (chunk, planes, ii, jj, kk, planeIndex, color) => (block, i,
     buffer.vertexCount + 3,
     buffer.vertexCount + 2,
   ];
-  buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0)
-    ? b
-    : b.reverse());
+  buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0 ? b : b.reverse()));
   buffer.vertexCount += 4;
 };
 
-type CreatePlane = $Call<typeof createPlane, any, any, any, any, any, any, any>;
+type CreatePlane = ReturnType<typeof createPlane>;
 
 export default class Chunk extends ChunkBase<Chunk> {
   minimap: Uint8Array = new Uint8Array(256 * 3);
@@ -265,14 +315,17 @@ export default class Chunk extends ChunkBase<Chunk> {
   createWestPlane: CreatePlane;
   createEastPlane: CreatePlane;
 
-  constructor(binaryData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
+  constructor(
+    binaryData: ArrayBuffer,
+    lightData: ArrayBuffer,
+    x: number,
+    z: number,
+  ) {
     super(binaryData, lightData, x, z);
 
-    const planes = basePlanes.map(plane => [].concat(...plane.map(([x, y, z]) => [
-      x + this.x,
-      y,
-      z + this.z,
-    ])));
+    const planes = basePlanes.map((plane) =>
+      [].concat(...plane.map(([x, y, z]) => [x + this.x, y, z + this.z])),
+    );
     this.createTopPlane = createPlane(this, planes, 1, 0, 0, 0, 1);
     this.createBottomPlane = createPlane(this, planes, -1, 0, 0, 1, 0.5);
     this.createNorthPlane = createPlane(this, planes, 0, -1, 0, 2, 0.6);
@@ -281,39 +334,39 @@ export default class Chunk extends ChunkBase<Chunk> {
     this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
   }
 
-  calcRecursionRed(x: number, y: number, z: number) {
+  calcRecursionRed(x: number, y: number, z: number): void {
     calcRecursionRed(this, x, y, z, 400);
   }
 
-  calcRecursionGreen(x: number, y: number, z: number) {
+  calcRecursionGreen(x: number, y: number, z: number): void {
     calcRecursionGreen(this, x, y, z, 400);
   }
 
-  calcRecursionBlue(x: number, y: number, z: number) {
+  calcRecursionBlue(x: number, y: number, z: number): void {
     calcRecursionBlue(this, x, y, z, 400);
   }
 
-  calcGlobalRecursion(x: number, y: number, z: number) {
+  calcGlobalRecursion(x: number, y: number, z: number): void {
     calcRecursionGlobal(this, x, y, z, 400);
   }
 
-  calcRecursionRedRemove(x: number, y: number, z: number) {
+  calcRecursionRedRemove(x: number, y: number, z: number): void {
     calcRecursionRedRemove(this, x, y, z, 400);
   }
 
-  calcRecursionGreenRemove(x: number, y: number, z: number) {
+  calcRecursionGreenRemove(x: number, y: number, z: number): void {
     calcRecursionGreenRemove(this, x, y, z, 400);
   }
 
-  calcRecursionBlueRemove(x: number, y: number, z: number) {
+  calcRecursionBlueRemove(x: number, y: number, z: number): void {
     calcRecursionBlueRemove(this, x, y, z, 400);
   }
 
-  calcGlobalRecursionRemove(x: number, y: number, z: number) {
+  calcGlobalRecursionRemove(x: number, y: number, z: number): void {
     calcRecursionGlobalRemove(this, x, y, z, 400);
   }
 
-  calcVBO() {
+  calcVBO(): void {
     const buffers = [
       createBuffers(vertexPool, indexPool),
       createBuffers(vertexPool2, indexPool2),
@@ -322,12 +375,15 @@ export default class Chunk extends ChunkBase<Chunk> {
 
     for (let index = SLICE; index < BLOCKS_IN_CHUNK; index += 1) {
       const i = index >>> 8;
-      const j = index & 0xF;
-      const k = (index >>> 4) & 0xF;
+      const j = index & 0xf;
+      const k = (index >>> 4) & 0xf;
       const block = this.blocks[index];
       if (block) {
-        if (blocksInfo[block].renderToChunk) { // TODO: MODEL
-          buffers[bufferInfo[block][0]].vertexCount += blocksInfo[block].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
+        if (blocksInfo[block].renderToChunk) {
+          // TODO: MODEL
+          buffers[bufferInfo[block][0]].vertexCount += blocksInfo[
+            block
+          ].renderToChunk(this, j, i, k, buffers[bufferInfo[block][0]]);
         } else {
           this.createTopPlane(block, i, j, k, buffers);
           this.createBottomPlane(block, i, j, k, buffers);
@@ -339,19 +395,23 @@ export default class Chunk extends ChunkBase<Chunk> {
       }
     }
 
-    const buffersInfo = [{
-      indexCount: 0,
-      index: 0,
-      offset: 0,
-    }, {
-      indexCount: 0,
-      index: 1,
-      offset: 0,
-    }, {
-      indexCount: 0,
-      index: 2,
-      offset: 0,
-    }];
+    const buffersInfo = [
+      {
+        indexCount: 0,
+        index: 0,
+        offset: 0,
+      },
+      {
+        indexCount: 0,
+        index: 1,
+        offset: 0,
+      },
+      {
+        indexCount: 0,
+        index: 2,
+        offset: 0,
+      },
+    ];
     let offset = buffers[0].indexBuffer.index;
     let offset2 = buffers[0].vertexBuffer.index;
     let offset3 = buffers[0].vertexCount;
@@ -366,29 +426,37 @@ export default class Chunk extends ChunkBase<Chunk> {
       for (let index = 0; index < vertexBuffer.index; index += 1) {
         vertexPool[index + offset2] = vertexBuffer.data[index];
       }
-      buffersInfo[i].offset = buffersInfo[i - 1].offset + (buffersInfo[i - 1].indexCount * 2);
+      buffersInfo[i].offset =
+        buffersInfo[i - 1].offset + buffersInfo[i - 1].indexCount * 2;
       offset += indexBuffer.index;
       offset2 += vertexBuffer.index;
       offset3 += buffers[i].vertexCount;
     }
 
     const buffersData = {
-      vertexBuffer: vertexPool.slice(0, offset2 + buffers[2].vertexBuffer.index).buffer,
-      indexBuffer: indexPool.slice(0, offset + buffers[2].indexBuffer.index).buffer,
+      vertexBuffer: vertexPool.slice(0, offset2 + buffers[2].vertexBuffer.index)
+        .buffer,
+      indexBuffer: indexPool.slice(0, offset + buffers[2].indexBuffer.index)
+        .buffer,
     };
-    self.postMessage({
-      type: 'UPDATE_COMPONENTS',
-      payload: {
-        events: [{
-          type: CHUNK_VBO_LOADED,
-          payload: {
-            geoId: this.geoId,
-            buffers: buffersData,
-            buffersInfo,
-          },
-        }],
+    self.postMessage(
+      {
+        type: 'UPDATE_COMPONENTS',
+        payload: {
+          events: [
+            {
+              type: CHUNK_VBO_LOADED,
+              payload: {
+                geoId: this.geoId,
+                buffers: buffersData,
+                buffersInfo,
+              },
+            },
+          ],
+        },
       },
-    }, Object.values(buffersData));
+      Object.values(buffersData),
+    );
   }
 
   prepareLight() {
@@ -422,7 +490,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     for (let x = 0; x < CHUNK_WIDTH; x += 1) {
       for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
-        while ((y > 0) && (blocksFlags[this.blocks[getIndex(x, y, z)]][1])) {
+        while (y > 0 && blocksFlags[this.blocks[getIndex(x, y, z)]][1]) {
           y -= 1;
           this.calcGlobalRecursion(x, y + 1, z);
         }
@@ -434,7 +502,7 @@ export default class Chunk extends ChunkBase<Chunk> {
         while (y > 0) {
           const index = getIndex(x, y, z);
           if (this.blocks[index] === 128) {
-            this.light[index] = (this.light[index] & 0x000F) | 0xFD20;
+            this.light[index] = (this.light[index] & 0x000f) | 0xfd20;
             this.calcRecursionRed(x, y, z);
             this.calcRecursionGreen(x, y, z);
             this.calcRecursionBlue(x, y, z);
@@ -461,7 +529,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     if (blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
       return;
     }
-    while ((y > -1) && (!this.blocks[index])) {
+    while (y > -1 && !this.blocks[index]) {
       this.calcGlobalRecursionRemove(x, y, z);
       y -= 1;
     }
@@ -473,14 +541,14 @@ export default class Chunk extends ChunkBase<Chunk> {
     const block = this.blocks[index];
     this.blocks[index] = 0;
     const ytmp = y;
-    if ((this.light[index + SLICE] & 0xF) === 15) {
+    if ((this.light[index + SLICE] & 0xf) === 15) {
       const ytmp2 = y;
-      while ((y > -1) && (!this.blocks[index])) {
-        this.light[index] = (this.light[index] & 0xFFF0) | 0x000F;
+      while (y > -1 && !this.blocks[index]) {
+        this.light[index] = (this.light[index] & 0xfff0) | 0x000f;
         y -= 1;
       }
       y = ytmp2;
-      while ((y > -1) && (!this.blocks[index])) {
+      while (y > -1 && !this.blocks[index]) {
         this.calcGlobalRecursion(x, y, z);
         y -= 1;
       }
@@ -502,16 +570,18 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   updateState() {
-    const updateState = chunk => (chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL
-      ? chunk.updateState()
-      : null);
+    const updateState = (chunk) =>
+      chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL ? chunk.updateState() : null;
     if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
       this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;
       this.surroundingChunks.forEach(updateState);
       this.updateState();
     } else if (this.state === CHUNK_STATUS_NEED_LOAD_LIGHT) {
-      if (this.hasSurroundingChunks
-        && this.surroundingChunks.every(chunk => chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL)
+      if (
+        this.hasSurroundingChunks &&
+        this.surroundingChunks.every(
+          (chunk) => chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL,
+        )
       ) {
         this.state = CHUNK_STATUS_NEED_LOAD_VBO;
         this.calcGlobalLight();
@@ -519,8 +589,11 @@ export default class Chunk extends ChunkBase<Chunk> {
         this.updateState();
       }
     } else if (this.state === CHUNK_STATUS_NEED_LOAD_VBO) {
-      if (this.hasNestedChunks
-        && this.nestedChunks.every(chunk => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
+      if (
+        this.hasNestedChunks &&
+        this.nestedChunks.every(
+          (chunk) => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO,
+        )
       ) {
         this.calcVBO();
         this.state = CHUNK_STATUS_LOADED;

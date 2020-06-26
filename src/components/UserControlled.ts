@@ -18,5 +18,4 @@ export default class UserControlled implements Component {
 /**
  * Component to make entity controllable by user inputs
  */
-export const UserControlledComponent = (_: {}) =>
-  new UserControlled();
+export const UserControlledComponent = (_: {}) => new UserControlled();

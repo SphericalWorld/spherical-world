@@ -1,19 +1,18 @@
 import { MongoClient } from 'mongodb';
 
 type Config = Readonly<{
-  host: string,
-  port: number,
-  authDB: string,
-  user: string,
-  password: string,
+  host: string;
+  port: number;
+  authDB: string;
+  user: string;
+  password: string;
 }>;
 
-const createURL = ({
-  host, port, authDB, user, password,
-}) => `mongodb://${user}:${password}@${host}:${port}/${authDB}`;
+const createURL = ({ host, port, authDB, user, password }) =>
+  `mongodb://${user}:${password}@${host}:${port}/${authDB}`;
 
-const createDatabase = async (config: Config) => MongoClient
-  .connect(createURL(config)).then(el => ({
+const createDatabase = async (config: Config) =>
+  MongoClient.connect(createURL(config)).then((el) => ({
     connection: el,
   }));
 

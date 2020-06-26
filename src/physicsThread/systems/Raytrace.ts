@@ -36,9 +36,8 @@ const getFace = (block: vec3, emptyBlock: vec3): BlockFace => {
   return face;
 };
 
-const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> => terrain
-  .getChunk(toChunkPosition(x), toChunkPosition(z))
-  .map((chunk) => {
+const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> =>
+  terrain.getChunk(toChunkPosition(x), toChunkPosition(z)).map((chunk) => {
     const position = vec3.fromValues(x, y, z);
     const xInChunk = toPositionInChunk(x);
     const zInChunk = toPositionInChunk(z);
@@ -52,9 +51,11 @@ const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> => terrain
   });
 
 const calcMax = (position: number, delta: number, step: number): number =>
-  delta * (1 - (((position >= 0 && step >= 0) || (position < 0 && step < 0))
-    ? Math.abs(position) - Math.floor(Math.abs(position))
-    : Math.ceil(Math.abs(position)) - Math.abs(position)));
+  delta *
+  (1 -
+    ((position >= 0 && step >= 0) || (position < 0 && step < 0)
+      ? Math.abs(position) - Math.floor(Math.abs(position))
+      : Math.ceil(Math.abs(position)) - Math.abs(position)));
 
 export default (ecs: World, terrain: Terrain): System => {
   const components = ecs.createSelector([Transform, Raytracer]);
@@ -102,27 +103,28 @@ export default (ecs: World, terrain: Terrain): System => {
         break;
       }
     }
-    return blockDetails.map(block => (emptyBlockDetails.isJust === true && block.block
-      ? {
-        block,
-        emptyBlock: emptyBlockDetails.extract(),
-        face: getFace(block.position, emptyBlockDetails.extract().position),
-      }
-      : { block }));
+    return blockDetails.map((block) =>
+      emptyBlockDetails.isJust === true && block.block
+        ? {
+            block,
+            emptyBlock: emptyBlockDetails.extract(),
+            face: getFace(block.position, emptyBlockDetails.extract().position),
+          }
+        : { block },
+    );
   };
 
   const raytrace = () => {
     const result = [];
     for (const { id, transform, raytracer } of components) {
       const { camera } = cameras[0];
-      trace(camera.worldPosition, camera.sight)
-        .map((traceResult) => {
-          raytracer.block = traceResult.block;
-          raytracer.emptyBlock = traceResult.emptyBlock;
-          raytracer.face = traceResult.face;
-          vec3.copy(transform.translation, traceResult.block.position);
-          result.push([id, raytracer]);
-        });
+      trace(camera.worldPosition, camera.sight).map((traceResult) => {
+        raytracer.block = traceResult.block;
+        raytracer.emptyBlock = traceResult.emptyBlock;
+        raytracer.face = traceResult.face;
+        vec3.copy(transform.translation, traceResult.block.position);
+        result.push([id, raytracer]);
+      });
     }
     return result;
   };

@@ -1,19 +1,44 @@
 import { gl } from '../../engine/glEngine';
-import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
+import {
+  GlVertexShader,
+  GlFragmentShader,
+  GlShaderProgram,
+} from '../../engine/glShader';
 import vertexShaderData from './chunk.vert';
 import fragmentShaderData from './chunk.frag';
 
 export default class ChunkProgram extends GlShaderProgram {
   name = 'chunk';
 
-  attributes = ['aVertexPosition', 'aTextureCoord', 'aVertexColor', 'aVertexGlobalColor', 'aBlockData'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'uBlocksTexture', 'uGrassColorMapTexture', 'uBlocksOverlayTexture', 'uAnimationTexture', 'uGlobalColor', 'uBufferNum', 'uTime', 'uFogColor', 'uFogDensity', 'uFogType', 'uAnimTextures'];
+  attributes = [
+    'aVertexPosition',
+    'aTextureCoord',
+    'aVertexColor',
+    'aVertexGlobalColor',
+    'aBlockData',
+  ];
 
-  aVertexPosition: number = 0;
-  aTextureCoord: number = 0;
-  aVertexColor: number = 0;
-  aVertexGlobalColor: number = 0;
-  aBlockData: number = 0;
+  uniforms = [
+    'uPMatrix',
+    'uMVMatrix',
+    'uBlocksTexture',
+    'uGrassColorMapTexture',
+    'uBlocksOverlayTexture',
+    'uAnimationTexture',
+    'uGlobalColor',
+    'uBufferNum',
+    'uTime',
+    'uFogColor',
+    'uFogDensity',
+    'uFogType',
+    'uAnimTextures',
+  ];
+
+  aVertexPosition = 0;
+  aTextureCoord = 0;
+  aVertexColor = 0;
+  aVertexGlobalColor = 0;
+  aBlockData = 0;
 
   uPMatrix: WebGLUniformLocation;
   uMVMatrix: WebGLUniformLocation;
@@ -30,24 +55,27 @@ export default class ChunkProgram extends GlShaderProgram {
   uAnimTextures: WebGLUniformLocation;
 
   constructor() {
-    super(new GlVertexShader(vertexShaderData, {
-      constants: {
-        animTexCount: 1, // app.glTextureLibrary.animTexCount,
-        GRAPHIC_LEVEL_CURRENT: 1,
-        GRAPHIC_LEVEL_SIMPLE: 1,
-        GRAPHIC_LEVEL_ADVANCED: 2,
-        GRAPHIC_LEVEL_HIGH: 3,
-        GRAPHIC_LEVEL_ULTRA: 4,
-      },
-    }), new GlFragmentShader(fragmentShaderData, {
-      constants: {
-        GRAPHIC_LEVEL_CURRENT: 1,
-        GRAPHIC_LEVEL_SIMPLE: 1,
-        GRAPHIC_LEVEL_ADVANCED: 2,
-        GRAPHIC_LEVEL_HIGH: 3,
-        GRAPHIC_LEVEL_ULTRA: 4,
-      },
-    }));
+    super(
+      new GlVertexShader(vertexShaderData, {
+        constants: {
+          animTexCount: 1, // app.glTextureLibrary.animTexCount,
+          GRAPHIC_LEVEL_CURRENT: 1,
+          GRAPHIC_LEVEL_SIMPLE: 1,
+          GRAPHIC_LEVEL_ADVANCED: 2,
+          GRAPHIC_LEVEL_HIGH: 3,
+          GRAPHIC_LEVEL_ULTRA: 4,
+        },
+      }),
+      new GlFragmentShader(fragmentShaderData, {
+        constants: {
+          GRAPHIC_LEVEL_CURRENT: 1,
+          GRAPHIC_LEVEL_SIMPLE: 1,
+          GRAPHIC_LEVEL_ADVANCED: 2,
+          GRAPHIC_LEVEL_HIGH: 3,
+          GRAPHIC_LEVEL_ULTRA: 4,
+        },
+      }),
+    );
     this.link();
     this.use();
 

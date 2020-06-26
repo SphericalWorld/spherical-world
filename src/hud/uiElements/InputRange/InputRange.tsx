@@ -10,7 +10,7 @@ import {
 type Props = Readonly<{
   value?: number;
   className?: string;
-}>
+}>;
 
 const InputRange = ({ value = 15, className = '' }: Props) => {
   const [activeNumber, setActiveNumber] = useState(value);

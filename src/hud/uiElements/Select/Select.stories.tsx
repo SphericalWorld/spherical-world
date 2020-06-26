@@ -13,10 +13,12 @@ const items = [
   { value: '6', text: 'products' },
 ];
 
-storiesOf('Select', module)
-  .add('Select', () => (
-    <>
-      <br />
-      <Select options={items} onSelect={value => action(`selected ${String(value)}`)} />
-    </>
-  ));
+storiesOf('Select', module).add('Select', () => (
+  <>
+    <br />
+    <Select
+      options={items}
+      onSelect={(value) => action(`selected ${String(value)}`)}
+    />
+  </>
+));

@@ -25,7 +25,11 @@ import {
   CATEGORY_COMBAT_AND_BLOCKS,
 } from './eventTypes';
 import RangeInputEvent from './RangeInputEvent';
-import { MENU_TOGGLED, INVENTORY_TOGGLED, KEY_SELECT_BUTTON } from '../hud/hudConstants';
+import {
+  MENU_TOGGLED,
+  INVENTORY_TOGGLED,
+  KEY_SELECT_BUTTON,
+} from '../hud/hudConstants';
 import {
   CAMERA_MOVED,
   CAMERA_LOCKED,
@@ -44,7 +48,10 @@ import {
   PLAYER_STOPED_ATTACK,
   PLAYER_START_PUT_BLOCK,
 } from '../player/events';
-import { PREVIOUS_ITEM_SELECTED, NEXT_ITEM_SELECTED } from '../hud/components/MainPanel/mainPanelConstants';
+import {
+  PREVIOUS_ITEM_SELECTED,
+  NEXT_ITEM_SELECTED,
+} from '../hud/components/MainPanel/mainPanelConstants';
 
 // TODO: move events to separate files
 
@@ -53,7 +60,9 @@ export const cameraMovedEvent = {
   type: INPUT_TYPE_RANGE,
   gameEvent: CAMERA_MOVED,
   data: ({ x, y, z }: RangeInputEvent) => ({
-    x, y, z,
+    x,
+    y,
+    z,
   }),
 };
 

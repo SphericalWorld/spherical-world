@@ -1,9 +1,10 @@
-import {
-  vec3, quat,
-} from 'gl-matrix';
+import { vec3, quat } from 'gl-matrix';
 import type { Component } from '../Component';
 import type { Entity } from '../Entity';
-import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
+import {
+  THREAD_MAIN,
+  THREAD_PHYSICS,
+} from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
 
 const ZERO_VECTOR = vec3.create();
@@ -20,15 +21,20 @@ export default class Transform implements Component, Networkable {
   parent: Entity | null;
   offset: number;
 
-  constructor(translation: vec3 = ZERO_VECTOR, rotation: quat = ZERO_QUAT, parent?: Entity, offset: number) {
+  constructor(
+    translation: vec3 = ZERO_VECTOR,
+    rotation: quat = ZERO_QUAT,
+    parent?: Entity,
+    offset: number,
+  ) {
     const mem = new Int32Array(Transform.memory);
     if (!offset) {
       mem[0] += 8 * 3 + 8 * 4;
     }
     this.offset = offset || mem[0];
 
-    this.translation = new Float64Array(Transform.memory, this.offset, 3)
-    this.rotation = new Float64Array(Transform.memory, this.offset+ 8 * 3, 4)
+    this.translation = new Float64Array(Transform.memory, this.offset, 3);
+    this.rotation = new Float64Array(Transform.memory, this.offset + 8 * 3, 4);
 
     vec3.copy(this.translation, translation);
     quat.copy(this.rotation, rotation);
@@ -49,12 +55,13 @@ export default class Transform implements Component, Networkable {
   }
 }
 
-Transform.memory = new ArrayBuffer(1024 * 1024)
+Transform.memory = new ArrayBuffer(1024 * 1024);
 
 export type TransformProps = {
-  translation?: vec3, parent?: Entity, rotation?: quat
+  translation?: vec3;
+  parent?: Entity;
+  rotation?: quat;
 };
-
 
 /**
  * Contains positional data, such as coordinates and rotation
@@ -62,6 +69,7 @@ export type TransformProps = {
  * @param {Entity} parent parent object in hierarchy
  */
 export const TransformComponent: React.FC<TransformProps> = ({
-  translation, parent, rotation,
-}: TransformProps) =>
-  new Transform(translation, rotation, parent);
+  translation,
+  parent,
+  rotation,
+}: TransformProps) => new Transform(translation, rotation, parent);

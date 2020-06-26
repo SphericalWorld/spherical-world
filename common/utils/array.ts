@@ -1,4 +1,7 @@
-export const createArray = <T>(length: number, filler: (() => T) | T): Array<T> => {
+export const createArray = <T>(
+  length: number,
+  filler: (() => T) | T,
+): Array<T> => {
   const arr = new Array(length);
   if (typeof filler === 'function') {
     for (let i = 0; i < length; i += 1) {
@@ -13,7 +16,11 @@ export const createArray = <T>(length: number, filler: (() => T) | T): Array<T> 
   return arr;
 };
 
-export const swap = <T>(arr: ReadonlyArray<T>, from: number, to: number): ReadonlyArray<T> => {
+export const swap = <T>(
+  arr: ReadonlyArray<T>,
+  from: number,
+  to: number,
+): ReadonlyArray<T> => {
   const copy = arr.slice();
   const tmp = copy[from];
   copy[from] = copy[to];

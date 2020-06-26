@@ -3,12 +3,7 @@ import { connect } from 'react-redux';
 import type { State } from '../../../reducers/rootReducer';
 import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
-import {
-  Button,
-  Label,
-  Checkbox,
-  InputRange,
-} from '../../uiElements';
+import { Button, Label, Checkbox, InputRange } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
 import {
   content,
@@ -22,7 +17,7 @@ import {
 } from './audio.module.scss';
 
 type Props = {
-  setUIState: typeof doSetUIState,
+  setUIState: typeof doSetUIState;
 };
 
 const Audio = ({ setUIState }: Props) => {
@@ -36,15 +31,21 @@ const Audio = ({ setUIState }: Props) => {
           </div>
           <div className={volumes}>
             <div>
-              <Label size="big" className={labelVolume}>Master Volume</Label>
+              <Label size="big" className={labelVolume}>
+                Master Volume
+              </Label>
               <InputRange value={30} className={inputVolume} />
             </div>
             <div>
-              <Label size="big" className={labelVolume}>Effect Volume</Label>
+              <Label size="big" className={labelVolume}>
+                Effect Volume
+              </Label>
               <InputRange value={50} className={inputVolume} />
             </div>
             <div>
-              <Label size="big" className={labelVolume}>Ambient Volume</Label>
+              <Label size="big" className={labelVolume}>
+                Ambient Volume
+              </Label>
               <InputRange value={100} className={inputVolume} />
             </div>
           </div>
@@ -53,8 +54,12 @@ const Audio = ({ setUIState }: Props) => {
           <Button size="small">defaults</Button>
           <Label className={label} />
           <Button size="small">apply</Button>
-          <Button size="small" onClick={close}>accept</Button>
-          <Button size="small" onClick={close}>cancel</Button>
+          <Button size="small" onClick={close}>
+            accept
+          </Button>
+          <Button size="small" onClick={close}>
+            cancel
+          </Button>
         </div>
       </div>
     </ModalWindowMenu>

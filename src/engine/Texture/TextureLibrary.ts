@@ -14,14 +14,14 @@ const drawImage = (
   deg: number,
   flip: boolean,
   flop: boolean,
-  center?: boolean = false,
+  center? = false,
 ) => {
   context.save();
   if (!center) {
-    context.translate(x + (width / 2), y + (height / 2));
+    context.translate(x + width / 2, y + height / 2);
   }
 
-  context.rotate((2 * Math.PI) - ((deg * Math.PI) / 180));
+  context.rotate(2 * Math.PI - (deg * Math.PI) / 180);
   const flipScale = flip ? -1 : 1;
   const flopScale = flop ? -1 : 1;
 
@@ -56,8 +56,8 @@ class GlTextureLibrary {
         drawImage(
           this.ctx,
           texture.image,
-          ((texture.atlasId % 16) * TILE_SIZE),
-          TILE_SIZE * (Math.floor(texture.atlasId / 16)),
+          (texture.atlasId % 16) * TILE_SIZE,
+          TILE_SIZE * Math.floor(texture.atlasId / 16),
           TILE_SIZE,
           TILE_SIZE,
           0,
@@ -74,7 +74,10 @@ class GlTextureLibrary {
   }
 
   makeTextureAtlasOverlay(): Texture {
-    return this.makeTextureAtlasBase('terrainOverlay', texture => (texture.meta && texture.meta.overlay) || false);
+    return this.makeTextureAtlasBase(
+      'terrainOverlay',
+      (texture) => (texture.meta && texture.meta.overlay) || false,
+    );
   }
 
   makeChunkMinimap(data: Uint8Array): ImageData {
@@ -85,9 +88,9 @@ class GlTextureLibrary {
 
     for (let i = 0; i < 256; i += 1) {
       imgData.data[i * 4] = data[i * 3];
-      imgData.data[(i * 4) + 1] = data[(i * 3) + 1];
-      imgData.data[(i * 4) + 2] = data[(i * 3) + 2];
-      imgData.data[(i * 4) + 3] = 255;
+      imgData.data[i * 4 + 1] = data[i * 3 + 1];
+      imgData.data[i * 4 + 2] = data[i * 3 + 2];
+      imgData.data[i * 4 + 3] = 255;
     }
 
     // this.ctx.putImageData(imgData, 0, 0);
@@ -118,8 +121,8 @@ class GlTextureLibrary {
       if (typeof texture.id !== 'undefined') {
         this.ctx.drawImage(
           texture.image,
-          ((texture.id % 16)),
-          (Math.floor(texture.id / 16)),
+          texture.id % 16,
+          Math.floor(texture.id / 16),
           1,
           1,
         );
@@ -128,7 +131,11 @@ class GlTextureLibrary {
     const pixelData = this.ctx.getImageData(0, 0, 16, 16);
     const atlas = [];
     for (let i = 0; i < pixelData.data.length / 4; i += 1) {
-      atlas.push([pixelData.data[i * 4], pixelData.data[(i * 4) + 1], pixelData.data[(i * 4) + 2]]);
+      atlas.push([
+        pixelData.data[i * 4],
+        pixelData.data[i * 4 + 1],
+        pixelData.data[i * 4 + 2],
+      ]);
     }
     // atlas.reverse();
     // console.log(atlas)
@@ -138,9 +145,7 @@ class GlTextureLibrary {
   makeAnimatedTextureAtlas() {
     const atlas = {
       textures: [],
-      animations: {
-
-      },
+      animations: {},
     };
 
     this.textureCanvas.width = 1024;
@@ -150,10 +155,9 @@ class GlTextureLibrary {
 
     // console.log(this.textureCanvas.toDataURL())
 
-
     const animTextures = [];
     for (const texture of this.textures.values()) {
-      if (texture.animation && (texture.image.height > texture.image.width)) {
+      if (texture.animation && texture.image.height > texture.image.width) {
         animTextures.push(texture);
 
         this.ctx.drawImage(texture.image, 0, 0);
@@ -165,7 +169,10 @@ class GlTextureLibrary {
     }
     console.log(atlas);
 
-    return Texture.createFromCanvas({ canvas: this.textureCanvas, name: 'animatedTexture' });
+    return Texture.createFromCanvas({
+      canvas: this.textureCanvas,
+      name: 'animatedTexture',
+    });
     // terrainAnimated
     // return atlas;
   }
@@ -186,10 +193,13 @@ class GlTextureLibrary {
   }
 }
 
-
-export const makeTextureFromText = (textToWrite: string, textSize: number = 56): Texture => {
+export const makeTextureFromText = (
+  textToWrite: string,
+  textSize = 56,
+): Texture => {
   ctx.font = `bold ${textSize}px monospace`;
-  textureCanvas.width = 2 ** Math.ceil(Math.log2(ctx.measureText(textToWrite).width));
+  textureCanvas.width =
+    2 ** Math.ceil(Math.log2(ctx.measureText(textToWrite).width));
   textureCanvas.height = 2 ** Math.ceil(Math.log2(2 * textSize));
   if (textureCanvas.width > textureCanvas.height) {
     textureCanvas.height = textureCanvas.width;
@@ -197,7 +207,7 @@ export const makeTextureFromText = (textToWrite: string, textSize: number = 56):
     textureCanvas.width = textureCanvas.height;
   }
   ctx.translate(textureCanvas.width / 2, textureCanvas.height / 2);
-  ctx.rotate((2 * Math.PI) - ((180 * Math.PI) / 180));
+  ctx.rotate(2 * Math.PI - (180 * Math.PI) / 180);
   ctx.scale(-1, 1);
 
   ctx.translate(-textureCanvas.width / 2, -textureCanvas.height / 2);

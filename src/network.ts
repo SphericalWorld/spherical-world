@@ -10,13 +10,13 @@ type NetworkEvent = {
 };
 
 class Network {
-  latency: number = 0;
+  latency = 0;
   connection: WebSocket;
   connected = false;
-  pingDescriptor: IntervalID;
+  pingDescriptor: number;
   requestBinaryData: Uint8Array | null;
-  host: string = `ws://${window.location.hostname}`;
-  port: number = 8080;
+  host = `ws://${window.location.hostname}`;
+  port = 8080;
   events: EventObservable<NetworkEvent> = new EventObservable();
   addonServerInfo = {
     host: window.location.origin,
@@ -47,7 +47,9 @@ class Network {
     await new Promise((resolve, reject) => {
       this.connection.binaryType = 'arraybuffer';
       this.connection.onopen = resolve;
-      this.connection.onclose = () => { this.connected = false; };
+      this.connection.onclose = () => {
+        this.connected = false;
+      };
 
       this.connection.onmessage = (message: MessageEvent) => {
         if (message.data instanceof ArrayBuffer) {

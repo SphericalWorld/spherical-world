@@ -1,9 +1,12 @@
 import type { Inventory } from '../../../../common/Inventory';
 import { createReducer } from '../../../util/reducerUtils';
-import { SWAP_INVENTORY_SLOTS, INVENTORY_ITEM_SELECTED } from './inventoryConstants';
+import {
+  SWAP_INVENTORY_SLOTS,
+  INVENTORY_ITEM_SELECTED,
+} from './inventoryConstants';
 import { swap } from '../../../../common/utils/array';
 
-type InventoryState = Inventory
+type InventoryState = Inventory;
 
 const initialState = {
   items: {},

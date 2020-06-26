@@ -7,13 +7,12 @@ export default class BlockRemover implements Component {
   static threads = [THREAD_MAIN];
   static componentName: 'blockRemover' = 'blockRemover';
 
-  removing: boolean = false;
-  removedPart: number = 0.0;
+  removing = false;
+  removedPart = 0.0;
   position: vec3 = vec3.create();
 }
 
 /**
  * Component to allow entity to destroy blocks. Used to destroy blocks by players
  */
-export const BlockRemoverComponent = (_: {}) =>
-  new BlockRemover();
+export const BlockRemoverComponent = (_: {}) => new BlockRemover();

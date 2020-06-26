@@ -5,8 +5,9 @@ import thunk from 'redux-thunk';
 import type { State } from '../reducers/rootReducer';
 import rootReducer from '../reducers/rootReducer';
 
-
-export default function configureStore(preloadedState: State | null): Store<State, any> {
+export default function configureStore(
+  preloadedState: State | null,
+): Store<State, any> {
   const middlewares = [thunk];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 
@@ -14,11 +15,7 @@ export default function configureStore(preloadedState: State | null): Store<Stat
 
   const composedEnhancer = composeWithDevTools(...storeEnhancers);
 
-  const store = createStore(
-    rootReducer,
-    preloadedState,
-    composedEnhancer,
-  );
+  const store = createStore(rootReducer, preloadedState, composedEnhancer);
 
   if (process.env.NODE_ENV !== 'production') {
     if ('hot' in module) {

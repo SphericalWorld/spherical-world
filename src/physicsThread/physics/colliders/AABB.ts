@@ -47,31 +47,52 @@ export type AABB = {
   move: (position: vec3) => void;
 };
 
-export const createAABB = (translation: vec3, size: vec3, objectPosition: vec3 | null): AABB =>
-  new AABBinner(translation, size, objectPosition);
+export const createAABB = (
+  translation: vec3,
+  size: vec3,
+  objectPosition: vec3 | null,
+): AABB => new AABBinner(translation, size, objectPosition);
 
 export const testAABBvsAABB = (a: AABB, b: AABB): boolean =>
-  (a.min[0] < b.max[0] && a.max[0] > b.min[0])
-  && (a.min[1] < b.max[1] && a.max[1] > b.min[1])
-  && (a.min[2] < b.max[2] && a.max[2] > b.min[2]);
+  a.min[0] < b.max[0] &&
+  a.max[0] > b.min[0] &&
+  a.min[1] < b.max[1] &&
+  a.max[1] > b.min[1] &&
+  a.min[2] < b.max[2] &&
+  a.max[2] > b.min[2];
 
 export const AABBvsAABB = (a: RigidBody, b: RigidBody): Manifold => {
   const normal = vec3.sub(vec3.create(), a.shape.center, b.shape.center);
-  const xOverlap = a.shape.halfSize[0] + b.shape.halfSize[0] - Math.abs(normal[0]);
-  const yOverlap = a.shape.halfSize[1] + b.shape.halfSize[1] - Math.abs(normal[1]);
-  const zOverlap = a.shape.halfSize[2] + b.shape.halfSize[2] - Math.abs(normal[2]);
+  const xOverlap =
+    a.shape.halfSize[0] + b.shape.halfSize[0] - Math.abs(normal[0]);
+  const yOverlap =
+    a.shape.halfSize[1] + b.shape.halfSize[1] - Math.abs(normal[1]);
+  const zOverlap =
+    a.shape.halfSize[2] + b.shape.halfSize[2] - Math.abs(normal[2]);
 
   if (zOverlap < yOverlap && zOverlap < xOverlap) {
-    return createManifold(a, b, zOverlap, normal[2] < 0
-      ? vec3.set(normal, 0, 0, -1)
-      : vec3.set(normal, 0, 0, 1), vec3.fromValues(1, 1, 0));
+    return createManifold(
+      a,
+      b,
+      zOverlap,
+      normal[2] < 0 ? vec3.set(normal, 0, 0, -1) : vec3.set(normal, 0, 0, 1),
+      vec3.fromValues(1, 1, 0),
+    );
   }
   if (xOverlap < yOverlap) {
-    return createManifold(a, b, xOverlap, normal[0] < 0
-      ? vec3.set(normal, -1, 0, 0)
-      : vec3.set(normal, 1, 0, 0), vec3.fromValues(0, 1, 1));
+    return createManifold(
+      a,
+      b,
+      xOverlap,
+      normal[0] < 0 ? vec3.set(normal, -1, 0, 0) : vec3.set(normal, 1, 0, 0),
+      vec3.fromValues(0, 1, 1),
+    );
   }
-  return createManifold(a, b, yOverlap, normal[1] < 0
-    ? vec3.set(normal, 0, -1, 0)
-    : vec3.set(normal, 0, 1, 0), vec3.fromValues(1, 0, 1));
+  return createManifold(
+    a,
+    b,
+    yOverlap,
+    normal[1] < 0 ? vec3.set(normal, 0, -1, 0) : vec3.set(normal, 0, 1, 0),
+    vec3.fromValues(1, 0, 1),
+  );
 };

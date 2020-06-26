@@ -1,13 +1,13 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, ReactElement } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import Portal from '../../uiElements/Portal';
 import { tooltip, wrapper, hidden } from './tooltip.module.scss';
 
 type Props<P> = Readonly<{
-  children: ReactNode,
-  tooltip: (P) => React$Element<any>,
-  tooltipProps?: P,
+  children: ReactNode;
+  tooltip: (P) => ReactElement<any>;
+  tooltipProps?: P;
 }>;
 
 type Ref = { current: null | HTMLDivElement };
@@ -27,18 +27,19 @@ const getOffset = (triggerRef: Ref, tooltipRef: Ref) => {
   };
 };
 
-const TooltipTrigger = <P extends any>({ children, tooltip: Tooltip, tooltipProps = {} }: Props<P>) => {
+const TooltipTrigger = <P extends any>({
+  children,
+  tooltip: Tooltip,
+  tooltipProps = {},
+}: Props<P>): JSX.Element => {
   const [isHidden, setHidden] = useState(true);
   const [style, setStyle] = useState({});
   const triggerRef = useRef<HTMLDivElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(
-    () => {
-      setStyle(getOffset(triggerRef, tooltipRef));
-    },
-    [isHidden],
-  );
+  useEffect(() => {
+    setStyle(getOffset(triggerRef, tooltipRef));
+  }, [isHidden]);
 
   return (
     <>
@@ -52,7 +53,11 @@ const TooltipTrigger = <P extends any>({ children, tooltip: Tooltip, tooltipProp
       >
         {children}
       </div>
-      <Portal ref={tooltipRef} className={classnames(isHidden && hidden, tooltip)} style={style}>
+      <Portal
+        ref={tooltipRef}
+        className={classnames(isHidden && hidden, tooltip)}
+        style={style}
+      >
         <Tooltip {...tooltipProps} />
       </Portal>
     </>

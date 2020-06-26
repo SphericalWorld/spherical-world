@@ -9,5 +9,4 @@ export default class Physics implements Component {
 /**
  * Component to mark Entity as affected by Physics System
  */
-export const PhysicsComponent = (_: {}) =>
-  new Physics();
+export const PhysicsComponent = (_: {}) => new Physics();

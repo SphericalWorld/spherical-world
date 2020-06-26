@@ -12,5 +12,4 @@ export default class Skybox implements Component {
 /**
  * Component to keep skybox-related data
  */
-export const SkyboxComponent = (_: {}) =>
-  new Skybox();
+export const SkyboxComponent = (_: {}) => new Skybox();

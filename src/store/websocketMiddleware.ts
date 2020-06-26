@@ -1,7 +1,8 @@
-
-const createWebsocketMiddleware = network => ({ dispatch }) => (next) => {
+const createWebsocketMiddleware = (network) => ({ dispatch }) => (next) => {
   if (!next) {
-    throw new Error('Worker middleware received no `next` action. Check your chain of middlewares.');
+    throw new Error(
+      'Worker middleware received no `next` action. Check your chain of middlewares.',
+    );
   }
 
   return (action) => {

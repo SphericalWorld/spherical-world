@@ -19,11 +19,7 @@ const BOTTOM = vec3.fromValues(0, -1, 0);
 const NORTH = vec3.fromValues(0, 0, 1);
 const SOUTH = vec3.fromValues(0, 0, -1);
 
-const leaves = (
-  chunk: Chunk,
-  position: vec3,
-  lengthRemain: number,
-): void => {
+const leaves = (chunk: Chunk, position: vec3, lengthRemain: number): void => {
   if (!lengthRemain) {
     return;
   }
@@ -52,9 +48,20 @@ const branch = (
   branchLengthRemain: number,
 ): void => {
   const BRANCH_LENGTH = 2;
-  const runRecursion = (newPosition: vec3, newDirection: vec3, steps: number): void => {
+  const runRecursion = (
+    newPosition: vec3,
+    newDirection: vec3,
+    steps: number,
+  ): void => {
     if (length) {
-      branch(chunk, newPosition, newDirection, length - 1, branchingFactor, steps);
+      branch(
+        chunk,
+        newPosition,
+        newDirection,
+        length - 1,
+        branchingFactor,
+        steps,
+      );
     }
     leaves(chunk, newPosition, 3);
   };
@@ -84,7 +91,11 @@ const branch = (
     runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
 
     if (branches === 3) {
-      runRecursion(vec3.add(vec3.create(), position, direction), direction, BRANCH_LENGTH);
+      runRecursion(
+        vec3.add(vec3.create(), position, direction),
+        direction,
+        BRANCH_LENGTH,
+      );
     }
   }
 };
@@ -96,19 +107,15 @@ const generateTree = (seed: number) => {
     height: 5,
   };
 
-  return (
-    chunk: Chunk,
-    x: number,
-    y: number,
-    z: number,
-  ): IO<Chunk> => IO.from(() => {
-    const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
-    for (let i = 0; i < length; i += 1) {
-      chunk.setUnsafe(x, y + i, z, 4);
-    }
-    branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
-    return chunk;
-  });
+  return (chunk: Chunk, x: number, y: number, z: number): IO<Chunk> =>
+    IO.from(() => {
+      const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
+      for (let i = 0; i < length; i += 1) {
+        chunk.setUnsafe(x, y + i, z, 4);
+      }
+      branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
+      return chunk;
+    });
 };
 
 export default generateTree;

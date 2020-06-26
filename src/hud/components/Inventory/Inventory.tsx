@@ -27,13 +27,19 @@ type MappedProps = {
 };
 
 type DispatchProps = {
-  setUIState: typeof doSetUIState,
-  swapSlots: typeof doSwapSlots,
+  setUIState: typeof doSetUIState;
+  swapSlots: typeof doSwapSlots;
 };
 
 type Props = SpreadTypes<MappedProps, DispatchProps>;
 
-const Coin = ({ caption, className }: { caption: string, className: string }) => (
+const Coin = ({
+  caption,
+  className,
+}: {
+  caption: string;
+  className: string;
+}) => (
   <div className={`${coin} ${className}`}>
     <Label className={icon}>🔘</Label>
     <Label>{caption}</Label>
@@ -50,14 +56,17 @@ const Footer = () => (
 
 const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
   const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
-  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [swapSlots]);
+  const swap = useCallback(
+    (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'),
+    [swapSlots],
+  );
 
   return (
     <ModalWindow caption="author's inventory" onClose={close}>
       <div>
         <div className={inventory}>
           <ul className={inventorySlots}>
-            { slots.map((slot, index) => (
+            {slots.map((slot, index) => (
               <InventorySlot
                 position={index}
                 slot={slot || undefined}
@@ -66,7 +75,9 @@ const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
                 onDrop={swap}
               />
             ))}
-            { slots.map(() => <li className={`${slotStyle} ${empty}`} />)}
+            {slots.map(() => (
+              <li className={`${slotStyle} ${empty}`} />
+            ))}
           </ul>
         </div>
         <Footer />
@@ -76,12 +87,12 @@ const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
 };
 
 const slotsSelector = createSelector(
-  state => state.hudData.player.inventory.slots,
-  state => state.hudData.player.inventory.items,
-  (slots, items) => slots.map(el => items[el || ''] || null),
+  (state) => state.hudData.player.inventory.slots,
+  (state) => state.hudData.player.inventory.items,
+  (slots, items) => slots.map((el) => items[el || ''] || null),
 );
 
-const mapState = state => ({
+const mapState = (state) => ({
   slots: slotsSelector(state),
 });
 
@@ -90,4 +101,7 @@ const mapActions = {
   swapSlots: doSwapSlots,
 };
 
-export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(Inventory);
+export default connect<Props, {}, _, _, State, _>(
+  mapState,
+  mapActions,
+)(Inventory);

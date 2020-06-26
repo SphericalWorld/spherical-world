@@ -11,11 +11,16 @@ import terrainAnimatedProvider from './TerrainAnimated';
 import terrainProvider from './Terrain';
 import blocksDropableProvider from './BlocksDroppable';
 
-
-const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) => {
+const materialsProvider = (
+  textureLibrary: TextureLibrary,
+  shaderLibrary: ShaderLibrary,
+) => {
   const terrainDiffuse = terrainDiffuseProvider(textureLibrary, shaderLibrary);
   const terrainOverlay = terrainOverlayProvider(textureLibrary, shaderLibrary);
-  const terrainAnimated = terrainAnimatedProvider(textureLibrary, shaderLibrary);
+  const terrainAnimated = terrainAnimatedProvider(
+    textureLibrary,
+    shaderLibrary,
+  );
   const blocksDropable = blocksDropableProvider(textureLibrary, shaderLibrary);
   const terrain = terrainProvider(textureLibrary, shaderLibrary, [
     terrainDiffuse,
@@ -23,7 +28,7 @@ const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: Shader
     terrainAnimated,
   ]);
 
-  return ([
+  return [
     blockPickerProvider(textureLibrary, shaderLibrary),
     blockRemoverProvider(textureLibrary, shaderLibrary),
     skyboxProvider(textureLibrary, shaderLibrary),
@@ -32,7 +37,7 @@ const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: Shader
     terrainAnimated,
     terrain,
     blocksDropable,
-  ]);
+  ];
 };
 
 export default materialsProvider;

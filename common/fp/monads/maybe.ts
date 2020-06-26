@@ -23,7 +23,8 @@ class Just<T> implements Monad<T>, Alternative<T> {
     return fn(this.value);
   }
 
-  alt(value: Maybe<T>): Maybe<T> { // eslint-disable-line no-unused-vars
+  alt(value: Maybe<T>): Maybe<T> {
+    // eslint-disable-line no-unused-vars
     return this;
   }
 
@@ -41,11 +42,13 @@ const JustFactory = <T>(value: T): Maybe<T> => new Just(value);
 class TNothing<T> implements Monad<T>, Alternative<T> {
   isJust: false = false;
 
-  map<G>(mapFn: (T) => G): TNothing<G> { // eslint-disable-line no-unused-vars
+  map<G>(mapFn: (T) => G): TNothing<G> {
+    // eslint-disable-line no-unused-vars
     return this;
   }
 
-  chain<G>(fn: (T) => Maybe<G>): Maybe<G> { // eslint-disable-line no-unused-vars
+  chain<G>(fn: (T) => Maybe<G>): Maybe<G> {
+    // eslint-disable-line no-unused-vars
     return this;
   }
 
@@ -53,7 +56,8 @@ class TNothing<T> implements Monad<T>, Alternative<T> {
     return value;
   }
 
-  ap<B>(b: Maybe<(T) => B>): TNothing { // eslint-disable-line no-unused-vars
+  ap<B>(b: Maybe<(T) => B>): TNothing {
+    // eslint-disable-line no-unused-vars
     return this;
   }
 

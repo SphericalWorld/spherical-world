@@ -3,11 +3,7 @@ import { vec3, mat4 } from 'gl-matrix';
 
 const PI2 = Math.PI * 2;
 
-const multiplyVec4 = (
-  mat: mat4,
-  vec: vec4,
-  dest: vec4 = vec,
-): vec4 => {
+const multiplyVec4 = (mat: mat4, vec: vec4, dest: vec4 = vec): vec4 => {
   const x = vec[0];
   const y = vec[1];
   const z = vec[2];
@@ -29,15 +25,14 @@ export const unproject = (
   const invMat = mat4.create();
   mat4.invert(invMat, mat);
   const n = [
-    2 * (winx - viewport[0]) / viewport[2] - 1,
-    2 * (winy - viewport[1]) / viewport[3] - 1,
+    (2 * (winx - viewport[0])) / viewport[2] - 1,
+    (2 * (winy - viewport[1])) / viewport[3] - 1,
     2 * winz - 1,
     1,
   ];
   multiplyVec4(invMat, n, n);
   return [n[0] / n[3], n[1] / n[3], n[2] / n[3]];
 };
-
 
 export const randomize = (out: vec3, a: vec3, factor: number): vec3 => {
   const u = vec3.normalize(vec3.create(), vec3.fromValues(a[2], a[0], a[1]));
@@ -49,9 +44,7 @@ export const randomize = (out: vec3, a: vec3, factor: number): vec3 => {
     out,
     vec3.scaleAndAdd(
       out,
-      vec3.scaleAndAdd(
-        v, a, v, multiplierV * factor * Math.random(),
-      ),
+      vec3.scaleAndAdd(v, a, v, multiplierV * factor * Math.random()),
       u,
       multiplierU * factor * Math.random(),
     ),

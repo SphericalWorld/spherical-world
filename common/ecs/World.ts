@@ -14,7 +14,7 @@ type SerializedComponent = {
 };
 
 type ComponentStatics = Readonly<{
-  threadsConstructors: (ComponentStatics) => void,
+  threadsConstructors: (ComponentStatics) => void;
 }>;
 
 // declare class ComponentWithStatics<T extends string> {
@@ -61,9 +61,9 @@ export class World {
           }
         }
       } else if (type === 'dataArray') {
-        console.log(123123, payload,  this.componentTypes)
-        this.componentTypes.forEach(component => {component.memory = payload})
-        // thi
+        this.componentTypes.forEach((component) => {
+          component.memory = payload;
+        });
       }
     });
   }
@@ -85,36 +85,42 @@ export class World {
     includeComponents: T,
     excludeComponents?: Class<Component>[],
   ): ReadonlyArray<$Call<transform<T>>> => {
-    const selector = new EntitySelector(this, includeComponents, excludeComponents);
+    const selector = new EntitySelector(
+      this,
+      includeComponents,
+      excludeComponents,
+    );
     this.selectors.push(selector);
     return selector.components;
-  }
+  };
 
   update(delta: number): void {
     this.changedData = new Map();
-    this.systems
-      .map(system => {
-        const changedComponents = system(delta / 1000);
-        if (!changedComponents) {
-          return;
-        }
-        for (const [id, ...components] of changedComponents) {
-          for (const component of components) {
-            let el = this.changedData.get(component.constructor);
-            if (!el) {
-              el = new Map();
-              this.changedData.set(component.constructor, el);
-            }
-            el.set(id, component);
+    this.systems.map((system) => {
+      const changedComponents = system(delta / 1000);
+      if (!changedComponents) {
+        return;
+      }
+      for (const [id, ...components] of changedComponents) {
+        for (const component of components) {
+          let el = this.changedData.get(component.constructor);
+          if (!el) {
+            el = new Map();
+            this.changedData.set(component.constructor, el);
           }
+          el.set(id, component);
         }
-      });
+      }
+    });
 
     const changedDataArray = [...this.changedData.entries()];
     for (const thread of this.threads) {
       const componentsToUpdate = changedDataArray
         .filter(([constructor]) => constructor.threads.includes(thread.id))
-        .map(([constructor, data]) => ({ type: constructor.name, data: [...data.entries()] }));
+        .map(([constructor, data]) => ({
+          type: constructor.name,
+          data: [...data.entries()],
+        }));
       thread.postMessage({
         type: 'UPDATE_COMPONENTS',
         payload: {
@@ -146,16 +152,28 @@ export class World {
       const componentRegistry = this.components.get(component.type);
       componentRegistry.set(entityId, component.data);
     }
-    const componentMap = new Map(components.map(({ type, data }) => [type, data]));
+    const componentMap = new Map(
+      components.map(({ type, data }) => [type, data]),
+    );
     for (const selector of this.selectors) {
-      if (!selector.includeComponents.find(componentType => !componentMap.has(componentType.name))
-        && !selector.excludeComponents.find(componentType => componentMap.has(componentType.name))) {
+      if (
+        !selector.includeComponents.find(
+          (componentType) => !componentMap.has(componentType.name),
+        ) &&
+        !selector.excludeComponents.find((componentType) =>
+          componentMap.has(componentType.name),
+        )
+      ) {
         const selectedComponents = {
           id: entityId,
         };
         for (let i = 0; i < selector.includeComponents.length; i += 1) {
-          const component = componentMap.get(selector.includeComponents[i].name);
-          selectedComponents[selector.includeComponents[i].componentName] = component;
+          const component = componentMap.get(
+            selector.includeComponents[i].name,
+          );
+          selectedComponents[
+            selector.includeComponents[i].componentName
+          ] = component;
         }
         selector.components.push(selectedComponents);
       }
@@ -167,12 +185,22 @@ export class World {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
       // console.log(component.type === 'Transform')
-      if (component.type !== 'Transform'){
-        component.data = Object.assign(Reflect.construct(constructor, []), component.data);
+      if (component.type !== 'Transform') {
+        component.data = Object.assign(
+          Reflect.construct(constructor, []),
+          component.data,
+        );
       } else {
-        component.data = new Transform(component.data.translation, component.data.rotation, component.data.parent, component.data.offset)
+        component.data = new Transform(
+          component.data.translation,
+          component.data.rotation,
+          component.data.parent,
+          component.data.offset,
+        );
       }
-      const threadConstructor = constructor.threadsConstructors && constructor.threadsConstructors[this.thread];
+      const threadConstructor =
+        constructor.threadsConstructors &&
+        constructor.threadsConstructors[this.thread];
       if (threadConstructor) {
         threadConstructor(component.data);
       }
@@ -180,17 +208,24 @@ export class World {
     this.registerEntity(id, components);
   }
 
-  createEntity<T extends Component[]>(id: Entity | null, ...components: T): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
-    const entityId = id !== null
-      ? id
-      : EntityManager.generateId();
+  createEntity<T extends Component[]>(
+    id: Entity | null,
+    ...components: T
+  ): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
+    const entityId = id !== null ? id : EntityManager.generateId();
     for (const thread of this.threads) {
       const componentsToAdd = components
-        .filter(el => el.constructor.threads.includes(thread.id))
-        .map(el => ({ type: el.constructor.name, data: el }));
-      thread.postMessage({ type: 'CREATE_ENTITY', payload: { id: entityId, components: componentsToAdd } });
+        .filter((el) => el.constructor.threads.includes(thread.id))
+        .map((el) => ({ type: el.constructor.name, data: el }));
+      thread.postMessage({
+        type: 'CREATE_ENTITY',
+        payload: { id: entityId, components: componentsToAdd },
+      });
     }
-    this.registerEntity(entityId, components.map(el => ({ type: el.constructor.name, data: el })));
+    this.registerEntity(
+      entityId,
+      components.map((el) => ({ type: el.constructor.name, data: el })),
+    );
     const selectedComponents = {
       id: entityId,
       children: [],
@@ -204,14 +239,16 @@ export class World {
       const component: ComponentWithStatics<string> = components[i];
       selectedComponents[component.constructor.componentName] = component;
       if (component.constructor.networkable === true) {
-        selectedComponentsNetworkable[component.constructor.componentName] = component;
+        selectedComponentsNetworkable[
+          component.constructor.componentName
+        ] = component;
       }
     }
     this.lastAddedObjects.push(selectedComponentsNetworkable);
     return selectedComponents;
   }
 
-  deleteEntity(id: Entity, dispatchable: boolean = true): void {
+  deleteEntity(id: Entity, dispatchable = true): void {
     for (const registry of this.components.values()) {
       const component = registry.get(id);
       if (component) {
@@ -220,7 +257,7 @@ export class World {
       }
     }
     for (const selector of this.selectors) {
-      const index = selector.components.findIndex(el => el.id === id);
+      const index = selector.components.findIndex((el) => el.id === id);
       if (index !== -1) {
         selector.components.splice(index, 1); // TODO: seems like it should be linked list with pool
       }
@@ -244,11 +281,18 @@ export class World {
     this.events.emit(gameEvent);
   }
 
-  createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean) {
+  createEventAndDispatch<T>(
+    type: GAME_EVENT_TYPE,
+    payload?: T,
+    network?: boolean,
+  ) {
     this.dispatch({ type, payload, network });
   }
 
   registerConstructor(name: string, constructor: ObjectConstructor) {
-    this.constructors.set(name, params => !this.entities.has(params.id) && constructor(params));
+    this.constructors.set(
+      name,
+      (params) => !this.entities.has(params.id) && constructor(params),
+    );
   }
 }

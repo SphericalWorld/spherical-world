@@ -3,12 +3,12 @@ import identity from '../../../common/fp/combinators/identity';
 import { SLICE } from '../../../common/constants/chunk';
 
 export type ChunkData = Readonly<{
-  flags: Uint8Array,
-  blocks: Uint8Array,
-  light: Uint16Array,
-  x: number,
-  z: number,
-}>
+  flags: Uint8Array;
+  blocks: Uint8Array;
+  light: Uint16Array;
+  x: number;
+  z: number;
+}>;
 
 export type RenderToChunk = (
   chunk: ChunkData,
@@ -16,9 +16,9 @@ export type RenderToChunk = (
   y: number,
   z: number,
   buffers: {
-    vertexBuffer: number[],
-    indexBuffer: number[],
-    vertexCount: number,
+    vertexBuffer: number[];
+    indexBuffer: number[];
+    vertexCount: number;
   },
 ) => number;
 
@@ -32,7 +32,7 @@ const putBlock = (
 ): boolean => {
   const index = getIndex(x, y, z);
   chunk.flags[index] = identity(plane);
-  if ((y !== 0) && (chunk.blocks[index - SLICE] !== 128)) {
+  if (y !== 0 && chunk.blocks[index - SLICE] !== 128) {
     chunk.blocks[index] = value;
   }
   return true;
@@ -64,7 +64,7 @@ const BasePropertiesComponent = () => ({
     east: 0,
   },
   putBlock,
-  getFlags: (identity as (_: number) => number),
+  getFlags: identity as (_: number) => number,
 });
 
 export default BasePropertiesComponent;

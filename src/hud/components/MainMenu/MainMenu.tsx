@@ -8,12 +8,10 @@ import { AUDIO } from '../Audio/audioConstants';
 import { VIDEO } from '../Video/videoConstants';
 import { MAIN_MENU } from './mainMenuConstants';
 
-import {
-  content,
-} from './mainMenu.module.scss';
+import { content } from './mainMenu.module.scss';
 
 type DispatchProps = {
-  setUIState: typeof doSetUIState,
+  setUIState: typeof doSetUIState;
 };
 
 type Props = DispatchProps;

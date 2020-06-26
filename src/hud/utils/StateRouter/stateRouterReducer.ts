@@ -2,13 +2,13 @@ import { createReducer } from '../../../util/reducerUtils';
 import { STATE_ROUTER_TOGGLE, STATE_ROUTER_SET } from './stateRouterConstants';
 
 export type UIStates = {
-  [string]: boolean
+  [string]: boolean;
 };
 
 const initialState: UIStates = {};
 
 type OnToggleData = Readonly<{
-  stateName: string,
+  stateName: string;
 }>;
 
 const onToggle = (state, { stateName }: OnToggleData): UIStates => ({
@@ -16,7 +16,10 @@ const onToggle = (state, { stateName }: OnToggleData): UIStates => ({
   [stateName]: !state[stateName],
 });
 
-const onSet = (state, { stateName, value }: OnToggleData & { value: boolean }): UIStates => ({
+const onSet = (
+  state,
+  { stateName, value }: OnToggleData & { value: boolean },
+): UIStates => ({
   ...state,
   [stateName]: value,
 });

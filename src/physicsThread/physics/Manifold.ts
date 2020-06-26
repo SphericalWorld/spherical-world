@@ -10,10 +10,17 @@ export type Manifold = Readonly<{
 }>;
 
 const createManifold = (
-  a: RigidBody, b: RigidBody, penetration: number, normal: vec3, inversedNormal: vec3,
-): Manifold =>
-  ({
-    a, b, penetration, normal, inversedNormal,
-  });
+  a: RigidBody,
+  b: RigidBody,
+  penetration: number,
+  normal: vec3,
+  inversedNormal: vec3,
+): Manifold => ({
+  a,
+  b,
+  penetration,
+  normal,
+  inversedNormal,
+});
 
 export default createManifold;

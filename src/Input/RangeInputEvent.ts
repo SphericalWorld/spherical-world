@@ -5,7 +5,7 @@ export default class RangeInputEvent extends InputEvent {
   y: number;
   z: number;
 
-  constructor(name: string, x: number = 0, y: number = 0, z: number = 0) {
+  constructor(name: string, x = 0, y = 0, z = 0) {
     super(name);
     this.x = x;
     this.y = y;

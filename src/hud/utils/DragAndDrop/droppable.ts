@@ -2,8 +2,8 @@ import { useState } from 'react';
 import dragStore from './dragStore';
 
 type Options<Props> = {
-  active: (props: Props) => boolean,
-  onDrop: (props: Props) => (item: any) => unknown,
+  active: (props: Props) => boolean;
+  onDrop: (props: Props) => (item: any) => unknown;
 };
 
 type Result = {
@@ -58,7 +58,11 @@ export const useDroppable = <Props>(
   };
 
   return {
-    canDrop, onDragEnter, onDrop, onDragOver, onDragLeave,
+    canDrop,
+    onDragEnter,
+    onDrop,
+    onDragOver,
+    onDragLeave,
   };
 };
 

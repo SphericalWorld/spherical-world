@@ -5,18 +5,9 @@ import TooltipDamage from './Components/TooltipDamage';
 import TooltipDescription from './Components/TooltipDescription';
 import TooltipImage from './Components/TooltipImage';
 import TooltipAttackSpeed from './Components/TooltipAttackSpeed';
-import {
-  toolTipGrid,
-  common,
-  uncommon,
-  rare,
-} from './tooltip.module.scss';
+import { toolTipGrid, common, uncommon, rare } from './tooltip.module.scss';
 
-const colors = [
-  common,
-  uncommon,
-  rare,
-];
+const colors = [common, uncommon, rare];
 
 const TooltipDefinitions = [
   TooltipName,
@@ -27,25 +18,23 @@ const TooltipDefinitions = [
 ];
 
 type ItemType = Readonly<{
-  name: string,
-  rareness: Rareness,
-  damage?: number,
-  icon?: string,
-  description?: string,
-  attackSpeed?: number,
-}>
+  name: string;
+  rareness: Rareness;
+  damage?: number;
+  icon?: string;
+  description?: string;
+  attackSpeed?: number;
+}>;
 
 type Props = Readonly<{
-  item: ItemType,
-}>
+  item: ItemType;
+}>;
 
-const Tooltip = ({
-  item,
-}: Props) => (
+const Tooltip = ({ item }: Props) => (
   <div className={`${colors[item.rareness]} ${toolTipGrid}`}>
-    {
-      TooltipDefinitions.map((Component, index) => <Component key={index} {...item} />)
-    }
+    {TooltipDefinitions.map((Component, index) => (
+      <Component key={index} {...item} />
+    ))}
   </div>
 );
 

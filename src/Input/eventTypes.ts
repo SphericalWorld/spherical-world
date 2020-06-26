@@ -7,7 +7,8 @@ export const INPUT_TYPE_RANGE: 2 = 2;
 
 export const CATEGORY_MOVEMENT: 'Movement' = 'Movement';
 export const CATEGORY_INTERFACE: 'Interface' = 'Interface';
-export const CATEGORY_COMBAT_AND_BLOCKS: 'Combat & Blocks interaction' = 'Combat & Blocks interaction';
+export const CATEGORY_COMBAT_AND_BLOCKS: 'Combat & Blocks interaction' =
+  'Combat & Blocks interaction';
 
 export const EVENT_CATEGORIES = [
   CATEGORY_MOVEMENT,

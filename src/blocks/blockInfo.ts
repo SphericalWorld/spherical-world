@@ -42,8 +42,8 @@ const blocks = [
   Cobblestone(),
 ];
 
-const blocksTextureInfo = createArray<Uint8Array>(256, () => (new Uint8Array(6)));
-const blocksFlags = createArray<Uint8Array>(256, () => (new Uint8Array(5)));
+const blocksTextureInfo = createArray<Uint8Array>(256, () => new Uint8Array(6));
+const blocksFlags = createArray<Uint8Array>(256, () => new Uint8Array(5));
 const bufferInfo = createArray<number[]>(256, () => createArray(6, 0));
 const blocksInfo = createArray<BlockData>(256, Block());
 
@@ -68,7 +68,6 @@ for (const block of blocks) {
   blocksFlags[block.id][HAS_GRAPHICS_MODEL] = 'model' in block ? 1 : 0;
   blocksFlags[block.id][4] = block.selfTransparent ? 1 : 0;
 
-
   blocksInfo[block.id] = block;
 
   blocksTextureInfo[block.id][0] = block.textures.top;
@@ -86,9 +85,4 @@ for (const block of blocks) {
   bufferInfo[block.id][5] = block.buffer.east || 0;
 }
 
-export {
-  blocksTextureInfo,
-  blocksFlags,
-  bufferInfo,
-  blocksInfo,
-};
+export { blocksTextureInfo, blocksFlags, bufferInfo, blocksInfo };

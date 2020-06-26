@@ -3,7 +3,7 @@ const CHUNK_GENERATION_TIME = 'Chunk generation time';
 export const profileChunkGeneration = (
   name: string = CHUNK_GENERATION_TIME,
 ) => {
-  let chunkGenerated: number = 0;
+  let chunkGenerated = 0;
   return <T>(chunk: T) => {
     if (chunkGenerated === 0) {
       console.time(name);

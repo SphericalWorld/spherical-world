@@ -44,8 +44,8 @@ import {
 } from './mouseRawEvents';
 
 export type RawEventInfo = {
-  caption: string,
-}
+  caption: string;
+};
 
 const events = {
   [KEY_UNBOUND]: {
@@ -170,6 +170,7 @@ const events = {
   },
 };
 
-export const getEventInfo = (name: string): RawEventInfo => (events[name] || events[KEY_UNBOUND]);
+export const getEventInfo = (name: string): RawEventInfo =>
+  events[name] || events[KEY_UNBOUND];
 
 export default events;

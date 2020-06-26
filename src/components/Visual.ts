@@ -6,7 +6,7 @@ export default class Visual implements Component {
   static threads = [THREAD_MAIN];
   static componentName: 'visual' = 'visual';
 
-  enabled: boolean = true;
+  enabled = true;
 
   glObject: GlObject;
 
@@ -19,5 +19,8 @@ export default class Visual implements Component {
  * Component with data to render Entity in 3D game world
  * @param {GlObject} glObject object with visual data to render
  */
-export const VisualComponent: React.FC<{ object: GlObject }> = ({ object }: { object: GlObject }) =>
-  new Visual(object);
+export const VisualComponent: React.FC<{ object: GlObject }> = ({
+  object,
+}: {
+  object: GlObject;
+}) => new Visual(object);

@@ -11,7 +11,9 @@ import { generate, generateObjects } from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
-const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
+const profileChunkGenerationFoliage = profileChunkGeneration(
+  'Foliage generation',
+);
 const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
@@ -30,9 +32,9 @@ const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
 };
 
 type ChunkMetaData = {
-  objectsGenerated: boolean,
-  dataLength: number,
-}
+  objectsGenerated: boolean;
+  dataLength: number;
+};
 
 class Chunk {
   terrain: Terrain;
@@ -47,8 +49,8 @@ class Chunk {
   flags: Buffer;
   chunkGenerator: ChunkGenerator;
   changesCount: number;
-  terrainGenerated: boolean = false;
-  objectsGenerated: boolean = false;
+  terrainGenerated = false;
+  objectsGenerated = false;
   northChunk: Chunk;
   southChunk: Chunk;
   westChunk: Chunk;
@@ -156,7 +158,9 @@ class Chunk {
     // await this.generate();
 
     if (depth) {
-      await Promise.all(chunks.map((chunk: Chunk) => chunk.generateWithSurrounding(depth - 1)));
+      await Promise.all(
+        chunks.map((chunk: Chunk) => chunk.generateWithSurrounding(depth - 1)),
+      );
       if (depth >= 2) {
         await this.generateObjects();
         await this.northChunk.generateObjects();
@@ -187,9 +191,14 @@ class Chunk {
     return this;
   }
 
-  setUnsafe(x: number, y: number, z: number, block: number | [number, number]): void {
+  setUnsafe(
+    x: number,
+    y: number,
+    z: number,
+    block: number | [number, number],
+  ): void {
     const chunk = getChunkNear(this, x, y, z);
-    const index = (x & 0xF) | ((z & 0xF) << 4) | (y << 8);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
     if (typeof block === 'number') {
       chunk.data[index] = block;
     } else {
@@ -202,13 +211,15 @@ class Chunk {
   setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
     const chunk = getChunkNear(this, x, y, z);
     return IO.from(() => {
-      chunk.data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)] = block;
+      chunk.data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)] = block;
       return chunk;
     });
   }
 
   at(x: number, y: number, z: number): number {
-    return getChunkNear(this, x, y, z).data[(x & 0xF) | ((z & 0xF) << 4) | (y << 8)];
+    return getChunkNear(this, x, y, z).data[
+      (x & 0xf) | ((z & 0xf) << 4) | (y << 8)
+    ];
   }
 
   async generateObjects(): Promise<Chunk> {

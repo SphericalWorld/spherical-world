@@ -45,54 +45,57 @@ const getRotatedTourches = () => {
 
 const Torch = () => {
   const torches = getRotatedTourches();
-  return Block(
-    {
-      id: 128,
-      lightTransparent: true,
-      sightTransparent: true,
-      selfTransparent: false,
-      needPhysics: false,
+  return Block({
+    id: 128,
+    lightTransparent: true,
+    sightTransparent: true,
+    selfTransparent: false,
+    needPhysics: false,
 
-      renderToChunk(
-        chunk,
-        x: number,
-        y: number,
-        z: number,
-        {
-          vertexBuffer,
-          indexBuffer,
-          vertexCount,
-        },
-      ) {
-        const [r, g, b, sunlight] = getLight(chunk, x, y, z);
-        const flag = chunk.flags[x + z * 16 + y * 256];
+    renderToChunk(
+      chunk,
+      x: number,
+      y: number,
+      z: number,
+      { vertexBuffer, indexBuffer, vertexCount },
+    ) {
+      const [r, g, b, sunlight] = getLight(chunk, x, y, z);
+      const flag = chunk.flags[x + z * 16 + y * 256];
 
-        for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
-          vertexBuffer.push(
-            torches[flag][i * 3] + x + chunk.x,
-            torches[flag][i * 3 + 1] + y,
-            torches[flag][i * 3 + 2] + z + chunk.z,
-            model.vertexTextureCoords[i * 2],
-            model.vertexTextureCoords[i * 2 + 1],
-            this.id,
-            r, g, b,
-            sunlight,
-          );
-        }
-        for (let i = 0; i < model.indices.length; i += 1) {
-          indexBuffer.push(model.indices[i] + vertexCount);
-        }
-        return model.vertexPositions.length / 3;
-      },
-
-      putBlock(chunk, x: number, y: number, z: number, value: number, plane: number): boolean {
-        const index = getIndex(x, y, z);
-        chunk.flags[index] = this.getFlags(plane);
-        chunk.blocks[index] = value;
-        return true;
-      },
+      for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
+        vertexBuffer.push(
+          torches[flag][i * 3] + x + chunk.x,
+          torches[flag][i * 3 + 1] + y,
+          torches[flag][i * 3 + 2] + z + chunk.z,
+          model.vertexTextureCoords[i * 2],
+          model.vertexTextureCoords[i * 2 + 1],
+          this.id,
+          r,
+          g,
+          b,
+          sunlight,
+        );
+      }
+      for (let i = 0; i < model.indices.length; i += 1) {
+        indexBuffer.push(model.indices[i] + vertexCount);
+      }
+      return model.vertexPositions.length / 3;
     },
-  );
+
+    putBlock(
+      chunk,
+      x: number,
+      y: number,
+      z: number,
+      value: number,
+      plane: number,
+    ): boolean {
+      const index = getIndex(x, y, z);
+      chunk.flags[index] = this.getFlags(plane);
+      chunk.blocks[index] = value;
+      return true;
+    },
+  });
 };
 
 export default Torch;

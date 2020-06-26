@@ -18,7 +18,11 @@ import { World } from '../common/ecs';
 
 import * as componentsProvider from './components';
 
-import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
+import {
+  THREAD_PHYSICS,
+  THREAD_CHUNK_HANDLER,
+  THREAD_MAIN,
+} from './Thread/threadConstants';
 
 import inputProvider from './Input/inputProvider';
 import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
@@ -27,8 +31,8 @@ import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
 import { initHudAPI } from './hud/HudApi';
 
 type Threads = Readonly<{
-  physicsThread: Worker,
-  chunksHandlerThread: Worker
+  physicsThread: Worker;
+  chunksHandlerThread: Worker;
 }>;
 
 const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
@@ -42,7 +46,9 @@ const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
 
 const getTerrain = () => {
   const terrain = new Terrain();
-  terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
+  terrain.generateBiomeColorMap(
+    textureLibrary.get('foliageColorMap').glTexture,
+  );
   // terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
   terrain.material = materialLibrary.get('terrain');
   return terrain;
@@ -50,8 +56,7 @@ const getTerrain = () => {
 
 const getShaders = (): ShaderLibrary => {
   const shaders = shadersProvider();
-  return shaderLibrary
-    .add(...shaders);
+  return shaderLibrary.add(...shaders);
 };
 
 const getTextures = async () => {
@@ -65,11 +70,14 @@ const getTextures = async () => {
 
 const getMaterials = () => {
   const materials = materialsProvider(textureLibrary, shaderLibrary);
-  return materialLibrary
-    .add(...materials);
+  return materialLibrary.add(...materials);
 };
 
-const mainProvider = async (store: Store, network: Network, threads: Threads) => {
+const mainProvider = async (
+  store: Store,
+  network: Network,
+  threads: Threads,
+) => {
   await getTextures();
   getShaders();
   getMaterials();
@@ -83,8 +91,10 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
   const input = inputProvider(inputSources, inputContexts);
-  input.onDispatch(event => world.dispatch(event));
-  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
+  input.onDispatch((event) => world.dispatch(event));
+  world.registerSystem(
+    ...systemsProvider(world, terrain, network, time, input, store),
+  );
   initHudAPI(store);
 
   return Main(network, new ResourceLoader(), world);

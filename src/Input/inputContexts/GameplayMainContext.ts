@@ -17,28 +17,30 @@ import {
   selectPreviousItemEvent,
 } from '../events';
 
-export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' = 'GAMEPLAY_MAIN_CONTEXT';
+export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' =
+  'GAMEPLAY_MAIN_CONTEXT';
 
-const createGameplayMainContext = (): InputContext => createContext({
-  type: GAMEPLAY_MAIN_CONTEXT,
-  active: false,
-  eventTypes: [
-    playerAttackEvent,
-    playerPutBlockEvent,
-    cameraMovedEvent,
-    cameraUnlockedEvent,
-    playerMoveForwardEvent,
-    playerMoveBackwardEvent,
-    playerMoveLeftEvent,
-    playerMoveRightEvent,
+const createGameplayMainContext = (): InputContext =>
+  createContext({
+    type: GAMEPLAY_MAIN_CONTEXT,
+    active: false,
+    eventTypes: [
+      playerAttackEvent,
+      playerPutBlockEvent,
+      cameraMovedEvent,
+      cameraUnlockedEvent,
+      playerMoveForwardEvent,
+      playerMoveBackwardEvent,
+      playerMoveLeftEvent,
+      playerMoveRightEvent,
 
-    playerRunEvent,
-    playerJumpEvent,
-    toggleMenuEvent,
-    toggleInventoryEvent,
-    selectNextItemEvent,
-    selectPreviousItemEvent,
-  ],
-});
+      playerRunEvent,
+      playerJumpEvent,
+      toggleMenuEvent,
+      toggleInventoryEvent,
+      selectNextItemEvent,
+      selectPreviousItemEvent,
+    ],
+  });
 
 export default createGameplayMainContext;

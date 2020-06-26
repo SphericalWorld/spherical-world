@@ -9,7 +9,7 @@ export default class Network implements Component {
   static componentName: 'network' = 'network';
 
   socket: Socket;
-  linkedPlayers: Readonly<{ network: Network, id: Entity }>[] = [];
+  linkedPlayers: Readonly<{ network: Network; id: Entity }>[] = [];
 
   constructor(socket: Socket) {
     this.socket = socket;
@@ -17,8 +17,9 @@ export default class Network implements Component {
 
   destructor() {
     for (const player of this.linkedPlayers) {
-      player.network.linkedPlayers = player.network.linkedPlayers
-        .filter(el => el.id !== this.socket.player.id);
+      player.network.linkedPlayers = player.network.linkedPlayers.filter(
+        (el) => el.id !== this.socket.player.id,
+      );
     }
   }
 

@@ -1,7 +1,7 @@
 import type { MongoClient, Collection } from 'mongodb';
 
 export type DB = Readonly<{
-  connection: MongoClient
+  connection: MongoClient;
 }>;
 
 // export const constSaveToDB = (collection: Collection<any>) => (data) => ((data instanceof Array)

@@ -35,7 +35,7 @@ const imageByDataURL = async (src: string): Promise<HTMLImageElement> => {
 };
 
 type TextureMeta = Readonly<{
-  overlay: boolean,
+  overlay: boolean;
 }>;
 
 export default class Texture {
@@ -45,8 +45,8 @@ export default class Texture {
   name: string;
   target: TextureTarget = gl.TEXTURE_2D;
   meta: TextureMeta | null;
-  animated: boolean = false;
-  frames: number = 0;
+  animated = false;
+  frames = 0;
 
   constructor(
     image: HTMLImageElement,
@@ -95,8 +95,8 @@ export default class Texture {
   }
 
   static createFromCanvas(params: {
-    canvas: HTMLCanvasElement,
-    name: string,
+    canvas: HTMLCanvasElement;
+    name: string;
   }): Texture {
     const glTexture = makeTexture(params.canvas, gl.TEXTURE_2D);
     const texture = new this(null, glTexture);
@@ -104,23 +104,24 @@ export default class Texture {
     return texture;
   }
 
-  static async create(dataUrl: string, {
-    animated = false,
-    type,
-    meta,
-    name,
-    atlasId,
-  }: {
-    animated?: boolean,
-    type?: number,
-    meta?: TextureMeta,
-    name: string,
-    atlasId?: number,
-  }): Promise<Texture> {
+  static async create(
+    dataUrl: string,
+    {
+      animated = false,
+      type,
+      meta,
+      name,
+      atlasId,
+    }: {
+      animated?: boolean;
+      type?: number;
+      meta?: TextureMeta;
+      name: string;
+      atlasId?: number;
+    },
+  ): Promise<Texture> {
     const image = await imageByDataURL(dataUrl);
-    const target = animated
-      ? gl.TEXTURE_2D_ARRAY
-      : gl.TEXTURE_2D;
+    const target = animated ? gl.TEXTURE_2D_ARRAY : gl.TEXTURE_2D;
 
     const glTexture = animated
       ? this.makeAnimatedTexture(image, target, type)

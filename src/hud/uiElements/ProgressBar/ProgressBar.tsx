@@ -19,17 +19,19 @@ type Props = Readonly<{
   maxValue: number;
   type?: 'hp' | 'mana';
   className?: string;
-}>
+}>;
 
-const decimalToHex = decimal => decimal.toString(16);
-const hexToDecimal = hex => parseInt(hex, 16);
+const decimalToHex = (decimal) => decimal.toString(16);
+const hexToDecimal = (hex) => parseInt(hex, 16);
 
 const mix = (colorMax, colorMin, weight = 50) => {
   let hexColor = '#';
   for (let i = 0; i <= 5; i += 2) {
     const pair1 = hexToDecimal(colorMax.substr(i, 2));
     const pair2 = hexToDecimal(colorMin.substr(i, 2));
-    let combine = decimalToHex(Math.floor(pair2 + (pair1 - pair2) * (weight / 100.0)));
+    let combine = decimalToHex(
+      Math.floor(pair2 + (pair1 - pair2) * (weight / 100.0)),
+    );
     while (combine.length < 2) {
       combine = `0${combine}`;
     }
@@ -38,11 +40,10 @@ const mix = (colorMax, colorMin, weight = 50) => {
   return hexColor;
 };
 
-const getColor = (percent) => (
-  (percent < 50)
+const getColor = (percent) =>
+  percent < 50
     ? mix(colorYellow, colorRed, percent)
-    : mix(colorGreen, colorYellow, percent - 50)
-);
+    : mix(colorGreen, colorYellow, percent - 50);
 
 const types = {
   mana,
@@ -51,7 +52,7 @@ const types = {
 type Styles = {
   width: string;
   background?: string;
-}
+};
 
 const ProgressBar = ({
   type = 'hp',
@@ -59,7 +60,7 @@ const ProgressBar = ({
   currentValue,
   className = '',
 }: Props) => {
-  const percent = Math.floor(currentValue / maxValue * 100);
+  const percent = Math.floor((currentValue / maxValue) * 100);
   const style: Styles = {
     width: `${percent}%`,
   };
@@ -73,14 +74,10 @@ const ProgressBar = ({
     <div className={`${content} ${className}`}>
       <div className={progressBar}>
         <span style={style} className={classnames(CSSColorClass, stripe)} />
-        <span className={labelValue}>
-          {`${currentValue} / ${maxValue}`}
-        </span>
+        <span className={labelValue}>{`${currentValue} / ${maxValue}`}</span>
       </div>
       <div className={percentInfo}>
-        <span className={labelPercent}>
-          {`${percent} %`}
-        </span>
+        <span className={labelPercent}>{`${percent} %`}</span>
       </div>
     </div>
   );

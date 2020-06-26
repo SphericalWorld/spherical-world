@@ -1,12 +1,13 @@
-import {
-  mat4, quat, vec3, vec4,
-} from 'gl-matrix';
+import { mat4, quat, vec3, vec4 } from 'gl-matrix';
 import type { World } from '../../common/ecs';
 import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { gl } from '../engine/glEngine';
-import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
+import {
+  GAMEPLAY_MAIN_CONTEXT,
+  GAMEPLAY_MENU_CONTEXT,
+} from '../Input/inputContexts';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
@@ -34,24 +35,30 @@ const resizeViewport = (viewport: Viewport): Viewport => {
   return viewport;
 };
 
-const getWorldPosition = (distance: number) =>
-  (width: number, height: number, pMatrix: mat4, mvMatrix: mat4) =>
-    unproject(
-      width / 2,
-      height / 2,
-      distance,
-      mat4.multiply(mat4.create(), pMatrix, mvMatrix),
-      vec4.fromValues(0, 0, width, height),
-    );
+const getWorldPosition = (distance: number) => (
+  width: number,
+  height: number,
+  pMatrix: mat4,
+  mvMatrix: mat4,
+) =>
+  unproject(
+    width / 2,
+    height / 2,
+    distance,
+    mat4.multiply(mat4.create(), pMatrix, mvMatrix),
+    vec4.fromValues(0, 0, width, height),
+  );
 
 const getWorldPositionNear = getWorldPosition(0);
 const getWorldPositionFar = getWorldPosition(1);
 
-const getCameraMovements = (world: World) => world.events
-  .filter(el => el.type === CAMERA_MOVED)
-  .subscribeQueue();
+const getCameraMovements = (world: World) =>
+  world.events.filter((el) => el.type === CAMERA_MOVED).subscribeQueue();
 
-const sumCameraMovements = ([x, y], { payload }) => ([x + payload.x, y + payload.y]);
+const sumCameraMovements = ([x, y], { payload }) => [
+  x + payload.x,
+  y + payload.y,
+];
 
 export default (world: World, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);
@@ -60,7 +67,7 @@ export default (world: World, input: Input): System => {
   const cameraMovements = getCameraMovements(world);
 
   world.events
-    .filter(el => el.type === CAMERA_LOCKED)
+    .filter((el) => el.type === CAMERA_LOCKED)
     .subscribe(() => {
       input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
       input.activateContext(GAMEPLAY_MAIN_CONTEXT);
@@ -68,7 +75,7 @@ export default (world: World, input: Input): System => {
     });
 
   world.events
-    .filter(el => el.type === CAMERA_UNLOCKED)
+    .filter((el) => el.type === CAMERA_UNLOCKED)
     .subscribe(() => {
       input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
       input.activateContext(GAMEPLAY_MENU_CONTEXT);
@@ -105,8 +112,18 @@ export default (world: World, input: Input): System => {
       viewport: { viewportWidth, viewportHeight, pMatrix },
       mvMatrix,
     } = camera;
-    const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
-    const worldPositionNear = getWorldPositionNear(viewportWidth, viewportHeight, pMatrix, mvMatrix);
+    const worldPosition = getWorldPositionFar(
+      viewportWidth,
+      viewportHeight,
+      pMatrix,
+      mvMatrix,
+    );
+    const worldPositionNear = getWorldPositionNear(
+      viewportWidth,
+      viewportHeight,
+      pMatrix,
+      mvMatrix,
+    );
     vec3.subtract(sight, worldPosition, worldPositionNear);
     vec3.normalize(sight, sight);
 

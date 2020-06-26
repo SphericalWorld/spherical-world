@@ -1,4 +1,7 @@
-import { SWAP_INVENTORY_SLOTS, INVENTORY_ITEM_SELECTED } from './inventoryConstants';
+import {
+  SWAP_INVENTORY_SLOTS,
+  INVENTORY_ITEM_SELECTED,
+} from './inventoryConstants';
 import {
   SWAP_MAIN_PANEL_ITEMS,
   DELETE_MAIN_PANEL_ITEMS,

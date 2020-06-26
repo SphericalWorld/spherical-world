@@ -18,7 +18,7 @@ export default class Joint implements Component {
   }
 }
 
-export type JointProps = { parent: Entity, distance?: vec3 };
+export type JointProps = { parent: Entity; distance?: vec3 };
 
 /**
  * Component which bounds its entity to parent entity and move together with parent

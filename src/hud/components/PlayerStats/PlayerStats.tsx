@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Label,
-  ProgressBar,
-} from '../../uiElements';
+import { Label, ProgressBar } from '../../uiElements';
 import {
   content,
   stats,
@@ -10,7 +7,6 @@ import {
   name,
   imgPlayer,
 } from './playerStats.module.scss';
-
 
 const PlayerStats = () => (
   <div className={content}>

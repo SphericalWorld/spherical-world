@@ -1,18 +1,17 @@
 import React from 'react';
 import TooltipTemplate from '../../Elements/TooltipTemplate';
-import {
-  gridArea,
-} from './tooltipAttackSpeed.module.scss';
-
+import { gridArea } from './tooltipAttackSpeed.module.scss';
 
 type Props = Readonly<{
   attackSpeed: number;
-}>
+}>;
 
-const TooltipAttackSpeed = ({
-  attackSpeed,
-}: Props) => (
-  <TooltipTemplate name="Attack Speed" value={attackSpeed} className={gridArea} />
+const TooltipAttackSpeed = ({ attackSpeed }: Props) => (
+  <TooltipTemplate
+    name="Attack Speed"
+    value={attackSpeed}
+    className={gridArea}
+  />
 );
 
 export default TooltipAttackSpeed;

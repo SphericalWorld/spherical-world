@@ -1,3 +1,3 @@
 import type { Apply } from './Apply';
 
-export interface Applicative<A> extends Apply<A> {}
+export type Applicative<A> = Apply<A>;

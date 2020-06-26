@@ -6,7 +6,7 @@ class GlShader {
   source: string;
   type: number;
   shader: WebGLShader;
-  version: string = '300';
+  version = '300';
 
   constructor(source: string, constants: Constants) {
     this.source = source;
@@ -26,14 +26,19 @@ class GlShader {
     gl.shaderSource(this.shader, this.source);
     gl.compileShader(this.shader);
     if (!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS)) {
-      throw new Error(`Shader compilation error: ${String(gl.getShaderInfoLog(this.shader))}`);
+      throw new Error(
+        `Shader compilation error: ${String(gl.getShaderInfoLog(this.shader))}`,
+      );
     }
   }
 }
 
 class GlVertexShader extends GlShader {
   type = gl.VERTEX_SHADER;
-  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
+  constructor(
+    source: string,
+    { constants = {} }: { constants: Constants } = {},
+  ) {
     super(source, constants);
     this.compile();
   }
@@ -41,7 +46,10 @@ class GlVertexShader extends GlShader {
 
 class GlFragmentShader extends GlShader {
   type = gl.FRAGMENT_SHADER;
-  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
+  constructor(
+    source: string,
+    { constants = {} }: { constants: Constants } = {},
+  ) {
     super(source, constants);
     this.compile();
   }

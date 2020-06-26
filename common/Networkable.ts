@@ -1,4 +1,3 @@
 import { Serializable } from './Serializable';
 
-export interface Networkable extends Serializable {
-}
+export type Networkable = Serializable;

@@ -26,14 +26,9 @@
 
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
-import {
-  GameObject, World, React,
-} from '../../common/ecs';
+import { GameObject, World, React } from '../../common/ecs';
 import playerModel from '../models/player.json';
-import type {
-  TransformProps,
-  InventoryProps,
-} from '../components/react';
+import type { TransformProps, InventoryProps } from '../components/react';
 import {
   Transform,
   Camera,
@@ -52,19 +47,24 @@ import { BlockPicker } from './BlockPicker';
 import { materialLibrary, GlObject } from '../engine';
 
 type Props = {
-  id: Entity,
-  transform: TransformProps,
-  inventory: InventoryProps,
-  playerData: any,
-  isMainPlayer: boolean,
+  id: Entity;
+  transform: TransformProps;
+  inventory: InventoryProps;
+  playerData: any;
+  isMainPlayer: boolean;
 };
 
 export const Player = ({
-  id, transform, inventory, playerData, camera, isMainPlayer = false,
+  id,
+  transform,
+  inventory,
+  playerData,
+  camera,
+  isMainPlayer = false,
 }: Props) => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
-// 
+  //
   return (
     <GameObject id={id}>
       <Transform {...transform} />
@@ -80,25 +80,20 @@ export const Player = ({
       <Velocity />
       <Gravity />
       <Inventory {...inventory.data} />
-      { isMainPlayer
-        ? [
-          <UserControlled />,
-          <Camera {...camera} />,
-        ]
+      {isMainPlayer
+        ? [<UserControlled />, <Camera {...camera} />]
         : [
           <Visual object={new GlObject({ model, material })} />,
           <TextBillboard
-            parent={id}
-            position={vec3.fromValues(0, 2, 0)}
-            text={playerData.name}
-          />,
-        ]
-      }
+              parent={id}
+              position={vec3.fromValues(0, 2, 0)}
+              text={playerData.name}
+            />,
+          ]}
       <BlockPicker parent={id} />
     </GameObject>
   );
 };
-
 
 const playerProvider = (ecs: World) => {
   ecs.registerConstructor('PLAYER', Player);

@@ -4,16 +4,14 @@ import { button, small, big } from './button.module.scss';
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';
 
-export type Size =
-  | typeof SIZE_SMALL
-  | typeof SIZE_BIG;
+export type Size = typeof SIZE_SMALL | typeof SIZE_BIG;
 
 type Props = Readonly<{
   children?: React$Node;
   size?: Size;
   onClick?: () => unknown;
   className?: string;
-}>
+}>;
 
 const sizes = {
   [SIZE_SMALL]: small,
@@ -21,7 +19,10 @@ const sizes = {
 };
 
 const Button = ({
-  size = SIZE_BIG, onClick, className = '', children,
+  size = SIZE_BIG,
+  onClick,
+  className = '',
+  children,
 }: Props) => (
   <button
     onClick={onClick}

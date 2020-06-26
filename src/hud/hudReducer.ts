@@ -4,12 +4,12 @@ import { createReducer } from '../util/reducerUtils';
 import { HUD_DATA_UPDATED } from './hudConstants';
 
 export type HUDState = {
-  mainPlayerId: string | null,
+  mainPlayerId: string | null;
   player: {
-    position: vec3,
-    inventory: Inventory,
-  },
-}
+    position: vec3;
+    inventory: Inventory;
+  };
+};
 
 const initialState = {
   mainPlayerId: null,

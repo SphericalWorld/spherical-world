@@ -7,13 +7,13 @@ import keyBindingsReducer from '../hud/components/KeyBindings/keyBindingsReducer
 import mainPanelReducer from '../hud/components/MainPanel/mainPanelReducer';
 import inventoryReducer from '../hud/components/Inventory/inventoryReducer';
 
-const hudData = reduceReducers(
-  hudReducer,
-  (state, action) => ({
-    ...state,
-    player: { ...state.player, inventory: inventoryReducer(state.player.inventory, action) },
-  }),
-);
+const hudData = reduceReducers(hudReducer, (state, action) => ({
+  ...state,
+  player: {
+    ...state.player,
+    inventory: inventoryReducer(state.player.inventory, action),
+  },
+}));
 
 const reducers = {
   hudData,
@@ -27,15 +27,14 @@ type $ExtractFunctionReturn = <V, Args>(v: (...args: Args) => V) => V;
 const combinedReducer = combineReducers(reducers);
 
 export type State = {
-  hudData: $Call<$ExtractFunctionReturn, typeof hudReducer>,
-  keyBindings: $Call<$ExtractFunctionReturn, typeof keyBindingsReducer>,
-  uiStates: $Call<$ExtractFunctionReturn, typeof routerReducer>,
-  mainPanel: $Call<$ExtractFunctionReturn, typeof mainPanelReducer>,
+  hudData: $Call<$ExtractFunctionReturn, typeof hudReducer>;
+  keyBindings: $Call<$ExtractFunctionReturn, typeof keyBindingsReducer>;
+  uiStates: $Call<$ExtractFunctionReturn, typeof routerReducer>;
+  mainPanel: $Call<$ExtractFunctionReturn, typeof mainPanelReducer>;
 };
 
 const rootReducer = reduceReducers<State>(combinedReducer);
 
 // export type State = $ObjMap<typeof reducers, $ExtractFunctionReturn>;
-
 
 export default rootReducer;

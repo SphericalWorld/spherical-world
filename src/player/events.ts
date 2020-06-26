@@ -12,20 +12,27 @@ export const PLAYER_STOPED_JUMP: 'PLAYER_STOPED_JUMP' = 'PLAYER_STOPED_JUMP';
 export const PLAYER_RUN: 'PLAYER_RUN' = 'PLAYER_RUN';
 export const PLAYER_STOPED_RUN: 'PLAYER_STOPED_RUN' = 'PLAYER_STOPED_RUN';
 export const PLAYER_ATTACKED: 'PLAYER_ATTACKED' = 'PLAYER_ATTACKED';
-export const PLAYER_STOPED_ATTACK: 'PLAYER_STOPED_ATTACK' = 'PLAYER_STOPED_ATTACK';
-export const PLAYER_STARTED_DESTROYING_BLOCK: 'PLAYER_STARTED_DESTROYING_BLOCK' = 'PLAYER_STARTED_DESTROYING_BLOCK';
-export const PLAYER_DESTROYED_BLOCK: 'PLAYER_DESTROYED_BLOCK' = 'PLAYER_DESTROYED_BLOCK';
-export const PLAYER_START_PUT_BLOCK: 'PLAYER_START_PUT_BLOCK' = 'PLAYER_START_PUT_BLOCK';
+export const PLAYER_STOPED_ATTACK: 'PLAYER_STOPED_ATTACK' =
+  'PLAYER_STOPED_ATTACK';
+export const PLAYER_STARTED_DESTROYING_BLOCK: 'PLAYER_STARTED_DESTROYING_BLOCK' =
+  'PLAYER_STARTED_DESTROYING_BLOCK';
+export const PLAYER_DESTROYED_BLOCK: 'PLAYER_DESTROYED_BLOCK' =
+  'PLAYER_DESTROYED_BLOCK';
+export const PLAYER_START_PUT_BLOCK: 'PLAYER_START_PUT_BLOCK' =
+  'PLAYER_START_PUT_BLOCK';
 export const PLAYER_PUT_BLOCK: 'PLAYER_PUT_BLOCK' = 'PLAYER_PUT_BLOCK';
 
 type Event<Type, Payload, Network = false> = Readonly<{
-  type: Type,
-  payload: Payload,
-  network: Network,
-}>
+  type: Type;
+  payload: Payload;
+  network: Network;
+}>;
 
-export type PLAYER_DESTROYED_BLOCK_TYPE = Event<typeof PLAYER_DESTROYED_BLOCK, Readonly<{
-  geoId: string,
-  positionInChunk: [number, number, number],
-  dispatchable: boolean;
-}>>
+export type PLAYER_DESTROYED_BLOCK_TYPE = Event<
+  typeof PLAYER_DESTROYED_BLOCK,
+  Readonly<{
+    geoId: string;
+    positionInChunk: [number, number, number];
+    dispatchable: boolean;
+  }>
+>;

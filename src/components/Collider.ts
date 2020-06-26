@@ -1,12 +1,13 @@
 import type { vec3 } from 'gl-matrix';
 import type { Component } from '../../common/ecs/Component';
-import type { Collider as TCollider, COLLIDER_TYPE } from '../physicsThread/physics/Collider';
+import type {
+  Collider as TCollider,
+  COLLIDER_TYPE,
+} from '../physicsThread/physics/Collider';
 import { createAABB } from '../physicsThread/physics/colliders/AABB';
 import { THREAD_PHYSICS } from '../Thread/threadConstants';
 
-const colliderShapes = [
-  createAABB,
-];
+const colliderShapes = [createAABB];
 
 export default class Collider implements Component {
   static threads = [THREAD_PHYSICS];
@@ -28,15 +29,15 @@ export default class Collider implements Component {
   }
 }
 
-
 /**
  * Component to specify object shape to detect collisions
  * @param {COLLIDER_TYPE} type type of the shape to detect collisions
  * @param {Array<vec3>} params params to collider shape constructor.
  */
 export const ColliderComponent = ({
-  type, params,
+  type,
+  params,
 }: {
-  type: COLLIDER_TYPE, params?: Array<vec3>,
-}) =>
-  new Collider(type, ...params);
+  type: COLLIDER_TYPE;
+  params?: Array<vec3>;
+}) => new Collider(type, ...params);

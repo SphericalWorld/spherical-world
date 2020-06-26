@@ -2,8 +2,8 @@ import type { Material } from './Material/Material';
 import Model from './Model';
 
 type Options = Readonly<{
-  model: Model,
-  material: Material,
+  model: Model;
+  material: Material;
 }>;
 
 class GlObject {

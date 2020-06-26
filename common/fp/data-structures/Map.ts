@@ -10,9 +10,7 @@ export default class HashMap<K, V> {
 
   get(key: K): Maybe<V> {
     const item = this.data.get(key);
-    return item === undefined
-      ? Nothing
-      : Just(item);
+    return item === undefined ? Nothing : Just(item);
   }
 
   set(key: K, value: V): void {

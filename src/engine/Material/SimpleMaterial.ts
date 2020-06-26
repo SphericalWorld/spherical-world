@@ -19,10 +19,10 @@ type BlendingMode =
   | typeof BLENDING_MODULATE;
 
 type MaterialOptions = {
-  name?: string,
-  diffuse?: Texture,
-  blendingMode?: BlendingMode,
-  shader: GlShaderProgram,
+  name?: string;
+  diffuse?: Texture;
+  blendingMode?: BlendingMode;
+  shader: GlShaderProgram;
 };
 
 export class SimpleMaterial implements Material {

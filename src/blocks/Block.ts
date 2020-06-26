@@ -5,30 +5,30 @@ import type {
 import BasePropertiesComponent from './components/BasePropertiesComponent';
 
 export type BlockData = {
-  id: number,
-  fallSpeedCap: number,
-  fallAcceleration: number,
-  lightTransparent: boolean,
-  sightTransparent: boolean,
-  selfTransparent: boolean,
-  needPhysics: boolean,
-  baseRemoveTime: number,
+  id: number;
+  fallSpeedCap: number;
+  fallAcceleration: number;
+  lightTransparent: boolean;
+  sightTransparent: boolean;
+  selfTransparent: boolean;
+  needPhysics: boolean;
+  baseRemoveTime: number;
   textures: {
-    top: number,
-    bottom: number,
-    north: number,
-    south: number,
-    west: number,
-    east: number,
-  },
+    top: number;
+    bottom: number;
+    north: number;
+    south: number;
+    west: number;
+    east: number;
+  };
   buffer: {
-    top: number,
-    bottom: number,
-    north: number,
-    south: number,
-    west: number,
-    east: number,
-  },
+    top: number;
+    bottom: number;
+    north: number;
+    south: number;
+    west: number;
+    east: number;
+  };
   putBlock: (
     chunk: ChunkData,
     x: number,
@@ -36,16 +36,12 @@ export type BlockData = {
     z: number,
     value: number,
     plane: number,
-  ) => boolean,
-  getFlags: (number) => number,
-  renderToChunk?: RenderToChunk,
+  ) => boolean;
+  getFlags: (number) => number;
+  renderToChunk?: RenderToChunk;
 };
 
 const Block = <T>(...components: T[]): $Call<Object$Assign, BlockData, T> =>
-  Object.assign(
-    {},
-    BasePropertiesComponent(),
-    ...components,
-  );
+  Object.assign({}, BasePropertiesComponent(), ...components);
 
 export default Block;

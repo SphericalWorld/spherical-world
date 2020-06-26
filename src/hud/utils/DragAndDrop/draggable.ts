@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import dragStore from './dragStore';
 
 type Options<Props> = {
-  active: (props: Props) => boolean,
-  item: (props: Props) => any,
+  active: (props: Props) => boolean;
+  item: (props: Props) => any;
 };
 
 type Result = Readonly<{
@@ -36,19 +36,19 @@ export const useDraggable = <Props>(
     return false;
   };
 
-  useEffect(
-    () => {
-      onDragEnd();
-    },
-    [props],
-  );
+  useEffect(() => {
+    onDragEnd();
+  }, [props]);
 
   if (!options.active(props)) {
     return { isDragging: false, draggable: false };
   }
 
   return {
-    draggable: true, isDragging, onDragStart, onDragEnd,
+    draggable: true,
+    isDragging,
+    onDragStart,
+    onDragEnd,
   };
 };
 

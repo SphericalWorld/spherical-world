@@ -9,7 +9,7 @@ const getContext = () => {
     throw new Error('Can not initialize webgl2 context');
   }
   return gl;
-}
+};
 
 const gl = getContext();
 

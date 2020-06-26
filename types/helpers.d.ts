@@ -1,4 +1,3 @@
-
 export type SetDifference<A, B> = A extends B ? never : A;
 
 export type Diff<T extends object, U extends object> = Pick<
@@ -21,7 +20,7 @@ declare global {
   type Class<T> = new (...args: any[]) => T;
 
   type $Call<Fn extends (...args: any[]) => any> = Fn extends (
-    arg: any
+    arg: any,
   ) => infer RT
     ? RT
     : never;

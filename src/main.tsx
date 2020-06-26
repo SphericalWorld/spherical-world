@@ -13,14 +13,10 @@ setInterval(() => {
   }
 }, 100);
 
-const engineProvider = (
-  network: Network,
-  resourceLoader,
-  ecs: World,
-) => {
+const engineProvider = (network: Network, resourceLoader, ecs: World) => {
   class Engine {
     ecs: World = ecs;
-    lastTime: number = 0;
+    lastTime = 0;
 
     constructor() {
       this.init().catch(console.error);
@@ -31,24 +27,27 @@ const engineProvider = (
       initWebGL();
 
       network.events
-        .filter(e => e.type === 'LOGGED_IN')
+        .filter((e) => e.type === 'LOGGED_IN')
         .subscribe(({ payload }) => {
           localStorage.setItem('userId', payload.data.id);
           const PlayerComp = () => <Player {...payload.data} isMainPlayer />;
-          const SkyboxComp = () =>  <Skybox parent={payload.data.id} />;
+          const SkyboxComp = () => <Skybox parent={payload.data.id} />;
 
           render(PlayerComp, ecs);
           render(SkyboxComp, ecs);
         });
 
       network.events
-        .filter(e => e.type === 'GAME_START')
+        .filter((e) => e.type === 'GAME_START')
         .subscribe(() => {
           resourceLoader.loadAddons();
           requestAnimationFrame(this.gameCycle);
         });
 
-      network.emit('LOGIN', { cookie: 12345, userId: localStorage.getItem('userId') });
+      network.emit('LOGIN', {
+        cookie: 12345,
+        userId: localStorage.getItem('userId'),
+      });
       network.start();
     }
 
@@ -57,7 +56,7 @@ const engineProvider = (
       this.lastTime = time;
       this.ecs.update(delta);
       requestAnimationFrame(this.gameCycle);
-    }
+    };
 
     static initKeyboardActions() {
       // this.keyboard.registerAction({
@@ -90,12 +89,10 @@ const engineProvider = (
       // // this.terrain.draw();
       //
       // gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-
       // this.useShader('diffuse');
     }
   }
   return Engine;
 };
-
 
 export default engineProvider;

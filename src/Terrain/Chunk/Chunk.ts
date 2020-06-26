@@ -18,20 +18,20 @@ const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
 };
 
 type DataBuffers = {
-  vertexBuffer: ArrayBuffer,
-  indexBuffer: ArrayBuffer,
+  vertexBuffer: ArrayBuffer;
+  indexBuffer: ArrayBuffer;
 };
 
 type GLBuffers = {
-  vertexBuffer: WebGLBuffer,
-  indexBuffer: WebGLBuffer,
-  vao: null,
+  vertexBuffer: WebGLBuffer;
+  indexBuffer: WebGLBuffer;
+  vao: null;
 };
 
 type BufferData = Readonly<{
-  index: number,
-  indexCount: number,
-  offset: number,
+  index: number;
+  indexCount: number;
+  offset: number;
 }>;
 
 export default class Chunk extends ChunkBase<Chunk> {
@@ -57,7 +57,10 @@ export default class Chunk extends ChunkBase<Chunk> {
     this.rainfallData = new Uint8Array(rainfallData);
     this.temperatureData = new Uint8Array(temperatureData);
 
-    this.frustum = new Frustum([[x, 0, z], [x + 16, 256, z + 16]]);
+    this.frustum = new Frustum([
+      [x, 0, z],
+      [x + 16, 256, z + 16],
+    ]);
   }
 
   generateFoliageTexture() {
@@ -65,7 +68,8 @@ export default class Chunk extends ChunkBase<Chunk> {
     for (let i = 0; i < 256; i += 1) {
       const rainfall = 255 - this.rainfallData[i];
       const temperature = 255 - this.temperatureData[i];
-      const index = ((256 * rainfall) + Math.floor((temperature * rainfall) / 256)) * 4;
+      const index =
+        (256 * rainfall + Math.floor((temperature * rainfall) / 256)) * 4;
       dataArray[i * 3] = this.terrain.foliageColorMap[index];
       dataArray[i * 3 + 1] = this.terrain.foliageColorMap[index + 1];
       dataArray[i * 3 + 2] = this.terrain.foliageColorMap[index + 2];
@@ -73,7 +77,17 @@ export default class Chunk extends ChunkBase<Chunk> {
     const texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 0);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, 16, 16, 0, gl.RGB, gl.UNSIGNED_BYTE, dataArray);
+    gl.texImage2D(
+      gl.TEXTURE_2D,
+      0,
+      gl.RGB,
+      16,
+      16,
+      0,
+      gl.RGB,
+      gl.UNSIGNED_BYTE,
+      dataArray,
+    );
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     this.foliageTexture = texture;
@@ -84,7 +98,7 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   bindVBO(buffers: DataBuffers, buffersInfo: ReadonlyArray<BufferData>) {
-    const { shader } = (this.terrain.material as { shader: ChunkProgram });
+    const { shader } = this.terrain.material as { shader: ChunkProgram };
 
     if (!timeOld) {
       timeOld = Date.now();
@@ -120,7 +134,14 @@ export default class Chunk extends ChunkBase<Chunk> {
     gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
 
     gl.enableVertexAttribArray(shader.aVertexGlobalColor);
-    gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
+    gl.vertexAttribPointer(
+      shader.aVertexGlobalColor,
+      1,
+      gl.FLOAT,
+      false,
+      40,
+      36,
+    );
 
     gl.bindVertexArray(null);
 

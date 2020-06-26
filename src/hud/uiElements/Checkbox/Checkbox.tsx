@@ -11,24 +11,20 @@ import {
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';
 
-export type Size =
-  | typeof SIZE_SMALL
-  | typeof SIZE_BIG;
+export type Size = typeof SIZE_SMALL | typeof SIZE_BIG;
 
 type Props = Readonly<{
   children?: React$Node;
   size?: Size;
   className?: string;
-}>
+}>;
 
 const sizes = {
   [SIZE_SMALL]: small,
   [SIZE_BIG]: big,
 };
 
-const Checkbox = ({
-  size = SIZE_BIG, className = '', children,
-}: Props) => (
+const Checkbox = ({ size = SIZE_BIG, className = '', children }: Props) => (
   <div className={checkboxLabel}>
     <input
       type="checkbox"
@@ -36,7 +32,9 @@ const Checkbox = ({
       name="scales"
       className={`${checkbox} ${sizes[size]} ${className}`}
     />
-    <Label className={checkboxName} size={size}>{children}</Label>
+    <Label className={checkboxName} size={size}>
+      {children}
+    </Label>
   </div>
 );
 

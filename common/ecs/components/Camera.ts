@@ -1,10 +1,11 @@
-import {
-  mat4, vec3,
-} from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 import type { Component } from '../Component';
 import { Networkable } from '../../Networkable';
 
-import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
+import {
+  THREAD_MAIN,
+  THREAD_PHYSICS,
+} from '../../../src/Thread/threadConstants';
 
 export type Viewport = {
   viewportWidth: number;
@@ -17,8 +18,8 @@ export default class Camera implements Component, Networkable {
   static componentName: 'camera' = 'camera';
   static networkable = true;
 
-  yaw: number = 0;
-  pitch: number = 0;
+  yaw = 0;
+  pitch = 0;
   viewport: Viewport = {
     viewportWidth: 0,
     viewportHeight: 0,
@@ -28,7 +29,6 @@ export default class Camera implements Component, Networkable {
   mvMatrix: mat4 = mat4.identity(mat4.create());
   sight: vec3 = vec3.create();
   worldPosition: vec3 = vec3.create();
-
 
   serialize(): unknown {
     return {

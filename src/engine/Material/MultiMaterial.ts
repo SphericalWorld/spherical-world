@@ -4,6 +4,7 @@ import type { TextureImageUnit } from '../Texture/Texture';
 import { TextureImageUnits } from '../Texture/Texture';
 
 import { gl } from '../glEngine';
+
 type Layer = Readonly<{
   material: Material;
   unit: TextureImageUnit;
@@ -13,7 +14,7 @@ export default class MultiMaterial implements Material {
   layers: Layer[] = [];
   name: string | null;
   shader: GlShaderProgram;
-  transparent: boolean = false;
+  transparent = false;
 
   constructor({
     name,

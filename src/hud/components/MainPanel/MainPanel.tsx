@@ -25,30 +25,33 @@ type MappedProps = {
 };
 
 type DispatchProps = {
-  swapSlots: typeof doSwapSlots,
-  selectInventoryItem: typeof doSelectInventoryItem,
+  swapSlots: typeof doSwapSlots;
+  selectInventoryItem: typeof doSelectInventoryItem;
 };
 
 type Props = SpreadTypes<MappedProps, DispatchProps>;
 
 const MainPanel = ({
-  slots, selectedItemIndex, swapSlots, selectInventoryItem,
+  slots,
+  selectedItemIndex,
+  swapSlots,
+  selectInventoryItem,
 }: Props) => {
-  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id), [swapSlots]);
-  useEffect(
-    () => {
-      if (slots[selectedItemIndex]) {
-        selectInventoryItem(slots[selectedItemIndex].id);
-      }
-    },
-    [selectInventoryItem, selectedItemIndex, slots],
+  const swap = useCallback(
+    (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id),
+    [swapSlots],
   );
+  useEffect(() => {
+    if (slots[selectedItemIndex]) {
+      selectInventoryItem(slots[selectedItemIndex].id);
+    }
+  }, [selectInventoryItem, selectedItemIndex, slots]);
 
   return (
     <section className={mainPanelSection}>
       <div className={mainPanel}>
         <ul className={itemsContainer}>
-          { slots.map((slot, index) => (
+          {slots.map((slot, index) => (
             <InventorySlot
               position={index}
               key={index}
@@ -65,9 +68,7 @@ const MainPanel = ({
             <div className={paginationUp} />
             <div className={paginationDown} />
           </div>
-          <div className={paginationPage}>
-            10
-          </div>
+          <div className={paginationPage}>10</div>
         </div>
       </div>
     </section>
@@ -75,12 +76,12 @@ const MainPanel = ({
 };
 
 const slotsSelector = createSelector(
-  state => state.mainPanel.slots,
-  state => state.hudData.player.inventory.items,
-  (slots, items) => slots.map(el => items[el || ''] || null),
+  (state) => state.mainPanel.slots,
+  (state) => state.hudData.player.inventory.items,
+  (slots, items) => slots.map((el) => items[el || ''] || null),
 );
 
-const mapState = state => ({
+const mapState = (state) => ({
   selectedItemIndex: state.mainPanel.selectedItemIndex,
   slots: slotsSelector(state),
 });
@@ -90,4 +91,7 @@ const mapActions = {
   selectInventoryItem: doSelectInventoryItem,
 };
 
-export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(MainPanel);
+export default connect<Props, {}, _, _, State, _>(
+  mapState,
+  mapActions,
+)(MainPanel);

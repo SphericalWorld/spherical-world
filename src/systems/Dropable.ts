@@ -11,7 +11,11 @@ export default (world: World): System => {
 
   const dropableSystem = (delta: number) =>
     dropableItems.map(({ id, transform }) => {
-      quat.rotateY(transform.rotation, transform.rotation, delta * ROTATION_SPEED);
+      quat.rotateY(
+        transform.rotation,
+        transform.rotation,
+        delta * ROTATION_SPEED,
+      );
       return [id, transform];
     });
   return dropableSystem;

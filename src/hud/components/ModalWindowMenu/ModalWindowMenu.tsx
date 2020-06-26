@@ -11,26 +11,22 @@ import {
   cornerRightBottom,
 } from './modalWindowMenu.module.scss';
 
-type Props = {
+type Props = Readonly<{
   caption: string;
-  children?: ReactNode,
-}
+  children?: ReactNode;
+}>;
 
-const ModalWindowMenu = ({ caption, children }: Props) => (
+const ModalWindowMenu = ({ caption, children }: Props): JSX.Element => (
   <div className={wrapper}>
     <div className={inner}>
-      <header className={label}>
-        {caption}
-      </header>
+      <header className={label}>{caption}</header>
       <div className={frame}>
         <div className={cornerLeftTop} />
         <div className={cornerLeftBottom} />
         <div className={cornerRightTop} />
         <div className={cornerRightBottom} />
       </div>
-      <section>
-        {children}
-      </section>
+      <section>{children}</section>
     </div>
   </div>
 );

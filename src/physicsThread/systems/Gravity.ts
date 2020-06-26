@@ -14,15 +14,14 @@ export default (ecs: World, terrain: Terrain): System => {
     const result = [];
     for (const { id, velocity, transform } of components) {
       let acceleration = 9.81;
-      getBlock(terrain)(...transform.translation)
-        .map((block) => {
-          acceleration *= blocksInfo[block].fallAcceleration;
-          velocity.linear[1] -= (acceleration * delta);
-          if (velocity.linear[1] < blocksInfo[block].fallSpeedCap) {
-            velocity.linear[1] = blocksInfo[block].fallSpeedCap;
-          }
-          result.push([id, velocity]);
-        });
+      getBlock(terrain)(...transform.translation).map((block) => {
+        acceleration *= blocksInfo[block].fallAcceleration;
+        velocity.linear[1] -= acceleration * delta;
+        if (velocity.linear[1] < blocksInfo[block].fallSpeedCap) {
+          velocity.linear[1] = blocksInfo[block].fallSpeedCap;
+        }
+        result.push([id, velocity]);
+      });
     }
 
     return result;

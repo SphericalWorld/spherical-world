@@ -4,8 +4,8 @@ export interface Foldable<A> {
       previousValue: B,
       currentValue: A,
       currentIndex: number,
-      array: Foldable<A>
+      array: Foldable<A>,
     ) => B,
-    initialValue: B
+    initialValue: B,
   ): B;
 }

@@ -5,13 +5,16 @@ import Label from '../../../uiElements/Label';
 import { labelCommandGroup } from './statusPanel.module.scss';
 
 type StateProps = {
-  statusText: string,
+  statusText: string;
 };
 
 type Props = StateProps;
 
-const StatusPanel = ({ statusText }: Props) =>
-  <Label size="small" className={labelCommandGroup}>{statusText}</Label>;
+const StatusPanel = ({ statusText }: Props) => (
+  <Label size="small" className={labelCommandGroup}>
+    {statusText}
+  </Label>
+);
 
 const mapState = (state: State) => ({
   statusText: state.keyBindings.status,

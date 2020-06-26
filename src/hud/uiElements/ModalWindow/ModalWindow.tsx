@@ -12,20 +12,20 @@ import {
 
 type Props = Readonly<{
   caption: string;
-  children?: ReactNode,
+  children?: ReactNode;
   onClose?: () => unknown;
-}>
+}>;
 
 const ModalWindow = ({ caption, children, onClose }: Props) => (
   <div className={wrapper}>
     <div className={inner}>
       <header className={header}>
         <Label className={inventoryName}>{caption}</Label>
-        <Button onClick={onClose} size="small" className={buttonClose}>❌</Button>
+        <Button onClick={onClose} size="small" className={buttonClose}>
+          ❌
+        </Button>
       </header>
-      <section>
-        {children}
-      </section>
+      <section>{children}</section>
     </div>
   </div>
 );

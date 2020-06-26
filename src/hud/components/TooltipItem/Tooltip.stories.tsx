@@ -9,10 +9,8 @@ const item = {
   speedAttack: 30,
   icon: 'diamond',
   attackSpeed: 319,
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat enim ex, in dignissim felis gravida vitae.',
+  description:
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed volutpat enim ex, in dignissim felis gravida vitae.',
 };
 
-storiesOf('Tooltip', module)
-  .add('Tooltip item', () => (
-    <Tooltip item={item} />
-  ));
+storiesOf('Tooltip', module).add('Tooltip item', () => <Tooltip item={item} />);

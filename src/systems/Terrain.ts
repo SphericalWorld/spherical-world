@@ -8,33 +8,40 @@ import Camera from '../components/Camera';
 import Transform from '../components/Transform';
 import { CHUNK_LOADED } from '../Terrain/terrainConstants';
 
-const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) => network.events
-  .filter(e => e.type === 'loadChunk')
-  .subscribe(({ type, payload }) => {
-    const data = new SharedArrayBuffer(payload.binaryData.byteLength); // eslint-disable-line no-undef
-    const viewOld = new Uint8Array(payload.binaryData);
-    const viewNew = new Uint8Array(data);
+const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
+  network.events
+    .filter((e) => e.type === 'loadChunk')
+    .subscribe(({ type, payload }) => {
+      const data = new SharedArrayBuffer(payload.binaryData.byteLength); // eslint-disable-line no-undef
+      const viewOld = new Uint8Array(payload.binaryData);
+      const viewNew = new Uint8Array(data);
 
-    for (let i = 0; i < payload.binaryData.byteLength; i += 1) {
-      viewNew[i] = viewOld[i];
-    }
+      for (let i = 0; i < payload.binaryData.byteLength; i += 1) {
+        viewNew[i] = viewOld[i];
+      }
 
-    const lightData = new SharedArrayBuffer(payload.binaryData.byteLength * 2); // eslint-disable-line no-undef
-    // console.log(data, viewNew)
-    terrain.loadChunk(data, lightData, payload.data);
-    ecs.createEventAndDispatch(CHUNK_LOADED, {
-      data, lightData, x: payload.data.x, z: payload.data.z,
+      const lightData = new SharedArrayBuffer(
+        payload.binaryData.byteLength * 2,
+      ); // eslint-disable-line no-undef
+      // console.log(data, viewNew)
+      terrain.loadChunk(data, lightData, payload.data);
+      ecs.createEventAndDispatch(CHUNK_LOADED, {
+        data,
+        lightData,
+        x: payload.data.x,
+        z: payload.data.z,
+      });
     });
-  });
 
-const onChunkVBOLoaded = (ecs: World, terrain: Terrain) => ecs.events
-  .filter(e => e.type === 'CHUNK_VBO_LOADED')
-  .map(e => e.payload)
-  .subscribe(e => terrain.chunks
-    .get(e.geoId)
-    .map((chunk) => {
-      chunk.bindVBO(e.buffers, e.buffersInfo);
-    }));
+const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
+  ecs.events
+    .filter((e) => e.type === 'CHUNK_VBO_LOADED')
+    .map((e) => e.payload)
+    .subscribe((e) =>
+      terrain.chunks.get(e.geoId).map((chunk) => {
+        chunk.bindVBO(e.buffers, e.buffersInfo);
+      }),
+    );
 
 export default (ecs: World, network: Network, terrain: Terrain): System => {
   onChunkLoaded(ecs, network, terrain);
@@ -45,7 +52,11 @@ export default (ecs: World, network: Network, terrain: Terrain): System => {
 
   const terrainSystem = () => {
     const [{ transform }] = player;
-    terrain.chunks = filterFarChunks(oldPosition, transform.translation, terrain.chunks);
+    terrain.chunks = filterFarChunks(
+      oldPosition,
+      transform.translation,
+      terrain.chunks,
+    );
     vec3.copy(oldPosition, transform.translation);
   };
   return terrainSystem;
