@@ -1,4 +1,3 @@
-// @flow strict
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -15,7 +14,7 @@ const mapState = (state) => {
   };
 };
 
-type Props = {|
+type Props = {
   +x: number;
   +y: number;
   +z: number;
@@ -24,7 +23,7 @@ type Props = {|
   +mouseX: number;
   +mouseY: number;
   +mouseZ: number;
-|}
+}
 
 const Panel = ({
   x, y, z, chunkX, chunkZ, mouseX, mouseY, mouseZ,
@@ -71,4 +70,4 @@ const Panel = ({
   </div>
 );
 
-export default connect<Props, {||}, _, _, _, _>(mapState)(Panel);
+export default connect<Props, {}, _, _, _, _>(mapState)(Panel);

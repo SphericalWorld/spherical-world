@@ -43,7 +43,8 @@ module.exports = function override(config, env) {
     ...config.output,
     globalObject: 'this',
   };
-  assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, 'css-modules-flow-types-loader');
+  assetLoaders.find(loader => loader.test.toString().includes('module\\.(scss')).use.splice(1, 0, '@teamsupercell/typings-for-css-modules-loader');
+
   assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);
   if (env === 'production') {
     config.mode = 'development';
