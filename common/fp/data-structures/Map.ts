@@ -21,11 +21,11 @@ export default class HashMap<K, V> {
     this.data.delete(key);
   }
 
-  values(): Iterator<V> {
+  values(): IterableIterator<V> {
     return this.data.values();
   }
 
-  entries(): Iterator<[K, V]> {
+  entries(): IterableIterator<[K, V]> {
     return this.data.entries();
   }
 }

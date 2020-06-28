@@ -33,7 +33,7 @@ export default class MultiMaterial implements Material {
     }));
   }
 
-  use() {
+  use(): void {
     for (let i = 0; i < this.layers.length; i += 1) {
       gl.activeTexture(this.layers[i].unit);
       this.layers[i].material.use();

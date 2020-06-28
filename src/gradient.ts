@@ -13,7 +13,7 @@ class Gradient {
     }
   }
 
-  getAtPosition(pos: number) {
+  getAtPosition(pos: number): number {
     for (let i = 1; i < this.points.length; i += 1) {
       if (this.points[i][0] > pos) {
         const posStart = pos - this.points[i - 1][0];
@@ -31,7 +31,7 @@ class Gradient {
         );
       }
     }
-    return this.points[this.points.length - 1];
+    return this.points[this.points.length - 1][0];
   }
 }
 

@@ -38,7 +38,6 @@ const timeProvider = () => {
   return Time;
 };
 
-declare let tmp: $Call<typeof timeProvider>;
-export type Time = tmp;
+export type Time = ReturnType<typeof timeProvider>;
 
 export default timeProvider;

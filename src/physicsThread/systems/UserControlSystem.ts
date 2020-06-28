@@ -93,8 +93,7 @@ export default (world: World, terrain: Terrain): System => {
       userControls.movingLeft ||
       userControls.movingRight
     ) {
-      const movingX = Number(userControls.movingForward);
-      Number(userControls.movingBackward);
+      const movingX = Number(userControls.movingForward) - Number(userControls.movingBackward);
       const movingZ = Number(userControls.movingLeft) - Number(userControls.movingRight);
       const angle = getAngle(movingX, movingZ);
       const rotation = quat.rotateY(quat.create(), transform.rotation, angle);
@@ -132,7 +131,7 @@ export default (world: World, terrain: Terrain): System => {
     moveEvents.clear();
     jumpEvents.clear();
     runEvents.clear();
-    return [[id, userControls, velocity]];
+    return [[id, userControls]];
   };
   return userControlSystem;
 };

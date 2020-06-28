@@ -446,7 +446,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     );
   }
 
-  prepareLight() {
+  prepareLight(): void {
     for (let x = 0; x < CHUNK_WIDTH; x += 1) {
       for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
@@ -557,7 +557,7 @@ export default class Chunk extends ChunkBase<Chunk> {
   }
 
   updateState(): void {
-    const updateState = (chunk) =>
+    const updateState = (chunk: Chunk) =>
       chunk.state !== CHUNK_STATUS_NEED_LOAD_ALL ? chunk.updateState() : null;
     if (this.state === CHUNK_STATUS_NEED_LOAD_ALL) {
       this.state = CHUNK_STATUS_NEED_LOAD_LIGHT;

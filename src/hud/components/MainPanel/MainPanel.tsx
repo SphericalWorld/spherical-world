@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
   mainPanel,
@@ -12,26 +12,21 @@ import {
   mainPanelSection,
 } from './mainPanel.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
-import type { Slot } from '../../../../common/Inventory';
 import type { State } from '../../../reducers/rootReducer';
-import {
-  swapSlots as doSwapSlots,
-  selectInventoryItem as doSelectInventoryItem,
-} from '../Inventory/inventoryActions';
+import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActions';
 
-type MappedProps = {
-  slots: ReadonlyArray<Slot | null>;
-  selectedItemIndex: number;
-};
+const slotsSelector = createSelector(
+  (state: State) => state.mainPanel.slots,
+  (state: State) => state.hudData.player.inventory.items,
+  (slots, items) => slots.map((el) => items[el || ''] || null),
+);
 
-type DispatchProps = {
-  swapSlots: typeof doSwapSlots;
-  selectInventoryItem: typeof doSelectInventoryItem;
-};
+const MainPanel = (): JSX.Element => {
+  const selectedItemIndex = useSelector((state: State) => state.mainPanel.selectedItemIndex);
+  const slots = useSelector((state: State) => slotsSelector(state));
+  const selectInventoryItem = useSelectInventoryItem();
+  const swapSlots = useSwapSlots();
 
-type Props = SpreadTypes<MappedProps, DispatchProps>;
-
-const MainPanel = ({ slots, selectedItemIndex, swapSlots, selectInventoryItem }: Props) => {
   const swap = useCallback(
     (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id),
     [swapSlots],
@@ -70,20 +65,4 @@ const MainPanel = ({ slots, selectedItemIndex, swapSlots, selectInventoryItem }:
   );
 };
 
-const slotsSelector = createSelector(
-  (state) => state.mainPanel.slots,
-  (state) => state.hudData.player.inventory.items,
-  (slots, items) => slots.map((el) => items[el || ''] || null),
-);
-
-const mapState = (state) => ({
-  selectedItemIndex: state.mainPanel.selectedItemIndex,
-  slots: slotsSelector(state),
-});
-
-const mapActions = {
-  swapSlots: doSwapSlots,
-  selectInventoryItem: doSelectInventoryItem,
-};
-
-export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(MainPanel);
+export default MainPanel;

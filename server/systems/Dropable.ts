@@ -28,7 +28,7 @@ export default (world: World, ds: DataStorage): System => {
   }, 2000);
   const deleteItem = deleteGameObject(ds, 'dropableItems');
 
-  getAllGameObjects(ds, 'dropableItems')().then((items) => items.forEach(deserializeItem(world)));
+  getAllGameObjects(ds, 'dropableItems')().then((items) => console.log(items) || items.forEach(deserializeItem(world)));
 
   const dropableSystem = () => {
     syncData();

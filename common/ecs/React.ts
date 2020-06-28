@@ -48,7 +48,7 @@ export const createElement: React$CreateElement = <Props extends { id: Entity },
   return element;
 };
 
-export const render = <T>(component: StatelessFunctionalComponent<T>, world: World) => {
+export const render = <T>(component: StatelessFunctionalComponent<T>, world: World): void => {
   worlds.stack.push(world);
   createElement(component, null);
 };

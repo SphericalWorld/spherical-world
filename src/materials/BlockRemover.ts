@@ -2,7 +2,7 @@ import type { ShaderLibrary } from '../engine/ShaderLibrary';
 import { SimpleMaterial, BLENDING_ADDITIVE } from '../engine/Material/SimpleMaterial';
 import TextureLibrary from '../engine/Texture/TextureLibrary';
 
-export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) =>
+export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary): SimpleMaterial =>
   new SimpleMaterial({
     name: 'blockRemover',
     diffuse: textureLibrary.get('blockDamaged'),

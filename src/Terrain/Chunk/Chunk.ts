@@ -86,7 +86,7 @@ export default class Chunk extends ChunkBase<Chunk> {
     return this.frustum.boxInFrustum(m);
   }
 
-  bindVBO(buffers: DataBuffers, buffersInfo: ReadonlyArray<BufferData>) {
+  bindVBO(buffers: DataBuffers, buffersInfo: ReadonlyArray<BufferData>): void {
     const { shader } = this.terrain.material as { shader: ChunkProgram };
 
     if (!timeOld) {

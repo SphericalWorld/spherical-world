@@ -23,7 +23,7 @@ const getMaterial = (diffuse) =>
     blendingMode: BLENDING_TRANSPARENT,
   });
 
-export const TextBillboard = ({ parent, position, text }: Props) => {
+export const TextBillboard = ({ parent, position, text }: Props): JSX.Element => {
   const texture = makeTextureFromText(text);
   const material = getMaterial(texture);
   const object = new GlObject({ model, material });

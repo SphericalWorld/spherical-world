@@ -54,6 +54,14 @@ type Props = {
   isMainPlayer: boolean;
 };
 
+// declare global {
+//   namespace JSX {
+//     interface IntrinsicElements {
+//       transform: { qwe: number };
+//     }
+//   }
+// }
+
 export const Player = ({
   id,
   transform,
@@ -67,6 +75,7 @@ export const Player = ({
   //
   return (
     <GameObject id={id}>
+      {/* <transform qwe="asd" /> */}
       <Transform {...transform} />
       <Collider
         type={COLLIDER_AABB}

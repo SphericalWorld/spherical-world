@@ -48,7 +48,7 @@ class Model {
     gl.bindVertexArray(null);
   }
 
-  loadFromJson(model: MeshJSON, scale? = 1) {
+  loadFromJson(model: MeshJSON, scale? = 1): void {
     const size = Math.max(...model.vertexPositions);
     let vertexPositions = model.vertexPositions.map((el) => el / size);
     if (scale) {

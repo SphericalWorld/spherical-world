@@ -11,8 +11,7 @@ export default (ecs: World, terrain: Terrain): System => {
   const components = ecs.createSelector([Gravity, Velocity, Transform]);
 
   const gravitySystem = (delta: number) => {
-    const result = [];
-    for (const { id, velocity, transform } of components) {
+    for (const { velocity, transform } of components) {
       let acceleration = 9.81;
       getBlock(terrain)(...transform.translation).map((block) => {
         acceleration *= blocksInfo[block].fallAcceleration;
@@ -20,11 +19,8 @@ export default (ecs: World, terrain: Terrain): System => {
         if (velocity.linear[1] < blocksInfo[block].fallSpeedCap) {
           velocity.linear[1] = blocksInfo[block].fallSpeedCap;
         }
-        result.push([id, velocity]);
       });
     }
-
-    return result;
   };
   return gravitySystem;
 };

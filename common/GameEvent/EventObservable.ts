@@ -16,12 +16,12 @@ export default class EventObservable<T> implements Filterable<T>, Functor<T> {
     return queue;
   }
 
-  subscribe(observer: (T) => unknown) {
+  subscribe(observer: (T) => unknown): void {
     this.subscriptions.push(this);
     this.observer = observer;
   }
 
-  emit(event: T) {
+  emit(event: T): void {
     for (let i = 0; i < this.subscriptions.length; i += 1) {
       let mappedEvent = event;
       for (let j = 0; j < this.subscriptions[i].pipeline.length; j += 1) {

@@ -9,10 +9,9 @@ const ROTATION_SPEED = 1;
 export default (world: World): System => {
   const dropableItems = world.createSelector([Transform, Item]);
 
-  const dropableSystem = (delta: number) =>
-    dropableItems.map(({ id, transform }) => {
+  return (delta: number) => {
+    for (const { transform } of dropableItems) {
       quat.rotateY(transform.rotation, transform.rotation, delta * ROTATION_SPEED);
-      return [id, transform];
-    });
-  return dropableSystem;
+    }
+  };
 };

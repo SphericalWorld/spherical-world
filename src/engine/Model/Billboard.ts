@@ -4,7 +4,7 @@ import Model from './Model';
 const indices = new Uint16Array([0, 3, 1, 0, 2, 3]);
 const textureCoords = new Float32Array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]);
 
-const createBillboard = (size = 1.0) => {
+const createBillboard = (size = 1.0): Model => {
   const model = new Model();
   const halfSize = size / 2;
   gl.bindBuffer(gl.ARRAY_BUFFER, model.vertexBuffer);

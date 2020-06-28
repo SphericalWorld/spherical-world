@@ -2,7 +2,7 @@ import { SimpleMaterial } from '../engine/Material/SimpleMaterial';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 import type TextureLibrary from '../engine/Texture/TextureLibrary';
 
-export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) =>
+export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary): SimpleMaterial =>
   new SimpleMaterial({
     name: 'terrainDiffuse',
     shader: shaderLibrary.get('chunk'),

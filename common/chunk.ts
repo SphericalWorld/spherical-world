@@ -13,7 +13,7 @@ export const getIndex = (x: number, y: number, z: number): number => x | (z << 4
 
 export const toChunkPosition = (dimension: number): number => Math.floor(dimension / 16) * 16;
 
-export const toPositionInChunk = (dimension: number) => Math.floor(dimension) & 0xf;
+export const toPositionInChunk = (dimension: number): number => Math.floor(dimension) & 0xf;
 
 export const filterFarChunks = <T extends { x: number; z: number }>(
   oldPosition: vec3,

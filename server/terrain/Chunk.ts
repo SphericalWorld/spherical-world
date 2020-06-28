@@ -46,7 +46,7 @@ class Chunk {
   data: Buffer;
   flags: Buffer;
   chunkGenerator: ChunkGenerator;
-  changesCount: number;
+  changesCount = 0;
   terrainGenerated = false;
   objectsGenerated = false;
   northChunk: Chunk;

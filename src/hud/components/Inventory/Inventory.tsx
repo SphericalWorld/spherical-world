@@ -7,7 +7,7 @@ import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
 import { setUIState as doSetUIState } from '../../utils/StateRouter';
-import { swapSlots as doSwapSlots } from './inventoryActions';
+import { useSwapSlots } from './inventoryActions';
 import {
   inventory,
   inventorySlots,
@@ -48,7 +48,9 @@ const Footer = () => (
   </footer>
 );
 
-const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
+const Inventory = ({ setUIState, slots }: Props) => {
+  const swapSlots = useSwapSlots();
+
   const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
   const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [
     swapSlots,
@@ -80,18 +82,17 @@ const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
 };
 
 const slotsSelector = createSelector(
-  (state) => state.hudData.player.inventory.slots,
-  (state) => state.hudData.player.inventory.items,
+  (state: State) => state.hudData.player.inventory.slots,
+  (state: State) => state.hudData.player.inventory.items,
   (slots, items) => slots.map((el) => items[el || ''] || null),
 );
 
-const mapState = (state) => ({
+const mapState = (state: State) => ({
   slots: slotsSelector(state),
 });
 
 const mapActions = {
   setUIState: doSetUIState,
-  swapSlots: doSwapSlots,
 };
 
 export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(Inventory);

@@ -26,6 +26,7 @@ const mainProvider = async () => {
     user: 'root',
     password: 'example',
   });
+  // await db.connection.db('sphericalWorld').dropDatabase();
   const ds = createDataStorage(db);
   const Server = serverProvider(world, createTerrain(createItem(world)));
   const server = new Server();

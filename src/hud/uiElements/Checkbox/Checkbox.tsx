@@ -18,7 +18,7 @@ const sizes = {
   [SIZE_BIG]: big,
 };
 
-const Checkbox = ({ size = SIZE_BIG, className = '', children }: Props) => (
+const Checkbox = ({ size = SIZE_BIG, className = '', children }: Props): JSX.Element => (
   <div className={checkboxLabel}>
     <input
       type="checkbox"

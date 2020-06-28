@@ -2,7 +2,7 @@ import React from 'react';
 import { Label, ProgressBar } from '../../uiElements';
 import { content, stats, statsInner, name, imgPlayer } from './playerStats.module.scss';
 
-const PlayerStats = () => (
+const PlayerStats = (): JSX.Element => (
   <div className={content}>
     <div className={stats}>
       <div className={statsInner}>

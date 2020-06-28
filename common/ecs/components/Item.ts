@@ -9,4 +9,4 @@ export default class Item implements Component {
 /**
  * Component to mark entity a pickable item
  */
-export const ItemComponent = (_: {}): JSX.Element => new Item();
+export const ItemComponent = (): JSX.Element => new Item();

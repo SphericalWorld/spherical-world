@@ -3,6 +3,7 @@ import type { Component } from '../Component';
 import type { Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
+import type { MemoryManager } from '../MemoryManager';
 
 const ZERO_VECTOR = vec3.create();
 const ZERO_QUAT = quat.create();
@@ -11,27 +12,26 @@ export default class Transform implements Component, Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'transform' = 'transform';
   static networkable = true;
-  static memory: SharedArrayBuffer;
+  static memoryManager: MemoryManager;
+  static memorySize = 4 * 3 + 4 * 4;
 
-  translation: vec3;
-  rotation: quat;
+  translation: vec3 = Transform.memoryManager.getVec3();
+  rotation: quat = Transform.memoryManager.getQuat();
   parent: Entity | null;
   offset: number;
 
-  constructor(
-    translation: vec3 = ZERO_VECTOR,
-    rotation: quat = ZERO_QUAT,
-    parent?: Entity,
-    offset: number,
-  ) {
-    const mem = new Int32Array(Transform.memory);
-    if (!offset) {
-      mem[0] += 8 * 3 + 8 * 4;
-    }
-    this.offset = offset || mem[0];
-
-    this.translation = new Float64Array(Transform.memory, this.offset, 3);
-    this.rotation = new Float64Array(Transform.memory, this.offset + 8 * 3, 4);
+  constructor({
+    translation = ZERO_VECTOR,
+    rotation = ZERO_QUAT,
+    parent,
+    offset,
+  }: {
+    translation: vec3;
+    rotation: quat;
+    parent?: Entity;
+    offset: number;
+  }) {
+    this.offset = offset;
 
     vec3.copy(this.translation, translation);
     quat.copy(this.rotation, rotation);
@@ -39,10 +39,10 @@ export default class Transform implements Component, Networkable {
     this.parent = parent;
   }
 
-  static deserialize(data: Transform): Transform {
-    const res = new Transform(data.translation, data.rotation);
-    return res;
-  }
+  // static deserialize(data: Transform): Transform {
+  //   const res = new Transform(data);
+  //   return res;
+  // }
 
   serialize(): unknown {
     return {
@@ -51,8 +51,6 @@ export default class Transform implements Component, Networkable {
     };
   }
 }
-
-Transform.memory = new ArrayBuffer(1024 * 1024);
 
 export type TransformProps = {
   translation?: vec3;
@@ -69,4 +67,12 @@ export const TransformComponent = ({
   translation,
   parent,
   rotation,
-}: TransformProps): JSX.Element => new Transform(translation, rotation, parent);
+}: TransformProps): JSX.Element => ({
+  type: Transform,
+  props: {
+    translation,
+    parent,
+    rotation,
+  },
+  key: null,
+}); // new Transform(translation, rotation, parent);

@@ -1,4 +1,4 @@
-FROM node:10.8.0-alpine
+FROM node:14.4.0-alpine3.10
 WORKDIR /usr/src
 EXPOSE 8080
 VOLUME /usr/src/source

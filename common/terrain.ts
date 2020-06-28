@@ -14,7 +14,7 @@ type ColorComponentBitShifts =
   | typeof BLUE_COLOR_BIT_SHIFT
   | typeof SUN_COLOR_BIT_SHIFT;
 
-export const getColorComponent = (light: number, shift: ColorComponentBitShifts) =>
+export const getColorComponent = (light: number, shift: ColorComponentBitShifts): number =>
   0.8 ** (15 - ((light >>> shift) & 0xf));
 
 export const getColorComponents = (light: number) => [

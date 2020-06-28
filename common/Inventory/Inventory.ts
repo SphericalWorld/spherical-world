@@ -33,7 +33,7 @@ export const createInventory = ({
   selectedItem,
 });
 
-export const putItem = ({ slots, items }: Inventory, item: Slot) => {
+export const putItem = ({ slots, items }: Inventory, item: Slot): void => {
   const freeSlot = slots.findIndex((slot) => !slot);
   if (freeSlot === -1) return;
   slots[freeSlot] = item.id;

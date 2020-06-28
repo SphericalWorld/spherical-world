@@ -6,7 +6,8 @@ import type { transform } from './EntityManager';
 import { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
-import { Transform } from '../../src/components';
+import { MemoryManager } from './MemoryManager';
+import { THREAD_PHYSICS } from '../../src/Thread/threadConstants';
 
 type SerializedComponent = {
   type: string;
@@ -42,7 +43,7 @@ export class World {
   lastDeletedObjects = [];
   objects: Map<Entity, any> = new Map();
   changedData: Map<Class<Component>, Map<string, Component>>;
-
+  memoryManager: MemoryManager = new MemoryManager();
   constructor(thread: THREAD_ID) {
     this.thread = thread;
   }
@@ -50,7 +51,11 @@ export class World {
   registerThread(thread: Thread): void {
     this.threads.push(thread);
     this.threadsMap.set(thread.id, thread);
+    if (thread.id === THREAD_PHYSICS)
+      thread.postMessage({ type: 'dataArray', payload: this.memoryManager.memory });
+
     thread.events.subscribe(({ type, payload }) => {
+      // console.log(type);
       if (type === 'CREATE_ENTITY') {
         this.addExistedEntity(payload.id, ...payload.components);
       } else if (type === 'UPDATE_COMPONENTS') {
@@ -61,15 +66,14 @@ export class World {
           }
         }
       } else if (type === 'dataArray') {
-        this.componentTypes.forEach((component) => {
-          component.memory = payload;
-        });
+        this.memoryManager.memory = payload;
       }
     });
   }
 
   registerComponentTypes(...componentTypes: Function[]): void {
     for (const componentType of componentTypes) {
+      componentType.memoryManager = this.memoryManager;
       this.componentTypes.set(componentType.name, componentType);
       this.components.set(componentType.name, new Map());
     }
@@ -130,7 +134,7 @@ export class World {
     this.eventsForThreads = [];
   }
 
-  updateComponents(components: Array<SerializedComponent>) {
+  updateComponents(components: Array<SerializedComponent>): void {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       for (const [key, data] of component.data) {
@@ -172,16 +176,11 @@ export class World {
   addExistedEntity(id: Entity, ...components: SerializedComponent[]): void {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
-      // console.log(component.type === 'Transform')
-      if (component.type !== 'Transform') {
+      if (!component.data.offset) {
         component.data = Object.assign(Reflect.construct(constructor, []), component.data);
       } else {
-        component.data = new Transform(
-          component.data.translation,
-          component.data.rotation,
-          component.data.parent,
-          component.data.offset,
-        );
+        this.memoryManager.useAlocatedMemory(component.data.offset);
+        component.data = Reflect.construct(constructor, [component.data]);
       }
       const threadConstructor =
         constructor.threadsConstructors && constructor.threadsConstructors[this.thread];
@@ -196,7 +195,13 @@ export class World {
     id: Entity | null,
     ...components: T
   ): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
+    const createComponentInstance = (component) => {
+      const offset = this.memoryManager.allocate(component.type);
+      component.props.offset = offset;
+      return new component.type(component.props);
+    };
     const entityId = id !== null ? id : EntityManager.generateId();
+    components = components.map((el) => (el.type ? createComponentInstance(el) || el : el));
     for (const thread of this.threads) {
       const componentsToAdd = components
         .filter((el) => el.constructor.threads.includes(thread.id))

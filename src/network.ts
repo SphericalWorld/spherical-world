@@ -27,11 +27,11 @@ class Network {
    * to call proper handler */
   requestBinaryData = null;
 
-  processBinaryData(data: ArrayBuffer) {
+  processBinaryData(data: ArrayBuffer): void {
     this.requestBinaryData = inflate(new Uint8Array(data));
   }
 
-  processAction(message: MessageEvent) {
+  processAction(message: MessageEvent): void {
     this.events.emit({
       type: message.type,
       payload: {

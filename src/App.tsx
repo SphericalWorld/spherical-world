@@ -7,18 +7,10 @@ import ChunksHandlerThread from 'worker-loader!./chunksHandlerThread/index';
 import store from './store/store';
 import Network from './network';
 import Hud from './hud/Hud';
-import { Transform } from './components';
 
 const physicsThread = new PhysicsThread();
 const chunksHandlerThread = new ChunksHandlerThread();
 const network = new Network();
-
-// TODO: proper memory allocator
-const data = new SharedArrayBuffer(1024 * 1024 * 10); // eslint-disable-line no-undef
-physicsThread.postMessage({ type: 'dataArray', payload: data });
-Transform.memory = data;
-// console.log(data);
-// componentsProvider.Transform.memory = data
 
 const App = (): JSX.Element => (
   <Provider store={store}>

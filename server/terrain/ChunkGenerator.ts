@@ -32,7 +32,7 @@ import {
   REEDS,
 } from '../../common/blocks';
 
-type ChunkLiftIO = ({ chunk: Chunk, height: number, x: number, z: number }) => IO<Chunk>;
+type ChunkLiftIO = (block: { chunk: Chunk; height: number; x: number; z: number }) => IO<Chunk>;
 
 type GetBlock = (x: number, y: number, z: number, chunk: Chunk) => number;
 
@@ -58,7 +58,7 @@ export type ChunkGenerator = Readonly<{
   simplexResourcesCoal: Simplex3D;
   simplexResourcesIron: Simplex3D;
   simplexResourcesClay: Simplex2D;
-  generateTree: $Call<typeof generateTree, any>;
+  generateTree: ReturnType<typeof generateTree>;
 }>;
 
 const createChunkGenerator = (seed: number): ChunkGenerator => ({

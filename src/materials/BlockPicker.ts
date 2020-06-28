@@ -2,7 +2,7 @@ import { SimpleMaterial, BLENDING_TRANSPARENT } from '../engine/Material/SimpleM
 import TextureLibrary from '../engine/Texture/TextureLibrary';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
-export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) =>
+export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary): SimpleMaterial =>
   new SimpleMaterial({
     name: 'blockSelector',
     diffuse: textureLibrary.get('blockSelector'),
