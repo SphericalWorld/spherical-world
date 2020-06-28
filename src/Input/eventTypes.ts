@@ -10,11 +10,7 @@ export const CATEGORY_INTERFACE: 'Interface' = 'Interface';
 export const CATEGORY_COMBAT_AND_BLOCKS: 'Combat & Blocks interaction' =
   'Combat & Blocks interaction';
 
-export const EVENT_CATEGORIES = [
-  CATEGORY_MOVEMENT,
-  CATEGORY_INTERFACE,
-  CATEGORY_COMBAT_AND_BLOCKS,
-];
+export const EVENT_CATEGORIES = [CATEGORY_MOVEMENT, CATEGORY_INTERFACE, CATEGORY_COMBAT_AND_BLOCKS];
 
 export type INPUT_TYPE =
   | typeof INPUT_TYPE_ACTION

@@ -2,19 +2,10 @@ import { vec3 } from 'gl-matrix';
 import type { Socket } from './network/socket';
 import type { GameObject } from '../common/ecs/EntityManager';
 import type { World } from '../common/ecs/World';
-import {
-  Transform,
-  Network,
-  PlayerData,
-  Inventory,
-  NetworkSync,
-  Camera,
-} from './components';
+import { Transform, Network, PlayerData, Inventory, NetworkSync, Camera } from './components';
 import { createStubItems } from '../common/Inventory/Inventory';
 
-type SerializedPlayerData = GameObject<
-  [typeof Transform, typeof Inventory, typeof Camera]
->;
+type SerializedPlayerData = GameObject<[typeof Transform, typeof Inventory, typeof Camera]>;
 
 export const playerProvider = (world: World) => (
   playerData: SerializedPlayerData | null,

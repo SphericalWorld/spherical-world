@@ -119,23 +119,13 @@ class GlTextureLibrary {
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (const texture of this.textures.values()) {
       if (typeof texture.id !== 'undefined') {
-        this.ctx.drawImage(
-          texture.image,
-          texture.id % 16,
-          Math.floor(texture.id / 16),
-          1,
-          1,
-        );
+        this.ctx.drawImage(texture.image, texture.id % 16, Math.floor(texture.id / 16), 1, 1);
       }
     }
     const pixelData = this.ctx.getImageData(0, 0, 16, 16);
     const atlas = [];
     for (let i = 0; i < pixelData.data.length / 4; i += 1) {
-      atlas.push([
-        pixelData.data[i * 4],
-        pixelData.data[i * 4 + 1],
-        pixelData.data[i * 4 + 2],
-      ]);
+      atlas.push([pixelData.data[i * 4], pixelData.data[i * 4 + 1], pixelData.data[i * 4 + 2]]);
     }
     // atlas.reverse();
     // console.log(atlas)
@@ -193,13 +183,9 @@ class GlTextureLibrary {
   }
 }
 
-export const makeTextureFromText = (
-  textToWrite: string,
-  textSize = 56,
-): Texture => {
+export const makeTextureFromText = (textToWrite: string, textSize = 56): Texture => {
   ctx.font = `bold ${textSize}px monospace`;
-  textureCanvas.width =
-    2 ** Math.ceil(Math.log2(ctx.measureText(textToWrite).width));
+  textureCanvas.width = 2 ** Math.ceil(Math.log2(ctx.measureText(textToWrite).width));
   textureCanvas.height = 2 ** Math.ceil(Math.log2(2 * textSize));
   if (textureCanvas.width > textureCanvas.height) {
     textureCanvas.height = textureCanvas.width;

@@ -28,4 +28,4 @@ export default class Raytracer implements Component {
 /**
  * Component to change position of Entity by moving it to 3D world cursor position
  */
-export const RaytracerComponent: React.FC<{}> = (_: {}) => new Raytracer();
+export const RaytracerComponent = (_: {}): JSX.Element => new Raytracer();

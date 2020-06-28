@@ -1,6 +1,7 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 
-const Air = () =>
+const Air = (): BlockData =>
   Block({
     id: 0,
     lightTransparent: true,

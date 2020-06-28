@@ -7,7 +7,7 @@ import { SET_KEY, KEY_EDITING_STARTED } from './keyBindingsConstants';
 import { KEY_SELECT_BUTTON } from '../../hudConstants';
 
 const getKeyCategories = () =>
-  (Object.values(events) as ReadonlyArray<ValueOf<typeof events>>)
+  Object.values(events)
     .filter((event) => 'caption' in event)
     .reduce(
       (categories, event) => {

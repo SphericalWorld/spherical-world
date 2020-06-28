@@ -1,7 +1,8 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 import { GRASS, GRASS_SIDE, DIRT } from '../engine/Texture/textureConstants';
 
-const Grass = () =>
+const Grass = (): BlockData =>
   Block({
     id: 1,
     buffer: {

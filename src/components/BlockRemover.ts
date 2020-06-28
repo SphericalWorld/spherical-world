@@ -15,4 +15,4 @@ export default class BlockRemover implements Component {
 /**
  * Component to allow entity to destroy blocks. Used to destroy blocks by players
  */
-export const BlockRemoverComponent = (_: {}) => new BlockRemover();
+export const BlockRemoverComponent = (_: {}): JSX.Element => new BlockRemover();

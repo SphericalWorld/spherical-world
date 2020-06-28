@@ -4,10 +4,7 @@ import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { gl } from '../engine/glEngine';
-import {
-  GAMEPLAY_MAIN_CONTEXT,
-  GAMEPLAY_MENU_CONTEXT,
-} from '../Input/inputContexts';
+import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
@@ -55,10 +52,7 @@ const getWorldPositionFar = getWorldPosition(1);
 const getCameraMovements = (world: World) =>
   world.events.filter((el) => el.type === CAMERA_MOVED).subscribeQueue();
 
-const sumCameraMovements = ([x, y], { payload }) => [
-  x + payload.x,
-  y + payload.y,
-];
+const sumCameraMovements = ([x, y], { payload }) => [x + payload.x, y + payload.y];
 
 export default (world: World, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);
@@ -112,12 +106,7 @@ export default (world: World, input: Input): System => {
       viewport: { viewportWidth, viewportHeight, pMatrix },
       mvMatrix,
     } = camera;
-    const worldPosition = getWorldPositionFar(
-      viewportWidth,
-      viewportHeight,
-      pMatrix,
-      mvMatrix,
-    );
+    const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
     const worldPositionNear = getWorldPositionNear(
       viewportWidth,
       viewportHeight,

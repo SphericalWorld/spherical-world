@@ -5,12 +5,7 @@ import type { InputContext } from './InputContext';
 import type { InputContexts } from './inputContexts';
 import type { EventTypes } from '../../common/constants/input/eventTypes';
 import InputEvent from './InputEvent';
-import {
-  activate,
-  deactivate,
-  getMappedInputEvent,
-  setKey as setContextKey,
-} from './InputContext';
+import { activate, deactivate, getMappedInputEvent, setKey as setContextKey } from './InputContext';
 import * as events from './events';
 
 const inputProvider = (inputContexts: InputContext[]) => {
@@ -31,9 +26,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
 
     onEvent(event: InputEvent): void {
       for (let i = 0; i < this.activeContexts.length; i += 1) {
-        getMappedInputEvent(this.activeContexts[i].events, event).map(
-          this.dispatch,
-        );
+        getMappedInputEvent(this.activeContexts[i].events, event).map(this.dispatch);
       }
     }
 

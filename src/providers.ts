@@ -18,11 +18,7 @@ import { World } from '../common/ecs';
 
 import * as componentsProvider from './components';
 
-import {
-  THREAD_PHYSICS,
-  THREAD_CHUNK_HANDLER,
-  THREAD_MAIN,
-} from './Thread/threadConstants';
+import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
 
 import inputProvider from './Input/inputProvider';
 import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
@@ -46,9 +42,7 @@ const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
 
 const getTerrain = () => {
   const terrain = new Terrain();
-  terrain.generateBiomeColorMap(
-    textureLibrary.get('foliageColorMap').glTexture,
-  );
+  terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
   // terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
   terrain.material = materialLibrary.get('terrain');
   return terrain;
@@ -73,11 +67,7 @@ const getMaterials = () => {
   return materialLibrary.add(...materials);
 };
 
-const mainProvider = async (
-  store: Store,
-  network: Network,
-  threads: Threads,
-) => {
+const mainProvider = async (store: Store, network: Network, threads: Threads) => {
   await getTextures();
   getShaders();
   getMaterials();
@@ -92,9 +82,7 @@ const mainProvider = async (
   const inputContexts = inputContextsProvider();
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch((event) => world.dispatch(event));
-  world.registerSystem(
-    ...systemsProvider(world, terrain, network, time, input, store),
-  );
+  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
   initHudAPI(store);
 
   return Main(network, new ResourceLoader(), world);

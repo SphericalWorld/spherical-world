@@ -9,10 +9,8 @@ type Props = Readonly<{
   rareness: Rareness;
 }>;
 
-const TooltipName = ({ name, rareness }: Props) => (
-  <TooltipText className={`${getRarenessColor(rareness)} ${gridArea}`}>
-    {name}
-  </TooltipText>
+const TooltipName = ({ name, rareness }: Props): JSX.Element => (
+  <TooltipText className={`${getRarenessColor(rareness)} ${gridArea}`}>{name}</TooltipText>
 );
 
 export default TooltipName;

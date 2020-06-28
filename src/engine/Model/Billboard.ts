@@ -2,16 +2,7 @@ import { gl } from '../glEngine';
 import Model from './Model';
 
 const indices = new Uint16Array([0, 3, 1, 0, 2, 3]);
-const textureCoords = new Float32Array([
-  0.0,
-  0.0,
-  0.0,
-  1.0,
-  1.0,
-  0.0,
-  1.0,
-  1.0,
-]);
+const textureCoords = new Float32Array([0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 1.0, 1.0]);
 
 const createBillboard = (size = 1.0) => {
   const model = new Model();

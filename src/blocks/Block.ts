@@ -1,7 +1,4 @@
-import type {
-  RenderToChunk,
-  ChunkData,
-} from './components/BasePropertiesComponent';
+import type { RenderToChunk, ChunkData } from './components/BasePropertiesComponent';
 import BasePropertiesComponent from './components/BasePropertiesComponent';
 
 export type BlockData = {
@@ -41,7 +38,7 @@ export type BlockData = {
   renderToChunk?: RenderToChunk;
 };
 
-const Block = <T>(...components: T[]): $Call<Object$Assign, BlockData, T> =>
+const Block = <T extends object>(...components: T[]): SpreadTypes<BlockData, T> =>
   Object.assign({}, BasePropertiesComponent(), ...components);
 
 export default Block;

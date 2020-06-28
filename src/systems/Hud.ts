@@ -27,14 +27,10 @@ const mapState = ({
 });
 
 const onMenuToggled = (events, toggleUIState) =>
-  events
-    .filter((e) => e.type === MENU_TOGGLED)
-    .subscribe(() => toggleUIState(MAIN_MENU));
+  events.filter((e) => e.type === MENU_TOGGLED).subscribe(() => toggleUIState(MAIN_MENU));
 
 const onInventoryToggled = (events, toggleUIState) =>
-  events
-    .filter((e) => e.type === INVENTORY_TOGGLED)
-    .subscribe(() => toggleUIState(INVENTORY));
+  events.filter((e) => e.type === INVENTORY_TOGGLED).subscribe(() => toggleUIState(INVENTORY));
 
 const onDispatchableEvent = (events, store) =>
   events.filter((e) => e.dispatchable).subscribe((e) => store.dispatch(e));
@@ -61,10 +57,8 @@ const onStateChanged = (input, player) => (
 
 export default (ecs: World, store: Store, input: Input): System => {
   const player = ecs.createSelector([Transform, UserControlled, Inventory]);
-  const toggleUIState = (...params) =>
-    store.dispatch(doToggleUIState(...params));
-  const updateHudData = (...params) =>
-    store.dispatch(doUpdateHudData(...params));
+  const toggleUIState = (...params) => store.dispatch(doToggleUIState(...params));
+  const updateHudData = (data) => store.dispatch(doUpdateHudData(data));
 
   onMenuToggled(ecs.events, toggleUIState);
   onInventoryToggled(ecs.events, toggleUIState);

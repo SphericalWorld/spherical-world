@@ -8,9 +8,7 @@ const TooltipContent = () => <div>child in a portal</div>;
 storiesOf('Tooltip', module).add('TooltipTrigger', () => (
   <>
     <div>
-      <TooltipTrigger tooltip={TooltipContent}>
-        hover to show tooltip
-      </TooltipTrigger>
+      <TooltipTrigger tooltip={TooltipContent}>hover to show tooltip</TooltipTrigger>
     </div>
   </>
 ));

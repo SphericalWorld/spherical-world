@@ -5,6 +5,6 @@ const images = {
   ironIngot: imageIronIngot,
 };
 
-const getIcon = (icon: string) => images[icon];
+const getIcon = (icon: 'diamond' | 'ironIngot'): string => images[icon];
 
 export default getIcon;

@@ -14,18 +14,7 @@ type MainPanel = {
   slots: ReadonlyArray<SlotID | null>;
 };
 
-const mockSlots = [
-  'id1',
-  'id2',
-  'id3',
-  'id4',
-  'id5',
-  null,
-  null,
-  null,
-  null,
-  null,
-];
+const mockSlots = ['id1', 'id2', 'id3', 'id4', 'id5', null, null, null, null, null];
 
 const initialState = {
   selectedItemIndex: 0,
@@ -45,8 +34,7 @@ export default createReducer<MainPanel>(initialState, {
   }),
   [PREVIOUS_ITEM_SELECTED]: (state) => ({
     ...state,
-    selectedItemIndex:
-      (state.slots.length + state.selectedItemIndex - 1) % state.slots.length,
+    selectedItemIndex: (state.slots.length + state.selectedItemIndex - 1) % state.slots.length,
   }),
   [SWAP_MAIN_PANEL_ITEMS]: (state, data) => ({
     ...state,

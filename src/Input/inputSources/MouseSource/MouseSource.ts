@@ -27,46 +27,30 @@ export default class MouseSource implements InputSource {
     this.setClickHandlers(document, this.canvas);
     document.addEventListener('mousemove', this.onMove, false);
     document.addEventListener('pointerlockchange', this.changeTracking, false);
-    document.addEventListener(
-      'mozpointerlockchange',
-      this.changeTracking,
-      false,
-    );
-    document.addEventListener(
-      'webkitpointerlockchange',
-      this.changeTracking,
-      false,
-    );
-    document.addEventListener(
-      'contextmenu',
-      (e: MouseEvent) => e.preventDefault(),
-      false,
-    );
+    document.addEventListener('mozpointerlockchange', this.changeTracking, false);
+    document.addEventListener('webkitpointerlockchange', this.changeTracking, false);
+    document.addEventListener('contextmenu', (e: MouseEvent) => e.preventDefault(), false);
   }
 
-  onMove = (e: MouseEvent) => {
+  onMove = (e: MouseEvent): void => {
     this.onEvent(new RangeInputEvent(MOUSE_MOVE, e.movementX, e.movementY));
   };
 
-  onMouseDown = (e: MouseEvent) => {
+  onMouseDown = (e: MouseEvent): void => {
     this.onEvent(new StateInputEvent(keys[e.button], STATE_DOWN));
   };
 
-  onMouseUp = (e: MouseEvent) => {
+  onMouseUp = (e: MouseEvent): void => {
     this.onEvent(new StateInputEvent(keys[e.button], STATE_UP));
   };
 
-  onMouseWheel = (e: WheelEvent) => {
+  onMouseWheel = (e: WheelEvent): void => {
     this.onEvent(
-      new RangeInputEvent(
-        e.deltaY < 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN,
-        e.deltaX,
-        e.deltaY,
-      ),
+      new RangeInputEvent(e.deltaY < 0 ? MOUSE_WHEEL_UP : MOUSE_WHEEL_DOWN, e.deltaX, e.deltaY),
     );
   };
 
-  setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget) => {
+  setClickHandlers = (oldTarget: EventTarget, newTarget: EventTarget): void => {
     oldTarget.removeEventListener('mousedown', this.onMouseDown);
     oldTarget.removeEventListener('mouseup', this.onMouseUp);
     oldTarget.removeEventListener('wheel', this.onMouseWheel);
@@ -75,7 +59,7 @@ export default class MouseSource implements InputSource {
     newTarget.addEventListener('wheel', this.onMouseWheel, false);
   };
 
-  changeTracking = () => {
+  changeTracking = (): void => {
     if (document.pointerLockElement) {
       this.setClickHandlers(this.canvas, document);
     } else {

@@ -17,10 +17,7 @@ export default class ChunkMap<A> implements Functor<A>, Foldable<A> {
   //   return this.data.reduce(reducer, initial);
   // }
 
-  reduce<B>(
-    reducer: (B, A, number, a: A[]) => B,
-    initial?: B = this.data[0],
-  ): B {
+  reduce<B>(reducer: (B, A, number, a: A[]) => B, initial?: B = this.data[0]): B {
     return this.data.reduce(reducer, initial);
   }
 

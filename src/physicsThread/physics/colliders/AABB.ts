@@ -47,11 +47,8 @@ export type AABB = {
   move: (position: vec3) => void;
 };
 
-export const createAABB = (
-  translation: vec3,
-  size: vec3,
-  objectPosition: vec3 | null,
-): AABB => new AABBinner(translation, size, objectPosition);
+export const createAABB = (translation: vec3, size: vec3, objectPosition: vec3 | null): AABB =>
+  new AABBinner(translation, size, objectPosition);
 
 export const testAABBvsAABB = (a: AABB, b: AABB): boolean =>
   a.min[0] < b.max[0] &&
@@ -63,12 +60,9 @@ export const testAABBvsAABB = (a: AABB, b: AABB): boolean =>
 
 export const AABBvsAABB = (a: RigidBody, b: RigidBody): Manifold => {
   const normal = vec3.sub(vec3.create(), a.shape.center, b.shape.center);
-  const xOverlap =
-    a.shape.halfSize[0] + b.shape.halfSize[0] - Math.abs(normal[0]);
-  const yOverlap =
-    a.shape.halfSize[1] + b.shape.halfSize[1] - Math.abs(normal[1]);
-  const zOverlap =
-    a.shape.halfSize[2] + b.shape.halfSize[2] - Math.abs(normal[2]);
+  const xOverlap = a.shape.halfSize[0] + b.shape.halfSize[0] - Math.abs(normal[0]);
+  const yOverlap = a.shape.halfSize[1] + b.shape.halfSize[1] - Math.abs(normal[1]);
+  const zOverlap = a.shape.halfSize[2] + b.shape.halfSize[2] - Math.abs(normal[2]);
 
   if (zOverlap < yOverlap && zOverlap < xOverlap) {
     return createManifold(

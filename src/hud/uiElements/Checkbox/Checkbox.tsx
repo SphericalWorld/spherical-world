@@ -1,12 +1,6 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Label from '../Label';
-import {
-  checkbox,
-  small,
-  big,
-  checkboxLabel,
-  checkboxName,
-} from './checkbox.module.scss';
+import { checkbox, small, big, checkboxLabel, checkboxName } from './checkbox.module.scss';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';
@@ -14,7 +8,7 @@ export const SIZE_BIG: 'big' = 'big';
 export type Size = typeof SIZE_SMALL | typeof SIZE_BIG;
 
 type Props = Readonly<{
-  children?: React$Node;
+  children?: ReactNode;
   size?: Size;
   className?: string;
 }>;

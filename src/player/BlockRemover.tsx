@@ -13,7 +13,7 @@ type Props = Readonly<{
   parent: Entity;
 }>;
 
-export const BlockRemover = ({ parent }: Props) => {
+export const BlockRemover = ({ parent }: Props): JSX.Element => {
   const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockRemover');
   const object = new GlObject({ model, material });

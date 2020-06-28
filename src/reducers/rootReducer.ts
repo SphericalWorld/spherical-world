@@ -22,15 +22,13 @@ const reducers = {
   mainPanel: mainPanelReducer,
 };
 
-type $ExtractFunctionReturn = <V, Args>(v: (...args: Args) => V) => V;
-
 const combinedReducer = combineReducers(reducers);
 
 export type State = {
-  hudData: $Call<$ExtractFunctionReturn, typeof hudReducer>;
-  keyBindings: $Call<$ExtractFunctionReturn, typeof keyBindingsReducer>;
-  uiStates: $Call<$ExtractFunctionReturn, typeof routerReducer>;
-  mainPanel: $Call<$ExtractFunctionReturn, typeof mainPanelReducer>;
+  hudData: ReturnType<typeof hudReducer>;
+  keyBindings: ReturnType<typeof keyBindingsReducer>;
+  uiStates: ReturnType<typeof routerReducer>;
+  mainPanel: ReturnType<typeof mainPanelReducer>;
 };
 
 const rootReducer = reduceReducers<State>(combinedReducer);

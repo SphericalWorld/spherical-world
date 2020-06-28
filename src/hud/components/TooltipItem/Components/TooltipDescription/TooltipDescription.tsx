@@ -6,11 +6,11 @@ type Props = Readonly<{
   description: string;
 }>;
 
-const TooltipDescription = ({ description }: Props) =>
-  typeof description !== 'undefined' && (
+const TooltipDescription = ({ description }: Props): JSX.Element | null =>
+  typeof description !== 'undefined' ? (
     <TooltipText className={`${descriptionTooltip} ${gridArea}`}>
       <span>{description}</span>
     </TooltipText>
-  );
+  ) : null;
 
 export default TooltipDescription;

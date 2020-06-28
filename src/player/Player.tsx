@@ -61,7 +61,7 @@ export const Player = ({
   playerData,
   camera,
   isMainPlayer = false,
-}: Props) => {
+}: Props): JSX.Element => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('skybox'); // 'player'
   //
@@ -70,11 +70,7 @@ export const Player = ({
       <Transform {...transform} />
       <Collider
         type={COLLIDER_AABB}
-        params={[
-          vec3.create(),
-          vec3.fromValues(0.8, 1.8, 0.8),
-          vec3.fromValues(0.4, 0, 0.4),
-        ]}
+        params={[vec3.create(), vec3.fromValues(0.8, 1.8, 0.8), vec3.fromValues(0.4, 0, 0.4)]}
       />
       <Physics />
       <Velocity />
@@ -83,8 +79,8 @@ export const Player = ({
       {isMainPlayer
         ? [<UserControlled />, <Camera {...camera} />]
         : [
-          <Visual object={new GlObject({ model, material })} />,
-          <TextBillboard
+            <Visual object={new GlObject({ model, material })} />,
+            <TextBillboard
               parent={id}
               position={vec3.fromValues(0, 2, 0)}
               text={playerData.name}

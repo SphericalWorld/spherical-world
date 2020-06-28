@@ -77,14 +77,9 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     const chunksToRender = getVisibleChunks(terrain, pMatrix, mvMatrix);
     // terrain.material.shader.use()
     runShader(terrain.material.shader);
-    gl.uniform1f(
-      terrain.material.shader.uTime,
-      time.currentTimeFromStart / 1000,
-    ); // TODO remove
+    gl.uniform1f(terrain.material.shader.uTime, time.currentTimeFromStart / 1000); // TODO remove
 
-    let skyColor = Math.floor(
-      skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)),
-    );
+    let skyColor = Math.floor(skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
     skyColor = [
       ((skyColor & 0xff0000) >> 16) / 256,
       ((skyColor & 0xff00) >> 8) / 256,
@@ -94,9 +89,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
 
     setMatrixUniforms();
 
-    const color = Math.floor(
-      lightColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)),
-    );
+    const color = Math.floor(lightColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
     const globalColor = [
       ((color & 0xff0000) >> 16) / 256,
       ((color & 0xff00) >> 8) / 256,
@@ -104,12 +97,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       1,
     ];
     // console.log(globalColor)s
-    drawOpaqueChunkData(
-      terrain,
-      cameraPosition.translation,
-      skyColor,
-      globalColor,
-    );
+    drawOpaqueChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     const draw = (position: Transform, visual: Visual): void => {
       runShader(visual.glObject.material.shader);
@@ -120,11 +108,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       gl.uniform4f(currentShader.uGlobalColor, ...globalColor);
       mvPushMatrix();
       mat4.translate(mvMatrix, mvMatrix, position.translation);
-      mat4.multiply(
-        mvMatrix,
-        mvMatrix,
-        mat4.fromQuat(mat4.create(), position.rotation),
-      );
+      mat4.multiply(mvMatrix, mvMatrix, mat4.fromQuat(mat4.create(), position.rotation));
       setMatrixUniforms();
       visual.glObject.draw();
       mvPopMatrix();
@@ -157,12 +141,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     gl.enable(gl.BLEND);
 
     runShader(terrain.material.shader);
-    drawTransparentChunkData(
-      terrain,
-      cameraPosition.translation,
-      skyColor,
-      globalColor,
-    );
+    drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
     for (const { transform, visual } of components) {
       if (!visual.glObject.material.transparent || !visual.enabled) {

@@ -1,11 +1,7 @@
 import type { KeyPosition } from './keyBindingsTypes';
 import { SET_KEY, KEY_EDITING_STARTED } from './keyBindingsConstants';
 
-export const setKey = (
-  action: string,
-  firstKey?: string,
-  secondKey?: string,
-) => ({
+export const setKey = (action: string, firstKey?: string, secondKey?: string) => ({
   type: SET_KEY,
   payload: {
     action,

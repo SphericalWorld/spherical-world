@@ -1,10 +1,6 @@
 import React from 'react';
 import TooltipText from '../TooltipText';
-import {
-  templateTooltip,
-  labelTooltip,
-  valueTooltip,
-} from './tooltipTemplate.module.scss';
+import { templateTooltip, labelTooltip, valueTooltip } from './tooltipTemplate.module.scss';
 
 type Props = Readonly<{
   value: number;
@@ -12,15 +8,14 @@ type Props = Readonly<{
   className?: string;
 }>;
 
-const TooltipTemplate = ({ value, name, className = '' }: Props) =>
-  typeof value !== 'undefined' && (
+const TooltipTemplate = ({ value, name, className = '' }: Props): JSX.Element | null =>
+  typeof value !== 'undefined' ? (
     <TooltipText className={`${templateTooltip} ${className}`}>
       <div>
-        <span className={labelTooltip}>
-{name}:</span>
+        <span className={labelTooltip}>{name}:</span>
         <span className={valueTooltip}>{value}</span>
       </div>
     </TooltipText>
-  );
+  ) : null;
 
 export default TooltipTemplate;

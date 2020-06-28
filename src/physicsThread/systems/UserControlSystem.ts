@@ -20,13 +20,9 @@ import Transform from '../../components/Transform';
 import Velocity from '../../components/Velocity';
 import UserControlled from '../../components/UserControlled';
 
-const getAngle = (x, z) => Math.atan2(-z, x);
+const getAngle = (x: number, z: number): number => Math.atan2(-z, x);
 
-const setMove = (
-  userControls: UserControlled,
-  direction,
-  value: boolean,
-): UserControlled => {
+const setMove = (userControls: UserControlled, direction, value: boolean): UserControlled => {
   switch (direction) {
     case DIRECTION_FORWARD:
       userControls.movingForward = value;
@@ -46,11 +42,7 @@ const setMove = (
 };
 
 export default (world: World, terrain: Terrain): System => {
-  const components = world.createSelector([
-    Transform,
-    Velocity,
-    UserControlled,
-  ]);
+  const components = world.createSelector([Transform, Velocity, UserControlled]);
   const moveEvents = world.events
     .filter((el) => el.type === PLAYER_MOVED || el.type === PLAYER_STOPED_MOVE)
     .subscribeQueue();
@@ -69,9 +61,7 @@ export default (world: World, terrain: Terrain): System => {
     if (!components.length) {
       return;
     }
-    const [
-      { id, transform, velocity, userControlled: userControls },
-    ] = components;
+    const [{ id, transform, velocity, userControlled: userControls }] = components;
 
     moveEvents.events.reduce(
       (controls, { type, payload: { direction } }) =>
@@ -105,8 +95,7 @@ export default (world: World, terrain: Terrain): System => {
     ) {
       const movingX = Number(userControls.movingForward);
       Number(userControls.movingBackward);
-      const movingZ =
-        Number(userControls.movingLeft) - Number(userControls.movingRight);
+      const movingZ = Number(userControls.movingLeft) - Number(userControls.movingRight);
       const angle = getAngle(movingX, movingZ);
       const rotation = quat.rotateY(quat.create(), transform.rotation, angle);
 
@@ -133,11 +122,7 @@ export default (world: World, terrain: Terrain): System => {
       transform.translation[1] - 1,
       transform.translation[2],
     ).map((block) => {
-      if (
-        blocksInfo[block].needPhysics &&
-        userControls.isJumping &&
-        velocity.linear[1] === 0
-      ) {
+      if (blocksInfo[block].needPhysics && userControls.isJumping && velocity.linear[1] === 0) {
         velocity.linear[1] += 5;
       } else if (block === 127) {
         userControls.velocity[1] = userControls.isJumping ? 5 : 0;

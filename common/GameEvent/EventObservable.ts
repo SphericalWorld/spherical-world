@@ -39,10 +39,7 @@ export default class EventObservable<T> implements Filterable<T>, Functor<T> {
   filter<U>(predicate: (value: T) => boolean | U): EventObservable<U> {
     const filtered = new EventObservable();
     filtered.subscriptions = this.subscriptions;
-    filtered.pipeline = [
-      ...this.pipeline,
-      (event: T) => (predicate(event) ? event : Empty),
-    ];
+    filtered.pipeline = [...this.pipeline, (event: T) => (predicate(event) ? event : Empty)];
     return filtered;
   }
 

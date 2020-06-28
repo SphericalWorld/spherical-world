@@ -26,5 +26,5 @@ export type JointProps = { parent: Entity; distance?: vec3 };
  * @param {vec3} distance position in ***parent*** coordinates, where Joint entity will be located.
  * Position of Joint will be sum of parent position and ***distance***
  */
-export const JointComponent = ({ parent, distance }: JointProps) =>
+export const JointComponent = ({ parent, distance }: JointProps): JSX.Element =>
   new Joint(parent, distance);

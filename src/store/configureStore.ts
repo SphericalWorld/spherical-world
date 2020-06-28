@@ -5,9 +5,7 @@ import thunk from 'redux-thunk';
 import type { State } from '../reducers/rootReducer';
 import rootReducer from '../reducers/rootReducer';
 
-export default function configureStore(
-  preloadedState: State | null,
-): Store<State, any> {
+export default function configureStore(preloadedState: State | null): Store<State, any> {
   const middlewares = [thunk];
   const middlewareEnhancer = applyMiddleware(...middlewares);
 

@@ -4,7 +4,7 @@ import type { Server } from '../server';
 import { send } from '../network/socket';
 import { Transform, Network, Inventory } from '../components/index';
 
-const getComponentsToUpdate = (world, playerId) =>
+const getComponentsToUpdate = (world: World, playerId) =>
   [...world.changedData.entries()]
     .filter(([constructor]) => constructor.networkable)
     .map(([constructor, data]) =>
@@ -16,7 +16,7 @@ const getComponentsToUpdate = (world, playerId) =>
         : { type: constructor.name, data: [...data.entries()] },
     );
 
-const calcPlayerMovement = (server, transform, network) => {
+const calcPlayerMovement = (server, transform: Transform, network) => {
   const [x, , z] = transform.translation;
 
   const chunkX = Math.floor(x / 16) * 16;
@@ -27,36 +27,20 @@ const calcPlayerMovement = (server, transform, network) => {
 
   if (chunkX < chunkXold) {
     for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk(
-        { socket: network.socket },
-        chunkX - 7 * 16,
-        chunkZ + i * 16,
-      );
+      server.terrain.sendChunk({ socket: network.socket }, chunkX - 7 * 16, chunkZ + i * 16);
     }
   } else if (chunkX > chunkXold) {
     for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk(
-        { socket: network.socket },
-        chunkX + 6 * 16,
-        chunkZ + i * 16,
-      );
+      server.terrain.sendChunk({ socket: network.socket }, chunkX + 6 * 16, chunkZ + i * 16);
     }
   }
   if (chunkZ < chunkZold) {
     for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk(
-        { socket: network.socket },
-        chunkX + i * 16,
-        chunkZ - 7 * 16,
-      );
+      server.terrain.sendChunk({ socket: network.socket }, chunkX + i * 16, chunkZ - 7 * 16);
     }
   } else if (chunkZ > chunkZold) {
     for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk(
-        { socket: network.socket },
-        chunkX + i * 16,
-        chunkZ + 6 * 16,
-      );
+      server.terrain.sendChunk({ socket: network.socket }, chunkX + i * 16, chunkZ + 6 * 16);
     }
   }
   transform.chunkX = chunkX;

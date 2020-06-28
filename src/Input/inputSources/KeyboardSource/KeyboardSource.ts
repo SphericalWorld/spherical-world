@@ -12,7 +12,7 @@ export default class KeyboardSource implements InputSource {
     window.addEventListener('keyup', (e: KeyboardEvent) => this.onKeyUp(e));
   }
 
-  onKeyDown(e: KeyboardEvent) {
+  onKeyDown(e: KeyboardEvent): void {
     const isPressed = this.pressedKeys.has(e.code);
     if (!isPressed) {
       this.onEvent(new StateInputEvent(e.code, STATE_DOWN));
@@ -21,7 +21,7 @@ export default class KeyboardSource implements InputSource {
     this.pressedKeys.add(e.code);
   }
 
-  onKeyUp(e: KeyboardEvent) {
+  onKeyUp(e: KeyboardEvent): void {
     this.onEvent(new StateInputEvent(e.code, STATE_UP));
     this.pressedKeys.delete(e.code);
   }

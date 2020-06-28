@@ -5,13 +5,7 @@ import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import { VIDEO } from './videoConstants';
 import { Button, Label, Select } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import {
-  content,
-  footerButtons,
-  label,
-  labelSelect,
-  volumes,
-} from './video.module.scss';
+import { content, footerButtons, label, labelSelect, volumes } from './video.module.scss';
 
 type Props = {
   setUIState: typeof doSetUIState;
@@ -48,8 +42,7 @@ const Video = ({ setUIState }: Props) => {
           </div>
           <div>
             <Label size="big" className={labelSelect}>
-              effect quality
-{' '}
+              effect quality{' '}
             </Label>
             <Select options={quality} onSelect={console.log} />
           </div>

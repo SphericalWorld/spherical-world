@@ -11,10 +11,7 @@ type Props<ValueType> = Readonly<{
   onSelect: (value: ValueType) => unknown;
 }>;
 
-const Select = <ValueType extends any>({
-  options,
-  onSelect,
-}: Props<ValueType>) => {
+const Select = <ValueType extends any>({ options, onSelect }: Props<ValueType>): JSX.Element => {
   const [selectedValue, setSelectedValue] = useState(3);
   const handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     setSelectedValue(e.target.value);
@@ -23,11 +20,7 @@ const Select = <ValueType extends any>({
 
   return (
     <div>
-      <select
-        className={select}
-        onChange={handleInputChange}
-        value={selectedValue}
-      >
+      <select className={select} onChange={handleInputChange} value={selectedValue}>
         {options.map((item, index) => (
           <option key={String(item.value)} value={index}>
             {item.text}

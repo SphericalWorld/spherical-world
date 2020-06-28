@@ -1,7 +1,8 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 import { COBBLESTONE } from '../engine/Texture/textureConstants';
 
-const Cobblestone = () =>
+const Cobblestone = (): BlockData =>
   Block({
     id: 16,
     textures: {

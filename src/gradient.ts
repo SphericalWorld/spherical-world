@@ -25,10 +25,8 @@ class Gradient {
         ];
         return (
           0 |
-          ((this.points[i - 1][1] + (posStart * deltaColor[0]) / deltaPos) <<
-            16) |
-          ((this.points[i - 1][2] + (posStart * deltaColor[1]) / deltaPos) <<
-            8) |
+          ((this.points[i - 1][1] + (posStart * deltaColor[0]) / deltaPos) << 16) |
+          ((this.points[i - 1][2] + (posStart * deltaColor[1]) / deltaPos) << 8) |
           (this.points[i - 1][3] + (posStart * deltaColor[2]) / deltaPos)
         );
       }

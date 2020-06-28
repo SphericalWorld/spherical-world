@@ -81,8 +81,8 @@ const textureCoordsCubeMap = [
   0.25,
 ];
 
-const getIndices = () => {
-  let indices = [];
+const getIndices = (): Array<number> => {
+  let indices: Array<number> = [];
   for (let index = 0; index < 6; index += 1) {
     indices = indices.concat([0, 3, 1, 0, 2, 3].map((el) => el + index * 4));
   }

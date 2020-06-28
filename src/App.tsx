@@ -20,7 +20,7 @@ Transform.memory = data;
 // console.log(data);
 // componentsProvider.Transform.memory = data
 
-const App = () => (
+const App = (): JSX.Element => (
   <Provider store={store}>
     <div>
       <section id="hud">

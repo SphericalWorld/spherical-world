@@ -40,14 +40,12 @@ const dragOptions = {
 
 const dropOptions = {
   active: ({ draggable, isDragging }) => draggable && !isDragging,
-  onDrop: ({ onDrop, position }) => (data) =>
-    onDrop && onDrop({ ...data, to: position }),
+  onDrop: ({ onDrop, position }) => (data) => onDrop && onDrop({ ...data, to: position }),
 };
 
 const transitionOptions = {
   duration: 200,
-  onChange: (oldVal, newVal) =>
-    oldVal < newVal ? animateIncrease : animateDecrease,
+  onChange: (oldVal, newVal) => (oldVal < newVal ? animateIncrease : animateDecrease),
 };
 
 const Tooltip = (item) => <TooltipItem item={item} />;
@@ -76,9 +74,7 @@ const InventorySlotFilled = (props: InventorySlotFilledProps) => {
             canDrop && dragOver,
           )}
         >
-          <span className={classnames(slotItemCount, className)}>
-            {slot.count}
-          </span>
+          <span className={classnames(slotItemCount, className)}>{slot.count}</span>
         </div>
       </div>
     </TooltipTrigger>
@@ -93,21 +89,14 @@ const InventorySlotEmpty = ({ canDrop }: { canDrop: boolean }) => (
 
 const InventorySlot = (props: Props) => {
   const { slot, selected = false } = props;
-  const { isDragging, ...draggableProps } = useDraggable(
-    dragOptions,
-    SLOT,
-    props,
-  );
+  const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, {
     ...props,
     isDragging,
   });
 
   return (
-    <li
-      {...droppableProps}
-      className={classnames(slotStyle, selected && selectedSlot)}
-    >
+    <li {...droppableProps} className={classnames(slotStyle, selected && selectedSlot)}>
       {slot ? (
         <InventorySlotFilled
           slot={slot}

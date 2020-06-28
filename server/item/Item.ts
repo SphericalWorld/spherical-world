@@ -4,11 +4,7 @@ import type { World } from '../../common/ecs/World';
 import type { Slot } from '../../common/Inventory';
 import { Transform, NetworkSync, Item, Inventory } from '../components';
 
-const createItem = (world: World) => (
-  id: Entity | null,
-  position: vec3,
-  slot: Slot,
-) => {
+const createItem = (world: World) => (id: Entity | null, position: vec3, slot: Slot) => {
   const player = world.createEntity(
     id,
     new NetworkSync({ name: 'ITEM' }),

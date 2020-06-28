@@ -9,7 +9,7 @@ type Props<T> = Readonly<{
 const useCSSTransition = <T extends any>(
   value: T,
   { onChange, defaultClassName, duration }: Props<T>,
-) => {
+): JSX.Element => {
   const [state, setState] = useState(value);
   const [className, setClassName] = useState(defaultClassName);
   const [timeoutId, setTimeoutId] = useState();

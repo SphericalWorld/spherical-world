@@ -25,11 +25,7 @@ import {
   CATEGORY_COMBAT_AND_BLOCKS,
 } from './eventTypes';
 import RangeInputEvent from './RangeInputEvent';
-import {
-  MENU_TOGGLED,
-  INVENTORY_TOGGLED,
-  KEY_SELECT_BUTTON,
-} from '../hud/hudConstants';
+import { MENU_TOGGLED, INVENTORY_TOGGLED, KEY_SELECT_BUTTON } from '../hud/hudConstants';
 import {
   CAMERA_MOVED,
   CAMERA_LOCKED,

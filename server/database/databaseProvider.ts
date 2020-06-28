@@ -8,7 +8,7 @@ type Config = Readonly<{
   password: string;
 }>;
 
-const createURL = ({ host, port, authDB, user, password }) =>
+const createURL = ({ host, port, authDB, user, password }: Config) =>
   `mongodb://${user}:${password}@${host}:${port}/${authDB}`;
 
 const createDatabase = async (config: Config) =>

@@ -1,9 +1,6 @@
 import type { vec3 } from 'gl-matrix';
 import type { Component } from '../../common/ecs/Component';
-import type {
-  Collider as TCollider,
-  COLLIDER_TYPE,
-} from '../physicsThread/physics/Collider';
+import type { Collider as TCollider, COLLIDER_TYPE } from '../physicsThread/physics/Collider';
 import { createAABB } from '../physicsThread/physics/colliders/AABB';
 import { THREAD_PHYSICS } from '../Thread/threadConstants';
 
@@ -40,4 +37,4 @@ export const ColliderComponent = ({
 }: {
   type: COLLIDER_TYPE;
   params?: Array<vec3>;
-}) => new Collider(type, ...params);
+}): JSX.Element => new Collider(type, ...params);

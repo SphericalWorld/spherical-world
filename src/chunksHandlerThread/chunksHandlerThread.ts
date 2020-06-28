@@ -24,9 +24,7 @@ thread.events
 events
   .filter((e) => e.type === 'CHUNK_LOADED')
   .subscribe(({ payload: data }) => {
-    const chunk = terrain.addChunk(
-      new Chunk(data.data, data.lightData, data.x, data.z),
-    );
+    const chunk = terrain.addChunk(new Chunk(data.data, data.lightData, data.x, data.z));
     chunk.prepareLight();
     chunk.updateState();
   });
@@ -48,8 +46,7 @@ events
   .subscribe(({ geoId, positionInChunk: [x, y, z], blockId, flags }) =>
     terrain.chunks.get(geoId).map((chunk) => {
       chunk.putBlock(x, y, z, blockId, flags);
-      chunk.light[x + z * 16 + y * 256] =
-        (chunk.light[x + z * 16 + y * 256] & 0x000f) | 0xfd20;
+      chunk.light[x + z * 16 + y * 256] = (chunk.light[x + z * 16 + y * 256] & 0x000f) | 0xfd20;
 
       chunk.calcRecursionRed(x, y, z);
       chunk.calcRecursionGreen(x, y, z);

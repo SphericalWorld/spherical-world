@@ -1,9 +1,5 @@
 import { gl } from '../../engine/glEngine';
-import {
-  GlVertexShader,
-  GlFragmentShader,
-  GlShaderProgram,
-} from '../../engine/glShader';
+import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import vertexShaderData from './billboard.vert';
 import fragmentShaderData from './billboard.frag';
 
@@ -16,10 +12,7 @@ export default class BillboardProgram extends GlShaderProgram {
   uTexture: WebGLUniformLocation;
 
   constructor() {
-    super(
-      new GlVertexShader(vertexShaderData),
-      new GlFragmentShader(fragmentShaderData),
-    );
+    super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
     this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);

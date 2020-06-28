@@ -53,11 +53,7 @@ const TooltipTrigger = <P extends any>({
       >
         {children}
       </div>
-      <Portal
-        ref={tooltipRef}
-        className={classnames(isHidden && hidden, tooltip)}
-        style={style}
-      >
+      <Portal ref={tooltipRef} className={classnames(isHidden && hidden, tooltip)} style={style}>
         <Tooltip {...tooltipProps} />
       </Portal>
     </>

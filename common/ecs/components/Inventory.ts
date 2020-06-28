@@ -39,4 +39,4 @@ export type InventoryProps = InventoryData;
  * @param {{[SlotID]: SlotID}} items items stored in the inventory.
  * @param {SlotID} selectedItem item currently selected to perform action with
  */
-export const InventoryComponent = (data: InventoryProps) => new Inventory(data);
+export const InventoryComponent = (data: InventoryProps): JSX.Element => new Inventory(data);

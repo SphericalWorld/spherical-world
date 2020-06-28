@@ -1,7 +1,8 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 import { WATER_STILL } from '../engine/Texture/textureConstants';
 
-const Water = () =>
+const Water = (): BlockData =>
   Block({
     id: 127,
     sightTransparent: true,

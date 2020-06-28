@@ -22,5 +22,5 @@ export default class NetworkSync implements Component, Networkable {
  * Component to mark entity syncable between client and server
  * @param {name} string name of the object constructor to use for deserializing
  */
-export const NetworkSyncComponent = ({ name }: { name: string }) =>
+export const NetworkSyncComponent = ({ name }: { name: string }): JSX.Element =>
   new NetworkSync({ name });

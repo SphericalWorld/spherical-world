@@ -9,32 +9,20 @@ const resourceLoaderProvider = (Addon) =>
 
     async loadAddon(addonName: string) {
       let manifest = await (
-        await fetch(
-          `${this.addonServerInfo.host}/addons/${addonName}/package.json`,
-        )
+        await fetch(`${this.addonServerInfo.host}/addons/${addonName}/package.json`)
       ).text();
       manifest = JSON.parse(manifest);
       const addon = new Addon(addonName, manifest);
-      await this.loadAddonScripts(
-        addon.name,
-        addon.manifest.main,
-        addon.mainNode,
-      );
+      await this.loadAddonScripts(addon.name, addon.manifest.main, addon.mainNode);
     }
 
     async loadAddons() {
       return Promise.all(addonsToLoad.map((el) => this.loadAddon(el)));
     }
 
-    async loadAddonScripts(
-      addonName: string,
-      bundlePath: string,
-      tag: HTMLElement,
-    ) {
+    async loadAddonScripts(addonName: string, bundlePath: string, tag: HTMLElement) {
       const scriptBundle = await (
-        await fetch(
-          `${this.addonServerInfo.host}/addons/${addonName}/${bundlePath}`,
-        )
+        await fetch(`${this.addonServerInfo.host}/addons/${addonName}/${bundlePath}`)
       ).text();
       return new Promise((resolve) => {
         const s = document.createElement('script');

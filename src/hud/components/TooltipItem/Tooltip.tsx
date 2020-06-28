@@ -30,7 +30,7 @@ type Props = Readonly<{
   item: ItemType;
 }>;
 
-const Tooltip = ({ item }: Props) => (
+const Tooltip = ({ item }: Props): JSX.Element => (
   <div className={`${colors[item.rareness]} ${toolTipGrid}`}>
     {TooltipDefinitions.map((Component, index) => (
       <Component key={index} {...item} />

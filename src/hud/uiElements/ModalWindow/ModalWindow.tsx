@@ -2,13 +2,7 @@ import React from 'react';
 import type { ReactNode } from 'react';
 import Button from '../Button';
 import Label from '../Label';
-import {
-  inner,
-  inventoryName,
-  header,
-  wrapper,
-  buttonClose,
-} from './modalWindow.module.scss';
+import { inner, inventoryName, header, wrapper, buttonClose } from './modalWindow.module.scss';
 
 type Props = Readonly<{
   caption: string;
@@ -16,7 +10,7 @@ type Props = Readonly<{
   onClose?: () => unknown;
 }>;
 
-const ModalWindow = ({ caption, children, onClose }: Props) => (
+const ModalWindow = ({ caption, children, onClose }: Props): JSX.Element => (
   <div className={wrapper}>
     <div className={inner}>
       <header className={header}>

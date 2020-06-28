@@ -20,14 +20,11 @@ const deserializeGameObject = (rawObject) =>
     ...rawObject.components.map(({ data, type }) => ({ [type]: data })),
   );
 
-export const saveGameObject = (
-  ds: DataStorage,
-  collectionName = 'gameObjects',
-) => async (...objects: GameObject<[]>[]) => {
+export const saveGameObject = (ds: DataStorage, collectionName = 'gameObjects') => async (
+  ...objects: GameObject<[]>[]
+) => {
   if (!objects.length) return;
-  const collection = ds.db.connection
-    .db('sphericalWorld')
-    .collection(collectionName);
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   await collection.insert(
     objects.map(({ id, ...components }) => ({
       _id: id,
@@ -37,14 +34,11 @@ export const saveGameObject = (
   );
 };
 
-export const updateGameObject = (
-  ds: DataStorage,
-  collectionName = 'gameObjects',
-) => async (...objects: GameObject<[]>[]) => {
+export const updateGameObject = (ds: DataStorage, collectionName = 'gameObjects') => async (
+  ...objects: GameObject<[]>[]
+) => {
   if (!objects.length) return;
-  const collection = ds.db.connection
-    .db('sphericalWorld')
-    .collection(collectionName);
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   await collection.bulkWrite(
     objects.map(({ id, ...components }) => ({
       updateOne: {
@@ -59,9 +53,7 @@ export const updateGameObject = (
 };
 
 export const getGameObject = (ds: DataStorage) => async (id: Entity) => {
-  const collection = ds.db.connection
-    .db('sphericalWorld')
-    .collection('gameObjects');
+  const collection = ds.db.connection.db('sphericalWorld').collection('gameObjects');
   const rawObject = await collection.findOne({ _id: id });
   if (!rawObject) {
     throw new Error('object not found');
@@ -69,25 +61,15 @@ export const getGameObject = (ds: DataStorage) => async (id: Entity) => {
   return deserializeGameObject(rawObject);
 };
 
-export const getAllGameObjects = (
-  ds: DataStorage,
-  collectionName = 'gameObjects',
-) => async () => {
-  const collection = ds.db.connection
-    .db('sphericalWorld')
-    .collection(collectionName);
+export const getAllGameObjects = (ds: DataStorage, collectionName = 'gameObjects') => async () => {
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   const cursor = collection.find();
   const items = await cursor.toArray();
   return items.map(deserializeGameObject);
 };
 
-export const deleteGameObject = (
-  ds: DataStorage,
-  collectionName = 'gameObjects',
-) => {
-  const collection = ds.db.connection
-    .db('sphericalWorld')
-    .collection(collectionName);
+export const deleteGameObject = (ds: DataStorage, collectionName = 'gameObjects') => {
+  const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   return async (id: Entity) => {
     await collection.deleteOne({ _id: id });
   };

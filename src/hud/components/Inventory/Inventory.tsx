@@ -33,13 +33,7 @@ type DispatchProps = {
 
 type Props = SpreadTypes<MappedProps, DispatchProps>;
 
-const Coin = ({
-  caption,
-  className,
-}: {
-  caption: string;
-  className: string;
-}) => (
+const Coin = ({ caption, className }: { caption: string; className: string }) => (
   <div className={`${coin} ${className}`}>
     <Label className={icon}>🔘</Label>
     <Label>{caption}</Label>
@@ -56,10 +50,9 @@ const Footer = () => (
 
 const Inventory = ({ setUIState, slots, swapSlots }: Props) => {
   const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
-  const swap = useCallback(
-    (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'),
-    [swapSlots],
-  );
+  const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [
+    swapSlots,
+  ]);
 
   return (
     <ModalWindow caption="author's inventory" onClose={close}>
@@ -101,7 +94,4 @@ const mapActions = {
   swapSlots: doSwapSlots,
 };
 
-export default connect<Props, {}, _, _, State, _>(
-  mapState,
-  mapActions,
-)(Inventory);
+export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(Inventory);

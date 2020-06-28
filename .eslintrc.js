@@ -4,6 +4,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:import/typescript',
     'prettier',
+    'prettier/react',
   ],
   parser: '@typescript-eslint/parser',
   plugins: ['prettier', 'react-hooks', '@typescript-eslint'],
@@ -56,5 +57,6 @@ module.exports = {
     'func-style': ['error', 'expression', { allowArrowFunctions: true }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    'max-classes-per-file': 'off',
   },
 };

@@ -1,7 +1,8 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 import { COAL_ORE } from '../engine/Texture/textureConstants';
 
-const CoalOre = () =>
+const CoalOre = (): BlockData =>
   Block({
     id: 8,
     textures: {

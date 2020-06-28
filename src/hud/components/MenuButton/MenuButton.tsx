@@ -31,7 +31,4 @@ const mapActions = {
   toggleUIState: doToggleUIState,
 };
 
-export default connect<Props, {}, _, DispatchProps, State, _>(
-  null,
-  mapActions,
-)(MenuButton);
+export default connect<Props, {}, _, DispatchProps, State, _>(null, mapActions)(MenuButton);

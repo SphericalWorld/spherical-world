@@ -1,9 +1,5 @@
 import { gl } from '../../engine/glEngine';
-import {
-  GlVertexShader,
-  GlFragmentShader,
-  GlShaderProgram,
-} from '../../engine/glShader';
+import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import vertexShaderData from './chunk.vert';
 import fragmentShaderData from './chunk.frag';
 

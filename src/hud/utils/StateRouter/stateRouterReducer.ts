@@ -1,9 +1,9 @@
 import { createReducer } from '../../../util/reducerUtils';
 import { STATE_ROUTER_TOGGLE, STATE_ROUTER_SET } from './stateRouterConstants';
 
-export type UIStates = {
-  [string]: boolean;
-};
+export type UIStates = Readonly<{
+  [uiComponentName: string]: boolean;
+}>;
 
 const initialState: UIStates = {};
 
@@ -11,13 +11,13 @@ type OnToggleData = Readonly<{
   stateName: string;
 }>;
 
-const onToggle = (state, { stateName }: OnToggleData): UIStates => ({
+const onToggle = (state: UIStates, { stateName }: OnToggleData): UIStates => ({
   ...state,
   [stateName]: !state[stateName],
 });
 
 const onSet = (
-  state,
+  state: UIStates,
   { stateName, value }: OnToggleData & { value: boolean },
 ): UIStates => ({
   ...state,

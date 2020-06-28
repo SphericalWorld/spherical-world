@@ -1,7 +1,8 @@
+import type { BlockData } from './Block';
 import Block from './Block';
 import { OAK_LEAVES } from '../engine/Texture/textureConstants';
 
-const OakLeaves = () =>
+const OakLeaves = (): BlockData =>
   Block({
     id: 5,
     lightTransparent: false,

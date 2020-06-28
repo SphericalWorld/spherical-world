@@ -82,14 +82,7 @@ const Torch = () => {
       return model.vertexPositions.length / 3;
     },
 
-    putBlock(
-      chunk,
-      x: number,
-      y: number,
-      z: number,
-      value: number,
-      plane: number,
-    ): boolean {
+    putBlock(chunk, x: number, y: number, z: number, value: number, plane: number): boolean {
       const index = getIndex(x, y, z);
       chunk.flags[index] = this.getFlags(plane);
       chunk.blocks[index] = value;

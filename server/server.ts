@@ -5,11 +5,11 @@ import parseJson from '../common/utils/parseString';
 import type { Terrain as ITerrain } from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
 
-const send = (ws: WebSocket) => (data): void => {
+const send = (ws: WebSocket) => (data: unknown): void => {
   ws.send(JSON.stringify(data));
 };
 
-const sendSerialized = (ws: WebSocket) => (data): void => {
+const sendSerialized = (ws: WebSocket) => (data: unknown): void => {
   ws.send(data);
 };
 
@@ -32,7 +32,7 @@ type ServerEvents = {
   payload: any;
 }; // TODO: change to enum for simplified refinements
 
-const onMessage = (events) => (socket) => (data) =>
+const onMessage = (events) => (socket: Socket) => (data) =>
   parseJson<Message>(data).map((message) => {
     if (typeof message.type === 'string') {
       events.emit({
@@ -84,7 +84,6 @@ const serverProvider = (world: World, Terrain: ITerrain) =>
     }
   };
 
-declare let tmp: $Call<typeof serverProvider, any, any>;
-export type Server = tmp;
+export type Server = InstanceType<ReturnType<typeof serverProvider>>;
 
 export default serverProvider;

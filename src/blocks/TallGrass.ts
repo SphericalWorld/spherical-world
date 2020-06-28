@@ -1,8 +1,9 @@
+import type { BlockData } from './Block';
 import model from '../models/tallgrass.json';
 import Block from './Block';
 import ModelComponent from './components/ModelComponent';
 
-const TallGrass = () =>
+const TallGrass = (): BlockData =>
   Block(
     {
       id: 129,

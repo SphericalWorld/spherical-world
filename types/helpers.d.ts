@@ -1,9 +1,6 @@
 export type SetDifference<A, B> = A extends B ? never : A;
 
-export type Diff<T extends object, U extends object> = Pick<
-  T,
-  SetDifference<keyof T, keyof U>
->;
+export type Diff<T extends object, U extends object> = Pick<T, SetDifference<keyof T, keyof U>>;
 
 export type Intersection<T extends object, U extends object> = Pick<
   T,
@@ -11,19 +8,19 @@ export type Intersection<T extends object, U extends object> = Pick<
 >;
 
 declare global {
-  type SpreadTypes<
-    T extends object,
-    U extends object,
-    I = Diff<T, U> & Intersection<U, T> & Diff<U, T>
-  > = Pick<I, keyof I>;
+  // type SpreadTypes<
+  //   T extends object,
+  //   U extends object,
+  //   I = Diff<T, U> & Intersection<U, T> & Diff<U, T>
+  // > = Pick<I, keyof I>;
+
+  type SpreadTypes<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] } & B extends infer O
+    ? { [K in keyof O]: O[K] }
+    : never;
 
   type Class<T> = new (...args: any[]) => T;
 
-  type $Call<Fn extends (...args: any[]) => any> = Fn extends (
-    arg: any,
-  ) => infer RT
-    ? RT
-    : never;
+  type $Call<Fn extends (...args: any[]) => any> = Fn extends (arg: any) => infer RT ? RT : never;
 
   type ValueOf<T> = T[keyof T];
 }

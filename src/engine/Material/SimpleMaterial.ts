@@ -33,12 +33,7 @@ export class SimpleMaterial implements Material {
   transparent = false;
   frame = 0;
 
-  constructor({
-    name,
-    diffuse,
-    blendingMode = BLENDING_OPAQUE,
-    shader,
-  }: MaterialOptions) {
+  constructor({ name, diffuse, blendingMode = BLENDING_OPAQUE, shader }: MaterialOptions) {
     this.blendingMode = blendingMode;
     this.transparent = blendingMode !== BLENDING_OPAQUE;
     this.name = name !== '' ? name : null;

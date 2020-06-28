@@ -92,14 +92,8 @@ const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
   </div>
 );
 
-const KeyBindings = ({
-  keyCategories,
-  setUIState,
-  startEditKey,
-}: KeyBindingsProps) => {
-  const close = useCallback(() => setUIState(KEY_BINDINGS, false), [
-    setUIState,
-  ]);
+const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsProps) => {
+  const close = useCallback(() => setUIState(KEY_BINDINGS, false), [setUIState]);
 
   return (
     <ModalWindowMenu caption="Key Bindings">
@@ -112,11 +106,7 @@ const KeyBindings = ({
         <section className={section}>
           <section>
             {keyCategories.map((category) => (
-              <ActionCategory
-                onSetKey={startEditKey}
-                key={category.name}
-                {...category}
-              />
+              <ActionCategory onSetKey={startEditKey} key={category.name} {...category} />
             ))}
           </section>
         </section>
@@ -146,7 +136,4 @@ const mapActions = {
   startEditKey: doStartEditKey,
 };
 
-export default connect<KeyBindingsProps, {}, _, _, State, _>(
-  mapState,
-  mapActions,
-)(KeyBindings);
+export default connect<KeyBindingsProps, {}, _, _, State, _>(mapState, mapActions)(KeyBindings);

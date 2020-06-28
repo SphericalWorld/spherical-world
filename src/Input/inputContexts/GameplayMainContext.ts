@@ -17,8 +17,7 @@ import {
   selectPreviousItemEvent,
 } from '../events';
 
-export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' =
-  'GAMEPLAY_MAIN_CONTEXT';
+export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' = 'GAMEPLAY_MAIN_CONTEXT';
 
 const createGameplayMainContext = (): InputContext =>
   createContext({

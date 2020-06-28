@@ -9,7 +9,7 @@ class Frustum {
     this.boundingBox = boundingBox;
   }
 
-  boxInFrustum(m: mat4) {
+  boxInFrustum(m: mat4): boolean {
     let inP = 0;
     let i = 0;
     let j = 0;

@@ -18,5 +18,5 @@ export default class Velocity implements Component {
  * Component with info about velocity
  * @param {vec3} linear linear velocity
  */
-export const VelocityComponent = ({ linear }: { linear?: vec3 }) =>
+export const VelocityComponent = ({ linear }: { linear?: vec3 }): JSX.Element =>
   new Velocity(linear);

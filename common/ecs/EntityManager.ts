@@ -24,19 +24,25 @@ type Obj<T extends ComponentLike> = {
   [key in T['componentName']]: InstanceType<T>;
 };
 
-type Merge2<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] } &
-  B extends infer O
-  ? { [K in keyof O]: O[K] }
-  : never;
+type Merge<A, B> = SpreadTypes<A, B>;
 
 export type transform = (<A extends ComponentLike, B extends ComponentLike>(
   includeComponents: [A, B],
-  excludeComponents?: Class<Component>[],
-) => ReadonlyArray<Merge2<{ id: Entity } & Obj<A>, Obj<B>>>) &
+  excludeComponents?: ReadonlyArray<ComponentLike>,
+) => ReadonlyArray<Merge<{ id: Entity } & Obj<A>, Obj<B>>>) &
   (<A extends ComponentLike, B extends ComponentLike, C extends ComponentLike>(
     includeComponents: [A, B, C],
-    excludeComponents?: Class<Component>[],
-  ) => ReadonlyArray<Merge2<Merge2<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>>);
+    excludeComponents?: ReadonlyArray<ComponentLike>,
+  ) => ReadonlyArray<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>>) &
+  (<
+    A extends ComponentLike,
+    B extends ComponentLike,
+    C extends ComponentLike,
+    D extends ComponentLike
+  >(
+    includeComponents: [A, B, C, D],
+    excludeComponents?: ReadonlyArray<ComponentLike>,
+  ) => ReadonlyArray<Merge<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>, Obj<D>>>);
 
 export type GameObject<T> = $Call<transform, T>;
 
@@ -46,11 +52,7 @@ export class EntitySelector<T> {
   selectorFunction: SelectorFunction;
   components: GameObject<T>[] = [];
 
-  constructor(
-    world: World,
-    includeComponents: T,
-    excludeComponents: Class<Component>[] = [],
-  ) {
+  constructor(world: World, includeComponents: T, excludeComponents: Class<Component>[] = []) {
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;
   }

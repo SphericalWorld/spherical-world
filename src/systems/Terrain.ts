@@ -20,9 +20,7 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
         viewNew[i] = viewOld[i];
       }
 
-      const lightData = new SharedArrayBuffer(
-        payload.binaryData.byteLength * 2,
-      ); // eslint-disable-line no-undef
+      const lightData = new SharedArrayBuffer(payload.binaryData.byteLength * 2); // eslint-disable-line no-undef
       // console.log(data, viewNew)
       terrain.loadChunk(data, lightData, payload.data);
       ecs.createEventAndDispatch(CHUNK_LOADED, {
@@ -52,11 +50,7 @@ export default (ecs: World, network: Network, terrain: Terrain): System => {
 
   const terrainSystem = () => {
     const [{ transform }] = player;
-    terrain.chunks = filterFarChunks(
-      oldPosition,
-      transform.translation,
-      terrain.chunks,
-    );
+    terrain.chunks = filterFarChunks(oldPosition, transform.translation, terrain.chunks);
     vec3.copy(oldPosition, transform.translation);
   };
   return terrainSystem;

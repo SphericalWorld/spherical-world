@@ -12,12 +12,7 @@ export default (world: World, time: Time): System => {
     const { day, hour, minute } = time;
     const [{ id, skybox }] = skyboxes;
     const sunPositionOnCircle = time.dayPercent * 2 * Math.PI - Math.PI;
-    vec3.set(
-      skybox.sunPosition,
-      Math.cos(sunPositionOnCircle),
-      Math.sin(sunPositionOnCircle),
-      0,
-    );
+    vec3.set(skybox.sunPosition, Math.cos(sunPositionOnCircle), Math.sin(sunPositionOnCircle), 0);
     // console.log(sunPos)
     // console.log(day, hour, minute, delta)
     // for (const [id, position, visual] of components) {

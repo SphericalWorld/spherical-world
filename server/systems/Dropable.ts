@@ -2,24 +2,17 @@ import { vec3 } from 'gl-matrix';
 import type { System } from '../../common/ecs/System';
 import type { World } from '../../common/ecs';
 import { Transform, Item, Inventory, PlayerData } from '../components';
-import { createSlot, putItem } from '../../common/Inventory';
+import { createSlot, putItem, Slot } from '../../common/Inventory';
 import type { DataStorage } from '../dataStorage';
-import {
-  updateGameObject,
-  getAllGameObjects,
-  deleteGameObject,
-} from '../dataStorage';
+import { updateGameObject, getAllGameObjects, deleteGameObject } from '../dataStorage';
 import { throttle } from '../../common/utils';
 import { deserializeItem } from '../item';
 
-const findItemToAdd = (inventory: Inventory, item) => {
+const findItemToAdd = (inventory: Inventory, item: Slot) => {
   for (const slot of inventory.data.slots) {
     if (slot !== null) {
       const currentItem = inventory.data.items[slot];
-      if (
-        currentItem.itemTypeId === item.itemTypeId &&
-        currentItem.count + item.count < 64
-      ) {
+      if (currentItem.itemTypeId === item.itemTypeId && currentItem.count + item.count < 64) {
         return currentItem;
       }
     }
@@ -35,16 +28,13 @@ export default (world: World, ds: DataStorage): System => {
   }, 2000);
   const deleteItem = deleteGameObject(ds, 'dropableItems');
 
-  getAllGameObjects(ds, 'dropableItems')().then((items) =>
-    items.forEach(deserializeItem(world)),
-  );
+  getAllGameObjects(ds, 'dropableItems')().then((items) => items.forEach(deserializeItem(world)));
 
   const dropableSystem = () => {
     syncData();
     return players.map(({ id, transform, inventory }) => {
       const item = dropableItems.find(
-        ({ transform: { translation } }) =>
-          vec3.distance(translation, transform.translation) < 1,
+        ({ transform: { translation } }) => vec3.distance(translation, transform.translation) < 1,
       );
       if (item) {
         const itemData = item.inventory.data;

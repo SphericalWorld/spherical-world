@@ -30,25 +30,16 @@ const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) =>
     .filter((e) => e.type === 'PLAYER_DESTROYED_BLOCK' && e)
     .subscribe(({ socket, payload }) => {
       broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', payload);
-      saveGameObject(
-        ds,
-        'dropableItems',
-      )(server.terrain.removeBlockHandler(payload));
+      saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(payload));
     });
 
-const registerNewPlayer = (
-  ds: DataStorage,
-  createPlayer: CreatePlayer,
-) => async (socket) => {
+const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket) => {
   const player = createPlayer(null, socket);
   await saveGameObject(ds)(player);
   return player;
 };
 
-const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (
-  socket,
-  userId,
-) => {
+const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket, userId) => {
   const playerData = await getGameObject(ds)(userId);
   const player = createPlayer(playerData, socket);
   return player;
@@ -78,13 +69,7 @@ const serialize = ({ id, ...data }) =>
       .map(([key, value]) => ({ [key]: value })),
   );
 
-const onLogin = (
-  server: Server,
-  ds: DataStorage,
-  createPlayer: CreatePlayer,
-  players,
-  world,
-) =>
+const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, players, world) =>
   server.events
     .filter((e) => e.type === 'LOGIN' && e)
     .subscribe(async ({ socket, payload }) => {

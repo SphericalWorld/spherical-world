@@ -1,10 +1,7 @@
 import { vec3, quat } from 'gl-matrix';
 import type { Component } from '../Component';
 import type { Entity } from '../Entity';
-import {
-  THREAD_MAIN,
-  THREAD_PHYSICS,
-} from '../../../src/Thread/threadConstants';
+import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import { Networkable } from '../../Networkable';
 
 const ZERO_VECTOR = vec3.create();
@@ -68,8 +65,8 @@ export type TransformProps = {
  * @param {vec3} translation 3D world coordinates
  * @param {Entity} parent parent object in hierarchy
  */
-export const TransformComponent: React.FC<TransformProps> = ({
+export const TransformComponent = ({
   translation,
   parent,
   rotation,
-}: TransformProps) => new Transform(translation, rotation, parent);
+}: TransformProps): JSX.Element => new Transform(translation, rotation, parent);

@@ -2,14 +2,7 @@ import { vec3 } from 'gl-matrix';
 import type { World } from '../../common/ecs/World';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from '../../common/ecs/System';
-import {
-  Transform,
-  BlockRemover,
-  Player,
-  Visual,
-  Raytracer,
-  Joint,
-} from '../components';
+import { Transform, BlockRemover, Player, Visual, Raytracer, Joint } from '../components';
 import {
   PLAYER_ATTACKED,
   PLAYER_STARTED_DESTROYING_BLOCK,
@@ -25,18 +18,14 @@ const getPutBlockEvents = (world: World, picker) =>
     .subscribe(() => {
       const { emptyBlock, face } = picker[0].raytracer;
       if (emptyBlock) {
-        const inventory = world.objects.get(picker[0].transform.parent)
-          .inventory.data;
+        const inventory = world.objects.get(picker[0].transform.parent).inventory.data;
         const item = inventory.items[inventory.selectedItem];
         if (!item || !item.count) {
           return;
         }
         item.count -= 1;
         if (!item.count) {
-          const {
-            [inventory.selectedItem]: toRemove,
-            ...newItems
-          } = inventory.items;
+          const { [inventory.selectedItem]: toRemove, ...newItems } = inventory.items;
           inventory.items = newItems;
         } else {
           inventory.items = { ...inventory.items };
@@ -58,19 +47,12 @@ const getPutBlockEvents = (world: World, picker) =>
 
 const getPlayerAttackEvents = (world: World) =>
   world.events
-    .filter(
-      (e) => e.type === PLAYER_ATTACKED || e.type === PLAYER_STOPED_ATTACK,
-    )
+    .filter((e) => e.type === PLAYER_ATTACKED || e.type === PLAYER_STOPED_ATTACK)
     .map((e) => e.type === PLAYER_ATTACKED)
     .subscribeQueue();
 
 export default (world: World): System => {
-  const removers = world.createSelector([
-    Transform,
-    BlockRemover,
-    Visual,
-    Joint,
-  ]);
+  const removers = world.createSelector([Transform, BlockRemover, Visual, Joint]);
   const picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
   const playerAttackEvents = getPlayerAttackEvents(world);
@@ -93,11 +75,7 @@ export default (world: World): System => {
           blockRemover.removing = possibleRemoving;
         });
         if (removing !== blockRemover.removing) {
-          world.createEventAndDispatch(
-            PLAYER_STARTED_DESTROYING_BLOCK,
-            block.position,
-            true,
-          );
+          world.createEventAndDispatch(PLAYER_STARTED_DESTROYING_BLOCK, block.position, true);
         }
       }
       if (
@@ -106,8 +84,7 @@ export default (world: World): System => {
         vec3.exactEquals(block.position, blockRemover.position)
       ) {
         visual.enabled = true;
-        blockRemover.removedPart +=
-          (1 / blocksInfo[block.block].baseRemoveTime) * delta;
+        blockRemover.removedPart += (1 / blocksInfo[block.block].baseRemoveTime) * delta;
         if (blockRemover.removedPart >= 1) {
           blockRemover.removedPart = 0;
           world.createEventAndDispatch(
@@ -126,9 +103,7 @@ export default (world: World): System => {
       }
       blockRemover.position = block.position;
       const maxFrames = visual.glObject.material.diffuse.frames;
-      visual.glObject.material.frame = Math.floor(
-        maxFrames * blockRemover.removedPart,
-      );
+      visual.glObject.material.frame = Math.floor(maxFrames * blockRemover.removedPart);
     }
     for (const { visual, raytracer } of picker) {
       visual.enabled = !!raytracer.block.block;

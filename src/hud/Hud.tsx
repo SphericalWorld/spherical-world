@@ -14,7 +14,7 @@ import Audio from './components/Audio/Audio';
 import Video from './components/Video/Video';
 import Inventory from './components/Inventory/Inventory';
 
-const Hud = () => (
+const Hud = (): JSX.Element => (
   <div>
     <Route on={MAIN_MENU} component={MainMenu} />
     <Route on={KEY_BINDINGS} component={KeyBindings} />

@@ -48,20 +48,9 @@ const branch = (
   branchLengthRemain: number,
 ): void => {
   const BRANCH_LENGTH = 2;
-  const runRecursion = (
-    newPosition: vec3,
-    newDirection: vec3,
-    steps: number,
-  ): void => {
+  const runRecursion = (newPosition: vec3, newDirection: vec3, steps: number): void => {
     if (length) {
-      branch(
-        chunk,
-        newPosition,
-        newDirection,
-        length - 1,
-        branchingFactor,
-        steps,
-      );
+      branch(chunk, newPosition, newDirection, length - 1, branchingFactor, steps);
     }
     leaves(chunk, newPosition, 3);
   };
@@ -91,11 +80,7 @@ const branch = (
     runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
 
     if (branches === 3) {
-      runRecursion(
-        vec3.add(vec3.create(), position, direction),
-        direction,
-        BRANCH_LENGTH,
-      );
+      runRecursion(vec3.add(vec3.create(), position, direction), direction, BRANCH_LENGTH);
     }
   }
 };

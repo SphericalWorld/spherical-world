@@ -8,7 +8,7 @@ type OwnProps = {
 };
 
 type MappedProps = {
-  uiStates: $PropertyType<State, 'uiStates'>;
+  uiStates: State['uiStates'];
 };
 
 type Props = SpreadTypes<OwnProps, MappedProps>;

@@ -19,8 +19,5 @@ export default class Visual implements Component {
  * Component with data to render Entity in 3D game world
  * @param {GlObject} glObject object with visual data to render
  */
-export const VisualComponent: React.FC<{ object: GlObject }> = ({
-  object,
-}: {
-  object: GlObject;
-}) => new Visual(object);
+export const VisualComponent = ({ object }: { object: GlObject }): JSX.Element =>
+  new Visual(object);

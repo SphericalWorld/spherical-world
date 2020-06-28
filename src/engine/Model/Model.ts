@@ -25,7 +25,7 @@ class Model {
     }
   }
 
-  createVBO(material: Material) {
+  createVBO(material: Material): void {
     const { shader } = material as { shader: TexturableShader };
     this.vao = gl.createVertexArray();
     gl.bindVertexArray(this.vao);
@@ -33,30 +33,16 @@ class Model {
     // if (shader.aTextureCoord) {
     gl.enableVertexAttribArray(shader.aTextureCoord);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
-    gl.vertexAttribPointer(
-      shader.aTextureCoord,
-      TEXTURE_COORDINATES_SIZE,
-      gl.FLOAT,
-      false,
-      0,
-      0,
-    );
+    gl.vertexAttribPointer(shader.aTextureCoord, TEXTURE_COORDINATES_SIZE, gl.FLOAT, false, 0, 0);
     // }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.vertexAttribPointer(
-      shader.aVertexPosition,
-      VERTEX_POSITION_SIZE,
-      gl.FLOAT,
-      false,
-      0,
-      0,
-    );
+    gl.vertexAttribPointer(shader.aVertexPosition, VERTEX_POSITION_SIZE, gl.FLOAT, false, 0, 0);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bindVertexArray(null);
   }
 
-  draw(shader) {
+  draw(shader): void {
     gl.bindVertexArray(this.vao);
     gl.drawElements(gl.TRIANGLES, this.elementsCount, gl.UNSIGNED_SHORT, 0);
     gl.bindVertexArray(null);
@@ -70,26 +56,14 @@ class Model {
     }
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(vertexPositions),
-      gl.STATIC_DRAW,
-    );
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexPositions), gl.STATIC_DRAW);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-    gl.bufferData(
-      gl.ELEMENT_ARRAY_BUFFER,
-      new Uint16Array(model.indices),
-      gl.STATIC_DRAW,
-    );
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(model.indices), gl.STATIC_DRAW);
     this.elementsCount = model.indices.length;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array(model.vertexTextureCoords),
-      gl.STATIC_DRAW,
-    );
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(model.vertexTextureCoords), gl.STATIC_DRAW);
   }
 }
 

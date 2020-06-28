@@ -1,10 +1,9 @@
 import type { Store } from 'redux';
 import shallowEqual from './shallowEqual';
 
-const connect = <A extends {}, B extends {}, S>(
-  mapState: (A) => B,
-  store: Store<A, S>,
-) => (handler: (B, B) => unknown) => {
+const connect = <A extends {}, B extends {}, S>(mapState: (A) => B, store: Store<A, S>) => (
+  handler: (B, B) => unknown,
+) => {
   let prevProps = mapState(store.getState());
   store.subscribe(() => {
     const nextProps = mapState(store.getState());

@@ -2,10 +2,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import type { Component } from '../Component';
 import { Networkable } from '../../Networkable';
 
-import {
-  THREAD_MAIN,
-  THREAD_PHYSICS,
-} from '../../../src/Thread/threadConstants';
+import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 
 export type Viewport = {
   viewportWidth: number;
@@ -48,6 +45,6 @@ export default class Camera implements Component, Networkable {
 /**
  * Component to store data about Camera
  */
-export const CameraComponent = (props: {}) =>
+export const CameraComponent = (props: {}): JSX.Element =>
   // console.log(_) || new Camera();
   Camera.deserialize(props);

@@ -1,15 +1,10 @@
 import { gl } from '../../engine/glEngine';
-import {
-  GlVertexShader,
-  GlFragmentShader,
-  GlShaderProgram,
-} from '../../engine/glShader';
+import { GlVertexShader, GlFragmentShader, GlShaderProgram } from '../../engine/glShader';
 import type { TexturableShader } from '../TexturableShader';
 import vertexShaderData from './diffuseAnimated.vert';
 import fragmentShaderData from './diffuseAnimated.frag';
 
-export default class DiffuseAnimatedProgram extends GlShaderProgram
-  implements TexturableShader {
+export default class DiffuseAnimatedProgram extends GlShaderProgram implements TexturableShader {
   name = 'diffuseAnimated';
 
   attributes = ['aVertexPosition', 'aTextureCoord'];
@@ -21,10 +16,7 @@ export default class DiffuseAnimatedProgram extends GlShaderProgram
   aTextureCoord = 0;
 
   constructor() {
-    super(
-      new GlVertexShader(vertexShaderData),
-      new GlFragmentShader(fragmentShaderData),
-    );
+    super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
     this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);

@@ -11,20 +11,18 @@ import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindings
 const onSyncGameData = (ecs: World) =>
   ecs.events
     .filter((e) => e.type === 'SYNC_GAME_DATA')
-    .subscribe(
-      ({ payload: { newObjects, deletedObjects = [], components = [] } }) => {
-        for (const newObject of newObjects) {
-          const Constructor = ecs.constructors.get(newObject.networkSync.name);
-          if (Constructor) {
-            render(() => <Constructor {...newObject} />, ecs);
-          }
+    .subscribe(({ payload: { newObjects, deletedObjects = [], components = [] } }) => {
+      for (const newObject of newObjects) {
+        const Constructor = ecs.constructors.get(newObject.networkSync.name);
+        if (Constructor) {
+          render(() => <Constructor {...newObject} />, ecs);
         }
-        for (const deletedObject of deletedObjects) {
-          ecs.deleteEntity(deletedObject, false);
-        }
-        ecs.updateComponents(components);
-      },
-    );
+      }
+      for (const deletedObject of deletedObjects) {
+        ecs.deleteEntity(deletedObject, false);
+      }
+      ecs.updateComponents(components);
+    });
 
 const onLoadControlSettings = (ecs: World, input: Input, store) =>
   ecs.events
@@ -37,12 +35,7 @@ const onLoadControlSettings = (ecs: World, input: Input, store) =>
       });
     });
 
-export default (
-  ecs: World,
-  network: Network,
-  input: Input,
-  store: Store,
-): System => {
+export default (ecs: World, network: Network, input: Input, store: Store): System => {
   const player = ecs.createSelector([Transform, Camera]);
   ecs.events
     .filter((el) => el.network === true)

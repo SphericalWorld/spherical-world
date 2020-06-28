@@ -1,17 +1,10 @@
 import type { Maybe } from '../../common/fp/monads/maybe';
-import type {
-  GAME_EVENT_TYPE,
-  GameEvent,
-} from '../../common/GameEvent/GameEvent';
+import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
 import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
 import type { InputContexts } from './inputContexts';
 import HashMap from '../../common/fp/data-structures/Map';
 import { Just, Nothing } from '../../common/fp/monads/maybe';
-import {
-  INPUT_TYPE_ACTION,
-  INPUT_TYPE_STATE,
-  INPUT_TYPE_RANGE,
-} from './eventTypes';
+import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
 import InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 
@@ -83,8 +76,5 @@ export const getMappedInputEvent = (
       }
     });
 
-export const setKey = (
-  context: InputContext,
-  key: string,
-  event: MappedEvent,
-) => context.events.set(key, event);
+export const setKey = (context: InputContext, key: string, event: MappedEvent) =>
+  context.events.set(key, event);

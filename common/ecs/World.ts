@@ -47,7 +47,7 @@ export class World {
     this.thread = thread;
   }
 
-  registerThread(thread: Thread) {
+  registerThread(thread: Thread): void {
     this.threads.push(thread);
     this.threadsMap.set(thread.id, thread);
     thread.events.subscribe(({ type, payload }) => {
@@ -84,12 +84,8 @@ export class World {
   createSelector: transform = <T extends ReadonlyArray<Class<Component>>>(
     includeComponents: T,
     excludeComponents?: Class<Component>[],
-  ): ReadonlyArray<$Call<transform<T>>> => {
-    const selector = new EntitySelector(
-      this,
-      includeComponents,
-      excludeComponents,
-    );
+  ) => {
+    const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);
     return selector.components;
   };
@@ -152,28 +148,20 @@ export class World {
       const componentRegistry = this.components.get(component.type);
       componentRegistry.set(entityId, component.data);
     }
-    const componentMap = new Map(
-      components.map(({ type, data }) => [type, data]),
-    );
+    const componentMap = new Map(components.map(({ type, data }) => [type, data]));
     for (const selector of this.selectors) {
       if (
         !selector.includeComponents.find(
           (componentType) => !componentMap.has(componentType.name),
         ) &&
-        !selector.excludeComponents.find((componentType) =>
-          componentMap.has(componentType.name),
-        )
+        !selector.excludeComponents.find((componentType) => componentMap.has(componentType.name))
       ) {
         const selectedComponents = {
           id: entityId,
         };
         for (let i = 0; i < selector.includeComponents.length; i += 1) {
-          const component = componentMap.get(
-            selector.includeComponents[i].name,
-          );
-          selectedComponents[
-            selector.includeComponents[i].componentName
-          ] = component;
+          const component = componentMap.get(selector.includeComponents[i].name);
+          selectedComponents[selector.includeComponents[i].componentName] = component;
         }
         selector.components.push(selectedComponents);
       }
@@ -186,10 +174,7 @@ export class World {
       const constructor = this.componentTypes.get(component.type);
       // console.log(component.type === 'Transform')
       if (component.type !== 'Transform') {
-        component.data = Object.assign(
-          Reflect.construct(constructor, []),
-          component.data,
-        );
+        component.data = Object.assign(Reflect.construct(constructor, []), component.data);
       } else {
         component.data = new Transform(
           component.data.translation,
@@ -199,8 +184,7 @@ export class World {
         );
       }
       const threadConstructor =
-        constructor.threadsConstructors &&
-        constructor.threadsConstructors[this.thread];
+        constructor.threadsConstructors && constructor.threadsConstructors[this.thread];
       if (threadConstructor) {
         threadConstructor(component.data);
       }
@@ -239,9 +223,7 @@ export class World {
       const component: ComponentWithStatics<string> = components[i];
       selectedComponents[component.constructor.componentName] = component;
       if (component.constructor.networkable === true) {
-        selectedComponentsNetworkable[
-          component.constructor.componentName
-        ] = component;
+        selectedComponentsNetworkable[component.constructor.componentName] = component;
       }
     }
     this.lastAddedObjects.push(selectedComponentsNetworkable);
@@ -276,23 +258,16 @@ export class World {
     }
   }
 
-  dispatch(gameEvent: GameEvent) {
+  dispatch(gameEvent: GameEvent): void {
     this.eventsForThreads.push(gameEvent);
     this.events.emit(gameEvent);
   }
 
-  createEventAndDispatch<T>(
-    type: GAME_EVENT_TYPE,
-    payload?: T,
-    network?: boolean,
-  ) {
+  createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean): void {
     this.dispatch({ type, payload, network });
   }
 
-  registerConstructor(name: string, constructor: ObjectConstructor) {
-    this.constructors.set(
-      name,
-      (params) => !this.entities.has(params.id) && constructor(params),
-    );
+  registerConstructor(name: string, constructor: ObjectConstructor): void {
+    this.constructors.set(name, (params) => !this.entities.has(params.id) && constructor(params));
   }
 }

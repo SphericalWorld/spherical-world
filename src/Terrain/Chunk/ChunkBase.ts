@@ -1,9 +1,6 @@
 import type { ChunkState } from './chunkConstants';
 import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
-import {
-  CHUNK_STATUS_NEED_LOAD_ALL,
-  CHUNK_STATUS_NEED_LOAD_VBO,
-} from './chunkConstants';
+import { CHUNK_STATUS_NEED_LOAD_ALL, CHUNK_STATUS_NEED_LOAD_VBO } from './chunkConstants';
 import { getGeoId, getIndex } from '../../../common/chunk';
 // north direction - decreasing of X
 
@@ -27,12 +24,7 @@ class ChunkBase<TChunk> {
 
   static BUFFERS_COUNT = 3;
 
-  constructor(
-    blocksData: ArrayBuffer,
-    lightData: ArrayBuffer,
-    x: number,
-    z: number,
-  ) {
+  constructor(blocksData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
     this.x = x;
     this.z = z;
     this.geoId = getGeoId(x, z);
@@ -51,12 +43,9 @@ class ChunkBase<TChunk> {
   }
 
   checkNestedChunks() {
-    this.nestedChunks = [
-      this.northChunk,
-      this.westChunk,
-      this.southChunk,
-      this.eastChunk,
-    ].filter((chunk) => chunk !== this);
+    this.nestedChunks = [this.northChunk, this.westChunk, this.southChunk, this.eastChunk].filter(
+      (chunk) => chunk !== this,
+    );
     this.hasNestedChunks = this.nestedChunks.length === 4;
     this.surroundingChunks = [
       this.northChunk.eastChunk,

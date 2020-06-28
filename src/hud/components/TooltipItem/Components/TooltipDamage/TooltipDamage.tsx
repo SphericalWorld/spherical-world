@@ -6,7 +6,7 @@ type Props = Readonly<{
   damage: number;
 }>;
 
-const TooltipDamage = ({ damage }: Props) => (
+const TooltipDamage = ({ damage }: Props): JSX.Element => (
   <TooltipTemplate name="damage" value={damage} className={gridArea} />
 );
 

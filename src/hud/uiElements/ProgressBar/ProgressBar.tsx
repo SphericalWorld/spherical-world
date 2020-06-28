@@ -21,17 +21,15 @@ type Props = Readonly<{
   className?: string;
 }>;
 
-const decimalToHex = (decimal) => decimal.toString(16);
-const hexToDecimal = (hex) => parseInt(hex, 16);
+const decimalToHex = (decimal: number) => decimal.toString(16);
+const hexToDecimal = (hex: string) => parseInt(hex, 16);
 
-const mix = (colorMax, colorMin, weight = 50) => {
+const mix = (colorMax: string, colorMin: string, weight = 50) => {
   let hexColor = '#';
   for (let i = 0; i <= 5; i += 2) {
     const pair1 = hexToDecimal(colorMax.substr(i, 2));
     const pair2 = hexToDecimal(colorMin.substr(i, 2));
-    let combine = decimalToHex(
-      Math.floor(pair2 + (pair1 - pair2) * (weight / 100.0)),
-    );
+    let combine = decimalToHex(Math.floor(pair2 + (pair1 - pair2) * (weight / 100.0)));
     while (combine.length < 2) {
       combine = `0${combine}`;
     }
@@ -40,10 +38,8 @@ const mix = (colorMax, colorMin, weight = 50) => {
   return hexColor;
 };
 
-const getColor = (percent) =>
-  percent < 50
-    ? mix(colorYellow, colorRed, percent)
-    : mix(colorGreen, colorYellow, percent - 50);
+const getColor = (percent: number) =>
+  percent < 50 ? mix(colorYellow, colorRed, percent) : mix(colorGreen, colorYellow, percent - 50);
 
 const types = {
   mana,
@@ -59,7 +55,7 @@ const ProgressBar = ({
   maxValue,
   currentValue,
   className = '',
-}: Props) => {
+}: Props): JSX.Element => {
   const percent = Math.floor((currentValue / maxValue) * 100);
   const style: Styles = {
     width: `${percent}%`,

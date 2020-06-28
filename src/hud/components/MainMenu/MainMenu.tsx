@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import ModalWindowMenu from '../ModalWindowMenu';
@@ -10,13 +10,12 @@ import { MAIN_MENU } from './mainMenuConstants';
 
 import { content } from './mainMenu.module.scss';
 
-type DispatchProps = {
-  setUIState: typeof doSetUIState;
-};
-
-type Props = DispatchProps;
-
-const MainMenu = ({ setUIState }: Props) => {
+const MainMenu = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const setUIState = useCallback(
+    (...params: Parameters<typeof doSetUIState>) => dispatch(doSetUIState(...params)),
+    [dispatch],
+  );
   const openKeyBindings = useCallback(() => {
     setUIState(MAIN_MENU, false);
     setUIState(KEY_BINDINGS, true);
@@ -47,8 +46,4 @@ const MainMenu = ({ setUIState }: Props) => {
   );
 };
 
-const mapActions = {
-  setUIState: doSetUIState,
-};
-
-export default connect<Props, {}, _, _, _, _>(null, mapActions)(MainMenu);
+export default MainMenu;

@@ -7,7 +7,7 @@ type Props = Readonly<{
   icon: string;
 }>;
 
-const TooltipImage = ({ icon }: Props) => (
+const TooltipImage = ({ icon }: Props): JSX.Element => (
   <TooltipText className={`${imageTooltip} ${gridArea}`}>
     <div className={`${getIcon(icon)} ${imgItem}`} />
   </TooltipText>

@@ -29,10 +29,7 @@ const calculateMovement = (terrain: Terrain) => {
     collider: Collider,
   ) =>
     terrain
-      .getChunk(
-        toChunkPosition(blockPosition[0]),
-        toChunkPosition(blockPosition[2]),
-      )
+      .getChunk(toChunkPosition(blockPosition[0]), toChunkPosition(blockPosition[2]))
       .chain(getChunkIfLoaded)
       .map((chunk) =>
         chunk.getBlock(
@@ -41,9 +38,7 @@ const calculateMovement = (terrain: Terrain) => {
           toPositionInChunk(blockPosition[2]),
         ),
       )
-      .chain((block) =>
-        blocksFlags[block][HAS_PHYSICS_MODEL] ? Just(block) : Nothing,
-      )
+      .chain((block) => (blocksFlags[block][HAS_PHYSICS_MODEL] ? Just(block) : Nothing))
       .map(() => {
         blockAABB.move(vec3.add(vec3.create(), blockPosition, halfVector));
         if (testCollision(collider.shape, blockAABB)) {
@@ -55,12 +50,7 @@ const calculateMovement = (terrain: Terrain) => {
               shape: blockAABB,
             },
           );
-          vec3.scaleAndAdd(
-            translation,
-            translation,
-            manifold.normal,
-            manifold.penetration,
-          );
+          vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
           move(collider.shape, translation);
           vec3.mul(velocity.linear, velocity.linear, manifold.inversedNormal);
         }
@@ -98,10 +88,7 @@ const collideWithTerrain = (terrain: Terrain) => {
 };
 
 export default (ecs: World, terrain: Terrain): System => {
-  const components = ecs.createSelector(
-    [Transform, Velocity, Physics, Collider],
-    [Joint],
-  );
+  const components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
   const dependentComponents = ecs.createSelector([Transform, Joint]);
   const collideWithTerrainPApplied = collideWithTerrain(terrain);
   const transformRegistry = ecs.components.get('Transform');
@@ -116,11 +103,7 @@ export default (ecs: World, terrain: Terrain): System => {
       if (!joint.parentTransform) {
         joint.parentTransform = transformRegistry.get(joint.parent);
       }
-      vec3.add(
-        transform.translation,
-        joint.parentTransform.translation,
-        joint.distance,
-      );
+      vec3.add(transform.translation, joint.parentTransform.translation, joint.distance);
     }
   };
 };

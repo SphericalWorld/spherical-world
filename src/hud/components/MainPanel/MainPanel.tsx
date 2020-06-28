@@ -31,12 +31,7 @@ type DispatchProps = {
 
 type Props = SpreadTypes<MappedProps, DispatchProps>;
 
-const MainPanel = ({
-  slots,
-  selectedItemIndex,
-  swapSlots,
-  selectInventoryItem,
-}: Props) => {
+const MainPanel = ({ slots, selectedItemIndex, swapSlots, selectInventoryItem }: Props) => {
   const swap = useCallback(
     (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id),
     [swapSlots],
@@ -91,7 +86,4 @@ const mapActions = {
   selectInventoryItem: doSelectInventoryItem,
 };
 
-export default connect<Props, {}, _, _, State, _>(
-  mapState,
-  mapActions,
-)(MainPanel);
+export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(MainPanel);

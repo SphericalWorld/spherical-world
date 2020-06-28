@@ -6,12 +6,8 @@ type Props = Readonly<{
   attackSpeed: number;
 }>;
 
-const TooltipAttackSpeed = ({ attackSpeed }: Props) => (
-  <TooltipTemplate
-    name="Attack Speed"
-    value={attackSpeed}
-    className={gridArea}
-  />
+const TooltipAttackSpeed = ({ attackSpeed }: Props): JSX.Element => (
+  <TooltipTemplate name="Attack Speed" value={attackSpeed} className={gridArea} />
 );
 
 export default TooltipAttackSpeed;

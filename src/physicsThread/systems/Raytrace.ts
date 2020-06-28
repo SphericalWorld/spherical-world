@@ -19,7 +19,7 @@ type RaytraceInfo = Readonly<{
 }>;
 
 const getFace = (block: vec3, emptyBlock: vec3): BlockFace => {
-  let face = 0;
+  let face: BlockFace = 0;
   if (block[1] < emptyBlock[1]) {
     face = 0; // top
   } else if (block[1] > emptyBlock[1]) {
@@ -36,7 +36,7 @@ const getFace = (block: vec3, emptyBlock: vec3): BlockFace => {
   return face;
 };
 
-const getBlockDetails = (terrain, x, y, z): Maybe<BlockDetails> =>
+const getBlockDetails = (terrain, x: number, y: number, z: number): Maybe<BlockDetails> =>
   terrain.getChunk(toChunkPosition(x), toChunkPosition(z)).map((chunk) => {
     const position = vec3.fromValues(x, y, z);
     const xInChunk = toPositionInChunk(x);

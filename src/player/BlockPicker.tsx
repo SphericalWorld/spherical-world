@@ -11,7 +11,7 @@ type Props = Readonly<{
   parent: Entity;
 }>;
 
-export const BlockPicker = ({ id, parent }: Props) => {
+export const BlockPicker = ({ id, parent }: Props): JSX.Element => {
   const model = createCube(1.001, false, false, [0.5, 0.5, 0.5]);
   const material = materialLibrary.get('blockSelector');
   const object = new GlObject({ model, material });

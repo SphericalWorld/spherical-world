@@ -11,16 +11,10 @@ import terrainAnimatedProvider from './TerrainAnimated';
 import terrainProvider from './Terrain';
 import blocksDropableProvider from './BlocksDroppable';
 
-const materialsProvider = (
-  textureLibrary: TextureLibrary,
-  shaderLibrary: ShaderLibrary,
-) => {
+const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) => {
   const terrainDiffuse = terrainDiffuseProvider(textureLibrary, shaderLibrary);
   const terrainOverlay = terrainOverlayProvider(textureLibrary, shaderLibrary);
-  const terrainAnimated = terrainAnimatedProvider(
-    textureLibrary,
-    shaderLibrary,
-  );
+  const terrainAnimated = terrainAnimatedProvider(textureLibrary, shaderLibrary);
   const blocksDropable = blocksDropableProvider(textureLibrary, shaderLibrary);
   const terrain = terrainProvider(textureLibrary, shaderLibrary, [
     terrainDiffuse,

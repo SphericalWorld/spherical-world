@@ -4,10 +4,7 @@ export const RARENESS_COMMON: 0 = 0;
 export const RARENESS_UNCOMMON: 1 = 1;
 export const RARENESS_RARE: 2 = 2;
 
-export type Rareness =
-  | typeof RARENESS_COMMON
-  | typeof RARENESS_UNCOMMON
-  | typeof RARENESS_RARE;
+export type Rareness = typeof RARENESS_COMMON | typeof RARENESS_UNCOMMON | typeof RARENESS_RARE;
 
 export type SlotID = string;
 
@@ -22,7 +19,7 @@ export type Slot = {
 
 export type Inventory = {
   slots: Array<SlotID | null>;
-  items: $Shape<{ [SlotID]: Slot }>;
+  items: Record<SlotID, Slot>;
   selectedItem?: SlotID;
 };
 

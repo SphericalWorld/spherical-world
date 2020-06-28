@@ -22,7 +22,7 @@ class GlObject {
     }
   }
 
-  draw() {
+  draw(): void {
     // gl.uniform3f(this.app.currentShader.uLighting, this.color[0], this.color[1], this.color[2]);
     // mat4.translate(this.app.mvMatrix, this.app.mvMatrix, [this.x, this.y, this.z]);
     // mat4.rotateY(this.app.mvMatrix, this.app.mvMatrix, this.horizontalRotate);

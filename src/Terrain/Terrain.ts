@@ -26,48 +26,22 @@ class Terrain extends TerrainBase<Chunk> {
     },
   ): void => {
     this.addChunk(
-      new Chunk(
-        this,
-        blocksData,
-        lightData,
-        data.x,
-        data.z,
-        data.temperature,
-        data.rainfall,
-      ),
+      new Chunk(this, blocksData, lightData, data.x, data.z, data.temperature, data.rainfall),
     ).generateFoliageTexture();
   };
 
   generateBiomeColorMap(texture: WebGLTexture) {
     const fb = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-    gl.framebufferTexture2D(
-      gl.FRAMEBUFFER,
-      gl.COLOR_ATTACHMENT0,
-      gl.TEXTURE_2D,
-      texture,
-      0,
-    );
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) {
-      gl.readPixels(
-        0,
-        0,
-        256,
-        256,
-        gl.RGBA,
-        gl.UNSIGNED_BYTE,
-        this.foliageColorMap,
-      );
+      gl.readPixels(0, 0, 256, 256, gl.RGBA, gl.UNSIGNED_BYTE, this.foliageColorMap);
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   }
 }
 
-export const getVisibleChunks = (
-  terrain: Terrain,
-  pMatrix: mat4,
-  mvMatrix: mat4,
-) => {
+export const getVisibleChunks = (terrain: Terrain, pMatrix: mat4, mvMatrix: mat4) => {
   const m = mat4.create();
   mat4.multiply(m, pMatrix, mvMatrix);
 
@@ -80,11 +54,7 @@ const getBlockDetails = (terrain, x: number, y: number, z: number) =>
   terrain
     .getChunk(toChunkPosition(x), toChunkPosition(z))
     .map((chunk) =>
-      chunk.getBlock(
-        toPositionInChunk(x),
-        y + PLAYER_CAMERA_HEIGHT,
-        toPositionInChunk(z),
-      ),
+      chunk.getBlock(toPositionInChunk(x), y + PLAYER_CAMERA_HEIGHT, toPositionInChunk(z)),
     );
 
 const drawFog = (terrain, shader, skyColor, x: number, y: number, z: number) =>
@@ -105,19 +75,12 @@ export const drawOpaqueChunkData = (
   cameraPosition: vec3,
   skyColor: number[],
   globalColor: number[],
-) => {
+): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
   terrain.material.use();
 
-  drawFog(
-    terrain,
-    shader,
-    skyColor,
-    cameraPosition[0],
-    cameraPosition[1],
-    cameraPosition[2],
-  );
+  drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
   gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
@@ -147,19 +110,12 @@ export const drawTransparentChunkData = (
   cameraPosition: vec3,
   skyColor: number[],
   globalColor: number[],
-) => {
+): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
   terrain.material.use();
 
-  drawFog(
-    terrain,
-    shader,
-    skyColor,
-    cameraPosition[0],
-    cameraPosition[1],
-    cameraPosition[2],
-  );
+  drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
 
   gl.uniform4f(shader.uGlobalColor, ...globalColor);
 
@@ -173,12 +129,7 @@ export const drawTransparentChunkData = (
   gl.enableVertexAttribArray(shader.aVertexGlobalColor);
 
   gl.uniform1i(shader.uBufferNum, ii);
-  gl.blendFuncSeparate(
-    gl.SRC_ALPHA,
-    gl.ONE_MINUS_SRC_ALPHA,
-    gl.ONE,
-    gl.ONE_MINUS_SRC_ALPHA,
-  );
+  gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
   gl.disable(gl.CULL_FACE);
 
@@ -189,14 +140,7 @@ export const drawTransparentChunkData = (
       gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
       gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20);
       gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
-      gl.vertexAttribPointer(
-        shader.aVertexGlobalColor,
-        1,
-        gl.FLOAT,
-        false,
-        40,
-        36,
-      );
+      gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, chunk.buffers.indexBuffer);
       gl.drawElements(
         gl.TRIANGLES,

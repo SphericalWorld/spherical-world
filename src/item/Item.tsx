@@ -57,10 +57,7 @@ export const Item = ({ transform, id, inventory }: Props) => {
     <GameObject id={id}>
       <Transform {...transform} />
       <Visual object={object} />
-      <Collider
-        type={COLLIDER_AABB}
-        params={[vec3.create(), vec3.fromValues(SIZE, SIZE, SIZE)]}
-      />
+      <Collider type={COLLIDER_AABB} params={[vec3.create(), vec3.fromValues(SIZE, SIZE, SIZE)]} />
       <Physics />
       <Velocity />
       <Gravity />

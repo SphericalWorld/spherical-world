@@ -11,9 +11,7 @@ import { generate, generateObjects } from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
-const profileChunkGenerationFoliage = profileChunkGeneration(
-  'Foliage generation',
-);
+const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
 const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
@@ -89,10 +87,7 @@ class Chunk {
     this.flags = Buffer.alloc(BLOCKS_IN_CHUNK);
 
     await new Promise((resolve) => {
-      generate(this.chunkGenerator, this)
-        .map(resolve)
-        .map(profileChunkGenerationBase)
-        .run();
+      generate(this.chunkGenerator, this).map(resolve).map(profileChunkGenerationBase).run();
     });
     // await this.northChunk.generateObjects();
     // await this.southChunk.generateObjects();
@@ -158,9 +153,7 @@ class Chunk {
     // await this.generate();
 
     if (depth) {
-      await Promise.all(
-        chunks.map((chunk: Chunk) => chunk.generateWithSurrounding(depth - 1)),
-      );
+      await Promise.all(chunks.map((chunk: Chunk) => chunk.generateWithSurrounding(depth - 1)));
       if (depth >= 2) {
         await this.generateObjects();
         await this.northChunk.generateObjects();
@@ -191,12 +184,7 @@ class Chunk {
     return this;
   }
 
-  setUnsafe(
-    x: number,
-    y: number,
-    z: number,
-    block: number | [number, number],
-  ): void {
+  setUnsafe(x: number, y: number, z: number, block: number | [number, number]): void {
     const chunk = getChunkNear(this, x, y, z);
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
     if (typeof block === 'number') {
@@ -217,9 +205,7 @@ class Chunk {
   }
 
   at(x: number, y: number, z: number): number {
-    return getChunkNear(this, x, y, z).data[
-      (x & 0xf) | ((z & 0xf) << 4) | (y << 8)
-    ];
+    return getChunkNear(this, x, y, z).data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)];
   }
 
   async generateObjects(): Promise<Chunk> {
