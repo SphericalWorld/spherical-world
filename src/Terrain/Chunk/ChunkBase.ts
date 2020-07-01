@@ -42,7 +42,7 @@ class ChunkBase<TChunk> {
     this.state = CHUNK_STATUS_NEED_LOAD_VBO;
   }
 
-  checkNestedChunks() {
+  checkNestedChunks(): void {
     this.nestedChunks = [this.northChunk, this.westChunk, this.southChunk, this.eastChunk].filter(
       (chunk) => chunk !== this,
     );

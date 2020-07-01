@@ -1,18 +1,12 @@
 import type { Simplex2D, Simplex3D } from '../util/simplex';
 import type Chunk from './Chunk';
-import chain from '../../common/fp/algebraicDataTypes/Chain';
 import { toByte } from '../../common/utils/numberUtils';
 import type { IGenerator } from './chunk-generators/Generator.types';
-import IO from '../../common/fp/monads/io';
 import range from '../../common/range';
 import { createSimplex2D, createSimplex3D } from '../util/simplex';
-
 import ChunkMap from './ChunkMap';
-
 import generateTree from './chunk-generators/Tree';
 import generateTreasury from './chunk-generators/Treasury';
-
-import { pipeMonadic } from '../../common/fp/pipe';
 
 import {
   AIR,
@@ -32,14 +26,19 @@ import {
   REEDS,
 } from '../../common/blocks';
 
-type ChunkLiftIO = (block: { chunk: Chunk; height: number; x: number; z: number }) => IO<Chunk>;
+type BlockPositionData = Readonly<{ chunk: Chunk; height: number; x: number; z: number }>;
+type ChunkGeneratorFn = (block: BlockPositionData) => void;
 
 type GetBlock = (x: number, y: number, z: number, chunk: Chunk) => number;
 
-const setBlocksInRangeIO = (getRange, getBlock: GetBlock): ChunkLiftIO => (params) => {
+const setBlocksInRange = (
+  getRange: (currentHeight: number) => [number, number],
+  getBlock: GetBlock,
+): ChunkGeneratorFn => (params) => {
   const { chunk, height, x, z } = params;
-  const fn = (y) => chunk.setUnsafe(x, y, z, getBlock(x, y, z, chunk));
-  return IO.from(() => range(...getRange(height), fn) || params);
+  const fn = (y: number) => chunk.setAt(x, y, z, getBlock(x, y, z, chunk));
+  range(...getRange(height), fn);
+  return params;
 };
 
 const BIOME_SIZE = 256;
@@ -95,7 +94,7 @@ const getBiomeType = ({ temperature, rainfall }, x: number, z: number) => {
 };
 
 const generateCaves = (generator: ChunkGenerator) =>
-  setBlocksInRangeIO(
+  setBlocksInRange(
     (height) => [0, height],
     (x, y, z) => {
       if (generator.simplexCaves(x, y, z) > 0.6) return AIR;
@@ -103,7 +102,7 @@ const generateCaves = (generator: ChunkGenerator) =>
     },
   );
 
-const generateBiomeData = setBlocksInRangeIO(
+const generateBiomeData = setBlocksInRange(
   (height) => [height - 3, height],
   (x, y, z, chunk) => {
     if (!chunk.at(x, y, z)) return AIR;
@@ -113,128 +112,121 @@ const generateBiomeData = setBlocksInRangeIO(
   },
 );
 
-const generateWater = setBlocksInRangeIO(
+const generateWater = setBlocksInRange(
   (height) => [height + 1, WATER_LEVEL],
   () => WATER,
 );
 
-const generateResources = (generator: ChunkGenerator) =>
-  pipeMonadic(
-    setBlocksInRangeIO(
-      (height) => [height, height + 1],
-      (x, y, z) => {
-        if (y >= WATER_LEVEL) return AIR;
-        if (y < WATER_LEVEL - 1 && generator.simplexResourcesClay(x, z) > 0.8) return CLAY;
-        return SAND;
-      },
-    ),
-    setBlocksInRangeIO(
-      (height) => [0, height - 5],
-      (x, y, z, chunk) => {
-        if (!chunk.at(x, y, z)) return AIR;
-        if (generator.simplexResourcesCoal(x, y, z) > 0.8) return COAL_ORE;
-        if (generator.simplexResourcesIron(x, y, z) > 0.85) return IRON_ORE;
-        return STONE;
-      },
-    ),
-  );
+const generateResources = (generator: ChunkGenerator): ChunkGeneratorFn => (params) => {
+  setBlocksInRange(
+    (height) => [height, height + 1],
+    (x, y, z) => {
+      if (y >= WATER_LEVEL) return AIR;
+      if (y < WATER_LEVEL - 1 && generator.simplexResourcesClay(x, z) > 0.8) return CLAY;
+      return SAND;
+    },
+  )(params);
+  setBlocksInRange(
+    (height) => [0, height - 5],
+    (x, y, z, chunk) => {
+      if (!chunk.at(x, y, z)) return AIR;
+      if (generator.simplexResourcesCoal(x, y, z) > 0.8) return COAL_ORE;
+      if (generator.simplexResourcesIron(x, y, z) > 0.85) return IRON_ORE;
+      return STONE;
+    },
+  )(params);
+};
 
-const generateReeds = ({ chunk, x, z, height }) =>
-  IO.from(() => {
-    if (
-      chunk.at(x, height, z - 1) === WATER ||
-      chunk.at(x, height, z + 1) === WATER ||
-      chunk.at(x - 1, height, z) === WATER ||
-      chunk.at(x + 1, height, z) === WATER
-    ) {
-      chunk.setUnsafe(x, height + 1, z, REEDS);
-      chunk.setUnsafe(x, height + 2, z, REEDS);
-      chunk.setUnsafe(x, height + 3, z, REEDS);
-    }
+const generateReeds = ({ chunk, x, z, height }: BlockPositionData) => {
+  if (
+    chunk.at(x, height, z - 1) === WATER ||
+    chunk.at(x, height, z + 1) === WATER ||
+    chunk.at(x - 1, height, z) === WATER ||
+    chunk.at(x + 1, height, z) === WATER
+  ) {
+    chunk.setAt(x, height + 1, z, REEDS);
+    chunk.setAt(x, height + 2, z, REEDS);
+    chunk.setAt(x, height + 3, z, REEDS);
+  }
+};
+
+const generateDesertBiome = (generator: ChunkGenerator): ChunkGeneratorFn => ({
+  chunk,
+  height,
+  x,
+  z,
+}) =>
+  chunk.generateAt(x, height, z, () => {
+    if (generator.simplexFoliage(x, z) > 0.94) return DEAD_BUSH;
+    return AIR;
   });
 
-const generateDesertBiome = (generator: ChunkGenerator): ChunkLiftIO => ({ chunk, height, x, z }) =>
-  chunk.setAt(
-    x,
-    height,
-    z,
-    (() => {
-      if (generator.simplexFoliage(x, z) > 0.94) return DEAD_BUSH;
-      return AIR;
-    })(),
-  );
+const generateHillsBiome = (generator: ChunkGenerator): ChunkGeneratorFn => ({
+  chunk,
+  height,
+  x,
+  z,
+}) => {
+  const s = generator.simplexFoliage(x, z);
+  chunk.generateAt(x, height, z, () => {
+    if (s < 0) return AIR;
+    if (s < 0.9) return TALL_GRASS;
+    if (s < 0.93) return FLOWER_YELLOW;
+    if (s < 0.95) return FLOWER_RED;
+    if (s < 0.99) return TORCH;
+    return AIR;
+  });
+  if (s > 0.99) generator.generateTree(chunk, x, height, z);
+  return chunk;
+};
 
-const generateHillsBiome = (generator: ChunkGenerator): ChunkLiftIO => ({ chunk, height, x, z }) =>
-  IO.from(() => {
-    const s = generator.simplexFoliage(x, z);
-    chunk.setUnsafe(
-      x,
+const generateBiomes = (generator: ChunkGenerator): ChunkGeneratorFn => (params) => {
+  const { chunk, height, x, z } = params;
+  if (height >= WATER_LEVEL && chunk.at(x, height - 1, z)) {
+    const biomeType = getBiomeType(chunk, x, z);
+    if (biomeType === 'desert') {
+      generateDesertBiome(generator)(params);
+    } else {
+      generateHillsBiome(generator)(params);
+    }
+  } else if (height === 62 && chunk.at(x, height, z)) {
+    const s = generator.simplexFoliageReeds(x, z);
+    if (s > 0.5) {
+      generateReeds(params);
+    }
+  }
+};
+
+const iterateChunk = (
+  funcToIterate: (params: { chunk: Chunk; height: number; x: number; z: number }) => unknown,
+) => (chunk: Chunk): Chunk => {
+  chunk.heightMap.map((height, x, z) =>
+    funcToIterate({
+      chunk,
       height,
-      z,
-      (() => {
-        if (s < 0) return AIR;
-        if (s < 0.9) return TALL_GRASS;
-        if (s < 0.93) return FLOWER_YELLOW;
-        if (s < 0.95) return FLOWER_RED;
-        if (s < 0.99) return TORCH;
-        return AIR;
-      })(),
-    );
-    if (s > 0.99) generator.generateTree(chunk, x, height, z).run();
-    return chunk;
-  });
+      x: chunk.x + x,
+      z: chunk.z + z,
+    }),
+  );
+  return chunk;
+};
 
-const generateBiomes = (generator: ChunkGenerator): ChunkLiftIO => (params) =>
-  IO.from(() => {
-    const { chunk, height, x, z } = params;
-    if (height >= WATER_LEVEL && chunk.at(x, height - 1, z)) {
-      const biomeType = getBiomeType(chunk, x, z);
-      (() => {
-        if (biomeType === 'desert') return generateDesertBiome(generator)(params);
-        return generateHillsBiome(generator)(params);
-      })().run();
-    } else if (height === 62 && chunk.at(x, height, z)) {
-      const s = generator.simplexFoliageReeds(x, z);
-      if (s > 0.5) {
-        generateReeds(params).run();
-      }
-    }
-    return chunk;
-  });
+const generateStructures = (generator: ChunkGenerator, chunk: Chunk) =>
+  generator.structures.forEach((generate) => generate(chunk));
 
-const iterateChunk = (funcToIterate) => (chunk: Chunk): IO<Chunk> =>
-  chunk.heightMap
-    .map((height, x, z) =>
-      funcToIterate({
-        chunk,
-        height,
-        x: chunk.x + x,
-        z: chunk.z + z,
-      }),
-    )
-    .reduce((f, g) => chain(() => f)(g));
+const setHeightMap = (chunk: Chunk, heightMap: ChunkMap<number>) => {
+  chunk.setHeightMap(heightMap);
+};
 
-const generateStructures = (generator: ChunkGenerator) => pipeMonadic(...generator.structures);
+const setRainfall = (chunk: Chunk, rainfall: ChunkMap<number>) => {
+  chunk.setRainfall(rainfall);
+};
 
-const setHeightMap = (heightMap: ChunkMap<number>) => (chunk: Chunk) =>
-  IO.from(() => {
-    chunk.heightMap = heightMap;
-    return chunk;
-  });
+const setTemperature = (chunk: Chunk, temperature: ChunkMap<number>) => {
+  chunk.setTemperature(temperature);
+};
 
-const setRainfall = (rainfall: ChunkMap<number>) => (chunk: Chunk) =>
-  IO.from(() => {
-    chunk.rainfall = rainfall;
-    return chunk;
-  });
-
-const setTemperature = (temperature: ChunkMap<number>) => (chunk: Chunk) =>
-  IO.from(() => {
-    chunk.temperature = temperature;
-    return chunk;
-  });
-
-export const generate = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> => {
+export const generate = (generator: ChunkGenerator, chunk: Chunk): void => {
   const { x, z } = chunk;
   const data = ChunkMap.of(0).map((_, i, j) => ({ x: x + i, z: z + j }));
   const heightMap = data.map(
@@ -242,25 +234,22 @@ export const generate = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> => 
   );
   const rainfall = data.map(generateRainfall(generator.simplexRainfall));
   const temperature = data.map(generateTemperature(generator.simplexTemperature));
-  return pipeMonadic(
-    setHeightMap(heightMap),
-    setRainfall(rainfall),
-    setTemperature(temperature),
-    iterateChunk(
-      pipeMonadic(
-        generateCaves(generator),
-        generateResources(generator),
-        generateBiomeData,
-        generateWater,
-      ),
-    ),
-  )(chunk);
+  setHeightMap(chunk, heightMap);
+  setRainfall(chunk, rainfall);
+  setTemperature(chunk, temperature);
+  iterateChunk((params) => {
+    generateCaves(generator)(params);
+    generateResources(generator)(params);
+    generateBiomeData(params);
+    generateWater(params);
+  })(chunk);
 };
 
-export const generateObjects = (generator: ChunkGenerator, chunk: Chunk): IO<Chunk> =>
-  pipeMonadic(
-    generateStructures(generator),
-    iterateChunk(pipeMonadic(generateBiomes(generator))),
-  )(chunk);
+export const generateObjects = (generator: ChunkGenerator, chunk: Chunk): void => {
+  generateStructures(generator, chunk);
+  iterateChunk((params) => {
+    generateBiomes(generator)(params);
+  })(chunk);
+};
 
 export default createChunkGenerator;

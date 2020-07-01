@@ -15,7 +15,7 @@ class Model {
   vertexBuffer: WebGLBuffer = gl.createBuffer();
   indexBuffer: WebGLBuffer = gl.createBuffer();
   texCoordBuffer: WebGLBuffer = gl.createBuffer();
-  elementsCount: number;
+  elementsCount = 0;
 
   vao: WebGLVertexArrayObject;
   // TODO: add vertex count, index count etc
@@ -48,7 +48,7 @@ class Model {
     gl.bindVertexArray(null);
   }
 
-  loadFromJson(model: MeshJSON, scale? = 1): void {
+  loadFromJson(model: MeshJSON, scale = 1): void {
     const size = Math.max(...model.vertexPositions);
     let vertexPositions = model.vertexPositions.map((el) => el / size);
     if (scale) {

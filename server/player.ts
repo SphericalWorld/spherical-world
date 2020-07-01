@@ -4,7 +4,7 @@ import type { GameObject } from '../common/ecs/EntityManager';
 import type { World } from '../common/ecs/World';
 import { Transform, Network, PlayerData, Inventory, NetworkSync, Camera } from './components';
 import { createStubItems } from '../common/Inventory/Inventory';
-import { TransformComponent } from '../src/components';
+import { TransformComponent, CameraComponent } from '../src/components';
 
 type SerializedPlayerData = GameObject<[typeof Transform, typeof Inventory, typeof Camera]>;
 
@@ -20,7 +20,7 @@ export const playerProvider = (world: World) => (
         new Network(socket),
         Inventory.deserialize(playerData.inventory),
         new NetworkSync({ name: 'PLAYER' }),
-        Camera.deserialize(playerData.camera),
+        CameraComponent({ ...playerData.camera }),
       )
     : world.createEntity(
         null,
@@ -29,7 +29,7 @@ export const playerProvider = (world: World) => (
         new Network(socket),
         new Inventory(createStubItems()),
         new NetworkSync({ name: 'PLAYER' }),
-        new Camera(),
+        CameraComponent({}),
       );
   socket.player = player;
   return player;

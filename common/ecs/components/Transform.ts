@@ -63,16 +63,8 @@ export type TransformProps = {
  * @param {vec3} translation 3D world coordinates
  * @param {Entity} parent parent object in hierarchy
  */
-export const TransformComponent = ({
-  translation,
-  parent,
-  rotation,
-}: TransformProps): JSX.Element => ({
+export const TransformComponent = (props: TransformProps): JSX.Element => ({
   type: Transform,
-  props: {
-    translation,
-    parent,
-    rotation,
-  },
+  props,
   key: null,
-}); // new Transform(translation, rotation, parent);
+});

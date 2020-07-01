@@ -38,6 +38,6 @@ const timeProvider = () => {
   return Time;
 };
 
-export type Time = ReturnType<typeof timeProvider>;
+export type Time = InstanceType<ReturnType<typeof timeProvider>>;
 
 export default timeProvider;

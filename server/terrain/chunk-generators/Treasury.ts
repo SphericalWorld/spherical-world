@@ -2,7 +2,6 @@ import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type Chunk from '../Chunk';
 import { TORCH, COBBLESTONE, AIR, WATER } from '../../../common/blocks';
-import IO from '../../../common/fp/monads/io';
 
 const PRNG = seedrandom.alea;
 
@@ -42,42 +41,41 @@ const generateRoom = (generator, chunk: Chunk) => {
     for (let j = xStart; j < xEnd; j += 1) {
       for (let k = zStart; k < zEnd; k += 1) {
         if (j === xStart || j === xEnd - 1 || k === zStart || k === zEnd - 1) {
-          chunk.setUnsafe(j, i, k, COBBLESTONE);
+          chunk.setAt(j, i, k, COBBLESTONE);
         } else {
-          chunk.setUnsafe(j, i, k, AIR);
+          chunk.setAt(j, i, k, AIR);
         }
       }
     }
   }
 
-  chunk.setUnsafe(xEnd - 2, y - 2, zStart + 4, [TORCH, 2]);
-  chunk.setUnsafe(xStart + 1, y - 2, zStart + 4, [TORCH, 3]);
-  chunk.setUnsafe(xStart + 4, y - 2, zEnd - 2, [TORCH, 4]);
-  chunk.setUnsafe(xStart + 4, y - 2, zStart + 1, [TORCH, 5]);
+  chunk.setAt(xEnd - 2, y - 2, zStart + 4, [TORCH, 2]);
+  chunk.setAt(xStart + 1, y - 2, zStart + 4, [TORCH, 3]);
+  chunk.setAt(xStart + 4, y - 2, zEnd - 2, [TORCH, 4]);
+  chunk.setAt(xStart + 4, y - 2, zStart + 1, [TORCH, 5]);
 
   for (let i = xStart; i < xEnd; i += 1) {
     for (let j = zStart; j < zEnd; j += 1) {
-      chunk.setUnsafe(i, y - generator.height, j, 16);
+      chunk.setAt(i, y - generator.height, j, 16);
     }
   }
 };
 
 // TODO use Maybe monad?
-const generateTreasury = (seed: number) => {
+const generateTreasury = (seed: number): ((chunk: Chunk) => Chunk) => {
   const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {
     simplex,
     height: 5,
   };
 
-  return (chunk: Chunk): IO<Chunk> =>
-    IO.from(() => {
-      if (simplex.noise2D(chunk.x * 10, chunk.z * 10) < 0.5) {
-        return chunk;
-      }
-      generateRoom(generator, chunk);
+  return (chunk: Chunk): Chunk => {
+    if (simplex.noise2D(chunk.x * 10, chunk.z * 10) < 0.5) {
       return chunk;
-    });
+    }
+    generateRoom(generator, chunk);
+    return chunk;
+  };
 };
 
 export default generateTreasury;

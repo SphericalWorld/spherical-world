@@ -42,7 +42,6 @@ export class World {
   lastAddedObjects = [];
   lastDeletedObjects = [];
   objects: Map<Entity, any> = new Map();
-  changedData: Map<Class<Component>, Map<string, Component>>;
   memoryManager: MemoryManager = new MemoryManager();
   constructor(thread: THREAD_ID) {
     this.thread = thread;
@@ -55,11 +54,9 @@ export class World {
       thread.postMessage({ type: 'dataArray', payload: this.memoryManager.memory });
 
     thread.events.subscribe(({ type, payload }) => {
-      // console.log(type);
       if (type === 'CREATE_ENTITY') {
         this.addExistedEntity(payload.id, ...payload.components);
       } else if (type === 'UPDATE_COMPONENTS') {
-        this.updateComponents(payload.components || []);
         if (payload.events && payload.events.length) {
           for (let i = 0; i < payload.events.length; i += 1) {
             this.events.emit(payload.events[i]);
@@ -95,36 +92,13 @@ export class World {
   };
 
   update(delta: number): void {
-    this.changedData = new Map();
-    this.systems.map((system) => {
-      const changedComponents = system(delta / 1000);
-      if (!changedComponents) {
-        return;
-      }
-      for (const [id, ...components] of changedComponents) {
-        for (const component of components) {
-          let el = this.changedData.get(component.constructor);
-          if (!el) {
-            el = new Map();
-            this.changedData.set(component.constructor, el);
-          }
-          el.set(id, component);
-        }
-      }
-    });
-
-    const changedDataArray = [...this.changedData.entries()];
+    for (const system of this.systems) {
+      system(delta / 1000);
+    }
     for (const thread of this.threads) {
-      const componentsToUpdate = changedDataArray
-        .filter(([constructor]) => constructor.threads.includes(thread.id))
-        .map(([constructor, data]) => ({
-          type: constructor.name,
-          data: [...data.entries()],
-        }));
       thread.postMessage({
         type: 'UPDATE_COMPONENTS',
         payload: {
-          components: componentsToUpdate,
           delta,
           events: this.eventsForThreads,
         },

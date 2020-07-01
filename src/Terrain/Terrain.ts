@@ -30,7 +30,7 @@ class Terrain extends TerrainBase<Chunk> {
     ).generateFoliageTexture();
   };
 
-  generateBiomeColorMap(texture: WebGLTexture) {
+  generateBiomeColorMap(texture: WebGLTexture): void {
     const fb = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
@@ -50,7 +50,7 @@ export const getVisibleChunks = (terrain: Terrain, pMatrix: mat4, mvMatrix: mat4
   ); // TODO cache loaded chunks array
 };
 
-const getBlockDetails = (terrain, x: number, y: number, z: number) =>
+const getBlockDetails = (terrain: Terrain, x: number, y: number, z: number) =>
   terrain
     .getChunk(toChunkPosition(x), toChunkPosition(z))
     .map((chunk) =>

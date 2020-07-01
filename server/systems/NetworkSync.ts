@@ -5,13 +5,16 @@ import { send } from '../network/socket';
 import { Transform, Network, Inventory } from '../components/index';
 
 const getComponentsToUpdate = (world: World, playerId) =>
-  [...world.changedData.entries()]
-    .filter(([constructor]) => constructor.networkable)
+  [...world.components.entries()]
+    .map(([constructor, data]) => [world.componentTypes.get(constructor), data])
+    .filter(([constructor]) => constructor.name === 'Transform')
     .map(([constructor, data]) =>
       constructor.name === 'Transform'
         ? {
             type: constructor.name,
-            data: [...data.entries()].filter(([id]) => id !== playerId),
+            data: [...data.entries()]
+              .filter(([id]) => id !== playerId)
+              .map(([_, value]) => [_, value.serialize()]),
           }
         : { type: constructor.name, data: [...data.entries()] },
     );

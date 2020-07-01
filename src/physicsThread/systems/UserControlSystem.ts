@@ -131,7 +131,6 @@ export default (world: World, terrain: Terrain): System => {
     moveEvents.clear();
     jumpEvents.clear();
     runEvents.clear();
-    return [[id, userControls]];
   };
   return userControlSystem;
 };

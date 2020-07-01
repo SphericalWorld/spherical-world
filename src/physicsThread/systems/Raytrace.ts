@@ -1,4 +1,4 @@
-import { vec3 } from 'gl-matrix';
+import { vec3, vec2 } from 'gl-matrix';
 import type { BlockFace } from '../../../common/block';
 import type { Maybe } from '../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
@@ -36,6 +36,13 @@ const getFace = (block: vec3, emptyBlock: vec3): BlockFace => {
   return face;
 };
 
+const copyBlockDetais = (dest: BlockDetails, source: BlockDetails): void => {
+  dest.block = source.block;
+  vec2.copy(dest.coordinates, source.coordinates);
+  vec3.copy(dest.position, source.position);
+  vec3.copy(dest.positionInChunk, source.positionInChunk);
+};
+
 const getBlockDetails = (terrain, x: number, y: number, z: number): Maybe<BlockDetails> =>
   terrain.getChunk(toChunkPosition(x), toChunkPosition(z)).map((chunk) => {
     const position = vec3.fromValues(x, y, z);
@@ -45,7 +52,7 @@ const getBlockDetails = (terrain, x: number, y: number, z: number): Maybe<BlockD
     return {
       block: chunk.getBlock(xInChunk, y, zInChunk),
       position,
-      geoId: chunk.geoId,
+      coordinates: [chunk.x, chunk.z],
       positionInChunk: vec3.fromValues(xInChunk, y, zInChunk),
     };
   });
@@ -115,18 +122,16 @@ export default (ecs: World, terrain: Terrain): System => {
   };
 
   const raytrace = () => {
-    const result = [];
-    for (const { id, transform, raytracer } of components) {
+    for (const { transform, raytracer } of components) {
       const { camera } = cameras[0];
       trace(camera.worldPosition, camera.sight).map((traceResult) => {
-        raytracer.block = traceResult.block;
-        raytracer.emptyBlock = traceResult.emptyBlock;
         raytracer.face = traceResult.face;
+        raytracer.hasEmptyBlock = traceResult.emptyBlock ? 1 : 0;
+        copyBlockDetais(raytracer.block, traceResult.block);
+        if (raytracer.hasEmptyBlock) copyBlockDetais(raytracer.emptyBlock, traceResult.emptyBlock);
         vec3.copy(transform.translation, traceResult.block.position);
-        result.push([id, raytracer]);
       });
     }
-    return result;
   };
   return raytrace;
 };

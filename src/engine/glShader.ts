@@ -70,7 +70,7 @@ class GlShaderProgram {
     }
   }
 
-  async load() {
+  async load(): Promise<void> {
     this.link();
     for (const attribute of this.attributes) {
       this.setAttribLocation.call(this, attribute);
@@ -80,7 +80,7 @@ class GlShaderProgram {
     }
   }
 
-  link() {
+  link(): void {
     for (const attribute of this.attributes) {
       this.setAttribLocation(attribute);
     }

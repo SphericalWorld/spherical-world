@@ -9,12 +9,12 @@ const drawImage = (
   img: HTMLImageElement,
   x: number,
   y: number,
-  width?: number = img.width,
-  height?: number = img.height,
+  width: number = img.width,
+  height: number = img.height,
   deg: number,
   flip: boolean,
   flop: boolean,
-  center? = false,
+  center = false,
 ) => {
   context.save();
   if (!center) {
@@ -35,6 +35,9 @@ if (!(textureCanvas instanceof HTMLCanvasElement)) {
   throw new Error('Fatal error: texture canvas not found');
 }
 const ctx = textureCanvas.getContext('2d');
+if (!ctx) {
+  throw new Error('Fatal error: cant initialize canvas context');
+}
 
 class GlTextureLibrary {
   textures: Map<string, Texture> = new Map();
@@ -46,7 +49,7 @@ class GlTextureLibrary {
     this.ctx = ctx;
   }
 
-  makeTextureAtlasBase(name: string, predicate: (Texture) => boolean): Texture {
+  makeTextureAtlasBase(name: string, predicate: (texture: Texture) => boolean): Texture {
     this.textureCanvas.width = 1024;
     this.textureCanvas.height = 1024;
     this.ctx.fillStyle = '#FFF0';

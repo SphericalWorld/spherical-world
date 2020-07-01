@@ -9,4 +9,4 @@ export default class Gravity implements Component {
 /**
  * Component to mark Entity as affected by gravity
  */
-export const GravityComponent = (_: {}): JSX.Element => new Gravity();
+export const GravityComponent = (): JSX.Element => new Gravity();

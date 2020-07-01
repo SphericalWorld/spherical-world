@@ -5,7 +5,6 @@ import type ChunkMap from './ChunkMap';
 import type { Terrain } from './Terrain';
 import type { ChunkGenerator } from './ChunkGenerator';
 import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
-import IO from '../../common/fp/monads/io';
 import { profileChunkGeneration } from '../../common/profileUtils';
 import { generate, generateObjects } from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
@@ -87,7 +86,9 @@ class Chunk {
     this.flags = Buffer.alloc(BLOCKS_IN_CHUNK);
 
     await new Promise((resolve) => {
-      generate(this.chunkGenerator, this).map(resolve).map(profileChunkGenerationBase).run();
+      generate(this.chunkGenerator, this);
+      profileChunkGenerationBase();
+      resolve();
     });
     // await this.northChunk.generateObjects();
     // await this.southChunk.generateObjects();
@@ -184,7 +185,7 @@ class Chunk {
     return this;
   }
 
-  setUnsafe(x: number, y: number, z: number, block: number | [number, number]): void {
+  setAt(x: number, y: number, z: number, block: number | [number, number]): void {
     const chunk = getChunkNear(this, x, y, z);
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
     if (typeof block === 'number') {
@@ -196,12 +197,17 @@ class Chunk {
     }
   }
 
-  setAt(x: number, y: number, z: number, block: number): IO<Chunk> {
+  generateAt(x: number, y: number, z: number, generateFn: () => number | [number, number]): void {
     const chunk = getChunkNear(this, x, y, z);
-    return IO.from(() => {
-      chunk.data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)] = block;
-      return chunk;
-    });
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    const block = generateFn();
+    if (typeof block === 'number') {
+      chunk.data[index] = block;
+    } else {
+      const [data, flags] = block;
+      chunk.data[index] = data;
+      chunk.flags[index] = flags;
+    }
   }
 
   at(x: number, y: number, z: number): number {
@@ -213,13 +219,24 @@ class Chunk {
       return this;
     }
     await new Promise((resolve) => {
-      generateObjects(this.chunkGenerator, this)
-        .map(resolve)
-        .map(profileChunkGenerationFoliage)
-        .run();
+      generateObjects(this.chunkGenerator, this);
+      resolve();
+      profileChunkGenerationFoliage();
     });
     this.objectsGenerated = true;
     return this;
+  }
+
+  setHeightMap(heightMap: ChunkMap<number>): void {
+    this.heightMap = heightMap;
+  }
+
+  setRainfall(rainfall: ChunkMap<number>): void {
+    this.rainfall = rainfall;
+  }
+
+  setTemperature(temperature: ChunkMap<number>): void {
+    this.temperature = temperature;
   }
 }
 

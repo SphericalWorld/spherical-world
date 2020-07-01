@@ -12,6 +12,7 @@ const onSyncGameData = (ecs: World) =>
   ecs.events
     .filter((e) => e.type === 'SYNC_GAME_DATA')
     .subscribe(({ payload: { newObjects, deletedObjects = [], components = [] } }) => {
+      // console.log(newObjects, deletedObjects, components);
       for (const newObject of newObjects) {
         const Constructor = ecs.constructors.get(newObject.networkSync.name);
         if (Constructor) {
@@ -21,7 +22,7 @@ const onSyncGameData = (ecs: World) =>
       for (const deletedObject of deletedObjects) {
         ecs.deleteEntity(deletedObject, false);
       }
-      ecs.updateComponents(components);
+      // ecs.updateComponents(components);
     });
 
 const onLoadControlSettings = (ecs: World, input: Input, store) =>
@@ -52,7 +53,6 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
 
   let lastUpdate = Date.now();
   const networkSystem = () => {
-    const result = [];
     if (Date.now() > lastUpdate + 100) {
       // TODO: replace Date.now() by global engine tick time
       lastUpdate = Date.now();
@@ -67,7 +67,6 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
         },
       ]);
     }
-    return result;
   };
   return networkSystem;
 };

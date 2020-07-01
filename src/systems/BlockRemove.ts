@@ -11,13 +11,14 @@ import {
   PLAYER_START_PUT_BLOCK,
   PLAYER_PUT_BLOCK,
 } from '../player/events';
+import { getGeoId } from '../../common/chunk';
 
 const getPutBlockEvents = (world: World, picker) =>
   world.events
     .filter((e) => e.type === PLAYER_START_PUT_BLOCK)
     .subscribe(() => {
-      const { emptyBlock, face } = picker[0].raytracer;
-      if (emptyBlock) {
+      const { emptyBlock, face, hasEmptyBlock } = picker[0].raytracer;
+      if (hasEmptyBlock) {
         const inventory = world.objects.get(picker[0].transform.parent).inventory.data;
         const item = inventory.items[inventory.selectedItem];
         if (!item || !item.count) {
@@ -34,7 +35,7 @@ const getPutBlockEvents = (world: World, picker) =>
           PLAYER_PUT_BLOCK,
           {
             flags: face,
-            geoId: emptyBlock.geoId,
+            geoId: getGeoId(...emptyBlock.coordinates),
             position: Array.from(emptyBlock.position),
             positionInChunk: Array.from(emptyBlock.positionInChunk),
             blockId: item.itemTypeId,
@@ -90,7 +91,7 @@ export default (world: World): System => {
           world.createEventAndDispatch(
             PLAYER_DESTROYED_BLOCK,
             {
-              geoId: block.geoId,
+              geoId: getGeoId(...block.coordinates),
               positionInChunk: Array.from(block.positionInChunk),
               position: Array.from(block.position),
             },

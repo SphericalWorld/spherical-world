@@ -2,7 +2,6 @@ import { vec3 } from 'gl-matrix';
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type Chunk from '../Chunk';
-import IO from '../../../common/fp/monads/io';
 import { randomize } from '../../../common/utils/vector';
 
 const PRNG = seedrandom.alea;
@@ -25,7 +24,7 @@ const leaves = (chunk: Chunk, position: vec3, lengthRemain: number): void => {
   }
   const runRecursion = (vector: vec3) => {
     if (!chunk.at(vector[0], vector[1], vector[2])) {
-      chunk.setUnsafe(vector[0], vector[1], vector[2], 5);
+      chunk.setAt(vector[0], vector[1], vector[2], 5);
       leaves(chunk, vector, lengthRemain - 1);
     }
   };
@@ -55,7 +54,7 @@ const branch = (
     leaves(chunk, newPosition, 3);
   };
   if (length) {
-    chunk.setUnsafe(...vec3.round(vec3.create(), position), 4);
+    chunk.setAt(...vec3.round(vec3.create(), position), 4);
   }
   if (branchLengthRemain) {
     const newDirection = direction;
@@ -85,22 +84,21 @@ const branch = (
   }
 };
 
-const generateTree = (seed: number) => {
+const generateTree = (seed: number): ((chunk: Chunk, x: number, y: number, z: number) => Chunk) => {
   const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {
     simplex,
     height: 5,
   };
 
-  return (chunk: Chunk, x: number, y: number, z: number): IO<Chunk> =>
-    IO.from(() => {
-      const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
-      for (let i = 0; i < length; i += 1) {
-        chunk.setUnsafe(x, y + i, z, 4);
-      }
-      branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
-      return chunk;
-    });
+  return (chunk: Chunk, x: number, y: number, z: number): Chunk => {
+    const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
+    for (let i = 0; i < length; i += 1) {
+      chunk.setAt(x, y + i, z, 4);
+    }
+    branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
+    return chunk;
+  };
 };
 
 export default generateTree;

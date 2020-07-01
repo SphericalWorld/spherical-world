@@ -10,26 +10,38 @@ import { Transform, Camera } from '../components';
 import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 import { unproject } from '../../common/utils/vector';
 
-const resizeViewport = (viewport: Viewport): Viewport => {
+const resizeViewport = (viewport: Viewport): void => {
   const width = gl.canvas.clientWidth;
   const height = gl.canvas.clientHeight;
   if (gl.canvas.width !== width || gl.canvas.height !== height) {
     gl.canvas.width = width;
     gl.canvas.height = height;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    return {
-      viewportWidth: gl.drawingBufferWidth,
-      viewportHeight: gl.drawingBufferHeight,
-      pMatrix: mat4.perspective(
+    viewport.viewportWidth = gl.drawingBufferWidth;
+    viewport.viewportHeight = gl.drawingBufferHeight;
+    mat4.copy(
+      viewport.pMatrix,
+      mat4.perspective(
         mat4.create(),
         1.04719755,
         gl.drawingBufferWidth / gl.drawingBufferHeight,
         0.1,
         1024.0,
-      ), // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
-    };
+      ),
+    );
+    // return {
+    //   viewportWidth: gl.drawingBufferWidth,
+    //   viewportHeight: gl.drawingBufferHeight,
+    //   pMatrix: mat4.perspective(
+    //     mat4.create(),
+    //     1.04719755,
+    //     gl.drawingBufferWidth / gl.drawingBufferHeight,
+    //     0.1,
+    //     1024.0,
+    //   ), // 60 degrees = (1.04719755 radian), distance of view [0.1, 512]
+    // };
   }
-  return viewport;
+  // return viewport;
 };
 
 const getWorldPosition = (distance: number) => (
@@ -52,7 +64,10 @@ const getWorldPositionFar = getWorldPosition(1);
 const getCameraMovements = (world: World) =>
   world.events.filter((el) => el.type === CAMERA_MOVED).subscribeQueue();
 
-const sumCameraMovements = ([x, y], { payload }) => [x + payload.x, y + payload.y];
+const sumCameraMovements = ([x, y]: [number, number], { payload }) => [
+  x + payload.x,
+  y + payload.y,
+];
 
 export default (world: World, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);
@@ -78,7 +93,7 @@ export default (world: World, input: Input): System => {
   const cameraSystem = () => {
     const movement = cameraMovements.events.reduce(sumCameraMovements, [0, 0]);
     const [{ id, transform, camera }] = cameras;
-    camera.viewport = resizeViewport(camera.viewport);
+    resizeViewport(camera.viewport);
 
     const { translation, rotation } = transform;
     camera.yaw += movement[1] * 0.005;
@@ -116,9 +131,8 @@ export default (world: World, input: Input): System => {
     vec3.subtract(sight, worldPosition, worldPositionNear);
     vec3.normalize(sight, sight);
 
-    camera.worldPosition = worldPositionNear;
-    camera.sight = sight;
-    return [[id, camera]];
+    vec3.copy(camera.worldPosition, worldPositionNear);
+    vec3.copy(camera.sight, sight);
   };
   return cameraSystem;
 };

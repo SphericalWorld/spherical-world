@@ -5,7 +5,7 @@ import { Joint, Transform, Visual } from '../../components/react';
 import { createBillboard } from '../../engine/Model';
 import { GlObject } from '../../engine';
 import { SimpleMaterial, BLENDING_TRANSPARENT } from '../../engine/Material';
-import { makeTextureFromText } from '../../engine/Texture';
+import { makeTextureFromText, Texture } from '../../engine/Texture';
 import { billboard } from '../../shaders/Billboard';
 
 type Props = Readonly<{
@@ -16,7 +16,7 @@ type Props = Readonly<{
 
 const model = createBillboard();
 
-const getMaterial = (diffuse) =>
+const getMaterial = (diffuse: Texture) =>
   new SimpleMaterial({
     shader: billboard,
     diffuse,

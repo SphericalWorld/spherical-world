@@ -5,8 +5,6 @@ import HashMap from '../../common/fp/data-structures/Map';
 
 class Terrain<Chunk extends ChunkBase> {
   chunks: HashMap<string, Chunk> = new HashMap();
-  playerX: number;
-  playerZ: number;
 
   addChunk(chunk: Chunk): Chunk {
     this.chunks.set(chunk.geoId, chunk);

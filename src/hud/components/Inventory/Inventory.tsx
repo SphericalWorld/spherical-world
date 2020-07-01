@@ -28,7 +28,6 @@ type MappedProps = {
 
 type DispatchProps = {
   setUIState: typeof doSetUIState;
-  swapSlots: typeof doSwapSlots;
 };
 
 type Props = SpreadTypes<MappedProps, DispatchProps>;

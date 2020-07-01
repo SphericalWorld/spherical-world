@@ -15,7 +15,7 @@ export default class Network implements Component {
     this.socket = socket;
   }
 
-  destructor() {
+  destructor(): void {
     for (const player of this.linkedPlayers) {
       player.network.linkedPlayers = player.network.linkedPlayers.filter(
         (el) => el.id !== this.socket.player.id,
