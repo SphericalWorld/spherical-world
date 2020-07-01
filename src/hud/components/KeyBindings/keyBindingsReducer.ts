@@ -29,7 +29,7 @@ const getKeyCategories = () =>
     );
 
 export type KeyBindingsState = Readonly<{
-  keyCategories: $Call<typeof getKeyCategories>;
+  keyCategories: ReturnType<typeof getKeyCategories>;
   status: string;
   editing: boolean;
   keyPosition?: KeyPosition;

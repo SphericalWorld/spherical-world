@@ -1,15 +1,9 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
-import type { State } from '../../../reducers/rootReducer';
-import { setUIState as doSetUIState } from '../../utils/StateRouter';
 import { VIDEO } from './videoConstants';
 import { Button, Label, Select } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
 import { content, footerButtons, label, labelSelect, volumes } from './video.module.scss';
-
-type Props = {
-  setUIState: typeof doSetUIState;
-};
+import { useSetUIState } from '../../utils/StateRouter';
 
 const quality = [
   { value: '1', text: 'low' },
@@ -22,8 +16,10 @@ const display = [
   { value: '2', text: 'fullscreen' },
 ];
 
-const Video = ({ setUIState }: Props) => {
+const Video = (): JSX.Element => {
+  const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(VIDEO, false), [setUIState]);
+
   return (
     <ModalWindowMenu caption="Video">
       <div className={content}>
@@ -63,8 +59,4 @@ const Video = ({ setUIState }: Props) => {
   );
 };
 
-const mapActions = {
-  setUIState: doSetUIState,
-};
-
-export default connect<Props, {}, _, _, State, _>(null, mapActions)(Video);
+export default Video;

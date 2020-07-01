@@ -157,7 +157,6 @@ const createTerrain = (createItem: CreateItem) =>
     }
   };
 
-declare let tmp: $Call<typeof createTerrain, any>;
-export type Terrain = tmp;
+export type Terrain = InstanceType<ReturnType<typeof createTerrain>>;
 
 export default createTerrain;

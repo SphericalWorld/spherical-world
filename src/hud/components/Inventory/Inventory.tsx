@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import type { State } from '../../../reducers/rootReducer';
 import type { Slot } from '../../../../common/Inventory';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
-import { setUIState as doSetUIState } from '../../utils/StateRouter';
+import { setUIState as doSetUIState, useSetUIState } from '../../utils/StateRouter';
 import { useSwapSlots } from './inventoryActions';
 import {
   inventory,
@@ -47,9 +47,16 @@ const Footer = () => (
   </footer>
 );
 
-const Inventory = ({ setUIState, slots }: Props) => {
-  const swapSlots = useSwapSlots();
+const slotsSelector = createSelector(
+  (state: State) => state.hudData.player.inventory.slots,
+  (state: State) => state.hudData.player.inventory.items,
+  (slots, items) => slots.map((el) => items[el || ''] || null),
+);
 
+const Inventory = (): JSX.Element => {
+  const swapSlots = useSwapSlots();
+  const setUIState = useSetUIState();
+  const slots = useSelector(slotsSelector);
   const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
   const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [
     swapSlots,
@@ -80,18 +87,4 @@ const Inventory = ({ setUIState, slots }: Props) => {
   );
 };
 
-const slotsSelector = createSelector(
-  (state: State) => state.hudData.player.inventory.slots,
-  (state: State) => state.hudData.player.inventory.items,
-  (slots, items) => slots.map((el) => items[el || ''] || null),
-);
-
-const mapState = (state: State) => ({
-  slots: slotsSelector(state),
-});
-
-const mapActions = {
-  setUIState: doSetUIState,
-};
-
-export default connect<Props, {}, _, _, State, _>(mapState, mapActions)(Inventory);
+export default Inventory;

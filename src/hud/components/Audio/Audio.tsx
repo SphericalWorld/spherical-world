@@ -1,7 +1,5 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
-import type { State } from '../../../reducers/rootReducer';
-import { setUIState as doSetUIState } from '../../utils/StateRouter';
+import { useSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
 import { Button, Label, Checkbox, InputRange } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
@@ -16,11 +14,8 @@ import {
   volumes,
 } from './audio.module.scss';
 
-type Props = {
-  setUIState: typeof doSetUIState;
-};
-
-const Audio = ({ setUIState }: Props) => {
+const Audio = (): JSX.Element => {
+  const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(AUDIO, false), [setUIState]);
   return (
     <ModalWindowMenu caption="Audio">
@@ -66,8 +61,4 @@ const Audio = ({ setUIState }: Props) => {
   );
 };
 
-const mapActions = {
-  setUIState: doSetUIState,
-};
-
-export default connect<Props, {}, _, _, State, _>(null, mapActions)(Audio);
+export default Audio;

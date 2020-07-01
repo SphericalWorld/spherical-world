@@ -28,7 +28,7 @@ export type transform = (<A extends ComponentLike, B extends ComponentLike>(
     excludeComponents?: ReadonlyArray<ComponentLike>,
   ) => ReadonlyArray<Merge<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>, Obj<D>>>);
 
-export type GameObject<T> = $Call<transform, T>;
+export type GameObject<T> = $Call<transform>;
 
 export class EntitySelector<T> {
   includeComponents: T;
