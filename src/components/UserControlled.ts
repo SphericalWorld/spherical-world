@@ -9,56 +9,12 @@ export default class UserControlled implements Component {
   static memoryManager: MemoryManager;
   static memorySize = 8 * BYTE + VEC3;
 
-  data = UserControlled.memoryManager.getDataView(6);
-
-  get movingForward(): number {
-    return this.data.getUint8(0);
-  }
-
-  set movingForward(val: number) {
-    this.data.setUint8(0, val);
-  }
-
-  get movingBackward(): number {
-    return this.data.getUint8(1);
-  }
-
-  set movingBackward(val: number) {
-    this.data.setUint8(1, val);
-  }
-
-  get movingLeft(): number {
-    return this.data.getUint8(2);
-  }
-
-  set movingLeft(val: number) {
-    this.data.setUint8(2, val);
-  }
-
-  get movingRight(): number {
-    return this.data.getUint8(3);
-  }
-
-  set movingRight(val: number) {
-    this.data.setUint8(3, val);
-  }
-
-  get isRunning(): number {
-    return this.data.getUint8(4);
-  }
-
-  set isRunning(val: number) {
-    this.data.setUint8(4, val);
-  }
-
-  get isJumping(): number {
-    return this.data.getUint8(5);
-  }
-
-  set isJumping(val: number) {
-    this.data.setUint8(5, val);
-  }
-
+  movingForward = UserControlled.memoryManager.getUint8();
+  movingBackward = UserControlled.memoryManager.getUint8();
+  movingLeft = UserControlled.memoryManager.getUint8();
+  movingRight = UserControlled.memoryManager.getUint8();
+  isRunning = UserControlled.memoryManager.getUint8();
+  isJumping = UserControlled.memoryManager.getUint8();
   velocity: vec3 = UserControlled.memoryManager.getVec3();
 
   offset: number;

@@ -61,4 +61,19 @@ export class MemoryManager {
     this.currentComponentLocalOffset += normalizedSize;
     return res;
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  getUint8(): number {
+    throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getUint16(): number {
+    throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getFloat32(): number {
+    throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
+  }
 }

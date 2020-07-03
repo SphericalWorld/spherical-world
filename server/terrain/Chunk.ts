@@ -11,7 +11,7 @@ import { getGeoId } from '../../common/chunk';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
-const deflate: (Buffer) => Promise<Buffer> = promisify(zlib.deflate);
+const deflate: (data: Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
   let chunkTo = chunk;
@@ -194,6 +194,17 @@ class Chunk {
       const [data, flags] = block;
       chunk.data[index] = data;
       chunk.flags[index] = flags;
+    }
+  }
+
+  setAtSameChunkOnly(x: number, y: number, z: number, block: number | [number, number]): void {
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    if (typeof block === 'number') {
+      this.data[index] = block;
+    } else {
+      const [data, flags] = block;
+      this.data[index] = data;
+      this.flags[index] = flags;
     }
   }
 

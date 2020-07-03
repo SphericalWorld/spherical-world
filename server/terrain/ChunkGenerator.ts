@@ -36,7 +36,7 @@ const setBlocksInRange = (
   getBlock: GetBlock,
 ): ChunkGeneratorFn => (params) => {
   const { chunk, height, x, z } = params;
-  const fn = (y: number) => chunk.setAt(x, y, z, getBlock(x, y, z, chunk));
+  const fn = (y: number) => chunk.setAtSameChunkOnly(x, y, z, getBlock(x, y, z, chunk));
   range(...getRange(height), fn);
   return params;
 };

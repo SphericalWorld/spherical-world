@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "react-app-rewired start",
-    "start-server": "nodemon --exec babel-node app.ts --no-babelrc --extensions \".ts\" --presets @babel/preset-typescript --plugins @babel/plugin-transform-flow-strip-types,@babel/transform-modules-commonjs,@babel/plugin-proposal-class-properties,@babel/plugin-syntax-object-rest-spread",
+    "start-server": "nodemon --exec babel-node app.ts --no-babelrc --extensions \".ts\" --presets @babel/preset-typescript --plugins @babel/transform-modules-commonjs,./common/ecs/utils/babelPlugin.js",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
