@@ -1,4 +1,4 @@
-module.exports = function (babel) {
+module.exports = (babel) => {
   const { types: t } = babel;
   const methods = ['getFloat32', 'getUint8', 'getUint16'];
   const transpile = (path, state) => {

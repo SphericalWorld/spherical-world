@@ -18,7 +18,7 @@ class AABBinner {
   objectPosition: vec3;
   type: COLLIDER_TYPE;
 
-  constructor(translation: vec3, size: vec3, objectPosition: vec3 | null) {
+  constructor(translation: vec3, size: vec3, objectPosition?: vec3) {
     this.type = COLLIDER_AABB;
     this.size = size;
     this.center = translation;
@@ -47,7 +47,7 @@ export type AABB = {
   move: (position: vec3) => void;
 };
 
-export const createAABB = (translation: vec3, size: vec3, objectPosition: vec3 | null): AABB =>
+export const createAABB = (translation: vec3, size: vec3, objectPosition?: vec3): AABB =>
   new AABBinner(translation, size, objectPosition);
 
 export const testAABBvsAABB = (a: AABB, b: AABB): boolean =>

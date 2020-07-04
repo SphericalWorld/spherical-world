@@ -1,7 +1,0 @@
-export interface Functor<A> {
-  map<B>(fn: (a: A) => B): Functor<B>;
-}
-
-const map = <B>(fn: (any) => B) => <A>(functor: Functor<A>): Functor<B> => functor.map(fn);
-
-export default map;

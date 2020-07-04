@@ -1,9 +1,6 @@
-import type { Maybe } from '../../common/fp/monads/maybe';
 import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
 import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
 import type { InputContexts } from './inputContexts';
-import HashMap from '../../common/fp/data-structures/Map';
-import { Just, Nothing } from '../../common/fp/monads/maybe';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
 import InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
@@ -22,7 +19,7 @@ type MappedEvent = Readonly<{
 export type InputContext = Readonly<{
   type: InputContexts;
   active: boolean;
-  events: HashMap<string, MappedEvent>;
+  events: Map<string, MappedEvent>;
   eventTypes: Set<MappedEvent>;
 }>;
 
@@ -38,7 +35,7 @@ export const createContext = ({
   type,
   active,
   eventTypes: new Set(eventTypes),
-  events: new HashMap(),
+  events: new Map(),
 });
 
 export const activate = (context: InputContext) => ({
@@ -51,30 +48,30 @@ export const deactivate = (context: InputContext) => ({
 });
 
 export const getMappedInputEvent = (
-  events: HashMap<string, MappedEvent>,
+  events: Map<string, MappedEvent>,
   inputEvent: InputEvent,
-): Maybe<GameEvent> =>
-  events
-    .get(inputEvent.name)
-    .chain(({ type, data, gameEvent, onEnd, dispatchable }: MappedEvent) => {
-      const payload = data && data(inputEvent);
-      switch (type) {
-        case INPUT_TYPE_ACTION:
-          if (inputEvent.status === STATE_DOWN) {
-            return Just({ type: gameEvent, payload, dispatchable });
-          }
-          return Nothing;
-        case INPUT_TYPE_STATE:
-          if (inputEvent.status === STATE_DOWN) {
-            return Just({ type: gameEvent, payload, dispatchable });
-          }
-          return Just({ type: onEnd, payload, dispatchable });
-        case INPUT_TYPE_RANGE:
-          return Just({ type: gameEvent, payload, dispatchable });
-        default:
-          return Nothing;
+): GameEvent | null => {
+  const event = events.get(inputEvent.name);
+  if (!event) return null;
+  const { type, data, gameEvent, onEnd, dispatchable } = event;
+  const payload = data && data(inputEvent);
+  switch (type) {
+    case INPUT_TYPE_ACTION:
+      if (inputEvent.status === STATE_DOWN) {
+        return { type: gameEvent, payload, dispatchable };
       }
-    });
+      return null;
+    case INPUT_TYPE_STATE:
+      if (inputEvent.status === STATE_DOWN) {
+        return { type: gameEvent, payload, dispatchable };
+      }
+      return { type: onEnd, payload, dispatchable };
+    case INPUT_TYPE_RANGE:
+      return { type: gameEvent, payload, dispatchable };
+    default:
+      return null;
+  }
+};
 
 export const setKey = (context: InputContext, key: string, event: MappedEvent) =>
   context.events.set(key, event);

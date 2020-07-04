@@ -61,7 +61,7 @@ export default (world: World, terrain: Terrain): System => {
     if (!components.length) {
       return;
     }
-    const [{ id, transform, velocity, userControlled: userControls }] = components;
+    const [{ transform, velocity, userControlled: userControls }] = components;
 
     moveEvents.events.reduce(
       (controls, { type, payload: { direction } }) =>
@@ -116,17 +116,18 @@ export default (world: World, terrain: Terrain): System => {
     } else {
       vec3.set(userControls.velocity, 0, 0, 0);
     }
-    getBlock(terrain)(
+    const block = getBlock(terrain)(
       transform.translation[0],
       transform.translation[1] - 1,
       transform.translation[2],
-    ).map((block) => {
+    );
+    if (block) {
       if (blocksInfo[block].needPhysics && userControls.isJumping && velocity.linear[1] === 0) {
         velocity.linear[1] += 5;
       } else if (block === 127) {
         userControls.velocity[1] = userControls.isJumping ? 5 : 0;
       }
-    });
+    }
 
     moveEvents.clear();
     jumpEvents.clear();

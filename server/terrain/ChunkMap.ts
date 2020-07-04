@@ -1,8 +1,6 @@
-import type { Functor } from '../../common/fp/algebraicDataTypes/Functor';
-import type { Foldable } from '../../common/fp/algebraicDataTypes/Foldable';
 import { createArray } from '../../common/utils/array';
 
-export default class ChunkMap<A> implements Functor<A>, Foldable<A> {
+export default class ChunkMap<A> {
   data: A[];
 
   constructor(data: A[]) {

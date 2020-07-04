@@ -32,18 +32,18 @@ type ServerEvents = {
   payload: any;
 }; // TODO: change to enum for simplified refinements
 
-const onMessage = (events) => (socket: Socket) => (data) =>
-  parseJson<Message>(data).map((message) => {
-    if (typeof message.type === 'string') {
-      events.emit({
-        type: message.type,
-        payload: message.data,
-        socket,
-      });
-    } else {
-      console.error('unknown message format');
-    }
-  });
+const onMessage = (events) => (socket: Socket) => (data) => {
+  const message = parseJson<Message>(data);
+  if (typeof message?.type === 'string') {
+    events.emit({
+      type: message.type,
+      payload: message.data,
+      socket,
+    });
+  } else {
+    console.error('unknown message format');
+  }
+};
 
 const serverProvider = (world: World, Terrain: ITerrain) =>
   class Server {

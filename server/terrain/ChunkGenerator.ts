@@ -197,9 +197,9 @@ const generateBiomes = (generator: ChunkGenerator): ChunkGeneratorFn => (params)
   }
 };
 
-const iterateChunk = (
-  funcToIterate: (params: { chunk: Chunk; height: number; x: number; z: number }) => unknown,
-) => (chunk: Chunk): Chunk => {
+const iterateChunk = (funcToIterate: (params: BlockPositionData) => unknown) => (
+  chunk: Chunk,
+): Chunk => {
   chunk.heightMap.map((height, x, z) =>
     funcToIterate({
       chunk,

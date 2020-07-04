@@ -1,12 +1,10 @@
 import { vec3, vec2 } from 'gl-matrix';
 import type { BlockFace } from '../../../common/block';
-import type { Maybe } from '../../../common/fp/monads/maybe';
 import type { BlockDetails } from '../../components/Raytracer';
 import type { World } from '../../../common/ecs/World';
 import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../../common/ecs/System';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
-import { Nothing } from '../../../common/fp/monads/maybe';
 import Transform from '../../components/Transform';
 import Raytracer from '../../components/Raytracer';
 import UserControlled from '../../components/UserControlled';
@@ -43,8 +41,14 @@ const copyBlockDetais = (dest: BlockDetails, source: BlockDetails): void => {
   vec3.copy(dest.positionInChunk, source.positionInChunk);
 };
 
-const getBlockDetails = (terrain, x: number, y: number, z: number): Maybe<BlockDetails> =>
-  terrain.getChunk(toChunkPosition(x), toChunkPosition(z)).map((chunk) => {
+const getBlockDetails = (
+  terrain: Terrain,
+  x: number,
+  y: number,
+  z: number,
+): BlockDetails | void => {
+  const chunk = terrain.getChunk(toChunkPosition(x), toChunkPosition(z));
+  if (chunk) {
     const position = vec3.fromValues(x, y, z);
     const xInChunk = toPositionInChunk(x);
     const zInChunk = toPositionInChunk(z);
@@ -55,7 +59,8 @@ const getBlockDetails = (terrain, x: number, y: number, z: number): Maybe<BlockD
       coordinates: [chunk.x, chunk.z],
       positionInChunk: vec3.fromValues(xInChunk, y, zInChunk),
     };
-  });
+  }
+};
 
 const calcMax = (position: number, delta: number, step: number): number =>
   delta *
@@ -68,7 +73,7 @@ export default (ecs: World, terrain: Terrain): System => {
   const components = ecs.createSelector([Transform, Raytracer]);
   const cameras = ecs.createSelector([UserControlled, Camera]);
 
-  const trace = (position: vec3, sight: vec3): Maybe<RaytraceInfo> => {
+  const trace = (position: vec3, sight: vec3): RaytraceInfo | void => {
     const stepX = sight[0] < 0 ? -1 : 1;
     const stepY = sight[1] < 0 ? -1 : 1;
     const stepZ = sight[2] < 0 ? -1 : 1;
@@ -85,8 +90,8 @@ export default (ecs: World, terrain: Terrain): System => {
     let tMaxY = calcMax(position[1], tDeltaY, stepY);
     let tMaxZ = calcMax(position[2], tDeltaZ, stepZ);
 
-    let blockDetails = Nothing;
-    let emptyBlockDetails = Nothing;
+    let blockDetails;
+    let emptyBlockDetails;
 
     for (let i = 0; i < 5; i += 1) {
       if (tMaxX < tMaxZ) {
@@ -106,31 +111,32 @@ export default (ecs: World, terrain: Terrain): System => {
       }
       emptyBlockDetails = blockDetails;
       blockDetails = getBlockDetails(terrain, x, y, z);
-      if (blockDetails.isJust === true && blockDetails.extract().block) {
+      if (blockDetails && blockDetails.block) {
         break;
       }
     }
-    return blockDetails.map((block) =>
-      emptyBlockDetails.isJust === true && block.block
-        ? {
-            block,
-            emptyBlock: emptyBlockDetails.extract(),
-            face: getFace(block.position, emptyBlockDetails.extract().position),
-          }
-        : { block },
-    );
+    if (!blockDetails) return;
+
+    return emptyBlockDetails && blockDetails.block
+      ? {
+          block: blockDetails,
+          emptyBlock: emptyBlockDetails,
+          face: getFace(blockDetails.position, emptyBlockDetails.position),
+        }
+      : { block: blockDetails };
   };
 
   const raytrace = () => {
     for (const { transform, raytracer } of components) {
       const { camera } = cameras[0];
-      trace(camera.worldPosition, camera.sight).map((traceResult) => {
+      const traceResult = trace(camera.worldPosition, camera.sight);
+      if (traceResult) {
         raytracer.face = traceResult.face;
         raytracer.hasEmptyBlock = traceResult.emptyBlock ? 1 : 0;
         copyBlockDetais(raytracer.block, traceResult.block);
         if (raytracer.hasEmptyBlock) copyBlockDetais(raytracer.emptyBlock, traceResult.emptyBlock);
         vec3.copy(transform.translation, traceResult.block.position);
-      });
+      }
     }
   };
   return raytrace;

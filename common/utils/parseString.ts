@@ -1,11 +1,8 @@
-import { Nothing, Just } from '../fp/monads/maybe';
-import type { Maybe } from '../fp/monads/maybe';
-
-const parseJson = <T>(data: string): Maybe<T> => {
+const parseJson = <T>(data: string): T | null => {
   try {
-    return Just(JSON.parse(data));
+    return JSON.parse(data);
   } catch (e) {
-    return Nothing;
+    return null;
   }
 };
 

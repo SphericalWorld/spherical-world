@@ -32,7 +32,7 @@ import grassColorMap from './colormap/grass.png';
 
 import skybox from './skybox.png';
 
-const texturesProvider = async () =>
+const texturesProvider = async (): Promise<Texture[]> =>
   Promise.all([
     Texture.create(grass, {
       name: 'grass',

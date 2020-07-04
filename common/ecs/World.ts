@@ -165,10 +165,7 @@ export class World {
     this.registerEntity(id, components);
   }
 
-  createEntity<T extends Component[]>(
-    id: Entity | null,
-    ...components: T
-  ): $Call<transform, $TupleMap<T, <TT>(TT) => Class<TT>>> {
+  createEntity<T extends Component[]>(id: Entity | null, ...components: T): $Call<transform> {
     const createComponentInstance = (component) => {
       const offset = this.memoryManager.allocate(component.type);
       component.props.offset = offset;

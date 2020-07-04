@@ -35,11 +35,12 @@ const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
   ecs.events
     .filter((e) => e.type === 'CHUNK_VBO_LOADED')
     .map((e) => e.payload)
-    .subscribe((e) =>
-      terrain.chunks.get(e.geoId).map((chunk) => {
+    .subscribe((e) => {
+      const chunk = terrain.chunks.get(e.geoId);
+      if (chunk) {
         chunk.bindVBO(e.buffers, e.buffersInfo);
-      }),
-    );
+      }
+    });
 
 export default (ecs: World, network: Network, terrain: Terrain): System => {
   onChunkLoaded(ecs, network, terrain);

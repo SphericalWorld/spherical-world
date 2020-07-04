@@ -102,9 +102,10 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     const draw = (position: Transform, visual: Visual): void => {
       runShader(visual.glObject.material.shader);
       visual.glObject.material.use();
-      getLight(terrain)(...position.translation).map((light) =>
-        gl.uniform4f(currentShader.uLighting, ...light),
-      );
+      const light = getLight(terrain)(...position.translation);
+      if (light) {
+        gl.uniform4f(currentShader.uLighting, ...light);
+      }
       gl.uniform4f(currentShader.uGlobalColor, ...globalColor);
       mvPushMatrix();
       mat4.translate(mvMatrix, mvMatrix, position.translation);

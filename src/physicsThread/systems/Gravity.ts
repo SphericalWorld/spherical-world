@@ -13,13 +13,14 @@ export default (ecs: World, terrain: Terrain): System => {
   const gravitySystem = (delta: number) => {
     for (const { velocity, transform } of components) {
       let acceleration = 9.81;
-      getBlock(terrain)(...transform.translation).map((block) => {
+      const block = getBlock(terrain)(...transform.translation);
+      if (block !== undefined) {
         acceleration *= blocksInfo[block].fallAcceleration;
         velocity.linear[1] -= acceleration * delta;
         if (velocity.linear[1] < blocksInfo[block].fallSpeedCap) {
           velocity.linear[1] = blocksInfo[block].fallSpeedCap;
         }
-      });
+      }
     }
   };
   return gravitySystem;

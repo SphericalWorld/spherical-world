@@ -1,11 +1,8 @@
-import type { Filterable } from '../fp/algebraicDataTypes/Filterable';
-import type { Functor } from '../fp/algebraicDataTypes/Functor';
-
 import EventQueue from './EventQueue';
 
 export const Empty = Symbol('Empty');
 
-export default class EventObservable<T> implements Filterable<T>, Functor<T> {
+export default class EventObservable<T> {
   subscriptions: EventObservable<any>[] = [];
   observer: (T) => unknown;
   pipeline: Function[] = [];

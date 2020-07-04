@@ -1,4 +1,3 @@
-import HashMap from '../../common/fp/data-structures/Map';
 import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import type { InputContext } from './InputContext';
@@ -10,11 +9,11 @@ import * as events from './events';
 
 const inputProvider = (inputContexts: InputContext[]) => {
   class Input {
-    contextsMap: HashMap<InputContexts, InputContext> = new HashMap();
+    private contextsMap = new Map<InputContexts, InputContext>();
     contexts: InputContext[] = [];
     activeContexts: InputContext[];
     inputStates: Map<string, InputEvent> = new Map();
-    dispatchHandler: (GameEvent) => unknown;
+    dispatchHandler: (event: GameEvent) => unknown;
 
     constructor() {
       this.contexts = inputContexts;
@@ -26,7 +25,8 @@ const inputProvider = (inputContexts: InputContext[]) => {
 
     onEvent(event: InputEvent): void {
       for (let i = 0; i < this.activeContexts.length; i += 1) {
-        getMappedInputEvent(this.activeContexts[i].events, event).map(this.dispatch);
+        const mappedEvent = getMappedInputEvent(this.activeContexts[i].events, event);
+        if (mappedEvent) this.dispatch(mappedEvent);
       }
     }
 
@@ -34,14 +34,14 @@ const inputProvider = (inputContexts: InputContext[]) => {
       return this.contexts.filter((el) => el.active);
     }
 
-    switchContext = (activateFn: (InputContext) => InputContext) => (
+    switchContext = (activateFn: (context: InputContext) => InputContext) => (
       contextType: InputContexts,
     ): void => {
-      this.contextsMap.get(contextType).map((context) => {
-        this.contextsMap.set(contextType, activateFn(context));
-        this.contexts = [...this.contextsMap.values()];
-        this.activeContexts = this.getActiveContexts();
-      });
+      const context = this.contextsMap.get(contextType);
+      if (!context) return;
+      this.contextsMap.set(contextType, activateFn(context));
+      this.contexts = [...this.contextsMap.values()];
+      this.activeContexts = this.getActiveContexts();
     };
 
     activateContext = this.switchContext(activate);
@@ -57,7 +57,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
       this.dispatchHandler(event);
     };
 
-    onDispatch(dispatchHandler: (GameEvent) => unknown) {
+    onDispatch(dispatchHandler: (event: GameEvent) => unknown) {
       this.dispatchHandler = dispatchHandler;
     }
   }

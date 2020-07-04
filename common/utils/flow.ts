@@ -1,1 +1,1 @@
-export type getElements<DataArray> = $Call<<T>(val: T[]) => T, DataArray>;
+export type getElements<DataArray extends Array<any>> = DataArray[number];

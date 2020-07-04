@@ -92,7 +92,7 @@ export default (world: World, input: Input): System => {
 
   const cameraSystem = () => {
     const movement = cameraMovements.events.reduce(sumCameraMovements, [0, 0]);
-    const [{ id, transform, camera }] = cameras;
+    const [{ transform, camera }] = cameras;
     resizeViewport(camera.viewport);
 
     const { translation, rotation } = transform;

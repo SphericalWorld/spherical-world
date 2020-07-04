@@ -1,6 +1,6 @@
-import compose from '../fp/combinators/compose';
-
 export const clamp = (min: number, max: number) => (value: number): number =>
   value > max ? max : value < min ? min : value;
 
-export const toByte = compose(Math.floor)(clamp(0, 255));
+const clampByte = clamp(0, 255);
+
+export const toByte = (value: number): number => Math.floor(clampByte(value));

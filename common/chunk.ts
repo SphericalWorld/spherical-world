@@ -1,6 +1,5 @@
 import type { vec3 } from 'gl-matrix';
 import { TERRAIN_HALF_SIZE_IN_BLOCKS } from './constants/chunk';
-import HashMap from './fp/data-structures/Map';
 // const k = index >>> 8;
 // // const index2 = index & 0xFF;
 // const i = (index >>> 4) & 0xF;
@@ -18,15 +17,15 @@ export const toPositionInChunk = (dimension: number): number => Math.floor(dimen
 export const filterFarChunks = <T extends { x: number; z: number }>(
   oldPosition: vec3,
   newPosition: vec3,
-  chunks: HashMap<string, T>,
-): HashMap<string, T> => {
+  chunks: Map<string, T>,
+): Map<string, T> => {
   const xOld = toChunkPosition(oldPosition[0]);
   const zOld = toChunkPosition(oldPosition[2]);
   const xNew = toChunkPosition(newPosition[0]);
   const zNew = toChunkPosition(newPosition[2]);
   return xNew === xOld && zNew === zOld
     ? chunks
-    : new HashMap(
+    : new Map(
         [...chunks.entries()].filter(
           ([, { x, z }]) =>
             x > xNew - TERRAIN_HALF_SIZE_IN_BLOCKS &&
