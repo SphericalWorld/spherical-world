@@ -1,23 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { ComponentType } from 'react';
 import type { State } from '../../../reducers/rootReducer';
+import { useMemoizedSelector } from '../../../util/reducerUtils';
 
-type OwnProps = {
+type Props = Readonly<{
   on: string;
-  component: React$ComponentType<any>;
+  component: ComponentType;
+}>;
+
+const Route = ({ on, component: Component }: Props): JSX.Element | null => {
+  const isVisible = useMemoizedSelector(({ uiStates }: State) => uiStates[on]);
+  if (!isVisible) return null;
+  return <Component />;
 };
 
-type MappedProps = {
-  uiStates: State['uiStates'];
-};
-
-type Props = SpreadTypes<OwnProps, MappedProps>;
-
-const mapState = ({ uiStates }: State) => ({
-  uiStates,
-});
-
-const Route = ({ on, uiStates, component: Component }: Props) =>
-  uiStates[on] ? <Component /> : null;
-
-export default connect<Props, OwnProps, _, _, _, _>(mapState, null)(Route);
+export default Route;

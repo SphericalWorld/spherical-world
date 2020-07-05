@@ -8,8 +8,6 @@ import Thread from './Thread/Thread';
 import texturesProvider from './textures';
 import materialsProvider from './materials';
 import shadersProvider from './shaders';
-import resourceLoader from './ResourceLoader';
-import addon from './addon';
 import Terrain from './Terrain';
 import systemsProvider from './systems';
 
@@ -74,8 +72,6 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const world = createECS(threads);
   const time = new (timeProvider())(Date.now());
   const terrain = getTerrain();
-  const Addon = addon(store);
-  const ResourceLoader = resourceLoader(Addon);
   playerProvider(world);
   itemProvider(world);
   const inputSources = inputSourcesProvider();
@@ -85,7 +81,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
   initHudAPI(store);
 
-  return Main(network, new ResourceLoader(), world);
+  return Main(network, world);
 };
 
 export default mainProvider;

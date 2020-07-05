@@ -13,7 +13,7 @@ import Chunk from './Chunk/Chunk';
 class Terrain extends TerrainBase<Chunk> {
   material: Material;
   foliageColorMap: Uint8Array = new Uint8Array(256 * 256 * 4);
-  chunksToRender: Chunk[];
+  chunksToRender: Chunk[] = [];
 
   loadChunk = (
     blocksData: ArrayBuffer,
@@ -57,7 +57,14 @@ const getBlockDetails = (terrain: Terrain, x: number, y: number, z: number) => {
   }
 };
 
-const drawFog = (terrain, shader, skyColor, x: number, y: number, z: number) => {
+const drawFog = (
+  terrain: Terrain,
+  shader,
+  skyColor: [number, number, number],
+  x: number,
+  y: number,
+  z: number,
+) => {
   const blockInDown = getBlockDetails(terrain, x, y, z);
   if (blockInDown) {
     if (blockInDown === WATER) {
@@ -75,8 +82,8 @@ const drawFog = (terrain, shader, skyColor, x: number, y: number, z: number) => 
 export const drawOpaqueChunkData = (
   terrain: Terrain,
   cameraPosition: vec3,
-  skyColor: number[],
-  globalColor: number[],
+  skyColor: [number, number, number],
+  globalColor: [number, number, number, number],
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
@@ -110,8 +117,8 @@ export const drawOpaqueChunkData = (
 export const drawTransparentChunkData = (
   terrain: Terrain,
   cameraPosition: vec3,
-  skyColor: number[],
-  globalColor: number[],
+  skyColor: [number, number, number],
+  globalColor: [number, number, number, number],
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;

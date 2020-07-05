@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react';
-import { connect } from 'react-redux';
 import type { KeyPosition } from './keyBindingsTypes';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
 import { getEventInfo } from '../../../../common/constants/input/rawEventInfo';
 import { KEY_BINDINGS } from './keyBindingsConstants';
-import { startEditKey as doStartEditKey } from './keyBindingsActions';
-import { setUIState as doSetUIState } from '../../utils/StateRouter';
+import { useStartEditKey } from './keyBindingsActions';
+import { useSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
 import StatusPanel from './StatusPanel';
@@ -23,6 +22,7 @@ import {
   labelFirst,
   labelCommandGroup,
 } from './keyBindings.module.scss';
+import { useMemoizedSelector } from '../../../util/reducerUtils';
 
 type ActionMapppingMappedProps = {
   caption: string;
@@ -49,17 +49,6 @@ type ActionCategoryProps = SpreadTypes<
     onSetKey: (action: string, key: KeyPosition) => unknown;
   }
 >;
-
-type DispatchProps = {
-  setUIState: typeof doSetUIState;
-  startEditKey: typeof doStartEditKey;
-};
-
-type KeyBindingsOwnProps = {
-  keyCategories: ReadonlyArray<ActionCategoryMappedProps>;
-};
-
-type KeyBindingsProps = SpreadTypes<KeyBindingsOwnProps, DispatchProps>;
 
 const ActionMappping = ({
   caption,
@@ -92,8 +81,11 @@ const ActionCategory = ({ name, items, onSetKey }: ActionCategoryProps) => (
   </div>
 );
 
-const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsProps) => {
+const KeyBindings = (): JSX.Element => {
+  const setUIState = useSetUIState();
+  const startEditKey = useStartEditKey();
   const close = useCallback(() => setUIState(KEY_BINDINGS, false), [setUIState]);
+  const keyCategories = useMemoizedSelector(({ keyBindings }: State) => keyBindings.keyCategories);
 
   return (
     <ModalWindowMenu caption="Key Bindings">
@@ -129,11 +121,4 @@ const KeyBindings = ({ keyCategories, setUIState, startEditKey }: KeyBindingsPro
   );
 };
 
-const mapState = ({ keyBindings: { keyCategories } }) => ({ keyCategories });
-
-const mapActions = {
-  setUIState: doSetUIState,
-  startEditKey: doStartEditKey,
-};
-
-export default connect<KeyBindingsProps, {}, _, _, State, _>(mapState, mapActions)(KeyBindings);
+export default KeyBindings;

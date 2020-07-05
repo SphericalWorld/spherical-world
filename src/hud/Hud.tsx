@@ -13,6 +13,7 @@ import KeyBindings from './components/KeyBindings/KeyBindings';
 import Audio from './components/Audio/Audio';
 import Video from './components/Video/Video';
 import Inventory from './components/Inventory/Inventory';
+import DebugPanel from './components/Debug/DebugPanel';
 
 const Hud = (): JSX.Element => (
   <div>
@@ -21,6 +22,7 @@ const Hud = (): JSX.Element => (
     <Route on={INVENTORY} component={Inventory} />
     <Route on={AUDIO} component={Audio} />
     <Route on={VIDEO} component={Video} />
+    <DebugPanel />
     <MainPanel />
     <PlayerStats />
     <MenuButton />

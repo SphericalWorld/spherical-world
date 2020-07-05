@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux';
+import { useCallback } from 'react';
 import type { KeyPosition } from './keyBindingsTypes';
 import { SET_KEY, KEY_EDITING_STARTED } from './keyBindingsConstants';
 
@@ -17,3 +19,11 @@ export const startEditKey = (action: string, keyPosition: KeyPosition) => ({
     keyPosition,
   },
 });
+
+export const useStartEditKey = () => {
+  const dispatch = useDispatch();
+  return useCallback(
+    (action: string, keyPosition: KeyPosition) => dispatch(startEditKey(action, keyPosition)),
+    [dispatch],
+  );
+};

@@ -4,19 +4,18 @@ import { CHUNK_STATUS_NEED_LOAD_ALL, CHUNK_STATUS_NEED_LOAD_VBO } from './chunkC
 import { getGeoId, getIndex } from '../../../common/chunk';
 // north direction - decreasing of X
 
-class ChunkBase<TChunk> {
+class ChunkBase {
   x: number;
   z: number;
-  height: number;
   geoId: string;
-  westChunk: TChunk = this;
-  eastChunk: TChunk = this;
-  southChunk: TChunk = this;
-  northChunk: TChunk = this;
+  westChunk: ChunkBase = this;
+  eastChunk: ChunkBase = this;
+  southChunk: ChunkBase = this;
+  northChunk: ChunkBase = this;
   state: ChunkState = CHUNK_STATUS_NEED_LOAD_ALL;
-  nestedChunks: TChunk[] = [];
+  nestedChunks: ChunkBase[] = [];
   hasNestedChunks = false;
-  surroundingChunks: TChunk[] = [];
+  surroundingChunks: ChunkBase[] = [];
   hasSurroundingChunks = false;
   blocks: Uint8Array;
   light: Uint16Array;
@@ -58,22 +57,22 @@ class ChunkBase<TChunk> {
     this.hasSurroundingChunks = this.surroundingChunks.length === 8;
   }
 
-  setNorthChunk(chunk: TChunk): void {
+  setNorthChunk(chunk: ChunkBase): void {
     this.northChunk = chunk;
     this.checkNestedChunks();
   }
 
-  setSouthChunk(chunk: TChunk): void {
+  setSouthChunk(chunk: ChunkBase): void {
     this.southChunk = chunk;
     this.checkNestedChunks();
   }
 
-  setWestChunk(chunk: TChunk): void {
+  setWestChunk(chunk: ChunkBase): void {
     this.westChunk = chunk;
     this.checkNestedChunks();
   }
 
-  setEastChunk(chunk: TChunk): void {
+  setEastChunk(chunk: ChunkBase): void {
     this.eastChunk = chunk;
     this.checkNestedChunks();
   }

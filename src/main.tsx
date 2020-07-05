@@ -13,7 +13,7 @@ setInterval(() => {
   }
 }, 100);
 
-const engineProvider = (network: Network, resourceLoader, ecs: World) => {
+const engineProvider = (network: Network, ecs: World) => {
   class Engine {
     ecs: World = ecs;
     lastTime = 0;
@@ -40,7 +40,6 @@ const engineProvider = (network: Network, resourceLoader, ecs: World) => {
       network.events
         .filter((e) => e.type === 'GAME_START')
         .subscribe(() => {
-          resourceLoader.loadAddons();
           requestAnimationFrame(this.gameCycle);
         });
 

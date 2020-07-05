@@ -1,3 +1,5 @@
+import { useSelector, shallowEqual } from 'react-redux';
+
 type Reducer<T> = (T, any) => T;
 
 type ReducersMap<T> = {
@@ -5,6 +7,10 @@ type ReducersMap<T> = {
 };
 
 type Action = Readonly<{ type: string; payload: unknown }>;
+
+export const useMemoizedSelector: typeof useSelector = (selector) => {
+  return useSelector(selector, shallowEqual);
+};
 
 export const createReducer = <T>(
   initialState: T,

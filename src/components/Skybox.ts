@@ -6,7 +6,7 @@ export default class Skybox implements Component {
   static threads = [THREAD_MAIN];
   static componentName: 'skybox' = 'skybox';
 
-  sunPosition: vec3 = [0, 0, 0];
+  sunPosition: vec3 = vec3.create();
 }
 
 /**

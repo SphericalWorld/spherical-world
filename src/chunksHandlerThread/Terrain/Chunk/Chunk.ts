@@ -296,8 +296,15 @@ const createPlane = (
 
 type CreatePlane = ReturnType<typeof createPlane>;
 
-export default class Chunk extends ChunkBase<Chunk> {
+export default class Chunk extends ChunkBase {
   minimap: Uint8Array = new Uint8Array(256 * 3);
+
+  westChunk: Chunk = this;
+  eastChunk: Chunk = this;
+  southChunk: Chunk = this;
+  northChunk: Chunk = this;
+  surroundingChunks: Chunk[] = [];
+  nestedChunks: Chunk[] = [];
 
   createTopPlane: CreatePlane;
   createBottomPlane: CreatePlane;

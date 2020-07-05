@@ -34,7 +34,7 @@ type BufferData = Readonly<{
   offset: number;
 }>;
 
-export default class Chunk extends ChunkBase<Chunk> {
+export default class Chunk extends ChunkBase {
   frustum: Frustum;
   foliageTexture: WebGLTexture = null;
   rainfallData: Uint8Array;

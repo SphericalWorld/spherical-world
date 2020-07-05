@@ -50,12 +50,12 @@ export class SimpleMaterial implements Material {
         this.shader.animate(this.frame % this.diffuse.frames);
       }
     }
-    if (this.blendingMode === BLENDING_ADDITIVE) {
-      gl.enable(gl.BLEND);
-      gl.blendEquation(gl.FUNC_ADD);
-      gl.blendFunc(gl.DST_COLOR, gl.SRC_COLOR);
-      // gl.disable(gl.BLEND);
-    }
+    // if (this.blendingMode === BLENDING_ADDITIVE) {
+    //   gl.enable(gl.BLEND);
+    //   gl.blendEquation(gl.FUNC_ADD);
+    //   gl.blendFunc(gl.DST_COLOR, gl.SRC_COLOR);
+    //   // gl.disable(gl.BLEND);
+    // }
     if (this.blendingMode === BLENDING_TRANSPARENT) {
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);

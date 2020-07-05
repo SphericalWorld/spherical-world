@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import {
   mainPanel,
@@ -14,6 +13,7 @@ import {
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
 import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActions';
+import { useMemoizedSelector } from '../../../util/reducerUtils';
 
 const slotsSelector = createSelector(
   (state: State) => state.mainPanel.slots,
@@ -22,8 +22,10 @@ const slotsSelector = createSelector(
 );
 
 const MainPanel = (): JSX.Element => {
-  const selectedItemIndex = useSelector((state: State) => state.mainPanel.selectedItemIndex);
-  const slots = useSelector((state: State) => slotsSelector(state));
+  const selectedItemIndex = useMemoizedSelector(
+    (state: State) => state.mainPanel.selectedItemIndex,
+  );
+  const slots = useMemoizedSelector((state: State) => slotsSelector(state));
   const selectInventoryItem = useSelectInventoryItem();
   const swapSlots = useSwapSlots();
 

@@ -42,7 +42,7 @@ type Props = Readonly<{
   inventory: InventoryProps;
 }>;
 
-export const Item = ({ transform, id, inventory }: Props) => {
+export const Item = ({ transform, id, inventory }: Props): JSX.Element => {
   const model = createCube(
     SIZE,
     undefined,

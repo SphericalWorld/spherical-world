@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import type { State } from '../../../reducers/rootReducer';
 import type { Slot } from '../../../../common/Inventory';
@@ -21,6 +20,7 @@ import {
   icon,
 } from './inventory.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
+import { useMemoizedSelector } from '../../../util/reducerUtils';
 
 type MappedProps = {
   slots: ReadonlyArray<Slot | null>;
@@ -56,7 +56,7 @@ const slotsSelector = createSelector(
 const Inventory = (): JSX.Element => {
   const swapSlots = useSwapSlots();
   const setUIState = useSetUIState();
-  const slots = useSelector(slotsSelector);
+  const slots = useMemoizedSelector(slotsSelector);
   const close = useCallback(() => setUIState(INVENTORY, false), [setUIState]);
   const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [
     swapSlots,
