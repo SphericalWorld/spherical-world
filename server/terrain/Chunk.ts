@@ -3,13 +3,13 @@ import { readFile, outputFile } from 'fs-extra';
 import zlib from 'zlib';
 import type ChunkMap from './ChunkMap';
 import type { Terrain } from './Terrain';
-import type { ChunkGenerator } from './ChunkGenerator';
+// import type { ChunkGenerator } from '../threads/chunkGenerator/ChunkGenerator';
 import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 import { profileChunkGeneration } from '../../common/profileUtils';
-import { generate, generateObjects } from './ChunkGenerator';
+// import { generate, generateObjects } from '../threads/chunkGenerator/ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
+import { ChunkBase } from './ChunkBase';
 
-const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
 const deflate: (data: Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
@@ -33,39 +33,35 @@ type ChunkMetaData = {
   dataLength: number;
 };
 
-class Chunk {
+class Chunk extends ChunkBase {
   terrain: Terrain;
-  x: number;
-  z: number;
-  geoId: string;
   fileName: string;
   metaFileName: string;
   filePath: string;
   metaPath: string;
-  data: Buffer;
-  flags: Buffer;
   chunkGenerator: ChunkGenerator;
   changesCount = 0;
   terrainGenerated = false;
   objectsGenerated = false;
-  northChunk: Chunk;
-  southChunk: Chunk;
-  westChunk: Chunk;
-  eastChunk: Chunk;
+  northChunk: Chunk = this;
+  southChunk: Chunk = this;
+  westChunk: Chunk = this;
+  eastChunk: Chunk = this;
   heightMap: ChunkMap<number>;
   rainfall: ChunkMap<number>;
   temperature: ChunkMap<number>;
 
   constructor(terrain: Terrain, x: number, z: number) {
-    this.terrain = terrain;
-    this.x = x;
-    this.z = z;
-    this.chunkGenerator = terrain.chunkGenerator;
-    this.geoId = getGeoId(x, z);
-    this.fileName = `${this.geoId}.bin`;
-    this.metaFileName = `${this.geoId}.meta.json`;
-    this.filePath = `./map/${this.terrain.locationName}/${this.fileName}`;
-    this.metaPath = `./map/${this.terrain.locationName}/${this.metaFileName}`;
+    super(terrain, x, z);
+    // this.terrain = terrain;
+    // this.x = x;
+    // this.z = z;
+    // this.chunkGenerator = terrain.chunkGenerator;
+    // this.geoId = getGeoId(x, z);
+    // this.fileName = `${this.geoId}.bin`;
+    // this.metaFileName = `${this.geoId}.meta.json`;
+    // this.filePath = `./map/${this.terrain.locationName}/${this.fileName}`;
+    // this.metaPath = `./map/${this.terrain.locationName}/${this.metaFileName}`;
   }
 
   async load(): Promise<Chunk> {
@@ -74,100 +70,10 @@ class Chunk {
   }
 
   async getCompressedData(): Promise<Buffer> {
-    const totalLength = this.data.length + this.flags.length;
-    return deflate(Buffer.concat([this.data, this.flags], totalLength));
-  }
-
-  async generate(): Promise<Chunk> {
-    if (this.terrainGenerated) {
-      return this;
-    }
-    this.data = Buffer.alloc(BLOCKS_IN_CHUNK);
-    this.flags = Buffer.alloc(BLOCKS_IN_CHUNK);
-
-    await new Promise((resolve) => {
-      generate(this.chunkGenerator, this);
-      profileChunkGenerationBase();
-      resolve();
-    });
-    // await this.northChunk.generateObjects();
-    // await this.southChunk.generateObjects();
-    // await this.westChunk.generateObjects();
-    // await this.eastChunk.generateObjects();
-    // await this.northChunk.westChunk.generateObjects();
-    // await this.northChunk.westChunk.generateObjects();
-    // await this.southChunk.westChunk.generateObjects();
-    // await this.southChunk.eastChunk.generateObjects();
-
-    // if (this.northChunk) {
-    //   await this.northChunk.generateObjects();
-    //   if (this.northChunk.westChunk) {
-    //     await this.northChunk.westChunk.generateObjects();
-    //   }
-    //   if (this.northChunk.westChunk) {
-    //     await this.northChunk.westChunk.generateObjects();
-    //   }
-    // }
-    // if (this.southChunk) {
-    //   await this.southChunk.generateObjects();
-    //   if (this.southChunk.westChunk) {
-    //     await this.southChunk.westChunk.generateObjects();
-    //   }
-    //   if (this.southChunk.eastChunk) {
-    //     await this.southChunk.eastChunk.generateObjects();
-    //   }
-    // }
-    // if (this.westChunk) {
-    //   await this.westChunk.generateObjects();
-    // }
-    // if (this.eastChunk) {
-    //   await this.eastChunk.generateObjects();
-    // }
-    this.terrainGenerated = true;
-    return this;
-  }
-
-  async generateWithSurrounding(depth: number): Promise<Chunk> {
-    // if (!depth) {
-    //   return this;
-    // }
-    // const [
-    //   northChunk,
-    //   southChunk,
-    //   westChunk,
-    //   eastChunk,
-    //   northWestChunk,
-    //   northEastChunk,
-    //   southWestChunk,
-    //   southEastChunk,
-    // ] =
-    const chunks = await Promise.all([
-      this.terrain.ensureChunk(this.x - 16, this.z),
-      this.terrain.ensureChunk(this.x + 16, this.z),
-      this.terrain.ensureChunk(this.x, this.z - 16),
-      this.terrain.ensureChunk(this.x, this.z + 16),
-      this.terrain.ensureChunk(this.x - 16, this.z - 16),
-      this.terrain.ensureChunk(this.x - 16, this.z + 16),
-      this.terrain.ensureChunk(this.x + 16, this.z - 16),
-      this.terrain.ensureChunk(this.x + 16, this.z + 16),
-    ]);
-    // await this.generate();
-
-    if (depth) {
-      await Promise.all(chunks.map((chunk: Chunk) => chunk.generateWithSurrounding(depth - 1)));
-      if (depth >= 2) {
-        await this.generateObjects();
-        await this.northChunk.generateObjects();
-        await this.southChunk.generateObjects();
-        await this.westChunk.generateObjects();
-        await this.eastChunk.generateObjects();
-        await this.northChunk.westChunk.generateObjects();
-        await this.northChunk.eastChunk.generateObjects();
-        await this.southChunk.westChunk.generateObjects();
-        await this.southChunk.eastChunk.generateObjects();
-      }
-    }
-    return this;
+    const totalLength = this.data.byteLength + this.flags.length;
+    return deflate(
+      Buffer.concat([Buffer.from(this.data, 0, this.data.byteLength), this.flags], totalLength),
+    );
   }
 
   async save(): Promise<Chunk> {
@@ -208,19 +114,6 @@ class Chunk {
     }
   }
 
-  generateAt(x: number, y: number, z: number, generateFn: () => number | [number, number]): void {
-    const chunk = getChunkNear(this, x, y, z);
-    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
-    const block = generateFn();
-    if (typeof block === 'number') {
-      chunk.data[index] = block;
-    } else {
-      const [data, flags] = block;
-      chunk.data[index] = data;
-      chunk.flags[index] = flags;
-    }
-  }
-
   at(x: number, y: number, z: number): number {
     return getChunkNear(this, x, y, z).data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)];
   }
@@ -248,6 +141,11 @@ class Chunk {
 
   setTemperature(temperature: ChunkMap<number>): void {
     this.temperature = temperature;
+  }
+
+  setData(dataBuffer: SharedArrayBuffer): void {
+    this.dataBuffer = dataBuffer;
+    this.data = new Uint8Array(this.dataBuffer);
   }
 }
 

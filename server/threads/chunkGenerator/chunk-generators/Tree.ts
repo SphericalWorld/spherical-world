@@ -1,8 +1,8 @@
 import { vec3 } from 'gl-matrix';
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type Chunk from '../Chunk';
-import { randomize } from '../../../common/utils/vector';
+import type Chunk from '../../../terrain/Chunk';
+import { randomize } from '../../../../common/utils/vector';
 
 const PRNG = seedrandom.alea;
 

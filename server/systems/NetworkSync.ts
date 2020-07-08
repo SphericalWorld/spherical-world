@@ -19,14 +19,14 @@ const getComponentsToUpdate = (world: World, playerId) =>
         : { type: constructor.name, data: [...data.entries()] },
     );
 
-const calcPlayerMovement = (server, transform: Transform, network) => {
+const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const [x, , z] = transform.translation;
 
   const chunkX = Math.floor(x / 16) * 16;
   const chunkZ = Math.floor(z / 16) * 16;
 
-  const chunkXold: number = transform.chunkX || chunkX;
-  const chunkZold: number = transform.chunkZ || chunkZ;
+  const chunkXold: number = transform.chunkX ?? chunkX;
+  const chunkZold: number = transform.chunkZ ?? chunkZ;
 
   if (chunkX < chunkXold) {
     for (let i = -8; i < 8; i += 1) {

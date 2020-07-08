@@ -8,6 +8,7 @@ import * as componentsProvider from './components';
 import createTerrain from './terrain/Terrain';
 import { createDatabase } from './database';
 import { createDataStorage } from './dataStorage';
+import { ChunkGeneratorThread } from './threads';
 
 const createECS = () => {
   const world = new World(THREAD_MAIN);
@@ -19,6 +20,8 @@ const createECS = () => {
 const mainProvider = async () => {
   const world = createECS();
   const createPlayer = playerProvider(world);
+  const chunkGeneratorThread = new ChunkGeneratorThread();
+  // const w = new Worker(path.resolve(__dirname, './threads/chunkGenerator/index.js'));
   const db = await createDatabase({
     host: 'mongo',
     port: 27017,
@@ -28,7 +31,7 @@ const mainProvider = async () => {
   });
   // await db.connection.db('sphericalWorld').dropDatabase();
   const ds = createDataStorage(db);
-  const Server = serverProvider(world, createTerrain(createItem(world)));
+  const Server = serverProvider(world, createTerrain(createItem(world), chunkGeneratorThread));
   const server = new Server();
   world.registerSystem(...systemsProvider(world, server, createPlayer, ds));
   return server;

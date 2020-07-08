@@ -1,10 +1,10 @@
-import type { Simplex2D, Simplex3D } from '../util/simplex';
-import type Chunk from './Chunk';
-import { toByte } from '../../common/utils/numberUtils';
+import type { Simplex2D, Simplex3D } from '../../util/simplex';
+import type Chunk from '../../terrain/Chunk';
+import { toByte } from '../../../common/utils/numberUtils';
 import type { IGenerator } from './chunk-generators/Generator.types';
-import range from '../../common/range';
-import { createSimplex2D, createSimplex3D } from '../util/simplex';
-import ChunkMap from './ChunkMap';
+import range from '../../../common/range';
+import { createSimplex2D, createSimplex3D } from '../../util/simplex';
+import ChunkMap from '../../terrain/ChunkMap';
 import generateTree from './chunk-generators/Tree';
 import generateTreasury from './chunk-generators/Treasury';
 
@@ -24,7 +24,7 @@ import {
   FLOWER_RED,
   DEAD_BUSH,
   REEDS,
-} from '../../common/blocks';
+} from '../../../common/blocks';
 
 type BlockPositionData = Readonly<{ chunk: Chunk; height: number; x: number; z: number }>;
 type ChunkGeneratorFn = (block: BlockPositionData) => void;

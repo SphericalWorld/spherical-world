@@ -1,11 +1,11 @@
 import { vec3 } from 'gl-matrix';
 import type { Block } from '../../common/block';
 import type { CreateItem } from '../item';
-import type { ChunkGenerator } from './ChunkGenerator';
 import Chunk from './Chunk';
-import createChunkGenerator from './ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 import { send } from '../network/socket';
+import type { ChunkGeneratorThread } from '../threads';
+import ChunkMap from './ChunkMap';
 
 type Position3D = {
   x: number;
@@ -13,17 +13,15 @@ type Position3D = {
   z: number;
 };
 
-const createTerrain = (createItem: CreateItem) =>
+const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGeneratorThread) =>
   class Terrain {
     locationName: string;
-    chunkGenerator: ChunkGenerator;
     seed: number;
     chunks: Map<string, Chunk> = new Map();
 
     constructor(locationName: string, seed: number) {
       this.locationName = locationName;
       this.seed = seed;
-      this.chunkGenerator = createChunkGenerator(this.seed);
     }
 
     addChunk(chunk: Chunk): void {
@@ -61,7 +59,13 @@ const createTerrain = (createItem: CreateItem) =>
       }
       const newChunk = new Chunk(this, x, z);
       this.addChunk(newChunk);
-      await newChunk.generate();
+      const chunkData = await chunkGeneratorThread.ensureChunk(x, z);
+      newChunk.setData(chunkData.dataBuffer);
+      newChunk.flags = chunkData.flags;
+      newChunk.setRainfall(new ChunkMap(chunkData.rainfall));
+      newChunk.setTemperature(new ChunkMap(chunkData.temperature));
+
+      // await newChunk.generate();
       return newChunk;
     }
 
@@ -69,7 +73,7 @@ const createTerrain = (createItem: CreateItem) =>
       let chunk;
       if (true) {
         chunk = await this.ensureChunk(x, z);
-        await chunk.generateWithSurrounding(2);
+        // await chunk.generateWithSurrounding(2);
       } else {
         chunk = this.chunks.get(getGeoId(x, z));
         if (!chunk) {

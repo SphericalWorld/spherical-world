@@ -1,7 +1,7 @@
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type Chunk from '../Chunk';
-import { TORCH, COBBLESTONE, AIR, WATER } from '../../../common/blocks';
+import type Chunk from '../../../terrain/Chunk';
+import { TORCH, COBBLESTONE, AIR, WATER } from '../../../../common/blocks';
 
 const PRNG = seedrandom.alea;
 
