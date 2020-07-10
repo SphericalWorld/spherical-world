@@ -15,10 +15,12 @@ const generateWithSurroundingChunks = (
     if (s < 0.99) return TORCH;
     return AIR;
   });
-  if (s > 0.99) generator.generateTree(chunk, x, height, z);
+  const s2 = generator.simplexFoliage(x * 32, z * 32);
+
+  if (s2 > 0.9) generator.generateTree(chunk, x, height, z);
   return chunk;
 };
 
-export const hills: Biome = {
+export const forest: Biome = {
   generateWithSurroundingChunks,
 };

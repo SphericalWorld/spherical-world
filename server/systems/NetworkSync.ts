@@ -19,6 +19,9 @@ const getComponentsToUpdate = (world: World, playerId) =>
         : { type: constructor.name, data: [...data.entries()] },
     );
 
+const VISIBILITY = 16;
+const HALF_VISIBILITY = VISIBILITY / 2;
+
 const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const [x, , z] = transform.translation;
 
@@ -29,21 +32,37 @@ const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const chunkZold: number = transform.chunkZ ?? chunkZ;
 
   if (chunkX < chunkXold) {
-    for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk({ socket: network.socket }, chunkX - 7 * 16, chunkZ + i * 16);
+    for (let i = -HALF_VISIBILITY; i < HALF_VISIBILITY; i += 1) {
+      server.terrain.sendChunk(
+        { socket: network.socket },
+        chunkX - (HALF_VISIBILITY - 1) * 16,
+        chunkZ + i * 16,
+      );
     }
   } else if (chunkX > chunkXold) {
-    for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk({ socket: network.socket }, chunkX + 6 * 16, chunkZ + i * 16);
+    for (let i = -HALF_VISIBILITY; i < HALF_VISIBILITY; i += 1) {
+      server.terrain.sendChunk(
+        { socket: network.socket },
+        chunkX + (HALF_VISIBILITY - 2) * 16,
+        chunkZ + i * 16,
+      );
     }
   }
   if (chunkZ < chunkZold) {
-    for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk({ socket: network.socket }, chunkX + i * 16, chunkZ - 7 * 16);
+    for (let i = -HALF_VISIBILITY; i < HALF_VISIBILITY; i += 1) {
+      server.terrain.sendChunk(
+        { socket: network.socket },
+        chunkX + i * 16,
+        chunkZ - (HALF_VISIBILITY - 1) * 16,
+      );
     }
   } else if (chunkZ > chunkZold) {
-    for (let i = -8; i < 8; i += 1) {
-      server.terrain.sendChunk({ socket: network.socket }, chunkX + i * 16, chunkZ + 6 * 16);
+    for (let i = -HALF_VISIBILITY; i < HALF_VISIBILITY; i += 1) {
+      server.terrain.sendChunk(
+        { socket: network.socket },
+        chunkX + i * 16,
+        chunkZ + (HALF_VISIBILITY - 2) * 16,
+      );
     }
   }
   transform.chunkX = chunkX;

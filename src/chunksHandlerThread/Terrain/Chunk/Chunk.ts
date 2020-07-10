@@ -45,7 +45,7 @@ type ChunkBuffers = {
   vertexCount: number;
 };
 
-const POOL_SIZE = 50000;
+const POOL_SIZE = 100000;
 const vertexPool = new Float32Array(POOL_SIZE * 4 * 3);
 const vertexPool2 = new Float32Array(POOL_SIZE * 4);
 const vertexPool3 = new Float32Array(POOL_SIZE * 4);

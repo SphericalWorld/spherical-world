@@ -1,6 +1,6 @@
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type Chunk from '../../../terrain/Chunk';
+import type { Chunk } from '../Chunk';
 import { TORCH, COBBLESTONE, AIR, WATER } from '../../../../common/blocks';
 
 const PRNG = seedrandom.alea;
@@ -41,18 +41,18 @@ const generateRoom = (generator, chunk: Chunk) => {
     for (let j = xStart; j < xEnd; j += 1) {
       for (let k = zStart; k < zEnd; k += 1) {
         if (j === xStart || j === xEnd - 1 || k === zStart || k === zEnd - 1) {
-          chunk.setAt(j, i, k, COBBLESTONE);
+          chunk.setAtNoFlags(j, i, k, COBBLESTONE);
         } else {
-          chunk.setAt(j, i, k, AIR);
+          chunk.setAtNoFlags(j, i, k, AIR);
         }
       }
     }
   }
 
-  chunk.setAt(xEnd - 2, y - 2, zStart + 4, [TORCH, 2]);
-  chunk.setAt(xStart + 1, y - 2, zStart + 4, [TORCH, 3]);
-  chunk.setAt(xStart + 4, y - 2, zEnd - 2, [TORCH, 4]);
-  chunk.setAt(xStart + 4, y - 2, zStart + 1, [TORCH, 5]);
+  chunk.setAtWithFlags(xEnd - 2, y - 2, zStart + 4, TORCH, 2);
+  chunk.setAtWithFlags(xStart + 1, y - 2, zStart + 4, TORCH, 3);
+  chunk.setAtWithFlags(xStart + 4, y - 2, zEnd - 2, TORCH, 4);
+  chunk.setAtWithFlags(xStart + 4, y - 2, zStart + 1, TORCH, 5);
 
   for (let i = xStart; i < xEnd; i += 1) {
     for (let j = zStart; j < zEnd; j += 1) {

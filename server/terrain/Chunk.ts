@@ -118,19 +118,6 @@ class Chunk extends ChunkBase {
     return getChunkNear(this, x, y, z).data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)];
   }
 
-  async generateObjects(): Promise<Chunk> {
-    if (this.objectsGenerated) {
-      return this;
-    }
-    await new Promise((resolve) => {
-      generateObjects(this.chunkGenerator, this);
-      resolve();
-      profileChunkGenerationFoliage();
-    });
-    this.objectsGenerated = true;
-    return this;
-  }
-
   setHeightMap(heightMap: ChunkMap<number>): void {
     this.heightMap = heightMap;
   }

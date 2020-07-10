@@ -197,6 +197,19 @@ export class Chunk extends ChunkBase {
     }
   }
 
+  setAtNoFlags(x: number, y: number, z: number, block: number): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    chunk.data[index] = block;
+  }
+
+  setAtWithFlags(x: number, y: number, z: number, block: number, flags: number): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    chunk.data[index] = block;
+    chunk.flags[index] = flags;
+  }
+
   setAtSameChunkOnly(x: number, y: number, z: number, block: number | [number, number]): void {
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
     if (typeof block === 'number') {

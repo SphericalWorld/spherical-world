@@ -110,6 +110,7 @@ export default class Chunk extends ChunkBase {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 
     this.buffers.vertexBuffer = createBuffer(buffers.vertexBuffer);
+
     gl.enableVertexAttribArray(shader.aVertexPosition);
     gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
 

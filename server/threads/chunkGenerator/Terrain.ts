@@ -1,7 +1,7 @@
-import type { ChunkGenerator } from './ChunkGenerator';
 import createChunkGenerator from './ChunkGenerator';
 import { Chunk } from './Chunk';
 import { getGeoId } from '../../../common/chunk';
+import type { ChunkGenerator } from './types';
 
 export class Terrain {
   locationName: string;

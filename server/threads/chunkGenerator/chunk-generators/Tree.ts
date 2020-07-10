@@ -1,8 +1,9 @@
 import { vec3 } from 'gl-matrix';
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
-import type Chunk from '../../../terrain/Chunk';
+import type { Chunk } from '../Chunk';
 import { randomize } from '../../../../common/utils/vector';
+import { OAK_LEAVES } from '../../../../common/blocks';
 
 const PRNG = seedrandom.alea;
 
@@ -24,7 +25,7 @@ const leaves = (chunk: Chunk, position: vec3, lengthRemain: number): void => {
   }
   const runRecursion = (vector: vec3) => {
     if (!chunk.at(vector[0], vector[1], vector[2])) {
-      chunk.setAt(vector[0], vector[1], vector[2], 5);
+      chunk.setAtNoFlags(vector[0], vector[1], vector[2], OAK_LEAVES);
       leaves(chunk, vector, lengthRemain - 1);
     }
   };
@@ -54,7 +55,7 @@ const branch = (
     leaves(chunk, newPosition, 3);
   };
   if (length) {
-    chunk.setAt(...vec3.round(vec3.create(), position), 4);
+    chunk.setAtNoFlags(...vec3.round(vec3.create(), position), 4);
   }
   if (branchLengthRemain) {
     const newDirection = direction;
@@ -66,20 +67,20 @@ const branch = (
     const newPosition = vec3.add(vec3.create(), position, newDirection);
     runRecursion(newPosition, newDirection, BRANCH_LENGTH);
 
-    const newDirection2 = vec3.negate(
-      vec3.create(),
-      vec3.scaleAndAdd(
-        vec3.create(),
-        newDirection,
-        direction,
-        -2 * vec3.dot(newDirection, direction),
-      ),
-    );
-    const newPosition2 = vec3.add(vec3.create(), position, newDirection2);
-    runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
+    runRecursion(vec3.add(vec3.create(), position, direction), direction, BRANCH_LENGTH);
 
     if (branches === 3) {
-      runRecursion(vec3.add(vec3.create(), position, direction), direction, BRANCH_LENGTH);
+      const newDirection2 = vec3.negate(
+        vec3.create(),
+        vec3.scaleAndAdd(
+          vec3.create(),
+          newDirection,
+          direction,
+          -2 * vec3.dot(newDirection, direction),
+        ),
+      );
+      const newPosition2 = vec3.add(vec3.create(), position, newDirection2);
+      runRecursion(newPosition2, newDirection2, BRANCH_LENGTH);
     }
   }
 };
@@ -92,9 +93,9 @@ const generateTree = (seed: number): ((chunk: Chunk, x: number, y: number, z: nu
   };
 
   return (chunk: Chunk, x: number, y: number, z: number): Chunk => {
-    const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 5;
+    const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 4;
     for (let i = 0; i < length; i += 1) {
-      chunk.setAt(x, y + i, z, 4);
+      chunk.setAtNoFlags(x, y + i, z, 4);
     }
     branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
     return chunk;

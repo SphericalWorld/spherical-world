@@ -20,7 +20,7 @@ export default class ChunkMap<A> {
   }
 
   get(x: number, z: number): A {
-    return this.data[((x & 0xf) << 4) + (z & 0xf)];
+    return this.data[((z & 0xf) << 4) + (x & 0xf)];
   }
 
   static of(filler: A): ChunkMap<A> {

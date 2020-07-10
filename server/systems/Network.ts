@@ -45,13 +45,15 @@ const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket
   return player;
 };
 
+const VISIBILITY = 16;
+
 const sendChunks = (server, player) => {
   const [x, , z] = player.transform.translation;
   const {
     network: { socket },
   } = player;
-  for (let i = -8; i < 8; i += 1) {
-    for (let j = -8; j < 8; j += 1) {
+  for (let i = -VISIBILITY / 2; i < VISIBILITY / 2; i += 1) {
+    for (let j = -VISIBILITY / 2; j < VISIBILITY / 2; j += 1) {
       server.terrain.sendChunk(
         { socket },
         (i + Math.floor(x / 16)) * 16,
