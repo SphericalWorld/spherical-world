@@ -45,20 +45,30 @@ const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket
   return player;
 };
 
-const VISIBILITY = 16;
+const RENDER_DISTANCE = 8;
+const VISIBILITY = RENDER_DISTANCE + 2; // 1 chunk around will have loaded lights but not vbo, and another 1 will have no lights loaded
 
-const sendChunks = (server, player) => {
+const sendChunks = (server: Server, player) => {
   const [x, , z] = player.transform.translation;
   const {
     network: { socket },
   } = player;
-  for (let i = -VISIBILITY / 2; i < VISIBILITY / 2; i += 1) {
-    for (let j = -VISIBILITY / 2; j < VISIBILITY / 2; j += 1) {
-      server.terrain.sendChunk(
-        { socket },
-        (i + Math.floor(x / 16)) * 16,
-        (j + Math.floor(z / 16)) * 16,
-      );
+  const flooredX = Math.floor(x / 16);
+  const flooredZ = Math.floor(z / 16);
+
+  server.terrain.sendChunk({ socket }, flooredX * 16, flooredZ * 16);
+  for (let distance = 1; distance < VISIBILITY + 1; distance += 1) {
+    for (let i = -distance; i < distance + 1; i += 1) {
+      server.terrain.sendChunk({ socket }, (i + flooredX) * 16, (distance + flooredZ) * 16);
+    }
+    for (let i = distance - 1; i > -distance; i -= 1) {
+      server.terrain.sendChunk({ socket }, (distance + flooredX) * 16, (i + flooredZ) * 16);
+    }
+    for (let i = distance; i > -distance - 1; i -= 1) {
+      server.terrain.sendChunk({ socket }, (i + flooredX) * 16, (-distance + flooredZ) * 16);
+    }
+    for (let i = -distance + 1; i < distance; i += 1) {
+      server.terrain.sendChunk({ socket }, (-distance + flooredX) * 16, (i + flooredZ) * 16);
     }
   }
 };

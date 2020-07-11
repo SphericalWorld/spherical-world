@@ -1,5 +1,5 @@
 import type { vec3 } from 'gl-matrix';
-import { TERRAIN_HALF_SIZE_IN_BLOCKS } from './constants/chunk';
+import { TERRAIN_HALF_SIZE_IN_BLOCKS, CHUNK_WIDTH } from './constants/chunk';
 // const k = index >>> 8;
 // // const index2 = index & 0xFF;
 // const i = (index >>> 4) & 0xF;
@@ -28,10 +28,10 @@ export const filterFarChunks = <T extends { x: number; z: number }>(
     : new Map(
         [...chunks.entries()].filter(
           ([, { x, z }]) =>
-            x > xNew - TERRAIN_HALF_SIZE_IN_BLOCKS &&
-            x < xNew + TERRAIN_HALF_SIZE_IN_BLOCKS &&
-            z > zNew - TERRAIN_HALF_SIZE_IN_BLOCKS &&
-            z < zNew + TERRAIN_HALF_SIZE_IN_BLOCKS,
+            x > xNew - TERRAIN_HALF_SIZE_IN_BLOCKS - CHUNK_WIDTH * 2 &&
+            x < xNew + TERRAIN_HALF_SIZE_IN_BLOCKS + CHUNK_WIDTH * 2 + CHUNK_WIDTH &&
+            z > zNew - TERRAIN_HALF_SIZE_IN_BLOCKS - CHUNK_WIDTH * 2 &&
+            z < zNew + TERRAIN_HALF_SIZE_IN_BLOCKS + CHUNK_WIDTH * 2 + CHUNK_WIDTH,
         ),
       );
 };
