@@ -24,16 +24,30 @@ class AABBinner {
     this.center = translation;
     this.halfSize = vec3.scale(vec3.create(), size, 0.5);
     this.objectPosition = objectPosition || this.halfSize;
-    this.toMin = vec3.sub(vec3.create(), vec3.create(), this.objectPosition);
+    this.toMin = vec3.negate(vec3.create(), this.objectPosition);
     this.toMax = vec3.sub(vec3.create(), size, this.objectPosition);
     this.min = vec3.add(vec3.create(), translation, this.toMin);
     this.max = vec3.add(vec3.create(), translation, this.toMax);
   }
 
-  move(translation: vec3) {
-    vec3.add(this.min, translation, this.toMin);
-    vec3.add(this.max, translation, this.toMax);
-    vec3.copy(this.center, vec3.add(vec3.create(), this.min, this.halfSize));
+  /**
+   * Moves the AABB to the provided coordinates
+   * @param translation vector with *min* position of AABB
+   */
+  move(newMin: vec3) {
+    vec3.copy(this.min, newMin);
+    vec3.add(this.max, newMin, this.size);
+    vec3.add(this.center, this.min, this.halfSize);
+  }
+
+  /**
+   * Moves the AABB to the provided coordinates
+   * @param translation vector with *center* position of AABB
+   */
+  moveCenter(newCenter: vec3) {
+    vec3.add(this.min, newCenter, this.toMin);
+    vec3.add(this.max, newCenter, this.toMax);
+    vec3.add(this.center, this.min, this.halfSize);
   }
 }
 
@@ -45,6 +59,7 @@ export type AABB = {
   center: vec3;
   type: COLLIDER_TYPE;
   move: (position: vec3) => void;
+  moveCenter: (position: vec3) => void;
 };
 
 export const createAABB = (translation: vec3, size: vec3, objectPosition?: vec3): AABB =>

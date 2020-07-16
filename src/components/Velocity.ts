@@ -9,7 +9,7 @@ export default class Velocity implements Component {
   static memoryManager: MemoryManager;
   static memorySize = 4 * 3;
 
-  linear: vec3 = Velocity.memoryManager.getVec3();
+  readonly linear: vec3 = Velocity.memoryManager.getVec3();
   // angular: vec3 = [0, 0, 0];
 
   constructor(linear: vec3 = vec3.create()) {

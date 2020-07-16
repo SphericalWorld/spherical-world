@@ -95,6 +95,8 @@ export class World {
     for (const system of this.systems) {
       system(delta / 1000);
     }
+    if (!this.eventsForThreads.length) return;
+    // console.log(this.eventsForThreads);
     for (const thread of this.threads) {
       thread.postMessage({
         type: 'UPDATE_COMPONENTS',

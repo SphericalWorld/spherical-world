@@ -13,7 +13,6 @@ import { collide, testCollision, move } from '../physics/Collider';
 import Terrain from '../Terrain';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
-const halfVector = vec3.fromValues(0.5, 0.5, 0.5);
 const oneVector = vec3.fromValues(1, 1, 1);
 
 const isChunkNotLoaded = (chunk) => chunk.state === CHUNK_STATUS_NEED_LOAD_ALL;
@@ -37,7 +36,7 @@ const calculateMovement = (terrain: Terrain) => {
       toPositionInChunk(blockPosition[2]),
     );
     if (!blocksFlags[block][HAS_PHYSICS_MODEL]) return;
-    blockAABB.move(vec3.add(vec3.create(), blockPosition, halfVector));
+    blockAABB.move(blockPosition);
     if (testCollision(collider.shape, blockAABB)) {
       const manifold = collide(
         {

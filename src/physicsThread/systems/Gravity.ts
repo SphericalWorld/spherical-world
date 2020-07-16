@@ -15,10 +15,11 @@ export default (ecs: World, terrain: Terrain): System => {
       let acceleration = 9.81;
       const block = getBlock(terrain)(...transform.translation);
       if (block !== undefined) {
-        acceleration *= blocksInfo[block].fallAcceleration;
+        const { fallAcceleration, fallSpeedCap } = blocksInfo[block];
+        acceleration *= fallAcceleration;
         velocity.linear[1] -= acceleration * delta;
-        if (velocity.linear[1] < blocksInfo[block].fallSpeedCap) {
-          velocity.linear[1] = blocksInfo[block].fallSpeedCap;
+        if (velocity.linear[1] < fallSpeedCap) {
+          velocity.linear[1] = fallSpeedCap;
         }
       }
     }

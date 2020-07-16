@@ -15,6 +15,7 @@ import {
   KEY_BINDING_CONTEXT,
 } from '../Input/inputContexts';
 import { setKey } from '../Input/Input';
+import { throttle } from '../../common/utils';
 
 const mapState = ({
   keyBindings,
@@ -58,15 +59,14 @@ const onStateChanged = (input, player) => (
 export default (ecs: World, store: Store, input: Input): System => {
   const player = ecs.createSelector([Transform, UserControlled, Inventory]);
   const toggleUIState = (...params) => store.dispatch(doToggleUIState(...params));
-  const updateHudData = (data) => store.dispatch(doUpdateHudData(data));
 
   onMenuToggled(ecs.events, toggleUIState);
   onInventoryToggled(ecs.events, toggleUIState);
   onDispatchableEvent(ecs.events, store);
   connect(mapState, store)(onStateChanged(input, player));
-
+  const syncData = throttle((data) => store.dispatch(doUpdateHudData(data)), 100);
   return () => {
-    updateHudData({
+    syncData({
       player: {
         position: player[0].transform.translation,
         inventory: player[0].inventory.data,

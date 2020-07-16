@@ -57,6 +57,12 @@ export default (world: World, terrain: Terrain): System => {
     .map((el) => el.type === PLAYER_RUN)
     .subscribeQueue();
 
+  const rotation = quat.create();
+  const vX = vec3.fromValues(1, 0, 0);
+  const vZ = vec3.fromValues(0, 0, 1);
+  const vXrotated = vec3.create();
+  const vZrotated = vec3.create();
+
   const userControlSystem = (delta: number) => {
     if (!components.length) {
       return;
@@ -96,23 +102,18 @@ export default (world: World, terrain: Terrain): System => {
       const movingX = Number(userControls.movingForward) - Number(userControls.movingBackward);
       const movingZ = Number(userControls.movingLeft) - Number(userControls.movingRight);
       const angle = getAngle(movingX, movingZ);
-      const rotation = quat.rotateY(quat.create(), transform.rotation, angle);
+      quat.rotateY(rotation, transform.rotation, angle);
 
-      const v = vec3.fromValues(1, 0, 0);
-      vec3.transformQuat(v, v, rotation);
+      vec3.transformQuat(vXrotated, vX, rotation);
 
       // const v2 = vec3.fromValues(0, 1, 0);
       // vec3.transformQuat(v2, v2, rotation);
 
-      const v3 = vec3.fromValues(0, 0, 1);
-      vec3.transformQuat(v3, v3, rotation);
+      vec3.transformQuat(vZrotated, vZ, rotation);
 
-      userControls.velocity = [-v[2], 0, -v3[2]];
-      vec3.scale(
-        userControls.velocity,
-        userControls.velocity,
-        10 * (userControls.isRunning ? 2 : 1),
-      );
+      vec3.set(userControls.velocity, -vXrotated[2], 0, -vZrotated[2]);
+      const velocityScale = 10 * (userControls.isRunning ? 2 : 1);
+      vec3.scale(userControls.velocity, userControls.velocity, velocityScale);
     } else {
       vec3.set(userControls.velocity, 0, 0, 0);
     }

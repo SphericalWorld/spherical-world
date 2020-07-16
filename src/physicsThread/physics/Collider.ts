@@ -15,5 +15,5 @@ export const testCollision = (a: Collider, b: Collider): boolean =>
   collisionCheckers[a.type][b.type](a, b);
 
 export const move = (a: Collider, translation: vec3): void => {
-  a.move(translation);
+  a.moveCenter(translation);
 };

@@ -56,7 +56,7 @@ const getBlockDetails = (
     return {
       block: chunk.getBlock(xInChunk, y, zInChunk),
       position,
-      coordinates: [chunk.x, chunk.z],
+      coordinates: vec2.fromValues(chunk.x, chunk.z),
       positionInChunk: vec3.fromValues(xInChunk, y, zInChunk),
     };
   }

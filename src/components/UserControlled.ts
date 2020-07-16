@@ -9,13 +9,13 @@ export default class UserControlled implements Component {
   static memoryManager: MemoryManager;
   static memorySize = 8 * BYTE + VEC3;
 
-  movingForward = UserControlled.memoryManager.getUint8();
+  readonly movingForward = UserControlled.memoryManager.getUint8();
   movingBackward = UserControlled.memoryManager.getUint8();
   movingLeft = UserControlled.memoryManager.getUint8();
   movingRight = UserControlled.memoryManager.getUint8();
   isRunning = UserControlled.memoryManager.getUint8();
   isJumping = UserControlled.memoryManager.getUint8();
-  velocity: vec3 = UserControlled.memoryManager.getVec3();
+  readonly velocity: vec3 = UserControlled.memoryManager.getVec3();
 
   offset: number;
 
