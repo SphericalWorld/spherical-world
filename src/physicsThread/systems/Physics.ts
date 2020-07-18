@@ -94,7 +94,6 @@ export default (ecs: World, terrain: Terrain): System => {
       move(collider.shape, transform.translation);
       collideWithTerrainPApplied(transform, velocity, collider);
     }
-
     for (const { joint, transform } of dependentComponents) {
       if (!joint.parentTransform) {
         joint.parentTransform = transformRegistry.get(joint.parent);

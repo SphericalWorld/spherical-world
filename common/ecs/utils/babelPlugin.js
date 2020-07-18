@@ -1,6 +1,6 @@
 module.exports = (babel) => {
   const { types: t } = babel;
-  const methods = ['getFloat32', 'getUint8', 'getUint16'];
+  const methods = ['getFloat32', 'getUint8', 'getUint16', 'getUint32'];
   const transpile = (path, state) => {
     const { node } = path;
     if (node.static) return;
@@ -43,6 +43,7 @@ module.exports = (babel) => {
         ),
       ]);
     }
+    const packed = false;
     switch (getMethod) {
       case 'getFloat32': {
         state.dataViewIndex += 4;
@@ -50,17 +51,36 @@ module.exports = (babel) => {
         break;
       }
       case 'getUint8': {
-        state.dataViewIndex += 1;
-        state.memorySize += 1;
+        if (packed) {
+          state.dataViewIndex += 1;
+          state.memorySize += 1;
+        } else {
+          state.dataViewIndex += 4;
+          state.memorySize += 4;
+        }
         break;
       }
       case 'getUint16': {
-        state.dataViewIndex += 2;
-        state.memorySize += 2;
+        if (packed) {
+          state.dataViewIndex += 2;
+          state.memorySize += 2;
+        } else {
+          state.dataViewIndex += 4;
+          state.memorySize += 4;
+        }
+        break;
+      }
+      case 'getUint32': {
+        state.dataViewIndex += 4;
+        state.memorySize += 4;
         break;
       }
       case 'getVec3': {
         state.memorySize += 12;
+        break;
+      }
+      case 'getQuat': {
+        state.memorySize += 16;
         break;
       }
       case 'getMat4': {
@@ -118,7 +138,20 @@ module.exports = (babel) => {
             ClassMethod: (path) => transpileConstructor(path, state),
           });
         }
+        const MEMORY_ADRESS_SIZE = 4;
+        const totalMemory = Math.ceil(state.memorySize / MEMORY_ADRESS_SIZE) * MEMORY_ADRESS_SIZE;
+        path.node.body.body.unshift(
+          t.ClassProperty(
+            t.Identifier('memorySize'),
+            t.NumericLiteral(totalMemory),
+            null,
+            null,
+            null,
+            true,
+          ),
+        );
         // console.log(state);
+        // console.log(path.node.body.body);
       },
     },
   };

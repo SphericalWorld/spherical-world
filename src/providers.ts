@@ -14,7 +14,24 @@ import systemsProvider from './systems';
 import timeProvider from './Time/Time';
 import { World } from '../common/ecs';
 
-import * as componentsProvider from './components';
+import {
+  BlockRemover,
+  Camera,
+  Collider,
+  Gravity,
+  Physics,
+  Player,
+  Raytracer,
+  Skybox,
+  Transform,
+  UserControlled,
+  Velocity,
+  Visual,
+  Joint,
+  Item,
+  NetworkSync,
+  Inventory,
+} from './components';
 
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
 
@@ -31,9 +48,26 @@ type Threads = Readonly<{
 
 const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
   const world = new World(THREAD_MAIN);
+  world.registerComponentTypes(
+    BlockRemover,
+    Camera,
+    Collider,
+    Gravity,
+    Physics,
+    Player,
+    Raytracer,
+    Skybox,
+    Transform,
+    UserControlled,
+    Velocity,
+    Visual,
+    Joint,
+    Item,
+    NetworkSync,
+    Inventory,
+  );
   world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
   world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
-  world.registerComponentTypes(...Object.values(componentsProvider));
 
   return world;
 };

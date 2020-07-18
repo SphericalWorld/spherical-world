@@ -7,12 +7,13 @@ export default class Velocity implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'velocity' = 'velocity';
   static memoryManager: MemoryManager;
-  static memorySize = 4 * 3;
 
   readonly linear: vec3 = Velocity.memoryManager.getVec3();
   // angular: vec3 = [0, 0, 0];
 
-  constructor(linear: vec3 = vec3.create()) {
+  constructor({ offset, linear = vec3.create() }: { linear: vec3 }) {
+    this.offset = offset;
+
     vec3.copy(this.linear, linear);
   }
 }

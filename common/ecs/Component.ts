@@ -1,3 +1,4 @@
 export interface Component {
-  destructor?: () => void;
+  componentName: string;
+  new (...params: any[]): any;
 }

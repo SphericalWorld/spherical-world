@@ -63,7 +63,8 @@ export class World {
           }
         }
       } else if (type === 'dataArray') {
-        this.memoryManager.memory = payload;
+        // console.log(payload);
+        this.memoryManager.useMemory(payload);
       }
     });
   }
@@ -73,6 +74,7 @@ export class World {
       componentType.memoryManager = this.memoryManager;
       this.componentTypes.set(componentType.name, componentType);
       this.components.set(componentType.name, new Map());
+      this.memoryManager.registerComponentType(componentType);
     }
   }
 
@@ -155,7 +157,7 @@ export class World {
       if (!component.data.offset) {
         component.data = Object.assign(Reflect.construct(constructor, []), component.data);
       } else {
-        this.memoryManager.useAlocatedMemory(component.data.offset);
+        this.memoryManager.useAlocatedMemory(component.data.offset, constructor);
         component.data = Reflect.construct(constructor, [component.data]);
       }
       const threadConstructor =

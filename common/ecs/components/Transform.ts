@@ -13,7 +13,6 @@ export default class Transform implements Component, Networkable {
   static componentName: 'transform' = 'transform';
   static networkable = true;
   static memoryManager: MemoryManager;
-  static memorySize = 4 * 3 + 4 * 4;
 
   readonly translation: vec3 = Transform.memoryManager.getVec3();
   readonly rotation: quat = Transform.memoryManager.getQuat();

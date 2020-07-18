@@ -18,8 +18,6 @@ export default class Camera implements Component, Networkable {
   static networkable = true;
   static memoryManager: MemoryManager;
 
-  static memorySize = FLOAT32 + FLOAT32 + UINT16 + UINT16 + MAT4 + MAT4 + VEC3 + VEC3;
-
   yaw = Camera.memoryManager.getFloat32();
   pitch = Camera.memoryManager.getFloat32();
 
