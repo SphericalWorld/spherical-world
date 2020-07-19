@@ -71,7 +71,7 @@ export const Player = ({
   isMainPlayer = false,
 }: Props): JSX.Element => {
   const model = new Model(playerModel, 1.8);
-  const material = materialLibrary.get('skybox'); // 'player'
+  const material = materialLibrary.get('player'); // 'player'
   //
   return (
     <GameObject id={id}>

@@ -2,7 +2,8 @@ import { gl } from '../glEngine';
 import Texture, { makeTexture } from './Texture';
 import { CHUNK_WIDTH, TERRAIN_SIZE } from '../../../common/constants/chunk';
 
-const TILE_SIZE = 64;
+const TILE_SIZE = 32;
+const CANVAS_SIZE = TILE_SIZE * 16;
 
 const drawImage = (
   context: CanvasRenderingContext2D,
@@ -50,8 +51,8 @@ class GlTextureLibrary {
   }
 
   makeTextureAtlasBase(name: string, predicate: (texture: Texture) => boolean): Texture {
-    this.textureCanvas.width = 1024;
-    this.textureCanvas.height = 1024;
+    this.textureCanvas.width = CANVAS_SIZE;
+    this.textureCanvas.height = CANVAS_SIZE;
     this.ctx.fillStyle = '#FFF0';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (const texture of this.textures.values()) {
@@ -141,8 +142,8 @@ class GlTextureLibrary {
       animations: {},
     };
 
-    this.textureCanvas.width = 1024;
-    this.textureCanvas.height = 1024;
+    this.textureCanvas.width = CANVAS_SIZE;
+    this.textureCanvas.height = CANVAS_SIZE;
     this.ctx.fillStyle = 'rgba(255, 255, 255, 0)';
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 

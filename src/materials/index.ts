@@ -3,6 +3,7 @@ import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 import blockPickerProvider from './BlockPicker';
 import blockRemoverProvider from './BlockRemover';
+import playerProvider from './Player';
 import skyboxProvider from './Skybox';
 
 import terrainDiffuseProvider from './TerrainDiffuse';
@@ -26,6 +27,7 @@ const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: Shader
     blockPickerProvider(textureLibrary, shaderLibrary),
     blockRemoverProvider(textureLibrary, shaderLibrary),
     skyboxProvider(textureLibrary, shaderLibrary),
+    playerProvider(textureLibrary, shaderLibrary),
     terrainDiffuse,
     terrainOverlay,
     terrainAnimated,

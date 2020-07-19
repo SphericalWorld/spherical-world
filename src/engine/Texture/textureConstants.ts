@@ -20,3 +20,5 @@ export const CLAY: 18 = 18;
 export const REEDS: 19 = 19;
 export const DEAD_BUSH: 20 = 20;
 export const WATER_STILL: 21 = 21;
+export const TEXTURE_PODZOL: 22 = 22;
+export const TEXTURE_PODZOL_SIDE: 23 = 23;

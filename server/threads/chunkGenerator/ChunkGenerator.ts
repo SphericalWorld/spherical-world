@@ -18,6 +18,7 @@ import {
   IRON_ORE,
   WATER,
   REEDS,
+  PODZOL,
 } from '../../../common/blocks';
 import { ChunkGenerator, BiomeType } from './types';
 import { biomes } from './chunk-generators/biomes';
@@ -123,7 +124,7 @@ const generateBiomeData = setBlocksInRange(
     if (!chunk.at(x, y, z)) return AIR;
     const biome = getBiomeType(chunk, x, z);
     if (biome === BiomeType.desert) return SAND;
-    if (biome === BiomeType.forest) return STONE;
+    if (biome === BiomeType.forest) return chunk.at(x, y + 1, z) === 0 ? PODZOL : DIRT;
 
     if (chunk.at(x, y + 1, z) === 0) return GRASS;
     return DIRT;

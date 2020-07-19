@@ -20,6 +20,7 @@ import Stone from './Stone';
 import TallGrass from './TallGrass';
 import Torch from './Torch';
 import Water from './Water';
+import Podzol from './Podzol';
 
 const blocks = [
   Air(),
@@ -40,6 +41,7 @@ const blocks = [
   DeadBush(),
   Reeds(),
   Cobblestone(),
+  Podzol(),
 ];
 
 const blocksTextureInfo = createArray<Uint8Array>(256, () => new Uint8Array(6));

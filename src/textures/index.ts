@@ -23,6 +23,8 @@ import clay from './blocks/clay.png';
 import reeds from './blocks/reeds.png';
 import deadBush from './blocks/deadbush.png';
 import waterStill from './blocks/water_still.png';
+import podzol from './blocks/dirt_podzol_top.png';
+import podzolSide from './blocks/dirt_podzol_side.png';
 
 import blockSelector from './block_selector.png';
 import blockDamage from './block_damage.png';
@@ -31,6 +33,7 @@ import foliageColorMap from './colormap/foliage.png';
 import grassColorMap from './colormap/grass.png';
 
 import skybox from './skybox.png';
+import player from './player.png';
 
 const texturesProvider = async (): Promise<Texture[]> =>
   Promise.all([
@@ -73,6 +76,8 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(reeds, { name: 'reeds', atlasId: 19 }),
     Texture.create(deadBush, { name: 'deadBush', atlasId: 20 }),
     Texture.create(waterStill, { name: 'waterStill', atlasId: 21 }),
+    Texture.create(podzol, { name: 'podzol', atlasId: 22 }),
+    Texture.create(podzolSide, { name: 'podzolSide', atlasId: 23 }),
 
     //
     // waterStill: {
@@ -89,8 +94,7 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(foliageColorMap, { name: 'foliageColorMap' }),
     Texture.create(grassColorMap, { name: 'grassColorMap' }),
     Texture.create(skybox, { name: 'skybox' }),
-
-    // Texture.create(player, { player: 'grass' }),
+    Texture.create(player, { name: 'player' }),
     // terrain: {},
     // terrainAnimated: {}
   ]);

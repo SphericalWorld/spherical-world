@@ -8,6 +8,7 @@ export const DIRT: 6 = 6;
 export const CLAY: 7 = 7;
 export const COAL_ORE: 8 = 8;
 export const IRON_ORE: 9 = 9;
+export const PODZOL: 10 = 10;
 export const COBBLESTONE: 16 = 16;
 export const WATER: 127 = 127;
 export const TORCH: 128 = 128;
