@@ -5,3 +5,5 @@ export { default as PlayerData } from './PlayerData';
 export { default as Inventory } from './Inventory';
 export { default as Item } from './Item';
 export { default as Camera } from './Camera';
+export { TransformComponent } from './Transform';
+export { CameraComponent } from './Camera';

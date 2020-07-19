@@ -5,7 +5,7 @@ import type { CreatePlayer } from '../player';
 import type { DataStorage } from '../dataStorage';
 
 import { broadcastToLinked, send } from '../network/socket';
-import { Transform, Network, Inventory } from '../components/index';
+import { Transform, Network, Inventory } from '../components';
 import defaultInputBindings from '../../common/constants/input/defaultInputBindings';
 import { saveGameObject, getGameObject } from '../dataStorage';
 

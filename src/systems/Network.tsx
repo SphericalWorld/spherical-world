@@ -22,7 +22,7 @@ const onSyncGameData = (ecs: World) =>
       for (const deletedObject of deletedObjects) {
         ecs.deleteEntity(deletedObject, false);
       }
-      // ecs.updateComponents(components);
+      ecs.updateComponents(components);
     });
 
 const onLoadControlSettings = (ecs: World, input: Input, store) =>
@@ -53,7 +53,7 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
 
   let lastUpdate = Date.now();
   const networkSystem = () => {
-    if (Date.now() > lastUpdate + 100) {
+    if (Date.now() > lastUpdate + 50) {
       // TODO: replace Date.now() by global engine tick time
       lastUpdate = Date.now();
       network.emit('SYNC_GAME_DATA', [

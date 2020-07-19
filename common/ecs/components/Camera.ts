@@ -3,7 +3,6 @@ import type { Component } from '../Component';
 import { Networkable } from '../../Networkable';
 
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
-import { FLOAT32, VEC3, UINT16, MAT4 } from '../MemoryManager';
 import type { MemoryManager } from '../MemoryManager';
 
 export type Viewport = {
@@ -51,6 +50,15 @@ export default class Camera implements Component, Networkable {
     instance.yaw = serialized.yaw;
     instance.pitch = serialized.pitch;
     return instance;
+  }
+
+  update(data: Camera): void {
+    if (data.pitch) {
+      this.pitch = data.pitch;
+    }
+    if (data.yaw) {
+      this.yaw = data.yaw;
+    }
   }
 }
 

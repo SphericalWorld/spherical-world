@@ -99,8 +99,8 @@ export default (world: World, terrain: Terrain): System => {
       userControls.movingLeft ||
       userControls.movingRight
     ) {
-      const movingX = Number(userControls.movingForward) - Number(userControls.movingBackward);
-      const movingZ = Number(userControls.movingLeft) - Number(userControls.movingRight);
+      const movingX = userControls.movingForward - userControls.movingBackward;
+      const movingZ = userControls.movingLeft - userControls.movingRight;
       const angle = getAngle(movingX, movingZ);
       quat.rotateY(rotation, transform.rotation, angle);
 

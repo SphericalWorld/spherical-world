@@ -3,7 +3,7 @@ import type { Entity } from '../../common/ecs/Entity';
 import type { World } from '../../common/ecs/World';
 import type { Slot } from '../../common/Inventory';
 import { Transform, NetworkSync, Item, Inventory } from '../components';
-import { TransformComponent } from '../../src/components';
+import { TransformComponent } from '../components/Transform';
 
 const createItem = (world: World) => (id: Entity | null, position: vec3, slot: Slot) => {
   const player = world.createEntity(

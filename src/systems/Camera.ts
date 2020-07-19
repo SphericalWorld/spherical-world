@@ -90,6 +90,8 @@ export default (world: World, input: Input): System => {
       input.activateContext(GAMEPLAY_MENU_CONTEXT);
     });
 
+  const rotationMatrixQuat = quat.create();
+
   const cameraSystem = () => {
     const movement = cameraMovements.events.reduce(sumCameraMovements, [0, 0]);
     const [{ transform, camera }] = cameras;
@@ -100,15 +102,21 @@ export default (world: World, input: Input): System => {
     camera.pitch += movement[0] * 0.005;
 
     quat.identity(rotation);
-    quat.rotateX(rotation, rotation, camera.yaw);
     quat.rotateY(rotation, rotation, camera.pitch);
-    quat.normalize(rotation, rotation);
+
+    quat.identity(rotationMatrixQuat);
+    quat.rotateX(rotationMatrixQuat, rotationMatrixQuat, camera.yaw);
+    quat.rotateY(rotationMatrixQuat, rotationMatrixQuat, camera.pitch);
+
+    // quat.fromEuler(rotation, camera.yaw, camera.pitch, 0);
+    // quat.
+    quat.normalize(rotationMatrixQuat, rotationMatrixQuat);
     // quat.rotateY(rotation, rotation, movement[0] * 0.005);
     // quat.rotateX(rotation, rotation, movement[1] * 0.005);
     // quat.fromEuler(rotation, 0, camera.pitch, 0)
 
     // console.log(rotation)
-    mat4.fromQuat(camera.mvMatrix, rotation);
+    mat4.fromQuat(camera.mvMatrix, rotationMatrixQuat);
     mat4.translate(camera.mvMatrix, camera.mvMatrix, [
       -translation[0],
       -translation[1] - PLAYER_CAMERA_HEIGHT,

@@ -61,6 +61,7 @@ export class World {
           for (let i = 0; i < payload.events.length; i += 1) {
             this.events.emit(payload.events[i]);
           }
+          // if (this.thread === 1) console.log(payload.events);
         }
       } else if (type === 'dataArray') {
         // console.log(payload);
@@ -118,8 +119,7 @@ export class World {
       for (const [key, data] of component.data) {
         const componentForUpdate = componentRegistry.get(key);
         if (componentForUpdate) {
-          Object.assign(componentForUpdate, data);
-          // console.log(componentForUpdate, data)
+          componentForUpdate.update(data);
         }
       }
     }
@@ -239,7 +239,10 @@ export class World {
   }
 
   dispatch(gameEvent: GameEvent): void {
-    this.eventsForThreads.push(gameEvent);
+    // console.log(gameEvent);
+    if (gameEvent.type !== 'SYNC_GAME_DATA') {
+      this.eventsForThreads.push(gameEvent);
+    }
     this.events.emit(gameEvent);
   }
 

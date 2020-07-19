@@ -1,7 +1,7 @@
 import type { World } from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import type { Server } from '../server';
-import { Transform, Network, Inventory, Camera } from '../components/index';
+import { Transform, Network, Inventory, Camera } from '../components';
 import { throttle } from '../../common/utils';
 import type { DataStorage } from '../dataStorage';
 import { updateGameObject } from '../dataStorage';

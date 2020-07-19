@@ -16,6 +16,9 @@ export default class Transform implements Component, Networkable {
 
   readonly translation: vec3 = Transform.memoryManager.getVec3();
   readonly rotation: quat = Transform.memoryManager.getQuat();
+
+  readonly translationNext: vec3 = Transform.memoryManager.getVec3();
+
   parent: Entity | null;
   offset: number;
 
@@ -48,6 +51,15 @@ export default class Transform implements Component, Networkable {
       translation: Array.from(this.translation),
       rotation: Array.from(this.rotation),
     };
+  }
+
+  update(data: Transform): void {
+    if (data.translation) {
+      vec3.sub(this.translationNext, data.translation, this.translation);
+    }
+    if (data.rotation) {
+      quat.copy(this.rotation, data.rotation);
+    }
   }
 }
 

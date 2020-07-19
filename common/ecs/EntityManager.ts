@@ -10,10 +10,14 @@ type Obj<T extends ComponentLike> = {
 
 type Merge<A, B> = SpreadTypes<A, B>;
 
-export type transform = (<A extends ComponentLike, B extends ComponentLike>(
-  includeComponents: [A, B],
+export type transform = (<A extends ComponentLike>(
+  includeComponents: [A],
   excludeComponents?: ReadonlyArray<ComponentLike>,
-) => ReadonlyArray<Merge<{ id: Entity } & Obj<A>, Obj<B>>>) &
+) => ReadonlyArray<Merge<{ id: Entity }, Obj<A>>>) &
+  (<A extends ComponentLike, B extends ComponentLike>(
+    includeComponents: [A, B],
+    excludeComponents?: ReadonlyArray<ComponentLike>,
+  ) => ReadonlyArray<Merge<{ id: Entity } & Obj<A>, Obj<B>>>) &
   (<A extends ComponentLike, B extends ComponentLike, C extends ComponentLike>(
     includeComponents: [A, B, C],
     excludeComponents?: ReadonlyArray<ComponentLike>,
@@ -28,7 +32,7 @@ export type transform = (<A extends ComponentLike, B extends ComponentLike>(
     excludeComponents?: ReadonlyArray<ComponentLike>,
   ) => ReadonlyArray<Merge<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>, Obj<D>>>);
 
-export type GameObject<T> = $Call<transform>;
+export type GameObject<T> = ReturnType<transform>;
 
 export class EntitySelector<T> {
   includeComponents: T;
