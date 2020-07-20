@@ -1,10 +1,11 @@
-import WebSocket from 'ws';
+import WebSocket, { Server as WebSocketServer } from 'ws';
 import type { Network } from '../components/index';
 import type { Entity } from '../../common/ecs/Entity';
 
 export type Socket = {
   player: Readonly<{ network: Network; id: Entity }>;
   ws: WebSocket;
+  wss: WebSocketServer;
 };
 
 const isSocketOpen = (ws: WebSocket): boolean => ws.readyState === WebSocket.OPEN;

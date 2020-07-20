@@ -4,20 +4,18 @@ import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
 import type { Terrain as ITerrain } from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
+import { send } from './network/socket';
 
-const send = (ws: WebSocket) => (data: unknown): void => {
-  ws.send(JSON.stringify(data));
-};
-
-const sendSerialized = (ws: WebSocket) => (data: unknown): void => {
-  ws.send(data);
-};
-
-const wrapSocket = (ws: WebSocket): Socket => ({
+const wrapSocket = (ws: WebSocket, wss: WebSocketServer): Socket => ({
   player: null,
   ws,
-  send: send(ws),
-  sendSerialized: sendSerialized(ws),
+  wss,
+  send: (data: unknown): void => {
+    ws.send(JSON.stringify(data));
+  },
+  sendSerialized: (data: unknown): void => {
+    ws.send(data);
+  },
 });
 
 type Message = {
@@ -34,6 +32,11 @@ type ServerEvents = {
 
 const onMessage = (events) => (socket: Socket) => (data) => {
   const message = parseJson<Message>(data);
+
+  if (message?.type === 'CHAT_MESSAGE') {
+    socket.wss.clients.forEach((client) => client.send(data));
+    return;
+  }
   if (typeof message?.type === 'string') {
     events.emit({
       type: message.type,
@@ -70,7 +73,7 @@ const serverProvider = (world: World, Terrain: ITerrain) =>
       this.wss = new WebSocketServer({ port: 8080 });
 
       this.wss.on('connection', (ws) => {
-        const wrapper = wrapSocket(ws);
+        const wrapper = wrapSocket(ws, this.wss);
         ws.on('message', onMessage(this.events)(wrapper));
 
         ws.on('close', () => {

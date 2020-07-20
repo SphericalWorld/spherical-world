@@ -1,7 +1,7 @@
 import { inflate } from 'pako';
 import EventObservable from '../common/GameEvent/EventObservable';
 
-type NetworkEvent = {
+export type NetworkEvent = {
   type: string;
   payload: {
     data: unknown;
@@ -18,6 +18,8 @@ class Network {
   host = `ws://${window.location.hostname}`;
   port = 8080;
   events: EventObservable<NetworkEvent> = new EventObservable();
+  listeners: Array<(event: NetworkEvent) => unknown> = [];
+
   addonServerInfo = {
     host: window.location.origin,
   };
@@ -32,13 +34,15 @@ class Network {
   }
 
   processAction(message: MessageEvent): void {
-    this.events.emit({
+    const messageToEmit = {
       type: message.type,
       payload: {
         data: message.data,
         binaryData: this.requestBinaryData,
       },
-    });
+    };
+    this.events.emit(messageToEmit);
+    this.listeners.forEach((listener) => listener(messageToEmit));
     this.requestBinaryData = null;
   }
 
@@ -82,6 +86,14 @@ class Network {
       return;
     }
     this.connection.send(JSON.stringify({ type, data }));
+  }
+
+  addEventListener(listener: (event: NetworkEvent) => unknown): void {
+    this.listeners.push(listener);
+  }
+
+  removeEventListener(listener: (event: NetworkEvent) => unknown): void {
+    this.listeners = this.listeners.filter((el) => el !== listener);
   }
 }
 

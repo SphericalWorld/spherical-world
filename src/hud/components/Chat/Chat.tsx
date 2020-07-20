@@ -1,8 +1,9 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { chatWrapper, chat, messagesBox, message, input } from './chat.module.scss';
+import { useMessage, useSocketSend } from '../../utils/socket/Socket';
 
 const Chat = (): JSX.Element => {
-  const messages = new Array(30).fill('message').map((el, ind) => el.concat(` ${ind}`));
+  const [messages, setMessages] = useState<ReadonlyArray<string>>([]);
   const [currentMessage, setCurrentMessage] = useState('');
 
   const ref = useRef<HTMLDivElement>();
@@ -11,7 +12,10 @@ const Chat = (): JSX.Element => {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
   }, [messages]);
-
+  useMessage((incomingMessage) => {
+    setMessages(messages.concat(incomingMessage));
+  });
+  const send = useSocketSend();
   useEffect(() => {
     const mouseScroll = (event: MouseWheelEvent) => {
       event.preventDefault();
@@ -44,6 +48,7 @@ const Chat = (): JSX.Element => {
             onChange={(event) => setCurrentMessage(event.target.value)}
             onKeyPress={(event) => {
               if (event.key === 'Enter') {
+                send(currentMessage);
                 setCurrentMessage('');
               }
             }}

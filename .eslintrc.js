@@ -43,5 +43,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'max-classes-per-file': 'off',
+    'consistent-return': 'off', // garbage rule, forbids totally valid cases
   },
 };

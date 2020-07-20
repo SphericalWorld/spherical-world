@@ -12,6 +12,11 @@ import {
   PLAYER_PUT_BLOCK,
 } from '../player/events';
 import { getGeoId } from '../../common/chunk';
+// import { Sound } from '../Sound';
+
+// import woodHit from '../sounds/wood_hit.wav';
+
+// const blockRemoveSound = new Sound({ src: woodHit });
 
 const getPutBlockEvents = (world: World, picker) =>
   world.events
@@ -84,6 +89,7 @@ export default (world: World): System => {
         block.block &&
         vec3.exactEquals(block.position, blockRemover.position)
       ) {
+        // blockRemoveSound.audioData.play();
         visual.enabled = true;
         blockRemover.removedPart += (1 / blocksInfo[block.block].baseRemoveTime) * delta;
         if (blockRemover.removedPart >= 1) {
