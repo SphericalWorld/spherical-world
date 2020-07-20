@@ -1,8 +1,8 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
-import { chatWrapper, chat, messages, message, input } from './chat.module.scss';
+import { chatWrapper, chat, messagesBox, message, input } from './chat.module.scss';
 
 const Chat = (): JSX.Element => {
-  const messagesARR = new Array(30).fill('message').map((el, ind) => el.concat(` ${ind}`));
+  const messages = new Array(30).fill('message').map((el, ind) => el.concat(` ${ind}`));
   const [currentMessage, setCurrentMessage] = useState('');
 
   const ref = useRef<HTMLDivElement>();
@@ -10,12 +10,10 @@ const Chat = (): JSX.Element => {
     if (ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
-  });
+  }, [messages]);
 
   useEffect(() => {
     const mouseScroll = (event: MouseWheelEvent) => {
-      console.log(event);
-      console.log(ref.current.scrollTop);
       event.preventDefault();
       if (event.deltaY > 0) {
         ref.current.scrollTop += 17;
@@ -34,8 +32,8 @@ const Chat = (): JSX.Element => {
   return (
     <div className={chatWrapper}>
       <div className={chat}>
-        <div className={messages} ref={ref}>
-          {messagesARR.map((el) => (
+        <div className={messagesBox} ref={ref}>
+          {messages.map((el) => (
             <div className={message}>{el}</div>
           ))}
         </div>

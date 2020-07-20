@@ -4,9 +4,9 @@
 
 .chatWrapper {
   width: 30em;
-  height: 35vh;
+  height: 30vh;
   left: 0;
-  bottom: 0;
+  bottom: 100px;
   margin: auto 0;
   overflow: visible;
   padding: 0.3em;
@@ -23,7 +23,7 @@
   opacity: 1;
 }
 
-.messages {
+.messagesBox {
   display: flex;
   flex-direction: column;
 
