@@ -5,16 +5,15 @@
 .button {
   background-color: transparentize($primary, 0.3);
   border: $px1 solid transparentize($shadow, 0.5);
-  border-radius: $px1*3;
+  border-radius: $px1 * 3;
   color: $font-color-main-menu;
   cursor: pointer;
-  padding: 0.3em auto;
   text-decoration: none;
-  text-shadow:
-    -$px1 -$px1 0 $shadow,
-    $px1 -$px1 0 $shadow,
-    -$px1 $px1 0 $shadow,
-    $px1 $px1 0 $shadow;
+  // text-shadow:
+  //   -$px1 -$px1 0 $shadow,
+  //   $px1 -$px1 0 $shadow,
+  //   -$px1 $px1 0 $shadow,
+  //   $px1 $px1 0 $shadow;
   text-transform: capitalize;
   transition: all 0.2s ease;
   user-select: none;

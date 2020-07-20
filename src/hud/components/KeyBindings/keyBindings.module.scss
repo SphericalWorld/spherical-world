@@ -71,16 +71,3 @@
   grid-area: helpline;
   user-select: none;
 }
-
-.footerButtons {
-  @extend %footer-flex;
-  grid-area: footer;
-}
-
-.footerButtons > * {
-  @extend %footer-buttons;
-}
-
-.footerButtons > .label {
-  @extend %footer-buttons-label;
-}

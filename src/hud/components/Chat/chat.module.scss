@@ -1,0 +1,75 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.chatWrapper {
+  width: 30em;
+  height: 30vh;
+  left: 0;
+  bottom: 100px;
+  margin: auto 0;
+  overflow: visible;
+  padding: 0.3em;
+  pointer-events: all;
+  position: fixed;
+}
+
+.chat {
+  height: calc(17px * 10);
+  opacity: 0.3;
+}
+
+.chat:hover {
+  opacity: 1;
+}
+
+.messagesBox {
+  display: flex;
+  flex-direction: column;
+
+  height: 90%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.3em;
+}
+
+.messages::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+.messages::-webkit-scrollbar-track {
+  border-radius: 1em;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 1em;
+}
+
+.messages:hover::-webkit-scrollbar-thumb {
+  background: $primary;
+  border-radius: 1em;
+}
+
+.message {
+  padding: 1px;
+  font-weight: bold;
+  line-height: 15px;
+  color: #fff;
+}
+
+.input {
+  padding: 16px 0;
+}
+
+.input > input {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1em;
+  outline: 1px solid #fff;
+  border: 1px solid #fff;
+  width: calc(100% - 20px);
+  padding: 8px;
+}

@@ -8,12 +8,13 @@ import { INVENTORY } from './components/Inventory/inventoryConstants';
 import MainMenu from './components/MainMenu';
 import MainPanel from './components/MainPanel/MainPanel';
 import PlayerStats from './components/PlayerStats/PlayerStats';
-import MenuButton from './components/MenuButton/MenuButton';
+import MenuButton from './components/HamburgerMenuButton/HamburgerMenuButton';
 import KeyBindings from './components/KeyBindings/KeyBindings';
 import Audio from './components/Audio/Audio';
 import Video from './components/Video/Video';
 import Inventory from './components/Inventory/Inventory';
 import DebugPanel from './components/Debug/DebugPanel';
+import Chat from './components/Chat';
 
 const Hud = (): JSX.Element => (
   <div>
@@ -24,6 +25,7 @@ const Hud = (): JSX.Element => (
     <Route on={VIDEO} component={Video} />
     <DebugPanel />
     <MainPanel />
+    <Chat />
     <PlayerStats />
     <MenuButton />
   </div>

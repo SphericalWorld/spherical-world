@@ -1,0 +1,16 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.footerButtons {
+  @extend %footer-flex;
+  grid-area: footer;
+}
+
+.footerButtons > * {
+  @extend %footer-buttons;
+}
+
+.footerButtons > .label {
+  @extend %footer-buttons-label;
+}

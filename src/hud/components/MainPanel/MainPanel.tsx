@@ -46,7 +46,7 @@ const MainPanel = (): JSX.Element => {
           {slots.map((slot, index) => (
             <InventorySlot
               position={index}
-              key={index}
+              key={slot?.id}
               slot={slot || undefined}
               selected={index === selectedItemIndex}
               draggableMeta={{ source: 'mainPanel' }}

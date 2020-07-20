@@ -40,6 +40,7 @@ const MainMenu = (): JSX.Element => {
         <Button onClick={openVideo}>video</Button>
         <Button onClick={openAudio}>audio</Button>
         <Button onClick={openKeyBindings}>key bindings</Button>
+        {/* <Button onClick={}>Controls</Button> */}
         <Button onClick={close}>exit</Button>
       </div>
     </ModalWindowMenu>
