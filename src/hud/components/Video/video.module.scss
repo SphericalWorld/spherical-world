@@ -24,18 +24,3 @@
   padding: 0.5em 0;
   user-select: none;
 }
-
-.footerButtons {
-  @extend %footer-flex;
-  grid-area: footer;
-}
-
-.footerButtons > * {
-  @extend %footer-buttons;
-}
-
-.footerButtons > .label {
-  @extend %footer-buttons-label;
-}
-
-

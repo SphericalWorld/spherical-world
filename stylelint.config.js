@@ -5,5 +5,6 @@ module.exports = {
       '^[a-z][A-Za-z0-9]*$',
       { message: 'Selector should be written in camelCase' },
     ],
+    'order/properties-alphabetical-order': null,
   },
 };

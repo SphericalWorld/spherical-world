@@ -5,16 +5,16 @@ import { inputRange, valueLabel, valueDescript, formInputRange } from './inputRa
 type Props = Readonly<{
   value?: number;
   className?: string;
+  min?: number;
+  max: number;
+  step?: number;
 }>;
 
-const InputRange = ({ value = 15, className = '' }: Props): JSX.Element => {
+const InputRange = ({ value = 15, className = '', min = 0, max, step = 1 }: Props): JSX.Element => {
   const [activeNumber, setActiveNumber] = useState(value);
   const handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) =>
     setActiveNumber(parseInt(e.currentTarget.value, 10));
 
-  const min = 0;
-  const max = 100;
-  const step = 5;
   return (
     <div className={`${formInputRange} ${className}`}>
       <input

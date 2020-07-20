@@ -1,0 +1,39 @@
+@import '../../styles/fonts';
+@import '../../styles/colors';
+@import '../../styles/sizes';
+
+.avatar {
+  position: relative;
+}
+
+.lvlPlayer {
+  position: absolute;
+  left: -5px;
+  bottom: -5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #d8c18c;
+
+  border: 2px ridge #000;
+
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 5px 1px #60b88d;
+  height: 1.7em;
+  width: 1.7em;
+}
+
+.imgPlayer {
+  background-repeat: no-repeat;
+  background-size: 100%;
+  border-radius: 50%;
+  background-color: #8d01f7;
+  box-shadow: inset 0 0 5px 1px #60b88d;
+  height: 5em;
+  width: 5em;
+}

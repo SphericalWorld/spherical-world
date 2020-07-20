@@ -62,6 +62,10 @@
   font-size: $size-pagination-arrow * 1.2;
 }
 
+.paginationUp:active::after {
+  font-size: $size-pagination-arrow;
+}
+
 .paginationDown {
   @extend %alignment-text-in-div;
   height: 50%;
@@ -74,6 +78,10 @@
 
 .paginationDown:hover::after {
   font-size: $size-pagination-arrow * 1.2;
+}
+
+.paginationDown:active::after {
+  font-size: $size-pagination-arrow;
 }
 
 .paginationPage {

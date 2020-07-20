@@ -23,8 +23,8 @@
   },
   "scripts": {
     "start": "TSC_COMPILE_ON_ERROR=true react-app-rewired start",
-    "start-server": "docker-compose up",
-    "rebuild-server": "docker-compose up -d --force-recreate --build",
+    "start-server": "sudo docker-compose up",
+    "rebuild-server": "sudo docker-compose up -d --force-recreate --build",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",

@@ -17,12 +17,12 @@ import {
   section,
   commandGroup,
   helpLine,
-  footerButtons,
   label,
   labelFirst,
   labelCommandGroup,
 } from './keyBindings.module.scss';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
+import MenuFooterButtons from '../MenuFooterButtons';
 
 type ActionMapppingMappedProps = {
   caption: string;
@@ -105,17 +105,7 @@ const KeyBindings = (): JSX.Element => {
         <div className={helpLine}>
           <StatusPanel />
         </div>
-        <footer className={footerButtons}>
-          <Button size="small">reset to default</Button>
-          <Label className={label} />
-          <Button size="small">unbind key</Button>
-          <Button size="small" onClick={close}>
-            OK
-          </Button>
-          <Button size="small" onClick={close}>
-            Cancel
-          </Button>
-        </footer>
+        <MenuFooterButtons close={close} />
       </div>
     </ModalWindowMenu>
   );

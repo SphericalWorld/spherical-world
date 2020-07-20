@@ -1,18 +1,10 @@
 import React, { useCallback } from 'react';
 import { useSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
-import { Button, Label, Checkbox, InputRange } from '../../uiElements';
+import { Label, Checkbox, InputRange } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import {
-  content,
-  inner,
-  footerButtons,
-  label,
-  cbEnSound,
-  labelVolume,
-  inputVolume,
-  volumes,
-} from './audio.module.scss';
+import { content, inner, cbEnSound, labelVolume, inputVolume, volumes } from './audio.module.scss';
+import MenuFooterButtons from '../MenuFooterButtons';
 
 const Audio = (): JSX.Element => {
   const setUIState = useSetUIState();
@@ -29,33 +21,23 @@ const Audio = (): JSX.Element => {
               <Label size="big" className={labelVolume}>
                 Master Volume
               </Label>
-              <InputRange value={30} className={inputVolume} />
+              <InputRange max={100} step={5} value={30} className={inputVolume} />
             </div>
             <div>
               <Label size="big" className={labelVolume}>
                 Effect Volume
               </Label>
-              <InputRange value={50} className={inputVolume} />
+              <InputRange max={100} step={5} value={50} className={inputVolume} />
             </div>
             <div>
               <Label size="big" className={labelVolume}>
                 Ambient Volume
               </Label>
-              <InputRange value={100} className={inputVolume} />
+              <InputRange max={100} step={5} value={100} className={inputVolume} />
             </div>
           </div>
         </div>
-        <div className={footerButtons}>
-          <Button size="small">defaults</Button>
-          <Label className={label} />
-          <Button size="small">apply</Button>
-          <Button size="small" onClick={close}>
-            accept
-          </Button>
-          <Button size="small" onClick={close}>
-            cancel
-          </Button>
-        </div>
+        <MenuFooterButtons close={close} />
       </div>
     </ModalWindowMenu>
   );
