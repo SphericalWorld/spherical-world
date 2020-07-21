@@ -39,6 +39,7 @@ import {
   UserControlled,
   Visual,
   Inventory,
+  Script,
 } from '../components/react';
 import Model from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
@@ -62,6 +63,16 @@ type Props = {
 //   }
 // }
 
+class PlayerScript extends Script {
+  static componentName: 'script' = 'script';
+
+  process() {
+    console.log(1);
+  }
+}
+
+export const PlayerScriptComponent = (): JSX.Element => new PlayerScript();
+
 export const Player = ({
   id,
   transform,
@@ -84,6 +95,7 @@ export const Player = ({
       <Physics />
       <Velocity />
       <Gravity />
+      {/* <PlayerScriptComponent /> */}
       <Inventory {...inventory.data} />
       {isMainPlayer
         ? [<UserControlled />, <Camera {...camera} />]
@@ -102,6 +114,7 @@ export const Player = ({
 
 const playerProvider = (ecs: World) => {
   ecs.registerConstructor('PLAYER', Player);
+  // ecs.registerComponentTypes(PlayerScript);
 };
 
 export default playerProvider;

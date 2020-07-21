@@ -3,7 +3,7 @@ import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type { Chunk } from '../Chunk';
 import { randomize } from '../../../../common/utils/vector';
-import { OAK_LEAVES, WOOD, OAK } from '../../../../common/blocks';
+import { OAK_LEAVES, OAK } from '../../../../common/blocks';
 
 const PRNG = seedrandom.alea;
 
@@ -52,18 +52,13 @@ const branch = (
     if (length) {
       branch(chunk, newPosition, newDirection, length - 1, branchingFactor, steps);
     }
-    if (!branchLengthRemain) {
-      leaves(chunk, newPosition, 3);
-    }
+    leaves(chunk, newPosition, 3);
   };
   if (length) {
-    chunk.setAtNoFlags(...vec3.round(vec3.create(), position), OAK);
+    chunk.setAtNoFlags(...vec3.round(vec3.create(), position), 4);
   }
   if (branchLengthRemain) {
-    const newDirection = vec3.normalize(
-      vec3.create(),
-      vec3.add(vec3.create(), direction, vec3.fromValues(0, -0.3, 0)),
-    );
+    const newDirection = direction;
     const newPosition = vec3.add(vec3.create(), position, newDirection);
     runRecursion(newPosition, newDirection, branchLengthRemain - 1);
   } else {
@@ -90,13 +85,7 @@ const branch = (
   }
 };
 
-const iterateRoot = (chunk, height, x, y, z) => {
-  for (let i = 0; i < height; i += 1) {
-    chunk.setAtNoFlags(x, y + i, z, WOOD);
-  }
-};
-
-export const generateTree = (
+export const generateStomp = (
   seed: number,
 ): ((chunk: Chunk, x: number, y: number, z: number) => Chunk) => {
   const simplex = new Simplex(PRNG(`${seed}`));
@@ -106,19 +95,7 @@ export const generateTree = (
   };
 
   return (chunk: Chunk, x: number, y: number, z: number): Chunk => {
-    const length = Math.floor(generator.simplex.noise2D(x, z) * 3) + 4;
-    for (let i = 0; i < length; i += 1) {
-      chunk.setAtNoFlags(x, y + i, z, 4);
-    }
-    branch(chunk, vec3.fromValues(x, y + length, z), TOP, length + 4, 1.9, 0);
-    if (length >= 6) {
-      iterateRoot(chunk, 1 + Math.floor(Math.random() * 2), x + 1, y, z);
-      iterateRoot(chunk, 1 + Math.floor(Math.random() * 2), x - 1, y, z);
-      iterateRoot(chunk, 1 + Math.floor(Math.random() * 2), x, y, z + 1);
-      iterateRoot(chunk, 1 + Math.floor(Math.random() * 2), x, y, z - 1);
-    }
+    chunk.setAtNoFlags(x, y, z, OAK);
     return chunk;
   };
 };
-
-export default generateTree;

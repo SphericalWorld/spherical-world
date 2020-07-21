@@ -234,6 +234,25 @@ export class Chunk extends ChunkBase {
     }
   }
 
+  generateAtIfEmpty(
+    x: number,
+    y: number,
+    z: number,
+    generateFn: () => number | [number, number],
+  ): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    if (chunk.data[index]) return;
+    const block = generateFn();
+    if (typeof block === 'number') {
+      chunk.data[index] = block;
+    } else {
+      const [data, flags] = block;
+      chunk.data[index] = data;
+      chunk.flags[index] = flags;
+    }
+  }
+
   at(x: number, y: number, z: number): number {
     return getChunkNear(this, x, y, z).data[(x & 0xf) | ((z & 0xf) << 4) | (y << 8)];
   }

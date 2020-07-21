@@ -14,3 +14,4 @@ export { default as Joint, JointComponent } from './Joint';
 export { default as Item, ItemComponent } from './Item';
 export { default as NetworkSync, NetworkSyncComponent } from './NetworkSync';
 export { default as Inventory, InventoryComponent } from './Inventory';
+export { default as Script } from './Script';

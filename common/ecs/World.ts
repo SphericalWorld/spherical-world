@@ -131,6 +131,7 @@ export class World {
       componentRegistry.set(entityId, component.data);
     }
     const componentMap = new Map(components.map(({ type, data }) => [type, data]));
+    if (componentMap.has('PlayerScript')) console.log(components, componentMap);
     for (const selector of this.selectors) {
       if (
         !selector.includeComponents.find(
@@ -138,6 +139,9 @@ export class World {
         ) &&
         !selector.excludeComponents.find((componentType) => componentMap.has(componentType.name))
       ) {
+        if (componentMap.has('PlayerScript'))
+          console.log(components, componentMap, selector.includeComponents);
+
         const selectedComponents = {
           id: entityId,
         };

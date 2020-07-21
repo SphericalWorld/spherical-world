@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import type { Simplex2D } from '../../util/simplex';
 import type { Chunk } from './Chunk';
 import { toByte } from '../../../common/utils/numberUtils';
@@ -22,6 +23,7 @@ import {
 } from '../../../common/blocks';
 import { ChunkGenerator, BiomeType } from './types';
 import { biomes } from './chunk-generators/biomes';
+import { generateStomp } from './chunk-generators/Stomp';
 
 type BlockPositionData = Readonly<{ chunk: Chunk; height: number; x: number; z: number }>;
 type ChunkGeneratorFn = (block: BlockPositionData) => void;
@@ -38,25 +40,29 @@ const setBlocksInRange = (
   return params;
 };
 
-const BIOME_SIZE = 256;
+const BIOME_SIZE = 512;
 const WATER_LEVEL: 63 = 63;
 
-const createChunkGenerator = (seed: number): ChunkGenerator => ({
-  seed,
-  simplexHeightMapHills: createSimplex2D(seed, 128),
-  simplexHeightMapMountains: createSimplex2D(seed + 1, 256),
-  simplexTemperature: createSimplex2D(seed + 2, BIOME_SIZE),
-  simplexRainfall: createSimplex2D(seed + 3, BIOME_SIZE),
-  simplexFoliage: createSimplex2D(seed + 4),
-  simplexFoliageReeds: createSimplex2D(seed + 5, 64),
-  simplexResourcesCoal: createSimplex3D(seed + 6, 8),
-  simplexResourcesIron: createSimplex3D(seed + 7, 8),
-  simplexResourcesClay: createSimplex2D(seed + 8, 8),
-  simplexCaves: createSimplex3D(seed + 9, 16),
-  generateTree: generateTree(seed + 10),
-  structures: [generateTreasury(seed + 11)],
-  simplexHeightMapRivers: createSimplex2D(seed + 12, 1024),
-});
+const createChunkGenerator = (seed: number): ChunkGenerator => {
+  let seedShifted = seed;
+  return {
+    seed,
+    simplexHeightMapHills: createSimplex2D(seedShifted++, 128),
+    simplexHeightMapMountains: createSimplex2D(seedShifted++, 256),
+    simplexTemperature: createSimplex2D(seedShifted++, BIOME_SIZE),
+    simplexRainfall: createSimplex2D(seedShifted++, BIOME_SIZE),
+    simplexFoliage: createSimplex2D(seedShifted++),
+    simplexFoliageReeds: createSimplex2D(seedShifted++, 64),
+    simplexResourcesCoal: createSimplex3D(seedShifted++, 8),
+    simplexResourcesIron: createSimplex3D(seedShifted++, 8),
+    simplexResourcesClay: createSimplex2D(seedShifted++, 8),
+    simplexCaves: createSimplex3D(seedShifted++, 16),
+    generateTree: generateTree(seedShifted++),
+    generateStomp: generateStomp(seedShifted++),
+    structures: [generateTreasury(seedShifted++)],
+    simplexHeightMapRivers: createSimplex2D(seedShifted++, 1024),
+  };
+};
 
 // const generateHeightMap = (hills: Simplex2D, mountains: Simplex2D) => ({ x, z }) =>
 //   Math.max(

@@ -1,5 +1,7 @@
 import type { Chunk } from './Chunk';
 import type { Simplex2D, Simplex3D } from '../../util/simplex';
+import type { generateTree } from './chunk-generators/Tree';
+import type { generateStomp } from './chunk-generators/Stomp';
 
 export type BlockPositionData = Readonly<{ chunk: Chunk; height: number; x: number; z: number }>;
 
@@ -20,6 +22,7 @@ export type ChunkGenerator = Readonly<{
   simplexResourcesIron: Simplex3D;
   simplexResourcesClay: Simplex2D;
   generateTree: ReturnType<typeof generateTree>;
+  generateStomp: ReturnType<typeof generateStomp>;
 }>;
 
 export enum BiomeType {

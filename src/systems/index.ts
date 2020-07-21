@@ -13,6 +13,7 @@ import DrawSystem from './Draw';
 import HudSystem from './Hud';
 import NetworkSystem from './Network';
 import DropableSystem from './Dropable';
+import ScriptingSystem from './ScriptingSystem';
 
 export default (
   world: World,
@@ -30,4 +31,5 @@ export default (
   HudSystem(world, store, input),
   NetworkSystem(world, network, input, store),
   DropableSystem(world),
+  ScriptingSystem(world),
 ];

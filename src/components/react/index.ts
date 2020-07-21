@@ -15,6 +15,7 @@ export {
   ItemComponent as Item,
   NetworkSyncComponent as NetworkSync,
   InventoryComponent as Inventory,
+  Script,
 } from '../index';
 export type { TransformProps } from '../Transform';
 export type { InventoryProps } from '../Inventory';
