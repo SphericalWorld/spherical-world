@@ -1,6 +1,7 @@
 @import '../../styles/fonts';
 @import '../../styles/colors';
 @import '../../styles/sizes';
+@import '../../styles/spacing';
 
 .chatWrapper {
   width: 30em;
@@ -9,7 +10,7 @@
   bottom: 100px;
   margin: auto 0;
   overflow: visible;
-  padding: 0.3em;
+  padding: $space-xxs;
   pointer-events: all;
   position: fixed;
 }
@@ -31,7 +32,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 0.3em;
+  padding: $space-xxs;
 }
 
 .messagesBox::-webkit-scrollbar {
@@ -65,8 +66,10 @@
 }
 
 .input {
-  padding: 16px 0;
+  padding: $space-m 0;
 }
+
+$input-width: calc(100% - calc(#{$space-m} + calc(#{$space-s} / 2)));
 
 .input > input {
   background-color: rgba(0, 0, 0, 0.5);
@@ -75,6 +78,6 @@
   font-size: 1em;
   outline: 1px solid #fff;
   border: 1px solid #fff;
-  width: calc(100% - 20px);
-  padding: 8px;
+  width: $input-width;
+  padding: $space-s;
 }
