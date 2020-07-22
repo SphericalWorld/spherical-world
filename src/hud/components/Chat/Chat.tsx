@@ -44,7 +44,6 @@ const Chat = (): JSX.Element => {
       };
     }
   }, [ref]);
-  console.log(messages);
   return (
     <div className={chatWrapper}>
       <div className={chat}>

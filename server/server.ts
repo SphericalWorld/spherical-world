@@ -34,7 +34,6 @@ type ServerEvents = {
 const onMessage = (events) => (socket: Socket) => (data) => {
   const message = parseJson<Message>(data);
   if (message?.type === 'CHAT_MESSAGE') {
-    console.log(message);
     const dataToSend = {
       type: 'CHAT_MESSAGE',
       data: {
