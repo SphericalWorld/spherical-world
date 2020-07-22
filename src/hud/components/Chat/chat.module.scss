@@ -34,29 +34,34 @@
   padding: 0.3em;
 }
 
-.messages::-webkit-scrollbar {
+.messagesBox::-webkit-scrollbar {
   width: 0.8em;
 }
 
-.messages::-webkit-scrollbar-track {
+.messagesBox::-webkit-scrollbar-track {
   border-radius: 1em;
 }
 
-.messages::-webkit-scrollbar-thumb {
+.messagesBox::-webkit-scrollbar-thumb {
   background: transparent;
   border-radius: 1em;
 }
 
-.messages:hover::-webkit-scrollbar-thumb {
+.messagesBox:hover::-webkit-scrollbar-thumb {
   background: $primary;
   border-radius: 1em;
 }
 
 .message {
-  padding: 1px;
   font-weight: bold;
-  line-height: 15px;
+  line-height: 17px;
   color: #fff;
+
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+
+  max-width: 100%;
 }
 
 .input {

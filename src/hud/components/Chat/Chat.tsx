@@ -1,9 +1,18 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import { chatWrapper, chat, messagesBox, message, input } from './chat.module.scss';
 import { useMessage, useSocketSend } from '../../utils/socket/Socket';
+import type { IncomingMessage } from '../../utils/socket/Socket';
+
+export const getShortTime = (date: number): string => {
+  const parsedDate = new Date(date);
+  return parsedDate.toLocaleString('ru-RU', {
+    hour: 'numeric',
+    minute: 'numeric',
+  });
+};
 
 const Chat = (): JSX.Element => {
-  const [messages, setMessages] = useState<ReadonlyArray<string>>([]);
+  const [messages, setMessages] = useState<ReadonlyArray<IncomingMessage>>([]);
   const [currentMessage, setCurrentMessage] = useState('');
 
   const ref = useRef<HTMLDivElement>();
@@ -12,9 +21,11 @@ const Chat = (): JSX.Element => {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
   }, [messages]);
+
   useMessage((incomingMessage) => {
     setMessages(messages.concat(incomingMessage));
   });
+
   const send = useSocketSend();
   useEffect(() => {
     const mouseScroll = (event: MouseWheelEvent) => {
@@ -33,12 +44,16 @@ const Chat = (): JSX.Element => {
       };
     }
   }, [ref]);
+  console.log(messages);
   return (
     <div className={chatWrapper}>
       <div className={chat}>
         <div className={messagesBox} ref={ref}>
           {messages.map((el) => (
-            <div className={message}>{el}</div>
+            <div key={el.id} className={message}>
+              <span>[{getShortTime(el.time)}]</span>
+              <span>[{el.from.name}]</span> : {el.text}
+            </div>
           ))}
         </div>
         <div className={input}>

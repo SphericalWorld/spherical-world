@@ -5,6 +5,16 @@ type Socket = Readonly<{
   network: Network;
 }>;
 
+export type IncomingMessage = {
+  id: string;
+  text: string;
+  time: number;
+  from: {
+    id: string;
+    name: string;
+  };
+};
+
 const SocketContext = React.createContext<Socket | null>(null);
 
 export const SocketProvider = ({ value, children }: { value: Network; children: ReactNode }) => {
@@ -18,7 +28,7 @@ export const SocketProvider = ({ value, children }: { value: Network; children: 
 };
 
 export const useMessage = (
-  cb: (message: string) => unknown,
+  cb: (message: IncomingMessage) => unknown,
   deps: ReadonlyArray<unknown> = [],
 ): void => {
   const socket = useContext(SocketContext);
