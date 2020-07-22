@@ -87,7 +87,7 @@ export default (ecs: World, terrain: Terrain): System => {
   const components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
   const dependentComponents = ecs.createSelector([Transform, Joint]);
   const collideWithTerrainPApplied = collideWithTerrain(terrain);
-  const transformRegistry = ecs.components.get('Transform');
+  const transformRegistry = ecs.components.get('transform');
 
   return (delta: number) => {
     for (const { transform, velocity, collider } of components) {

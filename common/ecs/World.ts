@@ -73,8 +73,8 @@ export class World {
   registerComponentTypes(...componentTypes: Function[]): void {
     for (const componentType of componentTypes) {
       componentType.memoryManager = this.memoryManager;
-      this.componentTypes.set(componentType.name, componentType);
-      this.components.set(componentType.name, new Map());
+      this.componentTypes.set(componentType.componentName, componentType);
+      this.components.set(componentType.componentName, new Map());
       this.memoryManager.registerComponentType(componentType);
     }
   }
@@ -131,22 +131,25 @@ export class World {
       componentRegistry.set(entityId, component.data);
     }
     const componentMap = new Map(components.map(({ type, data }) => [type, data]));
-    if (componentMap.has('PlayerScript')) console.log(components, componentMap);
     for (const selector of this.selectors) {
       if (
         !selector.includeComponents.find(
-          (componentType) => !componentMap.has(componentType.name),
+          (componentType) => !componentMap.has(componentType.componentName),
         ) &&
-        !selector.excludeComponents.find((componentType) => componentMap.has(componentType.name))
+        !selector.excludeComponents.find((componentType) =>
+          componentMap.has(componentType.componentName),
+        )
       ) {
-        if (componentMap.has('PlayerScript'))
-          console.log(components, componentMap, selector.includeComponents);
-
         const selectedComponents = {
           id: entityId,
         };
         for (let i = 0; i < selector.includeComponents.length; i += 1) {
-          const component = componentMap.get(selector.includeComponents[i].name);
+          const component = componentMap.get(selector.includeComponents[i].componentName);
+          if (selector.includeComponents[i].componentName === 'script') {
+            component.setGameObject(componentMap);
+            component.start();
+          }
+
           selectedComponents[selector.includeComponents[i].componentName] = component;
         }
         selector.components.push(selectedComponents);
@@ -184,7 +187,7 @@ export class World {
     for (const thread of this.threads) {
       const componentsToAdd = components
         .filter((el) => el.constructor.threads.includes(thread.id))
-        .map((el) => ({ type: el.constructor.name, data: el }));
+        .map((el) => ({ type: el.constructor.componentName, data: el }));
       thread.postMessage({
         type: 'CREATE_ENTITY',
         payload: { id: entityId, components: componentsToAdd },
@@ -192,7 +195,7 @@ export class World {
     }
     this.registerEntity(
       entityId,
-      components.map((el) => ({ type: el.constructor.name, data: el })),
+      components.map((el) => ({ type: el.constructor.componentName, data: el })),
     );
     const selectedComponents = {
       id: entityId,

@@ -11,4 +11,4 @@ if (!root) {
 
 ReactDOM.render(React.createElement(App), root);
 registerServiceWorker();
-start();
+start().catch((e) => console.error(e.stack));

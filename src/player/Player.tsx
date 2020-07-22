@@ -46,6 +46,13 @@ import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 import { TextBillboard } from '../gameObjects';
 import { BlockPicker } from './BlockPicker';
 import { materialLibrary, GlObject } from '../engine';
+import { Sound } from '../Sound';
+import { footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18 } from '../sounds';
+import { getBlock } from '../../common/terrain';
+import Terrain from '../Terrain';
+import { blocksFlags, HAS_PHYSICS_MODEL, blocksInfo } from '../blocks/blockInfo';
+import { UserControlled as CUserControlled, Transform as CTransform } from '../components';
+import { defaultFootstepsSounds } from '../blocks/components/BasePropertiesComponent';
 
 type Props = {
   id: Entity;
@@ -63,11 +70,51 @@ type Props = {
 //   }
 // }
 
-class PlayerScript extends Script {
-  static componentName: 'script' = 'script';
+const tmp = vec3.create();
 
-  process() {
-    console.log(1);
+class PlayerScript extends Script {
+  static terrain: Terrain;
+
+  footsteps = blocksInfo.map(
+    (block) =>
+      new Sound({
+        src: block.sounds?.footsteps,
+        volume: 0.04,
+        lazy: true,
+      }),
+  );
+
+  lastPosition = vec3.create();
+  deltaMove = 0;
+  movementData: CUserControlled = null;
+  transform: CTransform = null;
+
+  start() {
+    this.movementData = this.gameObject.get('userControlled');
+    this.transform = this.gameObject.get('transform');
+  }
+
+  update() {
+    const { movementData, transform } = this;
+
+    this.deltaMove += vec3.length(vec3.sub(tmp, transform.translation, this.lastPosition));
+    vec3.copy(this.lastPosition, transform.translation);
+
+    if (movementData.velocity[0] || movementData.velocity[1]) {
+      if (this.deltaMove >= 3 && transform.translation[1] % 1 < 0.1) {
+        const { translation } = transform;
+
+        const block = getBlock(PlayerScript.terrain)(
+          translation[0],
+          translation[1] - 1,
+          translation[2],
+        );
+        if (blocksFlags[block][HAS_PHYSICS_MODEL]) {
+          this.footsteps[block].play();
+          this.deltaMove = 0;
+        }
+      }
+    }
   }
 }
 
@@ -95,7 +142,7 @@ export const Player = ({
       <Physics />
       <Velocity />
       <Gravity />
-      {/* <PlayerScriptComponent /> */}
+      <PlayerScriptComponent />
       <Inventory {...inventory.data} />
       {isMainPlayer
         ? [<UserControlled />, <Camera {...camera} />]
@@ -112,8 +159,9 @@ export const Player = ({
   );
 };
 
-const playerProvider = (ecs: World) => {
+const playerProvider = (ecs: World, terrain: Terrain) => {
   ecs.registerConstructor('PLAYER', Player);
+  PlayerScript.terrain = terrain;
   // ecs.registerComponentTypes(PlayerScript);
 };
 

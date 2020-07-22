@@ -31,6 +31,7 @@ import {
   Item,
   NetworkSync,
   Inventory,
+  Script,
 } from './components';
 
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
@@ -65,6 +66,7 @@ const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
     Item,
     NetworkSync,
     Inventory,
+    Script,
   );
   world.registerThread(new Thread(THREAD_PHYSICS, physicsThread));
   world.registerThread(new Thread(THREAD_CHUNK_HANDLER, chunksHandlerThread));
@@ -106,7 +108,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const world = createECS(threads);
   const time = new (timeProvider())(Date.now());
   const terrain = getTerrain();
-  playerProvider(world);
+  playerProvider(world, terrain);
   itemProvider(world);
   const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();

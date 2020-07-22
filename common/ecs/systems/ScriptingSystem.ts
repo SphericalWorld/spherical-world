@@ -7,7 +7,7 @@ export default (ecs: World): System => {
 
   const scriptingSystem = (delta: number) => {
     for (const { script } of components) {
-      script.process(delta);
+      script.update(delta);
     }
   };
   return scriptingSystem;

@@ -64,10 +64,11 @@ export default (world: World): System => {
   const playerAttackEvents = getPlayerAttackEvents(world);
   getPutBlockEvents(world, picker);
 
-  const raytracerRegistry = world.components.get('Raytracer');
+  const raytracerRegistry = world.components.get('raytracer');
   if (!raytracerRegistry) {
     throw new Error();
   }
+
   const blockRemove = (delta: number) => {
     for (const { visual, blockRemover, id, joint } of removers) {
       if (!joint.raytracer) {

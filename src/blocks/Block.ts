@@ -36,6 +36,9 @@ export type BlockData = {
   ) => boolean;
   getFlags: (number) => number;
   renderToChunk?: RenderToChunk;
+  sounds: {
+    footsteps: ReadonlyArray<string>;
+  };
 };
 
 const Block = <T extends object>(...components: T[]): SpreadTypes<BlockData, T> =>

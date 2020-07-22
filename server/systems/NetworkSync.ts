@@ -8,16 +8,16 @@ import { throttle } from '../../common/utils';
 const getComponentsToUpdate = (world: World, playerId) =>
   [...world.components.entries()]
     .map(([constructor, data]) => [world.componentTypes.get(constructor), data])
-    .filter(([constructor]) => constructor.name === 'Transform')
+    .filter(([constructor]) => constructor.componentName === 'transform')
     .map(([constructor, data]) =>
-      constructor.name === 'Transform'
+      constructor.componentName === 'transform'
         ? {
-            type: constructor.name,
+            type: constructor.componentName,
             data: [...data.entries()]
               .filter(([id]) => id !== playerId)
               .map(([_, value]) => [_, value.serialize()]),
           }
-        : { type: constructor.name, data: [...data.entries()] },
+        : { type: constructor.componentName, data: [...data.entries()] },
     );
 
 const RENDER_DISTANCE = 8;

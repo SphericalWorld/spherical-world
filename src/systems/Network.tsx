@@ -58,11 +58,11 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
       lastUpdate = Date.now();
       network.emit('SYNC_GAME_DATA', [
         {
-          type: 'Transform',
+          type: 'transform',
           data: player.map((el) => [el.id, el.transform.serialize()]),
         },
         {
-          type: 'Camera',
+          type: 'camera',
           data: player.map((el) => [el.id, el.camera.serialize()]),
         },
       ]);

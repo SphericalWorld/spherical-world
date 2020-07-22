@@ -9,9 +9,17 @@ export default class Script implements Component {
   static networkable = true;
   static memoryManager: MemoryManager;
 
+  gameObject: any;
+
   constructor() {}
 
-  process(delta: number) {}
+  setGameObject(gameObject): void {
+    this.gameObject = gameObject;
+  }
+
+  start() {}
+
+  update(delta: number) {}
 }
 
 export type ScriptProps = {};

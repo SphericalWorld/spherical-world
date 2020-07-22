@@ -46,9 +46,10 @@ const blocks = [
   Wood(),
 ];
 
-const blocksTextureInfo = createArray<Uint8Array>(256, () => new Uint8Array(6));
-const blocksFlags = createArray<Uint8Array>(256, () => new Uint8Array(5));
-const bufferInfo = createArray<number[]>(256, () => createArray(6, 0));
+// TODO: try typed arrays everywhere, preferable 32 bit
+const blocksTextureInfo = createArray<Uint32Array>(256, () => new Uint32Array(6));
+const blocksFlags = createArray<Uint32Array>(256, () => new Uint32Array(5));
+const bufferInfo = createArray<Uint32Array>(256, () => new Uint32Array(6));
 const blocksInfo = createArray<BlockData>(256, Block());
 
 export const LIGHT_TRANSPARENT: 0 = 0;

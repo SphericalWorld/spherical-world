@@ -1,6 +1,12 @@
 import { getIndex } from '../../../common/chunk';
 import identity from '../../../common/fp/combinators/identity';
 import { SLICE } from '../../../common/constants/chunk';
+import {
+  footstepsGrass13,
+  footstepsGrass15,
+  footstepsGrass16,
+  footstepsGrass18,
+} from '../../sounds';
 
 export type ChunkData = Readonly<{
   flags: Uint8Array;
@@ -65,6 +71,9 @@ const BasePropertiesComponent = () => ({
   },
   putBlock,
   getFlags: identity as (_: number) => number,
+  sounds: {
+    footsteps: [footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18],
+  },
 });
 
 export default BasePropertiesComponent;
