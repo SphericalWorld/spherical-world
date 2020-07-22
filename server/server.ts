@@ -1,4 +1,5 @@
 import WebSocket, { Server as WebSocketServer } from 'ws';
+import { v4 as uuid } from 'uuid';
 import type { World } from '../common/ecs/World';
 import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
@@ -32,9 +33,20 @@ type ServerEvents = {
 
 const onMessage = (events) => (socket: Socket) => (data) => {
   const message = parseJson<Message>(data);
-
   if (message?.type === 'CHAT_MESSAGE') {
-    socket.wss.clients.forEach((client) => client.send(data));
+    const dataToSend = {
+      type: 'CHAT_MESSAGE',
+      data: {
+        id: uuid(),
+        time: Date.now(),
+        text: message.data,
+        from: {
+          id: socket.player.id,
+          name: 'noName',
+        },
+      },
+    };
+    socket.wss.clients.forEach((client) => client.send(JSON.stringify(dataToSend)));
     return;
   }
   if (typeof message?.type === 'string') {
