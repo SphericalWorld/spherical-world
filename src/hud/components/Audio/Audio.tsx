@@ -3,15 +3,16 @@ import { useSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
 import { Label, Checkbox, InputRange } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import { content, inner, cbEnSound, labelVolume, inputVolume, volumes } from './audio.module.scss';
+import { content, cbEnSound, labelVolume, inputVolume, volumes } from './audio.module.scss';
 import MenuFooterButtons from '../MenuFooterButtons';
+import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';
 
 const Audio = (): JSX.Element => {
   const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(AUDIO, false), [setUIState]);
   return (
     <ModalWindowMenu caption="Audio">
-      <div className={inner}>
+      <ModalWindowInnerContent>
         <div className={content}>
           <div className={cbEnSound}>
             <Checkbox size="big"> enable sound</Checkbox>
@@ -38,7 +39,7 @@ const Audio = (): JSX.Element => {
           </div>
         </div>
         <MenuFooterButtons close={close} />
-      </div>
+      </ModalWindowInnerContent>
     </ModalWindowMenu>
   );
 };

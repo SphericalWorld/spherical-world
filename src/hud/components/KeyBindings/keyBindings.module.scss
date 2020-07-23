@@ -2,10 +2,10 @@
 @import '../../styles/colors';
 @import '../../styles/sizes';
 
-.content {
-  @extend %grid-main-menu;
-  width: 40em;
-}
+// .content {
+//   @extend %grid-main-menu;
+//   width: 40em;
+// }
 
 .header {
   border-bottom: $border-key-bindings;
