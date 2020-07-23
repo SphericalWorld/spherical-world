@@ -11,7 +11,6 @@ import Label from '../../uiElements/Label';
 import StatusPanel from './StatusPanel';
 import ModalWindowMenu from '../ModalWindowMenu';
 import {
-  content,
   command,
   header,
   section,
@@ -23,6 +22,7 @@ import {
 } from './keyBindings.module.scss';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 import MenuFooterButtons from '../MenuFooterButtons';
+import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';
 
 type ActionMapppingMappedProps = {
   caption: string;
@@ -89,7 +89,7 @@ const KeyBindings = (): JSX.Element => {
 
   return (
     <ModalWindowMenu caption="Key Bindings">
-      <div className={content}>
+      <ModalWindowInnerContent>
         <header className={`${command} ${header}`}>
           <Label className={labelFirst}>command</Label>
           <Label className={label}>key 1</Label>
@@ -106,7 +106,7 @@ const KeyBindings = (): JSX.Element => {
           <StatusPanel />
         </div>
         <MenuFooterButtons close={close} />
-      </div>
+      </ModalWindowInnerContent>
     </ModalWindowMenu>
   );
 };

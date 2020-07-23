@@ -2,9 +2,10 @@ import React, { useCallback } from 'react';
 import { VIDEO } from './videoConstants';
 import { Label, Select } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import { content, labelSelect, volumes } from './video.module.scss';
+import { labelSelect, volumes } from './video.module.scss';
 import { useSetUIState } from '../../utils/StateRouter';
 import MenuFooterButtons from '../MenuFooterButtons';
+import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';
 
 const quality = [
   { value: '1', text: 'low' },
@@ -23,7 +24,7 @@ const Video = (): JSX.Element => {
 
   return (
     <ModalWindowMenu caption="Video">
-      <div className={content}>
+      <ModalWindowInnerContent>
         <div className={volumes}>
           <div>
             <Label size="big" className={labelSelect}>
@@ -45,7 +46,7 @@ const Video = (): JSX.Element => {
           </div>
         </div>
         <MenuFooterButtons close={close} />
-      </div>
+      </ModalWindowInnerContent>
     </ModalWindowMenu>
   );
 };
