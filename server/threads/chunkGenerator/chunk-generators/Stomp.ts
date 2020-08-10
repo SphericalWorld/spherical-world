@@ -3,7 +3,7 @@ import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type { Chunk } from '../Chunk';
 import { randomize } from '../../../../common/utils/vector';
-import { OAK_LEAVES, OAK } from '../../../../common/blocks';
+import { OAK_LEAVES, OAK, MUSHROOM_BROWN, AIR, TALL_GRASS } from '../../../../common/blocks';
 
 const PRNG = seedrandom.alea;
 
@@ -94,8 +94,19 @@ export const generateStomp = (
     height: 5,
   };
 
+  const generateMushroomFn = (block: number) =>
+    (block === AIR || block === TALL_GRASS) && Math.random() > 0.8 ? MUSHROOM_BROWN : block;
+
   return (chunk: Chunk, x: number, y: number, z: number): Chunk => {
     chunk.setAtNoFlags(x, y, z, OAK);
+    chunk.generateAtNoFlags(x + 1, y, z, generateMushroomFn);
+    chunk.generateAtNoFlags(x, y, z + 1, generateMushroomFn);
+    chunk.generateAtNoFlags(x + 1, y, z + 1, generateMushroomFn);
+    chunk.generateAtNoFlags(x - 1, y, z, generateMushroomFn);
+    chunk.generateAtNoFlags(x, y, z - 1, generateMushroomFn);
+    chunk.generateAtNoFlags(x - 1, y, z - 1, generateMushroomFn);
+    chunk.generateAtNoFlags(x + 1, y, z - 1, generateMushroomFn);
+    chunk.generateAtNoFlags(x - 1, y, z + 1, generateMushroomFn);
     return chunk;
   };
 };

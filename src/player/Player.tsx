@@ -47,12 +47,10 @@ import { TextBillboard } from '../gameObjects';
 import { BlockPicker } from './BlockPicker';
 import { materialLibrary, GlObject } from '../engine';
 import { Sound } from '../Sound';
-import { footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18 } from '../sounds';
 import { getBlock } from '../../common/terrain';
 import Terrain from '../Terrain';
 import { blocksFlags, HAS_PHYSICS_MODEL, blocksInfo } from '../blocks/blockInfo';
 import { UserControlled as CUserControlled, Transform as CTransform } from '../components';
-import { defaultFootstepsSounds } from '../blocks/components/BasePropertiesComponent';
 
 type Props = {
   id: Entity;

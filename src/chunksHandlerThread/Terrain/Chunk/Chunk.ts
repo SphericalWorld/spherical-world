@@ -282,15 +282,26 @@ const createPlane = (
   );
 
   // TODO: create one index buffer per all chunks
-  const b = [
-    buffer.vertexCount,
-    buffer.vertexCount + 1,
-    buffer.vertexCount + 3,
-    buffer.vertexCount,
-    buffer.vertexCount + 3,
-    buffer.vertexCount + 2,
-  ];
-  buffer.indexBuffer.push(...(ii < 0 || jj > 0 || kk < 0 ? b : b.reverse()));
+  if (ii < 0 || jj > 0 || kk < 0) {
+    buffer.indexBuffer.push(
+      buffer.vertexCount,
+      buffer.vertexCount + 1,
+      buffer.vertexCount + 3,
+      buffer.vertexCount,
+      buffer.vertexCount + 3,
+      buffer.vertexCount + 2,
+    );
+  } else {
+    buffer.indexBuffer.push(
+      buffer.vertexCount + 2,
+      buffer.vertexCount + 3,
+      buffer.vertexCount,
+      buffer.vertexCount + 3,
+      buffer.vertexCount + 1,
+      buffer.vertexCount,
+    );
+  }
+
   buffer.vertexCount += 4;
 };
 

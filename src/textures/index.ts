@@ -25,6 +25,8 @@ import deadBush from './blocks/deadbush.png';
 import waterStill from './blocks/water_still.png';
 import podzol from './blocks/dirt_podzol_top.png';
 import podzolSide from './blocks/dirt_podzol_side.png';
+import mushroomRed from './blocks/mushroom_red.png';
+import mushroomBrown from './blocks/mushroom_brown.png';
 
 import blockSelector from './block_selector.png';
 import blockDamage from './block_damage.png';
@@ -78,6 +80,8 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(waterStill, { name: 'waterStill', atlasId: 21 }),
     Texture.create(podzol, { name: 'podzol', atlasId: 22 }),
     Texture.create(podzolSide, { name: 'podzolSide', atlasId: 23 }),
+    Texture.create(mushroomRed, { name: 'mushroomRed', atlasId: 24 }),
+    Texture.create(mushroomBrown, { name: 'mushroomBrown', atlasId: 25 }),
 
     //
     // waterStill: {

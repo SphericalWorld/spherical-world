@@ -203,6 +203,13 @@ export class Chunk extends ChunkBase {
     chunk.data[index] = block;
   }
 
+  setAtNoFlagsIfEmpty(x: number, y: number, z: number, block: number): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    if (chunk.data[index]) return;
+    chunk.data[index] = block;
+  }
+
   setAtWithFlags(x: number, y: number, z: number, block: number, flags: number): void {
     const chunk = getChunkNear(this, x, y, z);
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
@@ -232,6 +239,13 @@ export class Chunk extends ChunkBase {
       chunk.data[index] = data;
       chunk.flags[index] = flags;
     }
+  }
+
+  generateAtNoFlags(x: number, y: number, z: number, generateFn: (block: number) => number): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    const block = generateFn(chunk.data[index]);
+    chunk.data[index] = block;
   }
 
   generateAtIfEmpty(

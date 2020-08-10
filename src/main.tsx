@@ -1,5 +1,4 @@
 import type Network from './network';
-import type { Store } from './store/store';
 import { initWebGL } from './engine/glEngine';
 import { World, React, render } from '../common/ecs';
 import { Player } from './player/Player';

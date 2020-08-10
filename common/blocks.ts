@@ -18,3 +18,5 @@ export const FLOWER_YELLOW: 130 = 130;
 export const FLOWER_RED: 131 = 131;
 export const DEAD_BUSH: 132 = 132;
 export const REEDS: 133 = 133;
+export const MUSHROOM_RED: 134 = 134;
+export const MUSHROOM_BROWN: 135 = 135;
