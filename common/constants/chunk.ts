@@ -15,3 +15,4 @@ export const COLUMN_NESTED_CHUNK: 15 = 15;
 export const ROW_NESTED_CHUNK: 240 = 240;
 
 export const BLOCKS_IN_CHUNK: 65536 = 65536;
+export const BLOCKS_IN_SUBCHUNK: 4096 = 4096;

@@ -2,6 +2,7 @@ import type { BlockFace } from '../../../../common/block';
 import { getIndex } from '../../../../common/chunk';
 import {
   BLOCKS_IN_CHUNK,
+  BLOCKS_IN_SUBCHUNK,
   CHUNK_WIDTH,
   CHUNK_HEIGHT,
   SLICE,
@@ -370,14 +371,17 @@ export default class Chunk extends ChunkBase {
     calcRecursionGlobalRemove(this, x, y, z, 400);
   }
 
-  calcVBO(): void {
+  calcVBO(subchunkIndex = 0): void {
     const buffers = [
       createBuffers(vertexPool, indexPool),
       createBuffers(vertexPool2, indexPool2),
       createBuffers(vertexPool3, indexPool3),
     ];
 
-    for (let index = SLICE; index < BLOCKS_IN_CHUNK; index += 1) {
+    const iterateFrom = subchunkIndex === 0 ? SLICE : BLOCKS_IN_SUBCHUNK * subchunkIndex;
+    const iterateTo = BLOCKS_IN_SUBCHUNK * (subchunkIndex + 1);
+
+    for (let index = iterateFrom; index < iterateTo; index += 1) {
       const i = index >>> 8;
       const j = index & 0xf;
       const k = (index >>> 4) & 0xf;
@@ -453,7 +457,9 @@ export default class Chunk extends ChunkBase {
               type: CHUNK_VBO_LOADED,
               payload: {
                 geoId: this.geoId,
+                subchunk: subchunkIndex,
                 buffers: buffersData,
+                hasData: offset2 + buffers[2].vertexBuffer.index !== 0,
                 buffersInfo,
               },
             },
@@ -596,7 +602,9 @@ export default class Chunk extends ChunkBase {
         this.hasNestedChunks &&
         this.nestedChunks.every((chunk) => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
       ) {
-        this.calcVBO();
+        for (let index = 0; index < 16; index++) {
+          this.calcVBO(index);
+        }
         this.state = CHUNK_STATUS_LOADED;
         this.nestedChunks.forEach(updateState);
       }

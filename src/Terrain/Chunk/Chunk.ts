@@ -39,7 +39,13 @@ export default class Chunk extends ChunkBase {
   foliageTexture: WebGLTexture = null;
   rainfallData: Uint8Array;
   temperatureData: Uint8Array;
-  buffers: GLBuffers;
+  buffers: GLBuffers[] = new Array(16).fill(null).map(() => ({
+    vertexBuffer: null,
+    indexBuffer: null,
+    vao: null,
+    hasData: false,
+  }));
+
   terrain: Terrain;
   buffersInfo: ReadonlyArray<BufferData>;
 
@@ -86,30 +92,41 @@ export default class Chunk extends ChunkBase {
     return this.frustum.boxInFrustum(m);
   }
 
-  bindVBO(buffers: DataBuffers, buffersInfo: ReadonlyArray<BufferData>): void {
+  bindVBO(
+    buffers: DataBuffers,
+    buffersInfo: ReadonlyArray<BufferData>,
+    subchunk: number,
+    hasData: boolean,
+  ): void {
     const { shader } = this.terrain.material as { shader: ChunkProgram };
 
     if (!timeOld) {
       timeOld = Date.now();
     }
     chunksLoaded += 1;
-    if (chunksLoaded === 12 * 12) {
+    if (chunksLoaded === 12 * 12 * 16) {
       console.log(Date.now() - timeOld);
     }
-    this.buffers = {
+    const buffersData: GLBuffers = {
       vertexBuffer: null,
       indexBuffer: null,
       vao: null,
+      hasData,
+      query: gl.createQuery(),
+      queryInProgress: false,
+      occluded: false,
     };
-    this.buffersInfo = buffersInfo;
-    this.buffers.vao = gl.createVertexArray();
-    gl.bindVertexArray(this.buffers.vao);
 
-    this.buffers.indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffers.indexBuffer);
+    this.buffers[subchunk] = buffersData;
+    buffersData.buffersInfo = buffersInfo;
+    buffersData.vao = gl.createVertexArray();
+    gl.bindVertexArray(buffersData.vao);
+
+    buffersData.indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffersData.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 
-    this.buffers.vertexBuffer = createBuffer(buffers.vertexBuffer);
+    buffersData.vertexBuffer = createBuffer(buffers.vertexBuffer);
 
     gl.enableVertexAttribArray(shader.aVertexPosition);
     gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);

@@ -41,9 +41,9 @@ class Network {
         binaryData: this.requestBinaryData,
       },
     };
+    this.requestBinaryData = null;
     this.events.emit(messageToEmit);
     this.listeners.forEach((listener) => listener(messageToEmit));
-    this.requestBinaryData = null;
   }
 
   async connect(): Promise<void> {

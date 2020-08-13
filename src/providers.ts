@@ -79,6 +79,7 @@ const getTerrain = () => {
   terrain.generateBiomeColorMap(textureLibrary.get('foliageColorMap').glTexture);
   // terrain.makeMipMappedTextureAtlas(textureLibrary.makeMipMappedTextureAtlas());
   terrain.material = materialLibrary.get('terrain');
+  terrain.occlusionCullingShader = shaderLibrary.get('occlusionCulling');
   return terrain;
 };
 

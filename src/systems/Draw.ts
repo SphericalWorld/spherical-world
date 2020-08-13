@@ -97,7 +97,15 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       1,
     ];
     // console.log(globalColor)s
-    drawOpaqueChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
+    drawOpaqueChunkData(
+      terrain,
+      cameraPosition.translation,
+      skyColor,
+      globalColor,
+      pMatrix,
+      mvMatrix,
+      cameraPosition.translation,
+    );
 
     const draw = (position: Transform, visual: Visual): void => {
       runShader(visual.glObject.material.shader);

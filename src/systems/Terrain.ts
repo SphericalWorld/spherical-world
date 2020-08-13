@@ -38,7 +38,7 @@ const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
     .subscribe((e) => {
       const chunk = terrain.chunks.get(e.geoId);
       if (chunk) {
-        chunk.bindVBO(e.buffers, e.buffersInfo);
+        chunk.bindVBO(e.buffers, e.buffersInfo, e.subchunk, e.hasData);
       }
     });
 
