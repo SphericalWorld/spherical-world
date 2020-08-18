@@ -1,11 +1,10 @@
-import { inflate } from 'pako';
 import EventObservable from '../common/GameEvent/EventObservable';
 
 export type NetworkEvent = {
   type: string;
   payload: {
     data: unknown;
-    binaryData: Uint8Array | null;
+    binaryData: ArrayBuffer | null;
   };
 };
 
@@ -14,7 +13,10 @@ class Network {
   connection: WebSocket;
   connected = false;
   pingDescriptor: number;
-  requestBinaryData: Uint8Array | null;
+  /** binary data from last package. data saved in this field and wait for next package
+   * with json data, which should describe purpose of this data, after that we'll be able
+   * to call proper handler */
+  requestBinaryData: ArrayBuffer | null = null;
   host = `ws://${window.location.hostname}`;
   port = 8080;
   events: EventObservable<NetworkEvent> = new EventObservable();
@@ -24,13 +26,8 @@ class Network {
     host: window.location.origin,
   };
 
-  /** binary data from last package. data saved in this field and wait for next package
-   * with json data, which should describe purpose of this data, after that we'll be able
-   * to call proper handler */
-  requestBinaryData = null;
-
   processBinaryData(data: ArrayBuffer): void {
-    this.requestBinaryData = inflate(new Uint8Array(data));
+    this.requestBinaryData = data;
   }
 
   processAction(message: MessageEvent): void {

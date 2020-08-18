@@ -7,7 +7,7 @@ import { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';
-import { THREAD_PHYSICS } from '../../src/Thread/threadConstants';
+import { THREAD_PHYSICS, THREAD_MAIN } from '../../src/Thread/threadConstants';
 
 type SerializedComponent = {
   type: string;
@@ -43,6 +43,12 @@ export class World {
   lastDeletedObjects = [];
   objects: Map<Entity, any> = new Map();
   memoryManager: MemoryManager = new MemoryManager();
+  interthreadDescriptors: SharedArrayBuffer = new SharedArrayBuffer(8);
+  interthreadDescriptors2: SharedArrayBuffer = new SharedArrayBuffer(4);
+  pseudoSyncTimer: number;
+  private threadTicker: Float64Array = new Float64Array(this.interthreadDescriptors, 0, 1);
+  private mutexes: Int32Array = new Int32Array(this.interthreadDescriptors2, 0, 1);
+
   constructor(thread: THREAD_ID) {
     this.thread = thread;
   }
@@ -51,7 +57,14 @@ export class World {
     this.threads.push(thread);
     this.threadsMap.set(thread.id, thread);
     if (thread.id === THREAD_PHYSICS)
-      thread.postMessage({ type: 'dataArray', payload: this.memoryManager.memory });
+      thread.postMessage({
+        type: 'dataArray',
+        payload: {
+          memory: this.memoryManager.memory,
+          interthreadDescriptors: this.interthreadDescriptors,
+          interthreadDescriptors2: this.interthreadDescriptors2,
+        },
+      });
 
     thread.events.subscribe(({ type, payload }) => {
       if (type === 'CREATE_ENTITY') {
@@ -64,8 +77,17 @@ export class World {
           // if (this.thread === 1) console.log(payload.events);
         }
       } else if (type === 'dataArray') {
-        // console.log(payload);
-        this.memoryManager.useMemory(payload);
+        this.interthreadDescriptors = payload.interthreadDescriptors;
+        this.interthreadDescriptors2 = payload.interthreadDescriptors2;
+        this.memoryManager.useMemory(payload.memory);
+        this.threadTicker = new Float64Array(this.interthreadDescriptors, 0, 1);
+        this.mutexes = new Int32Array(this.interthreadDescriptors2, 0, 1);
+        this.startGameLoopInThread();
+      } else if (type === 'START_PSEUDO_SYNC_TIMER') {
+        console.log(88888888888);
+        this.pseudoSyncTimer = setInterval(() => this.update(1000 / 60), 1000 / 60);
+      } else if (type === 'STOP_PSEUDO_SYNC_TIMER') {
+        clearInterval(this.pseudoSyncTimer);
       }
     });
   }
@@ -98,7 +120,11 @@ export class World {
     for (const system of this.systems) {
       system(delta / 1000);
     }
+    if (this.thread === THREAD_MAIN) {
+      this.syncThreads(delta);
+    }
     if (!this.eventsForThreads.length) return;
+
     // console.log(this.eventsForThreads);
     for (const thread of this.threads) {
       thread.postMessage({
@@ -176,7 +202,7 @@ export class World {
     this.registerEntity(id, components);
   }
 
-  createEntity<T extends Component[]>(id: Entity | null, ...components: T): $Call<transform> {
+  createEntity<T extends Component[]>(id: Entity | null, ...components: T): ReturnType<transform> {
     const createComponentInstance = (component) => {
       const offset = this.memoryManager.allocate(component.type);
       component.props.offset = offset;
@@ -259,5 +285,37 @@ export class World {
 
   registerConstructor(name: string, constructor: ObjectConstructor): void {
     this.constructors.set(name, (params) => !this.entities.has(params.id) && constructor(params));
+  }
+
+  startGameLoopInThread(): void {
+    // eslint-disable-next-line no-constant-condition
+    setTimeout(() => {
+      Atomics.wait(this.mutexes, 0, 0);
+      const delta = this.threadTicker[0];
+      this.threadTicker[0] = 0;
+      this.update(delta);
+      this.startGameLoopInThread();
+    }, 0);
+  }
+
+  syncThreads(delta: number): void {
+    this.threadTicker[0] += delta;
+    Atomics.notify(this.mutexes, 0);
+  }
+
+  startPseudoSyncTimer(): void {
+    for (const thread of this.threads) {
+      thread.postMessage({
+        type: 'START_PSEUDO_SYNC_TIMER',
+      });
+    }
+  }
+
+  stopPseudoSyncTimer(): void {
+    for (const thread of this.threads) {
+      thread.postMessage({
+        type: 'STOP_PSEUDO_SYNC_TIMER',
+      });
+    }
   }
 }

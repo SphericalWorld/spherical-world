@@ -1,6 +1,4 @@
-import { promisify } from 'util';
 import { readFile, outputFile } from 'fs-extra';
-import zlib from 'zlib';
 import type ChunkMap from '../../terrain/ChunkMap';
 import type { Terrain } from './Terrain';
 import type { ChunkGenerator } from './ChunkGenerator';
@@ -12,7 +10,6 @@ import { ChunkBase } from '../../terrain/ChunkBase';
 
 const profileChunkGenerationBase = profileChunkGeneration();
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
-const deflate: (data: Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
   let chunkTo = chunk;

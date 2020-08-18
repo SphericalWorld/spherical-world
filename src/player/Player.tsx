@@ -128,7 +128,7 @@ export const Player = ({
 }: Props): JSX.Element => {
   const model = new Model(playerModel, 1.8);
   const material = materialLibrary.get('player'); // 'player'
-  //
+
   return (
     <GameObject id={id}>
       {/* <transform qwe="asd" /> */}

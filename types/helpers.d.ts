@@ -20,7 +20,5 @@ declare global {
 
   type Class<T> = new (...args: any[]) => T;
 
-  type $Call<Fn extends (...args: any[]) => any> = Fn extends (arg: any) => infer RT ? RT : never;
-
   type ValueOf<T> = T[keyof T];
 }

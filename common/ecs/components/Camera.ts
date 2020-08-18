@@ -33,7 +33,6 @@ export default class Camera implements Component, Networkable {
       viewportHeight: Camera.memoryManager.getUint16(),
       pMatrix: Camera.memoryManager.getMat4(),
     };
-    mat4.identity(this.viewport.pMatrix);
     this.yaw = yaw;
     this.pitch = pitch;
   }

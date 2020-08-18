@@ -1,6 +1,4 @@
-import { promisify } from 'util';
 import { readFile, outputFile } from 'fs-extra';
-import zlib from 'zlib';
 import type ChunkMap from './ChunkMap';
 import type { Terrain } from './Terrain';
 // import type { ChunkGenerator } from '../threads/chunkGenerator/ChunkGenerator';
@@ -11,7 +9,6 @@ import { getGeoId } from '../../common/chunk';
 import { ChunkBase } from './ChunkBase';
 
 const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
-const deflate: (data: Buffer) => Promise<Buffer> = promisify(zlib.deflate);
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
   let chunkTo = chunk;
@@ -71,14 +68,12 @@ class Chunk extends ChunkBase {
 
   async getCompressedData(): Promise<Buffer> {
     const totalLength = this.data.byteLength + this.flags.byteLength;
-    return deflate(
-      Buffer.concat(
-        [
-          Buffer.from(this.data, 0, this.data.byteLength),
-          Buffer.from(this.flags, 0, this.flags.byteLength),
-        ],
-        totalLength,
-      ),
+    return Buffer.concat(
+      [
+        Buffer.from(this.data, 0, this.data.byteLength),
+        Buffer.from(this.flags, 0, this.flags.byteLength),
+      ],
+      totalLength,
     );
   }
 

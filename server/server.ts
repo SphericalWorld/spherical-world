@@ -82,7 +82,27 @@ const serverProvider = (world: World, Terrain: ITerrain) =>
       // router.route('PLAYER_STARTED_REMOVE_BLOCK', Player.startRemoveBlock);
       // router.route('PLAYER_STOPED_REMOVE_BLOCK', Player.stopRemoveBlock);
 
-      this.wss = new WebSocketServer({ port: 8080 });
+      this.wss = new WebSocketServer({
+        port: 8080,
+        perMessageDeflate: {
+          zlibDeflateOptions: {
+            // See zlib defaults.
+            chunkSize: 1024,
+            memLevel: 7,
+            level: 3,
+          },
+          zlibInflateOptions: {
+            chunkSize: 10 * 1024,
+          },
+          // Other options settable:
+          clientNoContextTakeover: true, // Defaults to negotiated value.
+          serverNoContextTakeover: true, // Defaults to negotiated value.
+          serverMaxWindowBits: 10, // Defaults to negotiated value.
+          // Below options specified as default values.
+          threshold: 1024, // Size (in bytes) below which messages
+          // should not be compressed.
+        },
+      });
 
       this.wss.on('connection', (ws) => {
         const wrapper = wrapSocket(ws, this.wss);

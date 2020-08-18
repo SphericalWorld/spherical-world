@@ -40,5 +40,5 @@ export const deserializeItem = (world: World) => ({
   return player;
 };
 
-export type CreateItem = $Call<typeof createItem, any>;
+export type CreateItem = ReturnType<typeof createItem>;
 export default createItem;

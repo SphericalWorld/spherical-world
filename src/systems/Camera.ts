@@ -19,15 +19,12 @@ const resizeViewport = (viewport: Viewport): void => {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     viewport.viewportWidth = gl.drawingBufferWidth;
     viewport.viewportHeight = gl.drawingBufferHeight;
-    mat4.copy(
+    mat4.perspective(
       viewport.pMatrix,
-      mat4.perspective(
-        mat4.create(),
-        1.04719755,
-        gl.drawingBufferWidth / gl.drawingBufferHeight,
-        0.1,
-        1024.0,
-      ),
+      1.04719755,
+      gl.drawingBufferWidth / gl.drawingBufferHeight,
+      0.1,
+      1024.0,
     );
     // return {
     //   viewportWidth: gl.drawingBufferWidth,

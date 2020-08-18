@@ -16,6 +16,7 @@ const engineProvider = (network: Network, ecs: World) => {
   class Engine {
     ecs: World = ecs;
     lastTime = 0;
+    gameLoopWasStopped = false;
 
     constructor() {
       this.init().catch(console.error);
@@ -47,9 +48,21 @@ const engineProvider = (network: Network, ecs: World) => {
         userId: localStorage.getItem('userId'),
       });
       network.start();
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          this.gameLoopWasStopped = true;
+          ecs.startPseudoSyncTimer();
+        } else {
+          ecs.stopPseudoSyncTimer();
+        }
+      });
     }
 
     gameCycle = (time: number): void => {
+      if (this.gameLoopWasStopped) {
+        this.lastTime = time;
+        this.gameLoopWasStopped = false;
+      }
       const delta = time - this.lastTime;
       this.lastTime = time;
       this.ecs.update(delta);

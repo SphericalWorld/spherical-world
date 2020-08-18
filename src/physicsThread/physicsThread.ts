@@ -48,7 +48,6 @@ class PhysicsThread {
     // eslint-disable-next-line no-restricted-globals
     world.registerThread(new Thread(THREAD_MAIN, self));
     world.registerSystem(...systemsProvider(world, terrain));
-    setInterval(() => world.update(1000 / 60), 1000 / 60);
   }
 }
 

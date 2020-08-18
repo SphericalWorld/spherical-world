@@ -43,4 +43,4 @@ export const playerProvider = (world: World) => (
   return player;
 };
 
-export type CreatePlayer = $Call<typeof playerProvider, any>;
+export type CreatePlayer = ReturnType<typeof playerProvider>;
