@@ -60,7 +60,7 @@ export class Terrain {
     z: number,
   ): Promise<{
     dataBuffer: SharedArrayBuffer;
-    flags: Buffer;
+    flagsBuffer: SharedArrayBuffer;
     rainfall: number[];
     temperature: number[];
   }> {
@@ -68,7 +68,7 @@ export class Terrain {
     await newChunk.generateWithSurrounding(2);
     return {
       dataBuffer: newChunk.dataBuffer,
-      flags: newChunk.flags,
+      flagsBuffer: newChunk.flagsBuffer,
       temperature: newChunk.temperature.data,
       rainfall: newChunk.rainfall.data,
     };

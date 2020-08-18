@@ -24,6 +24,7 @@ import {
 import { ChunkGenerator, BiomeType } from './types';
 import { biomes } from './chunk-generators/biomes';
 import { generateStomp } from './chunk-generators/Stomp';
+import { generateSmallForestHouse1 } from './chunk-generators/houses/smallForestHouse1';
 
 type BlockPositionData = Readonly<{ chunk: Chunk; height: number; x: number; z: number }>;
 type ChunkGeneratorFn = (block: BlockPositionData) => void;
@@ -61,6 +62,9 @@ const createChunkGenerator = (seed: number): ChunkGenerator => {
     generateStomp: generateStomp(seedShifted++),
     structures: [generateTreasury(seedShifted++)],
     simplexHeightMapRivers: createSimplex2D(seedShifted++, 1024),
+    houses: {
+      smallForestHouse1: generateSmallForestHouse1(seedShifted++),
+    },
   };
 };
 
@@ -218,8 +222,32 @@ const iterateChunk = (funcToIterate: (params: BlockPositionData) => unknown) => 
   return chunk;
 };
 
-const generateStructures = (generator: ChunkGenerator, chunk: Chunk) =>
+const generateStructures = (generator: ChunkGenerator, chunk: Chunk) => {
   generator.structures.forEach((generate) => generate(chunk));
+  const biomeTypes: Array<BiomeType | null> = [
+    getBiomeType(chunk, chunk.x, chunk.z),
+    getBiomeType(chunk, chunk.x + 1, chunk.z),
+    getBiomeType(chunk, chunk.x, chunk.z + 1),
+    getBiomeType(chunk, chunk.x + 1, chunk.z + 1),
+  ];
+  const biomeType = biomeTypes.reduce((prev, curr) => (prev === curr ? curr : null));
+  if (biomeType === null) return;
+  switch (biomeType) {
+    case BiomeType.desert: {
+      break;
+    }
+    case BiomeType.forest: {
+      biomes.forest.afterChunkGenerated(generator, chunk);
+      break;
+    }
+    case BiomeType.hills: {
+      break;
+    }
+    default: {
+      ((_: never) => _)(biomeType);
+    }
+  }
+};
 
 const setHeightMap = (chunk: Chunk, heightMap: ChunkMap<number>) => {
   chunk.setHeightMap(heightMap);
@@ -257,10 +285,10 @@ export const generate = (generator: ChunkGenerator, chunk: Chunk): void => {
 };
 
 export const generateObjects = (generator: ChunkGenerator, chunk: Chunk): void => {
-  generateStructures(generator, chunk);
   iterateChunk((params) => {
     generateBiomes(generator)(params);
   })(chunk);
+  generateStructures(generator, chunk);
 };
 
 export default createChunkGenerator;

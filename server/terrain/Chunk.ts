@@ -70,9 +70,15 @@ class Chunk extends ChunkBase {
   }
 
   async getCompressedData(): Promise<Buffer> {
-    const totalLength = this.data.byteLength + this.flags.length;
+    const totalLength = this.data.byteLength + this.flags.byteLength;
     return deflate(
-      Buffer.concat([Buffer.from(this.data, 0, this.data.byteLength), this.flags], totalLength),
+      Buffer.concat(
+        [
+          Buffer.from(this.data, 0, this.data.byteLength),
+          Buffer.from(this.flags, 0, this.flags.byteLength),
+        ],
+        totalLength,
+      ),
     );
   }
 
@@ -130,9 +136,11 @@ class Chunk extends ChunkBase {
     this.temperature = temperature;
   }
 
-  setData(dataBuffer: SharedArrayBuffer): void {
+  setData(dataBuffer: SharedArrayBuffer, flagsBuffer: SharedArrayBuffer): void {
     this.dataBuffer = dataBuffer;
     this.data = new Uint8Array(this.dataBuffer);
+    this.flagsBuffer = flagsBuffer;
+    this.flags = new Uint8Array(this.flagsBuffer);
   }
 }
 

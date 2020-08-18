@@ -1,6 +1,7 @@
 import { Biome } from '../biome';
 import { ChunkGenerator, BlockPositionData } from '../../types';
 import { AIR, TALL_GRASS, FLOWER_YELLOW, FLOWER_RED, TORCH } from '../../../../../common/blocks';
+import type { Chunk } from '../../Chunk';
 
 const generateWithSurroundingChunks = (
   generator: ChunkGenerator,
@@ -23,6 +24,11 @@ const generateWithSurroundingChunks = (
   return chunk;
 };
 
+const afterChunkGenerated = (generator: ChunkGenerator, chunk: Chunk): void => {
+  generator.houses.smallForestHouse1(chunk);
+};
+
 export const forest: Biome = {
   generateWithSurroundingChunks,
+  afterChunkGenerated,
 };

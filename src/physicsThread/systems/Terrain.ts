@@ -6,8 +6,8 @@ import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
 const onChunkAdd = (ecs: World, terrain: Terrain) =>
   ecs.events
     .filter((el) => el.type === CHUNK_LOADED && el)
-    .subscribe(({ payload: { x, z, data, lightData } }) =>
-      terrain.loadChunk(x, z, data, lightData),
+    .subscribe(({ payload: { x, z, data, lightData, flagsData } }) =>
+      terrain.loadChunk(x, z, data, lightData, flagsData),
     );
 
 export default (ecs: World, terrain: Terrain): System => {

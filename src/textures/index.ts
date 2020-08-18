@@ -27,6 +27,7 @@ import podzol from './blocks/dirt_podzol_top.png';
 import podzolSide from './blocks/dirt_podzol_side.png';
 import mushroomRed from './blocks/mushroom_red.png';
 import mushroomBrown from './blocks/mushroom_brown.png';
+import planksOak from './blocks/planks_oak.png';
 
 import blockSelector from './block_selector.png';
 import blockDamage from './block_damage.png';
@@ -36,6 +37,7 @@ import grassColorMap from './colormap/grass.png';
 
 import skybox from './skybox.png';
 import player from './player.png';
+import { PLANKS_OAK } from '../engine/Texture/textureConstants';
 
 const texturesProvider = async (): Promise<Texture[]> =>
   Promise.all([
@@ -82,6 +84,7 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(podzolSide, { name: 'podzolSide', atlasId: 23 }),
     Texture.create(mushroomRed, { name: 'mushroomRed', atlasId: 24 }),
     Texture.create(mushroomBrown, { name: 'mushroomBrown', atlasId: 25 }),
+    Texture.create(planksOak, { name: 'mushroomBrown', atlasId: PLANKS_OAK }),
 
     //
     // waterStill: {

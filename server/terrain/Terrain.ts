@@ -60,8 +60,7 @@ const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGenera
       const newChunk = new Chunk(this, x, z);
       this.addChunk(newChunk);
       const chunkData = await chunkGeneratorThread.ensureChunk(x, z);
-      newChunk.setData(chunkData.dataBuffer);
-      newChunk.flags = chunkData.flags;
+      newChunk.setData(chunkData.dataBuffer, chunkData.flagsBuffer);
       newChunk.setRainfall(new ChunkMap(chunkData.rainfall));
       newChunk.setTemperature(new ChunkMap(chunkData.temperature));
 

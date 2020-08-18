@@ -11,6 +11,7 @@ export const IRON_ORE: 9 = 9;
 export const PODZOL: 10 = 10;
 export const WOOD: 11 = 11;
 export const COBBLESTONE: 16 = 16;
+export const PLANKS: 17 = 17;
 export const WATER: 127 = 127;
 export const TORCH: 128 = 128;
 export const TALL_GRASS: 129 = 129;

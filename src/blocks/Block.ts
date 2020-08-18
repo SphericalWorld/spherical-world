@@ -35,6 +35,7 @@ export type BlockData = {
     plane: number,
   ) => boolean;
   getFlags: (number) => number;
+  getRotation: (flag: number) => number;
   renderToChunk?: RenderToChunk;
   sounds: {
     footsteps: ReadonlyArray<string>;

@@ -53,12 +53,13 @@ export default class Chunk extends ChunkBase {
     terrain: Terrain,
     blocksData: ArrayBuffer,
     lightData: ArrayBuffer,
+    flagsData: ArrayBuffer,
     x: number,
     z: number,
     temperatureData: number[],
     rainfallData: number[],
   ) {
-    super(blocksData, lightData, x, z);
+    super(blocksData, lightData, flagsData, x, z);
     this.terrain = terrain;
     this.rainfallData = new Uint8Array(rainfallData);
     this.temperatureData = new Uint8Array(temperatureData);
@@ -117,33 +118,34 @@ export default class Chunk extends ChunkBase {
       occluded: false,
     };
 
-    this.buffers[subchunk] = buffersData;
-    buffersData.buffersInfo = buffersInfo;
-    buffersData.vao = gl.createVertexArray();
-    gl.bindVertexArray(buffersData.vao);
+    if (hasData) {
+      this.buffers[subchunk] = buffersData;
+      buffersData.buffersInfo = buffersInfo;
+      buffersData.vao = gl.createVertexArray();
+      gl.bindVertexArray(buffersData.vao);
 
-    buffersData.indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffersData.indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
+      buffersData.indexBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffersData.indexBuffer);
+      gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 
-    buffersData.vertexBuffer = createBuffer(buffers.vertexBuffer);
+      buffersData.vertexBuffer = createBuffer(buffers.vertexBuffer);
 
-    gl.enableVertexAttribArray(shader.aVertexPosition);
-    gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
+      gl.enableVertexAttribArray(shader.aVertexPosition);
+      gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
 
-    gl.enableVertexAttribArray(shader.aTextureCoord);
-    gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
+      gl.enableVertexAttribArray(shader.aTextureCoord);
+      gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);
 
-    gl.enableVertexAttribArray(shader.aBlockData);
-    gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20);
+      gl.enableVertexAttribArray(shader.aBlockData);
+      gl.vertexAttribPointer(shader.aBlockData, 1, gl.FLOAT, false, 40, 20);
 
-    gl.enableVertexAttribArray(shader.aVertexColor);
-    gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
+      gl.enableVertexAttribArray(shader.aVertexColor);
+      gl.vertexAttribPointer(shader.aVertexColor, 3, gl.FLOAT, false, 40, 24);
 
-    gl.enableVertexAttribArray(shader.aVertexGlobalColor);
-    gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
-
-    gl.bindVertexArray(null);
+      gl.enableVertexAttribArray(shader.aVertexGlobalColor);
+      gl.vertexAttribPointer(shader.aVertexGlobalColor, 1, gl.FLOAT, false, 40, 36);
+      gl.bindVertexArray(null);
+    }
 
     this.state = CHUNK_STATUS_LOADED;
   }

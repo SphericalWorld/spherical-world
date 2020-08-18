@@ -223,6 +223,63 @@ const addVertexTR = addVertex(-1, 1);
 const addVertexBL = addVertex(1, -1);
 const addVertexBR = addVertex(1, 1);
 
+const getVertexUV = (index, u, v) => {};
+
+const getTextures = (
+  index: 0 | 1 | 2 | 3,
+  textureU: number,
+  textureV: number,
+  textureIndex: number,
+  rotation: number,
+): [number, number] => {
+  switch (index) {
+    case 0: {
+      if (rotation === 0) {
+        return [textureU, textureV];
+      }
+      if (rotation === 2 || rotation === 4) {
+        if (textureIndex === 4 || textureIndex === 5) {
+          return [textureU, textureV + 1 / 16];
+        }
+        return [textureU, textureV];
+      }
+    }
+    case 1: {
+      if (rotation === 0) {
+        return [textureU, textureV + 1 / 16];
+      }
+      if (rotation === 2 || rotation === 4) {
+        if (textureIndex === 4 || textureIndex === 5) {
+          return [textureU + 1 / 16, textureV + 1 / 16];
+        }
+        return [textureU, textureV + 1 / 16];
+      }
+    }
+    case 2: {
+      if (rotation === 0) {
+        return [textureU + 1 / 16, textureV];
+      }
+      if (rotation === 2 || rotation === 4) {
+        if (textureIndex === 4 || textureIndex === 5) {
+          return [textureU, textureV];
+        }
+        return [textureU + 1 / 16, textureV];
+      }
+    }
+    case 3: {
+      if (rotation === 0) {
+        return [textureU + 1 / 16, textureV + 1 / 16];
+      }
+      if (rotation === 2 || rotation === 4) {
+        if (textureIndex === 4 || textureIndex === 5) {
+          return [textureU + 1 / 16, textureV];
+        }
+        return [textureU + 1 / 16, textureV + 1 / 16];
+      }
+    }
+  }
+};
+
 const createPlane = (
   chunk: Chunk,
   planes,
@@ -231,7 +288,7 @@ const createPlane = (
   kk: number,
   planeIndex: number,
   color,
-) => (block, i: number, j: number, k: number, buffers) => {
+) => (block, i: number, j: number, k: number, buffers, textureIndex: number, rotation: number) => {
   const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, chunk);
   const indexNear = getIndex(jNear, i + ii, kNear);
   const blockNear = chunkNear.blocks[indexNear];
@@ -245,39 +302,48 @@ const createPlane = (
   const jVertex = j + jj;
   const kVertex = k + kk;
   const plane = planes[planeIndex];
-  const textureU = blocksTextureInfo[block][planeIndex] / 16;
+  const textureU = blocksTextureInfo[block][textureIndex] / 16;
   const textureV = Math.floor(textureU) / 16;
+
+  // if (rotation === 0) {
+  //   buffer.vertexBuffer.push(...vertexes[0], ...vertexes[1], ...vertexes[2], ...vertexes[3]);
+  // } else if (rotation === 2) {
+  //   if (textureIndex === 3 || textureIndex === 4) {
+  //     buffer.vertexBuffer.push(...vertexes[3], ...vertexes[0], ...vertexes[1], ...vertexes[2]);
+  //   } else {
+  //     buffer.vertexBuffer.push(...vertexes[0], ...vertexes[1], ...vertexes[2], ...vertexes[3]);
+  //   }
+  // }
 
   buffer.vertexBuffer.push(
     plane[0] + j,
     plane[1] + i,
     plane[2] + k,
-    textureU,
-    textureV,
+    ...getTextures(0, textureU, textureV, textureIndex, rotation),
     block,
     ...addVertexTL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[3] + j,
     plane[4] + i,
     plane[5] + k,
-    textureU,
-    textureV + 1 / 16,
+    ...getTextures(1, textureU, textureV, textureIndex, rotation),
+
     block,
     ...addVertexTR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[6] + j,
     plane[7] + i,
     plane[8] + k,
-    textureU + 1 / 16,
-    textureV,
+    ...getTextures(2, textureU, textureV, textureIndex, rotation),
+
     block,
     ...addVertexBL(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
 
     plane[9] + j,
     plane[10] + i,
     plane[11] + k,
-    textureU + 1 / 16,
-    textureV + 1 / 16,
+    ...getTextures(3, textureU, textureV, textureIndex, rotation),
+
     block,
     ...addVertexBR(iVertex, jVertex, kVertex, ii, jj, kk, light, color, chunk),
   );
@@ -325,8 +391,14 @@ export default class Chunk extends ChunkBase {
   createWestPlane: CreatePlane;
   createEastPlane: CreatePlane;
 
-  constructor(binaryData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
-    super(binaryData, lightData, x, z);
+  constructor(
+    binaryData: ArrayBuffer,
+    lightData: ArrayBuffer,
+    flagsData: ArrayBuffer,
+    x: number,
+    z: number,
+  ) {
+    super(binaryData, lightData, flagsData, x, z);
 
     const planes = basePlanes.map((plane) =>
       [].concat(...plane.map(([x, y, z]) => [x + this.x, y, z + this.z])),
@@ -397,12 +469,29 @@ export default class Chunk extends ChunkBase {
             buffers[bufferInfo[block][0]],
           );
         } else {
-          this.createTopPlane(block, i, j, k, buffers);
-          this.createBottomPlane(block, i, j, k, buffers);
-          this.createNorthPlane(block, i, j, k, buffers);
-          this.createSouthPlane(block, i, j, k, buffers);
-          this.createWestPlane(block, i, j, k, buffers);
-          this.createEastPlane(block, i, j, k, buffers);
+          const rotation = blocksInfo[block].getRotation(this.flags[index]);
+          if (rotation === 0) {
+            this.createTopPlane(block, i, j, k, buffers, 0, 0);
+            this.createBottomPlane(block, i, j, k, buffers, 1, 0);
+            this.createNorthPlane(block, i, j, k, buffers, 2, 0);
+            this.createSouthPlane(block, i, j, k, buffers, 3, 0);
+            this.createWestPlane(block, i, j, k, buffers, 4, 0);
+            this.createEastPlane(block, i, j, k, buffers, 5, 0);
+          } else if (rotation === 2) {
+            this.createTopPlane(block, i, j, k, buffers, 2, 2);
+            this.createBottomPlane(block, i, j, k, buffers, 3, 2);
+            this.createNorthPlane(block, i, j, k, buffers, 0, 2);
+            this.createSouthPlane(block, i, j, k, buffers, 1, 2);
+            this.createWestPlane(block, i, j, k, buffers, 4, 2);
+            this.createEastPlane(block, i, j, k, buffers, 5, 2);
+          } else if (rotation === 4) {
+            this.createTopPlane(block, i, j, k, buffers, 2, 4);
+            this.createBottomPlane(block, i, j, k, buffers, 3, 4);
+            this.createNorthPlane(block, i, j, k, buffers, 4, 4);
+            this.createSouthPlane(block, i, j, k, buffers, 5, 4);
+            this.createWestPlane(block, i, j, k, buffers, 0, 4);
+            this.createEastPlane(block, i, j, k, buffers, 1, 4);
+          }
         }
       }
     }
@@ -602,7 +691,7 @@ export default class Chunk extends ChunkBase {
         this.hasNestedChunks &&
         this.nestedChunks.every((chunk) => chunk.state >= CHUNK_STATUS_NEED_LOAD_VBO)
       ) {
-        for (let index = 0; index < 16; index++) {
+        for (let index = 0; index < 16; index += 1) {
           this.calcVBO(index);
         }
         this.state = CHUNK_STATUS_LOADED;

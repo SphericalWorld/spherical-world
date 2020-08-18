@@ -24,7 +24,9 @@ thread.events
 events
   .filter((e) => e.type === 'CHUNK_LOADED')
   .subscribe(({ payload: data }) => {
-    const chunk = terrain.addChunk(new Chunk(data.data, data.lightData, data.x, data.z));
+    const chunk = terrain.addChunk(
+      new Chunk(data.data, data.lightData, data.flagsData, data.x, data.z),
+    );
     chunk.prepareLight();
     chunk.updateState();
   });

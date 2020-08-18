@@ -71,6 +71,7 @@ const BasePropertiesComponent = () => ({
   },
   putBlock,
   getFlags: identity as (_: number) => number,
+  getRotation: () => 0,
   sounds: {
     footsteps: [footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18],
   },

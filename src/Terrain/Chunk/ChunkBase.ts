@@ -23,13 +23,19 @@ class ChunkBase {
 
   static BUFFERS_COUNT = 3;
 
-  constructor(blocksData: ArrayBuffer, lightData: ArrayBuffer, x: number, z: number) {
+  constructor(
+    blocksData: ArrayBuffer,
+    lightData: ArrayBuffer,
+    flagsData: ArrayBuffer,
+    x: number,
+    z: number,
+  ) {
     this.x = x;
     this.z = z;
     this.geoId = getGeoId(x, z);
     this.blocks = new Uint8Array(blocksData, 0, BLOCKS_IN_CHUNK);
     this.light = new Uint16Array(lightData, 0, BLOCKS_IN_CHUNK);
-    this.flags = new Uint8Array(blocksData, BLOCKS_IN_CHUNK);
+    this.flags = new Uint8Array(flagsData, 0, BLOCKS_IN_CHUNK);
   }
 
   getBlock(x: number, y: number, z: number): number {

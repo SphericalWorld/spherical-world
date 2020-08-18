@@ -61,7 +61,6 @@ const generateRoom = (generator, chunk: Chunk) => {
   }
 };
 
-// TODO use Maybe monad?
 const generateTreasury = (seed: number): ((chunk: Chunk) => Chunk) => {
   const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {

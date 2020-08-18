@@ -17,6 +17,7 @@ class Terrain extends TerrainBase<Chunk> {
   loadChunk = (
     blocksData: ArrayBuffer,
     lightData: ArrayBuffer,
+    flagsData: ArrayBuffer,
     data: {
       x: number;
       z: number;
@@ -25,7 +26,16 @@ class Terrain extends TerrainBase<Chunk> {
     },
   ): void => {
     this.addChunk(
-      new Chunk(this, blocksData, lightData, data.x, data.z, data.temperature, data.rainfall),
+      new Chunk(
+        this,
+        blocksData,
+        lightData,
+        flagsData,
+        data.x,
+        data.z,
+        data.temperature,
+        data.rainfall,
+      ),
     ).generateFoliageTexture();
   };
 

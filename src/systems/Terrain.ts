@@ -7,25 +7,33 @@ import { filterFarChunks } from '../../common/chunk';
 import Camera from '../components/Camera';
 import Transform from '../components/Transform';
 import { CHUNK_LOADED } from '../Terrain/terrainConstants';
+import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 
 const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
   network.events
     .filter((e) => e.type === 'loadChunk')
     .subscribe(({ type, payload }) => {
-      const data = new SharedArrayBuffer(payload.binaryData.byteLength); // eslint-disable-line no-undef
+      const data = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
       const viewOld = new Uint8Array(payload.binaryData);
       const viewNew = new Uint8Array(data);
 
-      for (let i = 0; i < payload.binaryData.byteLength; i += 1) {
+      for (let i = 0; i < BLOCKS_IN_CHUNK; i += 1) {
         viewNew[i] = viewOld[i];
       }
 
-      const lightData = new SharedArrayBuffer(payload.binaryData.byteLength * 2); // eslint-disable-line no-undef
+      const lightData = new SharedArrayBuffer(BLOCKS_IN_CHUNK * 2);
+      const flagsData = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
+
+      const viewFlags = new Uint8Array(flagsData);
+      for (let i = 0; i < BLOCKS_IN_CHUNK; i += 1) {
+        viewFlags[i] = viewOld[BLOCKS_IN_CHUNK + i];
+      }
       // console.log(data, viewNew)
-      terrain.loadChunk(data, lightData, payload.data);
+      terrain.loadChunk(data, lightData, flagsData, payload.data);
       ecs.createEventAndDispatch(CHUNK_LOADED, {
         data,
         lightData,
+        flagsData,
         x: payload.data.x,
         z: payload.data.z,
       });

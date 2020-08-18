@@ -51,6 +51,7 @@ export class Chunk extends ChunkBase {
   heightMap: ChunkMap<number>;
   rainfall: ChunkMap<number>;
   temperature: ChunkMap<number>;
+  generationFlags: { [key: string]: boolean } = {};
 
   constructor(terrain: Terrain, x: number, z: number) {
     super(terrain, x, z);
@@ -70,20 +71,14 @@ export class Chunk extends ChunkBase {
     return this;
   }
 
-  async getCompressedData(): Promise<Buffer> {
-    const totalLength = this.data.byteLength + this.flags.length;
-    return deflate(
-      Buffer.concat([Buffer.from(this.data, 0, this.data.byteLength), this.flags], totalLength),
-    );
-  }
-
   async generate(): Promise<Chunk> {
     if (this.terrainGenerated) {
       return this;
     }
     this.dataBuffer = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
     this.data = new Uint8Array(this.dataBuffer);
-    this.flags = Buffer.alloc(BLOCKS_IN_CHUNK);
+    this.flagsBuffer = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
+    this.flags = new Uint8Array(this.flagsBuffer);
 
     await new Promise((resolve) => {
       generate(this.chunkGenerator, this);
@@ -203,6 +198,26 @@ export class Chunk extends ChunkBase {
     chunk.data[index] = block;
   }
 
+  setAtNoFlagsAndRotate(
+    x: number,
+    y: number,
+    z: number,
+    block: number,
+    {
+      angle,
+      dimensions: [width, height],
+    }: { angle: 90 | 180 | 270; dimensions: readonly [number, number] },
+  ): void {
+    if (angle === 90) {
+      const tmp = x;
+      x = z;
+      z = width - tmp - 1;
+    }
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    chunk.data[index] = block;
+  }
+
   setAtNoFlagsIfEmpty(x: number, y: number, z: number, block: number): void {
     const chunk = getChunkNear(this, x, y, z);
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
@@ -211,6 +226,28 @@ export class Chunk extends ChunkBase {
   }
 
   setAtWithFlags(x: number, y: number, z: number, block: number, flags: number): void {
+    const chunk = getChunkNear(this, x, y, z);
+    const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
+    chunk.data[index] = block;
+    chunk.flags[index] = flags;
+  }
+
+  setAtWithFlagsAndRotate(
+    x: number,
+    y: number,
+    z: number,
+    block: number,
+    flags: number,
+    {
+      angle,
+      dimensions: [width, height],
+    }: { angle: 90 | 180 | 270; dimensions: readonly [number, number] },
+  ): void {
+    if (angle === 90) {
+      const tmp = x;
+      x = z;
+      z = width - tmp - 1;
+    }
     const chunk = getChunkNear(this, x, y, z);
     const index = (x & 0xf) | ((z & 0xf) << 4) | (y << 8);
     chunk.data[index] = block;

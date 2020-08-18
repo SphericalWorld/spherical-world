@@ -47,13 +47,13 @@ export class ChunkGeneratorThread {
     z: number,
   ): Promise<{
     dataBuffer: SharedArrayBuffer;
-    flags: Buffer;
+    flagsBuffer: SharedArrayBuffer;
     rainfall: number[];
     temperature: number[];
   }> {
     return this.request<{
       dataBuffer: SharedArrayBuffer;
-      flags: Buffer;
+      flagsBuffer: SharedArrayBuffer;
       rainfall: number[];
       temperature: number[];
     }>({

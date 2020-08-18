@@ -15,6 +15,7 @@ const Oak = (): BlockData =>
       affectBiomes: false,
     },
     baseRemoveTime: 3,
+    getRotation: (flags: number) => flags,
   });
 
 export default Oak;

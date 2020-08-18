@@ -24,6 +24,7 @@ import Podzol from './Podzol';
 import Wood from './Wood';
 import MushroomBrown from './MushroomBrown';
 import MushroomRed from './MushroomRed';
+import Planks from './Planks';
 
 const blocks = [
   Air(),
@@ -48,6 +49,7 @@ const blocks = [
   Wood(),
   MushroomRed(),
   MushroomBrown(),
+  Planks(),
 ];
 
 // TODO: try typed arrays everywhere, preferable 32 bit
