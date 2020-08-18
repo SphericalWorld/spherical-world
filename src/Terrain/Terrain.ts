@@ -206,6 +206,8 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndices, gl.STATIC_DRAW);
 
 gl.bindVertexArray(null);
 
+const tmpVec = vec3.create();
+
 export const drawOpaqueChunkData = (
   terrain: Terrain,
   cameraPosition: vec3,
@@ -294,7 +296,8 @@ export const drawOpaqueChunkData = (
     for (let subchunk = 15; subchunk > 0; subchunk -= 1) {
       const subchunkData = chunk.buffers[subchunk];
       if (!chunk.buffers[subchunk].hasData) continue;
-      mat4.translate(mvMatrix, matrixCopy, vec3.fromValues(chunk.x, 16 * subchunk, chunk.z));
+      vec3.set(tmpVec, chunk.x, 16 * subchunk, chunk.z);
+      mat4.translate(mvMatrix, matrixCopy, tmpVec);
       gl.uniformMatrix4fv(terrain.occlusionCullingShader.uMVMatrix, false, mvMatrix);
 
       // gl.bindVertexArray(box.vao);

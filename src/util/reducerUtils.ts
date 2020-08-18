@@ -1,6 +1,6 @@
 import { useSelector, shallowEqual } from 'react-redux';
 
-type Reducer<T> = (T, any) => T;
+type Reducer<T> = (state: T, any) => T;
 
 type ReducersMap<T> = {
   [key: string]: Reducer<T>;
