@@ -1,7 +1,7 @@
 import Simplex from 'simplex-noise';
 import seedrandom from 'seedrandom';
 import type { Chunk } from '../../Chunk';
-import { AIR, OAK, PLANKS } from '../../../../../common/blocks';
+import { AIR, OAK, PLANKS, STONE_BRICK, WOODEN_SLAB } from '../../../../../common/blocks';
 import { fillVolume } from '../helpers';
 
 const PRNG = seedrandom.alea;
@@ -90,7 +90,7 @@ const generate = (generator, chunk: Chunk) => {
   // column(chunk, 12, y, 4, rotationData);
 
   column(chunk, 1, y, 9, rotationData);
-  wall(chunk, 2, y, 9, rotationData);
+
   column(chunk, 5, y, 9, rotationData);
   wall(chunk, 6, y, 9, rotationData);
   column(chunk, 9, y, 9, rotationData);
@@ -114,6 +114,18 @@ const generate = (generator, chunk: Chunk) => {
 
   fillVolume(chunk, [2, y + 1, 2], [8, y + 4, 8], AIR, rotationData);
   fillVolume(chunk, [9, y + 1, 6], [12, y + 4, 8], AIR, rotationData);
+
+  // chimney
+  fillVolume(chunk, [2, y, 8], [4, y, 10], STONE_BRICK, rotationData);
+  fillVolume(chunk, [2, y + 1, 9], [4, y + 3, 10], STONE_BRICK, rotationData);
+  fillVolume(chunk, [3, y + 4, 9], [3, y + 7, 10], STONE_BRICK, rotationData);
+  const oakHorizontalFlag = getFlagByAngle(rotationData.angle);
+
+  chunk.setAtWithFlagsAndRotate(2, y + 4, 9, OAK, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(4, y + 4, 9, OAK, oakHorizontalFlag, rotationData);
+  // slabs
+  chunk.setAtWithFlagsAndRotate(10, y, 1, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(11, y, 1, WOODEN_SLAB, oakHorizontalFlag, rotationData);
 };
 
 export const generateSmallForestHouse1 = (seed: number): ((chunk: Chunk) => Chunk) => {

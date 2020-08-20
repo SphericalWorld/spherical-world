@@ -84,7 +84,6 @@ export class World {
         this.mutexes = new Int32Array(this.interthreadDescriptors2, 0, 1);
         this.startGameLoopInThread();
       } else if (type === 'START_PSEUDO_SYNC_TIMER') {
-        console.log(88888888888);
         this.pseudoSyncTimer = setInterval(() => this.update(1000 / 60), 1000 / 60);
       } else if (type === 'STOP_PSEUDO_SYNC_TIMER') {
         clearInterval(this.pseudoSyncTimer);

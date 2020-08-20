@@ -75,6 +75,7 @@ const BasePropertiesComponent = () => ({
   sounds: {
     footsteps: [footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18],
   },
+  isSlab: false,
 });
 
 export default BasePropertiesComponent;

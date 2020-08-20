@@ -22,5 +22,8 @@ export const DEAD_BUSH: 20 = 20;
 export const WATER_STILL: 21 = 21;
 export const TEXTURE_PODZOL: 22 = 22;
 export const TEXTURE_PODZOL_SIDE: 23 = 23;
-// shrooms
+// shrooms 24-25
 export const PLANKS_OAK: 26 = 26;
+export const TEXTURE_COBBLESTONE_MOSSY: 27 = 27;
+export const TEXTURE_GRAVEL: 28 = 28;
+export const TEXTURE_STONE_BRICK: 29 = 29;

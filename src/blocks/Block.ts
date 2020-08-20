@@ -40,6 +40,7 @@ export type BlockData = {
   sounds: {
     footsteps: ReadonlyArray<string>;
   };
+  isSlab: boolean;
 };
 
 const Block = <T extends object>(...components: T[]): SpreadTypes<BlockData, T> =>

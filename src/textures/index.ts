@@ -28,6 +28,9 @@ import podzolSide from './blocks/dirt_podzol_side.png';
 import mushroomRed from './blocks/mushroom_red.png';
 import mushroomBrown from './blocks/mushroom_brown.png';
 import planksOak from './blocks/planks_oak.png';
+import cobblestoneMossy from './blocks/cobblestone_mossy.png';
+import gravel from './blocks/gravel.png';
+import stoneBrick from './blocks/stonebrick.png';
 
 import blockSelector from './block_selector.png';
 import blockDamage from './block_damage.png';
@@ -37,7 +40,12 @@ import grassColorMap from './colormap/grass.png';
 
 import skybox from './skybox.png';
 import player from './player.png';
-import { PLANKS_OAK } from '../engine/Texture/textureConstants';
+import {
+  PLANKS_OAK,
+  TEXTURE_COBBLESTONE_MOSSY,
+  TEXTURE_GRAVEL,
+  TEXTURE_STONE_BRICK,
+} from '../engine/Texture/textureConstants';
 
 const texturesProvider = async (): Promise<Texture[]> =>
   Promise.all([
@@ -85,6 +93,12 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(mushroomRed, { name: 'mushroomRed', atlasId: 24 }),
     Texture.create(mushroomBrown, { name: 'mushroomBrown', atlasId: 25 }),
     Texture.create(planksOak, { name: 'mushroomBrown', atlasId: PLANKS_OAK }),
+    Texture.create(cobblestoneMossy, {
+      name: 'cobblestoneMossy',
+      atlasId: TEXTURE_COBBLESTONE_MOSSY,
+    }),
+    Texture.create(gravel, { name: 'gravel', atlasId: TEXTURE_GRAVEL }),
+    Texture.create(stoneBrick, { name: 'stoneBrick', atlasId: TEXTURE_STONE_BRICK }),
 
     //
     // waterStill: {

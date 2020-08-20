@@ -40,6 +40,10 @@ const engineProvider = (network: Network, ecs: World) => {
       network.events
         .filter((e) => e.type === 'GAME_START')
         .subscribe(() => {
+          if (document.hidden) {
+            this.gameLoopWasStopped = true;
+            ecs.startPseudoSyncTimer();
+          }
           requestAnimationFrame(this.gameCycle);
         });
 

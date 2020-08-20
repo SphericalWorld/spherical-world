@@ -171,6 +171,12 @@ const basePlanes = [
   addPlane(0, 1, 0),
   addPlane(0, 0, -1),
   addPlane(0, 0, 1),
+  [
+    [0, 0.5, 0],
+    [1, 0.5, 0],
+    [0, 0.5, 1],
+    [1, 0.5, 1],
+  ],
 ];
 
 const addVertex = (u, v) => (
@@ -384,6 +390,7 @@ export default class Chunk extends ChunkBase {
   surroundingChunks: Chunk[] = [];
   nestedChunks: Chunk[] = [];
 
+  createTopPlaneSlab: CreatePlane;
   createTopPlane: CreatePlane;
   createBottomPlane: CreatePlane;
   createNorthPlane: CreatePlane;
@@ -409,6 +416,7 @@ export default class Chunk extends ChunkBase {
     this.createSouthPlane = createPlane(this, planes, 0, 1, 0, 3, 0.6);
     this.createWestPlane = createPlane(this, planes, 0, 0, -1, 4, 0.8);
     this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
+    this.createTopPlaneSlab = createPlane(this, planes, 1, 0, 0, 0, 1);
   }
 
   calcRecursionRed(x: number, y: number, z: number): void {

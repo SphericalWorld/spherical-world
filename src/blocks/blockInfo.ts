@@ -25,6 +25,10 @@ import Wood from './Wood';
 import MushroomBrown from './MushroomBrown';
 import MushroomRed from './MushroomRed';
 import Planks from './Planks';
+import Gravel from './Gravel';
+import CobblestoneMossy from './CobblestoneMossy';
+import StoneBrick from './StoneBrick';
+import WoodenSlab from './WoodenSlab';
 
 const blocks = [
   Air(),
@@ -50,6 +54,10 @@ const blocks = [
   MushroomRed(),
   MushroomBrown(),
   Planks(),
+  CobblestoneMossy(),
+  Gravel(),
+  StoneBrick(),
+  WoodenSlab(),
 ];
 
 // TODO: try typed arrays everywhere, preferable 32 bit
