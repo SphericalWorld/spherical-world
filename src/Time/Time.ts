@@ -24,14 +24,28 @@ const timeProvider = () => {
       this.startingTime = startingTime;
     }
 
-    update(time: number): void {
-      this.currentTime = time;
+    update(delta: number): void {
+      this.currentTime += delta * 1000;
+      const time = this.currentTime + MILLISECONDS_IN_DAY / 4;
       this.currentTimeFromStart = time - this.startingTime;
       this.day = Math.floor(time / MILLISECONDS_IN_DAY);
       this.hour = Math.floor((time / MILLISECONDS_IN_HOUR) % HOURS_IN_DAY);
       this.minute = Math.floor((time / MILLISECONDS_IN_MINUTE) % MINUTES_IN_HOUR);
       this.dayPercent = (time % MILLISECONDS_IN_DAY) / MILLISECONDS_IN_DAY;
       this.dayLightLevel = Math.sin(this.dayPercent * 2 * Math.PI);
+      if (time > MILLISECONDS_IN_DAY) {
+        this.currentTime -= MILLISECONDS_IN_DAY;
+      }
+    }
+
+    set(time: number) {
+      this.currentTime = time;
+    }
+
+    setHoursMinutes(time: string) {
+      const [hours, minutes] = time.split(':');
+      const dayTimePercent = (parseInt(hours, 10) * 60 + parseInt(minutes, 10)) / (24 * 60);
+      this.set(dayTimePercent * MILLISECONDS_IN_DAY);
     }
   }
 

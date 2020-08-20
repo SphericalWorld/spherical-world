@@ -6,9 +6,14 @@ import { Transform, Skybox } from '../components';
 
 export default (world: World, time: Time): System => {
   const skyboxes = world.createSelector([Transform, Skybox]);
+  world.events
+    .filter((e) => e.type === 'SET_DAY_TIME')
+    .subscribe(({ type, payload }) => {
+      time.setHoursMinutes(payload);
+    });
 
-  const dayNightCycle = () => {
-    time.update(Date.now());
+  const dayNightCycle = (delta: number) => {
+    time.update(delta);
     const [{ skybox }] = skyboxes;
     const sunPositionOnCircle = time.dayPercent * 2 * Math.PI - Math.PI;
     vec3.set(skybox.sunPosition, Math.cos(sunPositionOnCircle), Math.sin(sunPositionOnCircle), 0);

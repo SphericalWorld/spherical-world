@@ -107,7 +107,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   getShaders();
   getMaterials();
   const world = createECS(threads);
-  const time = new (timeProvider())(Date.now());
+  const time = new (timeProvider())(12 * 60 * 1000);
   const terrain = getTerrain();
   playerProvider(world, terrain);
   itemProvider(world);
@@ -116,7 +116,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const input = inputProvider(inputSources, inputContexts);
   input.onDispatch((event) => world.dispatch(event));
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
-  initHudAPI(store);
+  initHudAPI(world);
 
   return Main(network, world);
 };

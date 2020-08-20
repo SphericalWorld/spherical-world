@@ -1,5 +1,6 @@
 import React, { ReactNode, useMemo, useContext, useEffect, useCallback } from 'react';
 import Network, { NetworkEvent } from '../../../network';
+import { useHudApi } from '../../HudApi';
 
 type Socket = Readonly<{
   network: Network;
@@ -48,12 +49,17 @@ export const useMessage = (
 
 export const useSocketSend = (): ((message: string) => unknown) => {
   const socket = useContext(SocketContext);
+  const hudApi = useHudApi();
 
   return useCallback(
     (message: string) => {
       if (!socket) return;
-      socket.network.emit('CHAT_MESSAGE', message);
+      if (message.startsWith('/')) {
+        hudApi.runCommand(message);
+      } else {
+        socket.network.emit('CHAT_MESSAGE', message);
+      }
     },
-    [socket],
+    [socket, hudApi],
   );
 };
