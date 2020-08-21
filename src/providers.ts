@@ -11,7 +11,7 @@ import shadersProvider from './shaders';
 import Terrain from './Terrain';
 import systemsProvider from './systems';
 
-import timeProvider from './Time/Time';
+import { Time } from './Time/Time';
 import { World } from '../common/ecs';
 
 import {
@@ -107,7 +107,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   getShaders();
   getMaterials();
   const world = createECS(threads);
-  const time = new (timeProvider())(12 * 60 * 1000);
+  const time = new Time(12 * 60 * 1000);
   const terrain = getTerrain();
   playerProvider(world, terrain);
   itemProvider(world);

@@ -177,6 +177,36 @@ const basePlanes = [
     [0, 0.5, 1],
     [1, 0.5, 1],
   ],
+  [
+    [0, 0, 0],
+    [1, 0, 0],
+    [0, 0, 1],
+    [1, 0, 1],
+  ],
+  [
+    [0, 0, 0],
+    [0, 0.5, 0],
+    [0, 0, 1],
+    [0, 0.5, 1],
+  ],
+  [
+    [1, 0, 0],
+    [1, 0.5, 0],
+    [1, 0, 1],
+    [1, 0.5, 1],
+  ],
+  [
+    [0, 0, 0],
+    [0, 0.5, 0],
+    [1, 0, 0],
+    [1, 0.5, 0],
+  ],
+  [
+    [0, 0, 1],
+    [0, 0.5, 1],
+    [1, 0, 1],
+    [1, 0.5, 1],
+  ],
 ];
 
 const addVertex = (u, v) => (
@@ -294,7 +324,15 @@ const createPlane = (
   kk: number,
   planeIndex: number,
   color,
-) => (block, i: number, j: number, k: number, buffers, textureIndex: number, rotation: number) => {
+) => (
+  block: number,
+  i: number,
+  j: number,
+  k: number,
+  buffers,
+  textureIndex: number,
+  rotation: number,
+) => {
   const { j: jNear, k: kNear, chunkNear } = getChunkNear(j + jj, k + kk, chunk);
   const indexNear = getIndex(jNear, i + ii, kNear);
   const blockNear = chunkNear.blocks[indexNear];
@@ -302,7 +340,7 @@ const createPlane = (
   if (!blocksFlags[blockNear][1] || (blocksFlags[block][4] && block === blockNear)) {
     return;
   }
-  const buffer = buffers[bufferInfo[block][planeIndex]];
+  const buffer = buffers[bufferInfo[block][textureIndex]];
   const light = chunkNear.light[indexNear];
   const iVertex = i + ii;
   const jVertex = j + jj;
@@ -390,13 +428,19 @@ export default class Chunk extends ChunkBase {
   surroundingChunks: Chunk[] = [];
   nestedChunks: Chunk[] = [];
 
-  createTopPlaneSlab: CreatePlane;
   createTopPlane: CreatePlane;
   createBottomPlane: CreatePlane;
   createNorthPlane: CreatePlane;
   createSouthPlane: CreatePlane;
   createWestPlane: CreatePlane;
   createEastPlane: CreatePlane;
+
+  createTopPlaneSlab: CreatePlane;
+  createBottomPlaneSlab: CreatePlane;
+  createNorthPlaneSlab: CreatePlane;
+  createSouthPlaneSlab: CreatePlane;
+  createWestPlaneSlab: CreatePlane;
+  createEastPlaneSlab: CreatePlane;
 
   constructor(
     binaryData: ArrayBuffer,
@@ -416,7 +460,13 @@ export default class Chunk extends ChunkBase {
     this.createSouthPlane = createPlane(this, planes, 0, 1, 0, 3, 0.6);
     this.createWestPlane = createPlane(this, planes, 0, 0, -1, 4, 0.8);
     this.createEastPlane = createPlane(this, planes, 0, 0, 1, 5, 0.8);
-    this.createTopPlaneSlab = createPlane(this, planes, 1, 0, 0, 0, 1);
+
+    this.createTopPlaneSlab = createPlane(this, planes, 1, 0, 0, 6, 1);
+    this.createBottomPlaneSlab = createPlane(this, planes, -1, 0, 0, 7, 0.5);
+    this.createNorthPlaneSlab = createPlane(this, planes, 0, -1, 0, 8, 0.6);
+    this.createSouthPlaneSlab = createPlane(this, planes, 0, 1, 0, 9, 0.6);
+    this.createWestPlaneSlab = createPlane(this, planes, 0, 0, -1, 10, 0.8);
+    this.createEastPlaneSlab = createPlane(this, planes, 0, 0, 1, 11, 0.8);
   }
 
   calcRecursionRed(x: number, y: number, z: number): void {
@@ -479,12 +529,21 @@ export default class Chunk extends ChunkBase {
         } else {
           const rotation = blocksInfo[block].getRotation(this.flags[index]);
           if (rotation === 0) {
-            this.createTopPlane(block, i, j, k, buffers, 0, 0);
-            this.createBottomPlane(block, i, j, k, buffers, 1, 0);
-            this.createNorthPlane(block, i, j, k, buffers, 2, 0);
-            this.createSouthPlane(block, i, j, k, buffers, 3, 0);
-            this.createWestPlane(block, i, j, k, buffers, 4, 0);
-            this.createEastPlane(block, i, j, k, buffers, 5, 0);
+            if (blocksInfo[block].isSlab) {
+              this.createTopPlaneSlab(block, i, j, k, buffers, 0, 0);
+              this.createBottomPlaneSlab(block, i, j, k, buffers, 1, 0);
+              this.createNorthPlaneSlab(block, i, j, k, buffers, 2, 0);
+              this.createSouthPlaneSlab(block, i, j, k, buffers, 3, 0);
+              this.createWestPlaneSlab(block, i, j, k, buffers, 4, 0);
+              this.createEastPlaneSlab(block, i, j, k, buffers, 5, 0);
+            } else {
+              this.createTopPlane(block, i, j, k, buffers, 0, 0);
+              this.createBottomPlane(block, i, j, k, buffers, 1, 0);
+              this.createNorthPlane(block, i, j, k, buffers, 2, 0);
+              this.createSouthPlane(block, i, j, k, buffers, 3, 0);
+              this.createWestPlane(block, i, j, k, buffers, 4, 0);
+              this.createEastPlane(block, i, j, k, buffers, 5, 0);
+            }
           } else if (rotation === 2) {
             this.createTopPlane(block, i, j, k, buffers, 2, 2);
             this.createBottomPlane(block, i, j, k, buffers, 3, 2);

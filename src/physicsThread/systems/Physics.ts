@@ -15,6 +15,7 @@ import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 
 const oneVector = vec3.fromValues(1, 1, 1);
 const halfVector = vec3.fromValues(1, 0.5, 1);
+const upVector = vec3.fromValues(0, 1, 0);
 
 const isChunkNotLoaded = (chunk) => chunk.state === CHUNK_STATUS_NEED_LOAD_ALL;
 
@@ -51,11 +52,9 @@ const calculateMovement = (terrain: Terrain) => {
           shape: blockModel,
         },
       );
-      // if (isSlab) {
-      //   vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
-      //   move(collider.shape, translation);
-      //   vec3.mul(velocity.linear, velocity.linear, manifold.inversedNormal);
-      // }
+      if ((manifold.normal[0] || manifold.normal[2]) && blockModel.max[1] - translation[1] <= 0.5) {
+        vec3.scaleAndAdd(translation, translation, upVector, blockModel.max[1] - translation[1]);
+      }
       vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
       move(collider.shape, translation);
       vec3.mul(velocity.linear, velocity.linear, manifold.inversedNormal);

@@ -72,4 +72,5 @@ const Chat = (): JSX.Element => {
     </div>
   );
 };
+
 export default Chat;

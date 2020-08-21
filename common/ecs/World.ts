@@ -3,7 +3,7 @@ import type { Thread, THREAD_ID } from '../Thread';
 import type { Entity } from './Entity';
 import type { System } from './System';
 import type { transform } from './EntityManager';
-import { Component } from './Component';
+import type { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';

@@ -34,12 +34,12 @@ const onMenuToggled = (events, toggleUIState) =>
 const onInventoryToggled = (events, toggleUIState) =>
   events.filter((e) => e.type === INVENTORY_TOGGLED).subscribe(() => toggleUIState(INVENTORY));
 
-const onInventoryChanged = (events, store) =>
+const onInventoryChanged = (events, store: Store) =>
   events
     .filter((e) => e.type === PLAYER_PUT_BLOCK)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
-const onDispatchableEvent = (events, store) =>
+const onDispatchableEvent = (events, store: Store) =>
   events.filter((e) => e.dispatchable).subscribe((e) => store.dispatch(e));
 
 const onStateChanged = (input, player) => (

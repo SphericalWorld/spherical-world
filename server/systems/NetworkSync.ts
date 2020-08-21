@@ -5,7 +5,7 @@ import { send } from '../network/socket';
 import { Transform, Network, Inventory } from '../components';
 import { throttle } from '../../common/utils';
 
-const getComponentsToUpdate = (world: World, playerId) =>
+const getComponentsToUpdate = (world: World, playerId: string) =>
   [...world.components.entries()]
     .map(([constructor, data]) => [world.componentTypes.get(constructor), data])
     .filter(([constructor]) => constructor.componentName === 'transform')
@@ -22,6 +22,53 @@ const getComponentsToUpdate = (world: World, playerId) =>
 
 const RENDER_DISTANCE = 8;
 const VISIBILITY = RENDER_DISTANCE + 2; // 1 chunk around will have loaded lights but not vbo, and another 1 will have no lights loaded
+
+// const calcPlayerMovement = (server: Server, transform: Transform, network) => {
+//   const [x, , z] = transform.translation;
+
+//   const chunkX = Math.floor(x / 16) * 16;
+//   const chunkZ = Math.floor(z / 16) * 16;
+
+//   const chunkXold: number = transform.chunkX ?? chunkX;
+//   const chunkZold: number = transform.chunkZ ?? chunkZ;
+
+//   if (chunkX < chunkXold) {
+//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
+//       server.terrain.sendChunk(
+//         { socket: network.socket },
+//         chunkX - (VISIBILITY - 1) * 16,
+//         chunkZ + i * 16,
+//       );
+//     }
+//   } else if (chunkX > chunkXold) {
+//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
+//       server.terrain.sendChunk(
+//         { socket: network.socket },
+//         chunkX + (VISIBILITY - 1) * 16,
+//         chunkZ + i * 16,
+//       );
+//     }
+//   }
+//   if (chunkZ < chunkZold) {
+//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
+//       server.terrain.sendChunk(
+//         { socket: network.socket },
+//         chunkX + i * 16,
+//         chunkZ - (VISIBILITY - 1) * 16,
+//       );
+//     }
+//   } else if (chunkZ > chunkZold) {
+//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
+//       server.terrain.sendChunk(
+//         { socket: network.socket },
+//         chunkX + i * 16,
+//         chunkZ + (VISIBILITY - 1) * 16,
+//       );
+//     }
+//   }
+//   transform.chunkX = chunkX;
+//   transform.chunkZ = chunkZ;
+// };
 
 const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const [x, , z] = transform.translation;
