@@ -3,6 +3,7 @@ import { initWebGL } from './engine/glEngine';
 import { World, React, render } from '../common/ecs';
 import { Player } from './player/Player';
 import { Skybox } from './Skybox';
+import { ServerToClientMessage, ClientToServerMessage } from '../common/protocol';
 
 let tex = 0;
 setInterval(() => {
@@ -27,18 +28,18 @@ const engineProvider = (network: Network, ecs: World) => {
       initWebGL();
 
       network.events
-        .filter((e) => e.type === 'LOGGED_IN')
-        .subscribe(({ payload }) => {
-          localStorage.setItem('userId', payload.data.id);
-          const PlayerComp = () => <Player {...payload.data} isMainPlayer />;
-          const SkyboxComp = () => <Skybox parent={payload.data.id} />;
+        .filter((e) => e.type === ServerToClientMessage.loggedIn && e)
+        .subscribe(({ data }) => {
+          localStorage.setItem('userId', data.id);
+          const PlayerComp = () => <Player {...data} isMainPlayer />;
+          const SkyboxComp = () => <Skybox parent={data.id} />;
 
           render(PlayerComp, ecs);
           render(SkyboxComp, ecs);
         });
 
       network.events
-        .filter((e) => e.type === 'GAME_START')
+        .filter((e) => e.type === ServerToClientMessage.gameStart)
         .subscribe(() => {
           if (document.hidden) {
             this.gameLoopWasStopped = true;
@@ -47,9 +48,12 @@ const engineProvider = (network: Network, ecs: World) => {
           requestAnimationFrame(this.gameCycle);
         });
 
-      network.emit('LOGIN', {
-        cookie: 12345,
-        userId: localStorage.getItem('userId'),
+      network.emit({
+        type: ClientToServerMessage.login,
+        data: {
+          cookie: '12345',
+          userId: localStorage.getItem('userId') || '',
+        },
       });
       network.start();
       document.addEventListener('visibilitychange', () => {

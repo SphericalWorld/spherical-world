@@ -1,5 +1,5 @@
 import type { DB } from '../database';
-import { Serializable } from '../../common/Serializable';
+import type { Serializable } from '../../common/Serializable';
 import type { Entity, GameObject } from '../../common/ecs';
 
 export type DataStorage = Readonly<{

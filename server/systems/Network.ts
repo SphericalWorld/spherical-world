@@ -4,22 +4,23 @@ import type { Server } from '../server';
 import type { CreatePlayer } from '../player';
 import type { DataStorage } from '../dataStorage';
 
-import { broadcastToLinked, send } from '../network/socket';
+import { broadcastToLinked, send, Socket } from '../network/socket';
 import { Transform, Network, Inventory } from '../components';
 import defaultInputBindings from '../../common/constants/input/defaultInputBindings';
 import { saveGameObject, getGameObject } from '../dataStorage';
+import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 
 const onSyncGameData = (server: Server, world: World) =>
   server.events
-    .filter((e) => e.message.type === 'SYNC_GAME_DATA')
-    .subscribe(({ message: { data } }) => {
+    .filter((e) => e.type === ClientToServerMessage.syncGameData && e)
+    .subscribe(({ data }) => {
       world.updateComponents(data);
     });
 
 const onPlayerPutBlock = (server: Server) =>
   server.events
-    .filter((e) => e.message.type === 'PLAYER_PUT_BLOCK' && e)
-    .subscribe(({ socket, message: { data } }) => {
+    .filter((e) => e.type === 'PLAYER_PUT_BLOCK' && e)
+    .subscribe(({ socket, data }) => {
       broadcastToLinked(socket.player, 'PLAYER_PUT_BLOCK', data);
       socket.player.inventory.data.items[data.itemId].count -= 1;
       server.terrain.putBlockHandler(data);
@@ -27,19 +28,24 @@ const onPlayerPutBlock = (server: Server) =>
 
 const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) =>
   server.events
-    .filter((e) => e.message.type === 'PLAYER_DESTROYED_BLOCK' && e)
-    .subscribe(({ socket, message: { data } }) => {
+    .filter((e) => e.type === ClientToServerMessage.playerDestroyedBlock && e)
+    .subscribe(({ socket, data }) => {
       broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', data);
       saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(data));
     });
 
-const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket) => {
+const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (
+  socket: Socket,
+) => {
   const player = createPlayer(null, socket);
   await saveGameObject(ds)(player);
   return player;
 };
 
-const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket, userId) => {
+const getPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (
+  socket: Socket,
+  userId: string,
+) => {
   const playerData = await getGameObject(ds)(userId);
   const player = createPlayer(playerData, socket);
   return player;
@@ -83,8 +89,8 @@ const serialize = ({ id, ...data }) =>
 
 const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, players, world) =>
   server.events
-    .filter((e) => e.message.type === 'LOGIN' && e)
-    .subscribe(async ({ socket, message: { data } }) => {
+    .filter((e) => e.type === ClientToServerMessage.login && e)
+    .subscribe(async ({ socket, data }) => {
       // data.cookie
       const player = data.userId
         ? await getPlayer(ds, createPlayer)(socket, data.userId)
@@ -100,7 +106,7 @@ const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, pl
       }
       sendChunks(server, player);
       send(socket, {
-        type: 'SYNC_GAME_DATA',
+        type: ServerToClientMessage.syncGameData,
         data: {
           newObjects: [...world.objects.values()]
             .filter((el) => el.networkSync && el.id !== id)
@@ -108,7 +114,7 @@ const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, pl
         },
       });
       send(socket, {
-        type: 'LOGGED_IN',
+        type: ServerToClientMessage.loggedIn,
         data: {
           id,
           transform,
@@ -118,12 +124,12 @@ const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, pl
         },
       });
       send(socket, {
-        type: 'LOAD_CONTROL_SETTINGS',
+        type: ServerToClientMessage.loadControlSettings,
         data: {
           controls: defaultInputBindings,
         },
       });
-      send(socket, { type: 'GAME_START' });
+      send(socket, { type: ServerToClientMessage.gameStart });
     });
 
 export default (

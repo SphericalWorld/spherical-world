@@ -1,19 +1,15 @@
 import EventObservable from '../common/GameEvent/EventObservable';
-import type { ServerToClientMessages } from '../common/protocol';
-
-export type NetworkEvent = {
-  type: string;
-  payload: {
-    data: unknown;
-    binaryData: ArrayBuffer | null;
-  };
-};
+import {
+  ServerToClientMessages,
+  ClientToServerMessage,
+  ClientToServerMessages,
+} from '../common/protocol';
 
 class Network {
   latency = 0;
   connection: WebSocket;
   connected = false;
-  pingDescriptor: number;
+  pingDescriptor: NodeJS.Timeout;
   /** binary data from last package. data saved in this field and wait for next package
    * with json data, which should describe purpose of this data, after that we'll be able
    * to call proper handler */
@@ -34,10 +30,8 @@ class Network {
   processAction(message: ServerToClientMessages): void {
     const messageToEmit = {
       type: message.type,
-      payload: {
-        data: message.data,
-        binaryData: this.requestBinaryData,
-      },
+      data: message.data,
+      binaryData: this.requestBinaryData,
     };
     this.requestBinaryData = null;
     this.events.emit(messageToEmit);
@@ -69,28 +63,24 @@ class Network {
 
   start(): void {
     this.pingDescriptor = setInterval(() => {
-      let timeOld = Date.now();
-      this.emit('PING', () => {
-        const timeNew = Date.now();
-        this.latency = timeNew - timeOld;
-        timeOld = timeNew;
-      });
+      const timeOld = Date.now();
+      this.emit({ type: ClientToServerMessage.ping });
     }, 5000);
   }
 
-  emit(type: string, data?: unknown): void {
+  emit(data?: ClientToServerMessages): void {
     if (!this.connected) {
       console.log('socket disconnected');
       return;
     }
-    this.connection.send(JSON.stringify({ type, data }));
+    this.connection.send(JSON.stringify(data));
   }
 
-  addEventListener(listener: (event: NetworkEvent) => unknown): void {
+  addEventListener(listener: (event: ServerToClientMessages) => unknown): void {
     this.listeners.push(listener);
   }
 
-  removeEventListener(listener: (event: NetworkEvent) => unknown): void {
+  removeEventListener(listener: (event: ServerToClientMessages) => unknown): void {
     this.listeners = this.listeners.filter((el) => el !== listener);
   }
 }

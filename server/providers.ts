@@ -13,7 +13,7 @@ import { ChunkGeneratorThread } from './threads';
 const createECS = () => {
   const world = new World(THREAD_MAIN);
   world.registerComponentTypes(...Object.values(componentsProvider));
-  setInterval(() => world.update(1000 / 60), 1000 / 60);
+  setInterval(() => world.update(1000 / 20), 1000 / 20);
   return world;
 };
 

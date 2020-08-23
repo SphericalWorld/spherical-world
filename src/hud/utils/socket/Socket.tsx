@@ -1,6 +1,11 @@
 import React, { ReactNode, useMemo, useContext, useEffect, useCallback } from 'react';
-import Network, { NetworkEvent } from '../../../network';
+import type Network from '../../../network';
 import { useHudApi } from '../../HudApi';
+import {
+  ClientToServerMessage,
+  ServerToClientMessages,
+  ServerToClientMessage,
+} from '../../../../common/protocol';
 
 type Socket = Readonly<{
   network: Network;
@@ -18,7 +23,13 @@ export type IncomingMessage = {
 
 const SocketContext = React.createContext<Socket | null>(null);
 
-export const SocketProvider = ({ value, children }: { value: Network; children: ReactNode }) => {
+export const SocketProvider = ({
+  value,
+  children,
+}: {
+  value: Network;
+  children: ReactNode;
+}): JSX.Element => {
   const socket = useMemo(
     () => ({
       network: value,
@@ -36,10 +47,9 @@ export const useMessage = (
 
   useEffect(() => {
     if (!socket) return;
-    const eventListener = (e: NetworkEvent) => {
-      // console.log(e.type);
-      if (e.type === 'CHAT_MESSAGE') {
-        cb(e.payload.data);
+    const eventListener = (e: ServerToClientMessages) => {
+      if (e.type === ServerToClientMessage.chatMessage) {
+        cb(e.data);
       }
     };
     socket.network.addEventListener(eventListener);
@@ -57,7 +67,7 @@ export const useSocketSend = (): ((message: string) => unknown) => {
       if (message.startsWith('/')) {
         hudApi.runCommand(message);
       } else {
-        socket.network.emit('CHAT_MESSAGE', message);
+        socket.network.emit({ type: ClientToServerMessage.chatMessage, data: message });
       }
     },
     [socket, hudApi],

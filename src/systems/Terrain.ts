@@ -8,14 +8,15 @@ import Camera from '../components/Camera';
 import Transform from '../components/Transform';
 import { CHUNK_LOADED } from '../Terrain/terrainConstants';
 import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
+import { ServerToClientMessage } from '../../common/protocol';
 
 const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
   network.events
-    .filter((e) => e.type === 'loadChunk')
-    .subscribe(({ type, payload }) => {
-      const data = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
-      const viewOld = new Uint8Array(payload.binaryData);
-      const viewNew = new Uint8Array(data);
+    .filter((e) => e.type === ServerToClientMessage.loadChunk && e)
+    .subscribe(({ binaryData, data }) => {
+      const blocksData = new SharedArrayBuffer(BLOCKS_IN_CHUNK);
+      const viewOld = new Uint8Array(binaryData);
+      const viewNew = new Uint8Array(blocksData);
 
       for (let i = 0; i < BLOCKS_IN_CHUNK; i += 1) {
         viewNew[i] = viewOld[i];
@@ -29,13 +30,13 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
         viewFlags[i] = viewOld[BLOCKS_IN_CHUNK + i];
       }
       // console.log(data, viewNew)
-      terrain.loadChunk(data, lightData, flagsData, payload.data);
+      terrain.loadChunk(blocksData, lightData, flagsData, data);
       ecs.createEventAndDispatch(CHUNK_LOADED, {
-        data,
+        data: blocksData,
         lightData,
         flagsData,
-        x: payload.data.x,
-        z: payload.data.z,
+        x: data.x,
+        z: data.z,
       });
     });
 

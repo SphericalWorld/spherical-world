@@ -8,6 +8,7 @@ import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';
 import { THREAD_PHYSICS, THREAD_MAIN } from '../../src/Thread/threadConstants';
+import { ServerToClientMessage } from '../protocol';
 
 type SerializedComponent = {
   type: string;
@@ -37,10 +38,11 @@ export class World {
   selectors: EntitySelector<ReadonlyArray<typeof Component>>[] = [];
   eventsForThreads: GameEvent[] = [];
   events: EventObservable<GameEvent> = new EventObservable();
+  networkQueue = [];
   listeners: Array<(event: GameEvent) => void> = [];
   thread: THREAD_ID;
   lastAddedObjects = [];
-  lastDeletedObjects = [];
+  lastDeletedObjects: string[] = [];
   objects: Map<Entity, any> = new Map();
   memoryManager: MemoryManager = new MemoryManager();
   interthreadDescriptors: SharedArrayBuffer = new SharedArrayBuffer(8);
@@ -272,7 +274,7 @@ export class World {
 
   dispatch(gameEvent: GameEvent): void {
     // console.log(gameEvent);
-    if (gameEvent.type !== 'SYNC_GAME_DATA') {
+    if (gameEvent.type !== ServerToClientMessage.syncGameData) {
       this.eventsForThreads.push(gameEvent);
     }
     this.events.emit(gameEvent);
@@ -316,5 +318,9 @@ export class World {
         type: 'STOP_PSEUDO_SYNC_TIMER',
       });
     }
+  }
+
+  pushToNetworkqueue(data) {
+    this.networkQueue.push(data);
   }
 }

@@ -7,6 +7,7 @@ import type { DataStorage } from '../dataStorage';
 import { updateGameObject, getAllGameObjects, deleteGameObject } from '../dataStorage';
 import { throttle } from '../../common/utils';
 import { deserializeItem } from '../item';
+import { ServerToClientMessage } from '../../common/protocol';
 
 const findItemToAdd = (inventory: Inventory, item: Slot) => {
   for (const slot of inventory.data.slots) {
@@ -48,8 +49,12 @@ export default (world: World, ds: DataStorage): System => {
           putItem(inventory.data, inventorySlot);
         }
         inventorySlot.count += 1;
-        world.deleteEntity(id);
-        deleteItem(id);
+        world.deleteEntity(item.id);
+        world.pushToNetworkqueue({
+          id,
+          payload: { type: ServerToClientMessage.playerAddItem, data: inventorySlot },
+        });
+        deleteItem(item.id);
       }
     });
   };

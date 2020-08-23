@@ -33,7 +33,7 @@ export default class EventObservable<T> {
     }
   }
 
-  filter<U extends T>(predicate: (value: T) => value is U): EventObservable<U> {
+  filter<U extends T>(predicate: (value: T) => U | false): EventObservable<U> {
     const filtered = new EventObservable();
     filtered.subscriptions = this.subscriptions;
     filtered.pipeline = [...this.pipeline, (event: T) => (predicate(event) ? event : Empty)];

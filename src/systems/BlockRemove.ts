@@ -5,13 +5,12 @@ import type { System } from '../../common/ecs/System';
 import { Transform, BlockRemover, Player, Visual, Raytracer, Joint } from '../components';
 import {
   PLAYER_ATTACKED,
-  PLAYER_STARTED_DESTROYING_BLOCK,
   PLAYER_STOPED_ATTACK,
-  PLAYER_DESTROYED_BLOCK,
   PLAYER_START_PUT_BLOCK,
   PLAYER_PUT_BLOCK,
 } from '../player/events';
 import { getGeoId } from '../../common/chunk';
+import { ClientToServerMessage } from '../../common/protocol';
 // import { Sound } from '../Sound';
 
 // import woodHit from '../sounds/wood_hit.wav';
@@ -82,7 +81,11 @@ export default (world: World): System => {
           blockRemover.removing = possibleRemoving;
         });
         if (removing !== blockRemover.removing) {
-          world.createEventAndDispatch(PLAYER_STARTED_DESTROYING_BLOCK, block.position, true);
+          world.createEventAndDispatch(
+            ClientToServerMessage.playerStartedDestroyingBlock,
+            block.position,
+            true,
+          );
         }
       }
       if (
@@ -96,7 +99,7 @@ export default (world: World): System => {
         if (blockRemover.removedPart >= 1) {
           blockRemover.removedPart = 0;
           world.createEventAndDispatch(
-            PLAYER_DESTROYED_BLOCK,
+            ClientToServerMessage.playerDestroyedBlock,
             {
               geoId: getGeoId(...block.coordinates),
               positionInChunk: Array.from(block.positionInChunk),

@@ -3,7 +3,7 @@ import type { System } from '../../common/ecs/System';
 import type { Server } from '../server';
 import { send } from '../network/socket';
 import { Transform, Network, Inventory } from '../components';
-import { throttle } from '../../common/utils';
+import { ServerToClientMessage } from '../../common/protocol';
 
 const getComponentsToUpdate = (world: World, playerId: string) =>
   [...world.components.entries()]
@@ -119,10 +119,11 @@ const calcPlayerMovement = (server: Server, transform: Transform, network) => {
 
 export default (world: World, server: Server): System => {
   const players = world.createSelector([Transform, Network, Inventory]);
-  const syncData = throttle(() => {
+
+  const networkSystem = () => {
     for (const { network, id, transform } of players) {
       send(network.socket, {
-        type: 'SYNC_GAME_DATA',
+        type: ServerToClientMessage.syncGameData,
         data: {
           components: getComponentsToUpdate(world, id),
           newObjects: world.lastAddedObjects.filter((el) => el.networkSync),
@@ -131,12 +132,13 @@ export default (world: World, server: Server): System => {
       });
       calcPlayerMovement(server, transform, network);
     }
+    for (const { id, payload } of world.networkQueue) {
+      world.objects.get(id).network.socket.send(payload);
+    }
 
+    world.networkQueue = [];
     world.lastAddedObjects = [];
     world.lastDeletedObjects = [];
-  }, 50);
-  const networkSystem = () => {
-    syncData();
   };
   return networkSystem;
 };

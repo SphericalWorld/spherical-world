@@ -1,32 +1,94 @@
+import type { EventTypes } from './constants/input/eventTypes';
+
+export enum ServerToClientMessage {
+  syncGameData,
+  gameStart,
+  loggedIn,
+  loadControlSettings,
+  loadChunk,
+  chatMessage,
+  playerAddItem,
+}
+
 export type ServerToClientMessages =
   | Readonly<{
-      type: 'SYNC_GAME_DATA';
+      type: ServerToClientMessage.syncGameData;
       data: {
         components?: never[];
         newObjects?: never[];
-        deletedObjects?: never[];
+        deletedObjects?: string[];
       };
     }>
-  | Readonly<{ type: 'GAME_START' }>
-  | Readonly<{ type: 'LOGGED_IN'; data: Readonly<{ id: string }> }>
-  | Readonly<{ type: 'LOAD_CONTROL_SETTINGS'; data: never }>
+  | Readonly<{ type: ServerToClientMessage.gameStart }>
+  | Readonly<{ type: ServerToClientMessage.loggedIn; data: Readonly<{ id: string }> }>
   | Readonly<{
-      type: 'loadChunk';
+      type: ServerToClientMessage.loadControlSettings;
+      data: { controls: [[EventTypes, unknown, unknown]] };
+    }>
+  | Readonly<{
+      type: ServerToClientMessage.loadChunk;
+      binaryData: ArrayBuffer;
       data: Readonly<{
         x: number;
         z: number;
-        rainfall: ReadonlyArray<number>;
-        temperature: ReadonlyArray<number>;
+        rainfall: number[];
+        temperature: number[];
       }>;
+    }>
+  | Readonly<{
+      type: ServerToClientMessage.chatMessage;
+      data: {
+        id: string;
+        text: string;
+        time: number;
+        from: {
+          id: string;
+          name: string;
+        };
+      };
+    }>
+  | Readonly<{
+      type: ServerToClientMessage.playerAddItem;
+      data: string;
     }>;
+
+export enum ClientToServerMessage {
+  syncGameData = 1000, // to have no overlap
+  login,
+  ping,
+  playerStartedDestroyingBlock,
+  playerDestroyedBlock,
+  chatMessage,
+}
 
 export type ClientToServerMessages =
   | Readonly<{
-      type: 'SYNC_GAME_DATA';
+      type: ClientToServerMessage.syncGameData;
       data: {
         components?: never[];
         newObjects?: never[];
         deletedObjects?: never[];
       };
     }>
-  | Readonly<{ type: 'LOGGED_IN'; data: Readonly<{ id: string }> }>;
+  | Readonly<{
+      type: ClientToServerMessage.login;
+      data: Readonly<{ cookie: string; userId: string }>;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.ping;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.playerStartedDestroyingBlock;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.playerDestroyedBlock;
+      data: Readonly<{
+        geoId: string;
+        positionInChunk: [number, number, number];
+        position: [number, number, number];
+      }>;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.chatMessage;
+      data: string;
+    }>;

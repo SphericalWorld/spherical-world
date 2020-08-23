@@ -6,7 +6,11 @@ import parseJson from '../common/utils/parseString';
 import type { Terrain as ITerrain } from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
 import { send } from './network/socket';
-import type { ClientToServerMessages } from '../common/protocol';
+import {
+  ClientToServerMessages,
+  ClientToServerMessage,
+  ServerToClientMessage,
+} from '../common/protocol';
 
 const wrapSocket = (ws: WebSocket, wss: WebSocketServer): Socket => ({
   player: null,
@@ -20,16 +24,16 @@ const wrapSocket = (ws: WebSocket, wss: WebSocketServer): Socket => ({
   },
 });
 
-type ServerEvents = Readonly<{
-  socket: Socket;
-  message: ClientToServerMessages;
-}>; // TODO: change to enum for simplified refinements
+type ServerEvents = ClientToServerMessages &
+  Readonly<{
+    socket: Socket;
+  }>; // TODO: change to enum for simplified refinements
 
-const onMessage = (events) => (socket: Socket) => (data) => {
+const onMessage = (events: EventObservable<ServerEvents>) => (socket: Socket) => (data: string) => {
   const message = parseJson<ClientToServerMessages>(data);
-  if (message?.type === 'CHAT_MESSAGE') {
+  if (message?.type === ClientToServerMessage.chatMessage) {
     const dataToSend = {
-      type: 'CHAT_MESSAGE',
+      type: ServerToClientMessage.chatMessage,
       data: {
         id: uuid(),
         time: Date.now(),
@@ -43,9 +47,9 @@ const onMessage = (events) => (socket: Socket) => (data) => {
     socket.wss.clients.forEach((client) => client.send(JSON.stringify(dataToSend)));
     return;
   }
-  if (typeof message?.type === 'string') {
+  if (typeof message?.type === 'number') {
     events.emit({
-      message,
+      ...message,
       socket,
     });
   } else {

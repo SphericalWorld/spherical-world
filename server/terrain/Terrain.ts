@@ -6,12 +6,7 @@ import { getGeoId } from '../../common/chunk';
 import { send } from '../network/socket';
 import type { ChunkGeneratorThread } from '../threads';
 import ChunkMap from './ChunkMap';
-
-type Position3D = {
-  x: number;
-  y: number;
-  z: number;
-};
+import { ServerToClientMessage } from '../../common/protocol';
 
 const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGeneratorThread) =>
   class Terrain {
@@ -92,9 +87,9 @@ const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGenera
       chunk.qwe = true;
 
       const data = await chunk.getCompressedData();
-      player.socket.sendSerialized(data);
       send(player.socket, {
-        type: 'loadChunk',
+        type: ServerToClientMessage.loadChunk,
+        binaryData: data,
         data: {
           x,
           z,
@@ -133,14 +128,11 @@ const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGenera
       geoId,
       positionInChunk: [x, y, z],
       position,
-    }: SpreadTypes<
-      {
-        geoId: string;
-        positionInChunk: vec3;
-        position: vec3;
-      },
-      Position3D
-    >) {
+    }: {
+      geoId: string;
+      positionInChunk: vec3;
+      position: vec3;
+    }) {
       const chunk = this.chunks.get(geoId);
       if (!chunk || !chunk.data[x + z * 16 + y * 256]) {
         return;
