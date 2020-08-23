@@ -13,7 +13,7 @@ export default class EventObservable<T> {
     return queue;
   }
 
-  subscribe(observer: (T) => unknown): void {
+  subscribe(observer: (data: T) => unknown): void {
     this.subscriptions.push(this);
     this.observer = observer;
   }
@@ -33,7 +33,7 @@ export default class EventObservable<T> {
     }
   }
 
-  filter<U>(predicate: (value: T) => boolean | U): EventObservable<U> {
+  filter<U extends T>(predicate: (value: T) => value is U): EventObservable<U> {
     const filtered = new EventObservable();
     filtered.subscriptions = this.subscriptions;
     filtered.pipeline = [...this.pipeline, (event: T) => (predicate(event) ? event : Empty)];

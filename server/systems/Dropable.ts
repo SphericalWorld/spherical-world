@@ -48,11 +48,9 @@ export default (world: World, ds: DataStorage): System => {
           putItem(inventory.data, inventorySlot);
         }
         inventorySlot.count += 1;
-        world.deleteEntity(item.id);
-        deleteItem(item.id);
-        return [id, transform, inventory];
+        world.deleteEntity(id);
+        deleteItem(id);
       }
-      return [];
     });
   };
   return dropableSystem;

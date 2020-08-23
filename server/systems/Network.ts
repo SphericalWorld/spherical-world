@@ -11,26 +11,26 @@ import { saveGameObject, getGameObject } from '../dataStorage';
 
 const onSyncGameData = (server: Server, world: World) =>
   server.events
-    .filter((e) => e.type === 'SYNC_GAME_DATA')
-    .subscribe(({ payload }) => {
-      world.updateComponents(payload);
+    .filter((e) => e.message.type === 'SYNC_GAME_DATA')
+    .subscribe(({ message: { data } }) => {
+      world.updateComponents(data);
     });
 
 const onPlayerPutBlock = (server: Server) =>
   server.events
-    .filter((e) => e.type === 'PLAYER_PUT_BLOCK' && e)
-    .subscribe(({ socket, payload }) => {
-      broadcastToLinked(socket.player, 'PLAYER_PUT_BLOCK', payload);
-      socket.player.inventory.data.items[payload.itemId].count -= 1;
-      server.terrain.putBlockHandler(payload);
+    .filter((e) => e.message.type === 'PLAYER_PUT_BLOCK' && e)
+    .subscribe(({ socket, message: { data } }) => {
+      broadcastToLinked(socket.player, 'PLAYER_PUT_BLOCK', data);
+      socket.player.inventory.data.items[data.itemId].count -= 1;
+      server.terrain.putBlockHandler(data);
     });
 
 const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) =>
   server.events
-    .filter((e) => e.type === 'PLAYER_DESTROYED_BLOCK' && e)
-    .subscribe(({ socket, payload }) => {
-      broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', payload);
-      saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(payload));
+    .filter((e) => e.message.type === 'PLAYER_DESTROYED_BLOCK' && e)
+    .subscribe(({ socket, message: { data } }) => {
+      broadcastToLinked(socket.player, 'PLAYER_DESTROYED_BLOCK', data);
+      saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(data));
     });
 
 const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (socket) => {
@@ -83,11 +83,11 @@ const serialize = ({ id, ...data }) =>
 
 const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, players, world) =>
   server.events
-    .filter((e) => e.type === 'LOGIN' && e)
-    .subscribe(async ({ socket, payload }) => {
+    .filter((e) => e.message.type === 'LOGIN' && e)
+    .subscribe(async ({ socket, message: { data } }) => {
       // data.cookie
-      const player = payload.userId
-        ? await getPlayer(ds, createPlayer)(socket, payload.userId)
+      const player = data.userId
+        ? await getPlayer(ds, createPlayer)(socket, data.userId)
         : await registerNewPlayer(ds, createPlayer)(socket);
 
       const { id, transform, playerData, inventory, camera } = player;
@@ -99,22 +99,31 @@ const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, pl
         }
       }
       sendChunks(server, player);
-      send(socket, 'SYNC_GAME_DATA', {
-        newObjects: [...world.objects.values()]
-          .filter((el) => el.networkSync && el.id !== id)
-          .map(serialize),
+      send(socket, {
+        type: 'SYNC_GAME_DATA',
+        data: {
+          newObjects: [...world.objects.values()]
+            .filter((el) => el.networkSync && el.id !== id)
+            .map(serialize),
+        },
       });
-      send(socket, 'LOGGED_IN', {
-        id,
-        transform,
-        playerData,
-        inventory,
-        camera,
+      send(socket, {
+        type: 'LOGGED_IN',
+        data: {
+          id,
+          transform,
+          playerData,
+          inventory,
+          camera,
+        },
       });
-      send(socket, 'LOAD_CONTROL_SETTINGS', {
-        controls: defaultInputBindings,
+      send(socket, {
+        type: 'LOAD_CONTROL_SETTINGS',
+        data: {
+          controls: defaultInputBindings,
+        },
       });
-      send(socket, 'GAME_START');
+      send(socket, { type: 'GAME_START' });
     });
 
 export default (

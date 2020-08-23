@@ -6,6 +6,7 @@ import { WOODEN_SLAB } from '../../common/blocks';
 const WoodenSlab = (): BlockData =>
   Block({
     id: WOODEN_SLAB,
+    sightTransparent: true,
     textures: {
       top: PLANKS_OAK,
       bottom: PLANKS_OAK,

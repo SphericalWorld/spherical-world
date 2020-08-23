@@ -22,6 +22,7 @@ const onSyncGameData = (ecs: World) =>
       for (const deletedObject of deletedObjects) {
         ecs.deleteEntity(deletedObject, false);
       }
+      // console.log(components);
       ecs.updateComponents(components);
     });
 

@@ -121,19 +121,22 @@ export default (world: World, server: Server): System => {
   const players = world.createSelector([Transform, Network, Inventory]);
   const syncData = throttle(() => {
     for (const { network, id, transform } of players) {
-      send(network.socket, 'SYNC_GAME_DATA', {
-        components: getComponentsToUpdate(world, id),
-        newObjects: world.lastAddedObjects.filter((el) => el.networkSync),
-        deletedObjects: world.lastDeletedObjects,
+      send(network.socket, {
+        type: 'SYNC_GAME_DATA',
+        data: {
+          components: getComponentsToUpdate(world, id),
+          newObjects: world.lastAddedObjects.filter((el) => el.networkSync),
+          deletedObjects: world.lastDeletedObjects,
+        },
       });
       calcPlayerMovement(server, transform, network);
     }
-  }, 50);
-  const networkSystem = () => {
-    syncData();
 
     world.lastAddedObjects = [];
     world.lastDeletedObjects = [];
+  }, 50);
+  const networkSystem = () => {
+    syncData();
   };
   return networkSystem;
 };

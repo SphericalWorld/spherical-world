@@ -1,5 +1,5 @@
 import type { PLAYER_DESTROYED_BLOCK_TYPE } from '../../src/player/events';
-import NetworkSync from '../ecs/components/NetworkSync';
+import type NetworkSync from '../ecs/components/NetworkSync';
 
 export type GAME_EVENT_TYPE = string;
 

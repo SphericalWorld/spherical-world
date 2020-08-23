@@ -93,11 +93,14 @@ const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGenera
 
       const data = await chunk.getCompressedData();
       player.socket.sendSerialized(data);
-      send(player.socket, 'loadChunk', {
-        x,
-        z,
-        rainfall: chunk.rainfall.data,
-        temperature: chunk.temperature.data,
+      send(player.socket, {
+        type: 'loadChunk',
+        data: {
+          x,
+          z,
+          rainfall: chunk.rainfall.data,
+          temperature: chunk.temperature.data,
+        },
       });
     }
 

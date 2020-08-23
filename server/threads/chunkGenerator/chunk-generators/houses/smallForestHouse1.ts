@@ -123,9 +123,14 @@ const generate = (generator, chunk: Chunk) => {
 
   chunk.setAtWithFlagsAndRotate(2, y + 4, 9, OAK, oakHorizontalFlag, rotationData);
   chunk.setAtWithFlagsAndRotate(4, y + 4, 9, OAK, oakHorizontalFlag, rotationData);
-  // slabs
+  // entrance
   chunk.setAtWithFlagsAndRotate(10, y, 1, WOODEN_SLAB, oakHorizontalFlag, rotationData);
   chunk.setAtWithFlagsAndRotate(11, y, 1, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(12, y, 1, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(13, y, 2, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(13, y, 3, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtWithFlagsAndRotate(13, y, 4, WOODEN_SLAB, oakHorizontalFlag, rotationData);
+  chunk.setAtNoFlagsAndRotate(13, y, 1, OAK, rotationData);
 };
 
 export const generateSmallForestHouse1 = (seed: number): ((chunk: Chunk) => Chunk) => {

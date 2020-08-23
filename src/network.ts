@@ -1,4 +1,5 @@
 import EventObservable from '../common/GameEvent/EventObservable';
+import type { ServerToClientMessages } from '../common/protocol';
 
 export type NetworkEvent = {
   type: string;
@@ -19,8 +20,8 @@ class Network {
   requestBinaryData: ArrayBuffer | null = null;
   host = `ws://${window.location.hostname}`;
   port = 8080;
-  events: EventObservable<NetworkEvent> = new EventObservable();
-  listeners: Array<(event: NetworkEvent) => unknown> = [];
+  events: EventObservable<ServerToClientMessages> = new EventObservable();
+  listeners: Array<(event: ServerToClientMessages) => unknown> = [];
 
   addonServerInfo = {
     host: window.location.origin,
@@ -30,7 +31,7 @@ class Network {
     this.requestBinaryData = data;
   }
 
-  processAction(message: MessageEvent): void {
+  processAction(message: ServerToClientMessages): void {
     const messageToEmit = {
       type: message.type,
       payload: {
