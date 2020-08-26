@@ -108,18 +108,18 @@ export default class Chunk extends ChunkBase {
     if (chunksLoaded === 12 * 12 * 16) {
       console.log(Date.now() - timeOld);
     }
-    const buffersData: GLBuffers = {
-      vertexBuffer: null,
-      indexBuffer: null,
-      vao: null,
-      hasData,
-      query: gl.createQuery(),
-      queryInProgress: false,
-      occluded: false,
-    };
 
     if (hasData) {
       setTimeout(() => {
+        const buffersData: GLBuffers = {
+          vertexBuffer: null,
+          indexBuffer: null,
+          vao: null,
+          hasData,
+          query: gl.createQuery(),
+          queryInProgress: false,
+          occluded: false,
+        };
         this.buffers[subchunk] = buffersData;
         buffersData.buffersInfo = buffersInfo;
         buffersData.vao = gl.createVertexArray();

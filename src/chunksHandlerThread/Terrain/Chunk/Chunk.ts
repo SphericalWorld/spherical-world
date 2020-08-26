@@ -57,7 +57,7 @@ const indexPool3 = new Uint16Array(POOL_SIZE);
 
 // don't move buffers to helper function, it will me polymorphic, not monomorphic and performance
 // will drop significally
-const createBuffers = (vertexBuffer, indexBuffer): ChunkBuffers => ({
+const createBuffers = (vertexBuffer: Float32Array, indexBuffer: Uint16Array): ChunkBuffers => ({
   vertexBuffer: {
     data: vertexBuffer,
     index: 0,

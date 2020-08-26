@@ -19,6 +19,7 @@ export const send = (receiver: Socket, payload: ServerToClientMessages): void =>
   }
   if ('binaryData' in payload) {
     receiver.sendSerialized(payload.binaryData);
+    delete payload.binaryData;
   }
   receiver.ws.send(JSON.stringify(payload));
 };
