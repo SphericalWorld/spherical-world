@@ -4,10 +4,11 @@ import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
 import type { Store } from '../store/store';
-import { Transform, Camera } from '../components';
+import { Transform, Camera, Inventory } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
+import { inventory } from '../hud/components/Inventory/inventory.module.scss';
 
 const onSyncGameData = (ecs: World) =>
   ecs.events
@@ -38,8 +39,16 @@ const onLoadControlSettings = (network: Network, input: Input, store: Store) =>
       });
     });
 
+const onPlayerAddItem = (network: Network, player) =>
+  network.events
+    .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
+    .subscribe(({ data }) => {
+      player[0].inventory.data.items[data.id] = data;
+      console.log(data, player[0].inventory.data.items);
+    });
+
 export default (ecs: World, network: Network, input: Input, store: Store): System => {
-  const player = ecs.createSelector([Transform, Camera]);
+  const player = ecs.createSelector([Transform, Camera, Inventory]);
   ecs.events
     .filter((el) => el.network === true)
     .subscribe(({ type, payload }) => {
@@ -52,6 +61,7 @@ export default (ecs: World, network: Network, input: Input, store: Store): Syste
 
   onSyncGameData(ecs);
   onLoadControlSettings(network, input, store);
+  onPlayerAddItem(network, player);
 
   let lastUpdate = Date.now();
   const networkSystem = () => {

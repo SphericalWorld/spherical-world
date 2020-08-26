@@ -4,6 +4,7 @@ import {
   SWAP_INVENTORY_SLOTS,
   INVENTORY_ITEM_SELECTED,
   INVENTORY_ITEM_DECREASE,
+  INVENTORY_ITEM_INCREASE,
 } from './inventoryConstants';
 import { swap } from '../../../../common/utils/array';
 
@@ -32,8 +33,16 @@ const onInventoryItemDecrease = (state: InventoryState, id: string) => {
   return { ...state, items: { ...state.items, [id]: { ...item, count: item.count } } };
 };
 
+const onInventoryItemIncrease = (state: InventoryState, id: string) => {
+  const item = state.items[id];
+
+  if (!item) return state;
+  return { ...state, items: { ...state.items, [id]: { ...item, count: item.count } } };
+};
+
 export default createReducer<InventoryState>(initialState, {
   [SWAP_INVENTORY_SLOTS]: onUpdateHudData,
   [INVENTORY_ITEM_SELECTED]: onInventoryItemSelected,
   [INVENTORY_ITEM_DECREASE]: onInventoryItemDecrease,
+  [INVENTORY_ITEM_INCREASE]: onInventoryItemIncrease,
 });

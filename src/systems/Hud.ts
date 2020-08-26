@@ -7,7 +7,11 @@ import { MENU_TOGGLED, INVENTORY_TOGGLED } from '../hud/hudConstants';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
 import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
 import { connect } from '../util';
-import { updateHudData as doUpdateHudData, inventoryItemDecrease } from '../hud/hudActions';
+import {
+  updateHudData as doUpdateHudData,
+  inventoryItemDecrease,
+  inventoryItemIncrease,
+} from '../hud/hudActions';
 import { toggleUIState as doToggleUIState } from '../hud/utils/StateRouter';
 import {
   GAMEPLAY_MAIN_CONTEXT,
@@ -17,6 +21,7 @@ import {
 import { setKey } from '../Input/Input';
 import { throttle } from '../../common/utils';
 import { PLAYER_PUT_BLOCK } from '../player/events';
+import { ServerToClientMessage } from '../../common/protocol';
 
 const mapState = ({
   keyBindings,
@@ -62,6 +67,13 @@ const onStateChanged = (input, player) => (
   }
 };
 
+const onPlayerAddItem = (events, store) =>
+  events
+    .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
+    .subscribe(({ payload }) => {
+      store.dispatch(inventoryItemIncrease(payload.id));
+    });
+
 export default (ecs: World, store: Store, input: Input): System => {
   const player = ecs.createSelector([Transform, UserControlled, Inventory]);
   const toggleUIState = (...params) => store.dispatch(doToggleUIState(...params));
@@ -70,6 +82,7 @@ export default (ecs: World, store: Store, input: Input): System => {
   onInventoryToggled(ecs.events, toggleUIState);
   onDispatchableEvent(ecs.events, store);
   onInventoryChanged(ecs.events, store);
+  onPlayerAddItem(ecs.events, store);
   connect(mapState, store)(onStateChanged(input, player));
   const syncData = throttle((data) => store.dispatch(doUpdateHudData(data)), 100);
   return () => {
