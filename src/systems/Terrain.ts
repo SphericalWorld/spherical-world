@@ -3,7 +3,6 @@ import type Network from '../network';
 import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../common/ecs/System';
 import type { World } from '../../common/ecs';
-import { filterFarChunks } from '../../common/chunk';
 import Camera from '../components/Camera';
 import Transform from '../components/Transform';
 import { CHUNK_LOADED } from '../Terrain/terrainConstants';
@@ -40,6 +39,13 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
       });
     });
 
+const onChunkUnLoaded = (ecs: World, network: Network, terrain: Terrain) =>
+  network.events
+    .filter((e) => e.type === ServerToClientMessage.unloadChunk && e)
+    .subscribe(({ data }) => {
+      terrain.unloadChunk(data.x, data.z);
+    });
+
 const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
   ecs.events
     .filter((e) => e.type === 'CHUNK_VBO_LOADED')
@@ -53,6 +59,8 @@ const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
 
 export default (ecs: World, network: Network, terrain: Terrain): System => {
   onChunkLoaded(ecs, network, terrain);
+  onChunkUnLoaded(ecs, network, terrain);
+
   onChunkVBOLoaded(ecs, terrain);
   const player = ecs.createSelector([Transform, Camera]);
 
@@ -60,7 +68,6 @@ export default (ecs: World, network: Network, terrain: Terrain): System => {
 
   const terrainSystem = () => {
     const [{ transform }] = player;
-    terrain.chunks = filterFarChunks(oldPosition, transform.translation, terrain.chunks);
     vec3.copy(oldPosition, transform.translation);
   };
   return terrainSystem;

@@ -6,6 +6,7 @@ export enum ServerToClientMessage {
   loggedIn,
   loadControlSettings,
   loadChunk,
+  unloadChunk,
   chatMessage,
   playerAddItem,
 }
@@ -33,6 +34,13 @@ export type ServerToClientMessages =
         z: number;
         rainfall: number[];
         temperature: number[];
+      }>;
+    }>
+  | Readonly<{
+      type: ServerToClientMessage.unloadChunk;
+      data: Readonly<{
+        x: number;
+        z: number;
       }>;
     }>
   | Readonly<{

@@ -23,53 +23,6 @@ const getComponentsToUpdate = (world: World, playerId: string) =>
 const RENDER_DISTANCE = 8;
 const VISIBILITY = RENDER_DISTANCE + 2; // 1 chunk around will have loaded lights but not vbo, and another 1 will have no lights loaded
 
-// const calcPlayerMovement = (server: Server, transform: Transform, network) => {
-//   const [x, , z] = transform.translation;
-
-//   const chunkX = Math.floor(x / 16) * 16;
-//   const chunkZ = Math.floor(z / 16) * 16;
-
-//   const chunkXold: number = transform.chunkX ?? chunkX;
-//   const chunkZold: number = transform.chunkZ ?? chunkZ;
-
-//   if (chunkX < chunkXold) {
-//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
-//       server.terrain.sendChunk(
-//         { socket: network.socket },
-//         chunkX - (VISIBILITY - 1) * 16,
-//         chunkZ + i * 16,
-//       );
-//     }
-//   } else if (chunkX > chunkXold) {
-//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
-//       server.terrain.sendChunk(
-//         { socket: network.socket },
-//         chunkX + (VISIBILITY - 1) * 16,
-//         chunkZ + i * 16,
-//       );
-//     }
-//   }
-//   if (chunkZ < chunkZold) {
-//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
-//       server.terrain.sendChunk(
-//         { socket: network.socket },
-//         chunkX + i * 16,
-//         chunkZ - (VISIBILITY - 1) * 16,
-//       );
-//     }
-//   } else if (chunkZ > chunkZold) {
-//     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
-//       server.terrain.sendChunk(
-//         { socket: network.socket },
-//         chunkX + i * 16,
-//         chunkZ + (VISIBILITY - 1) * 16,
-//       );
-//     }
-//   }
-//   transform.chunkX = chunkX;
-//   transform.chunkZ = chunkZ;
-// };
-
 const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const [x, , z] = transform.translation;
 
@@ -79,42 +32,69 @@ const calcPlayerMovement = (server: Server, transform: Transform, network) => {
   const chunkXold: number = transform.chunkX ?? chunkX;
   const chunkZold: number = transform.chunkZ ?? chunkZ;
 
-  if (chunkX < chunkXold) {
+  if (chunkX < chunkXold && transform.chunkXLoad > 0) {
     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
       server.terrain.sendChunk(
         { socket: network.socket },
         chunkX - (VISIBILITY - 1) * 16,
         chunkZ + i * 16,
       );
+      send(network.socket, {
+        type: ServerToClientMessage.unloadChunk,
+        data: { x: chunkX + (VISIBILITY + 1) * 16, z: chunkZ + i * 16 },
+      });
     }
-  } else if (chunkX > chunkXold) {
+  } else if (chunkX > chunkXold && transform.chunkXLoad < 0) {
     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
       server.terrain.sendChunk(
         { socket: network.socket },
         chunkX + (VISIBILITY - 1) * 16,
         chunkZ + i * 16,
       );
+      send(network.socket, {
+        type: ServerToClientMessage.unloadChunk,
+        data: { x: chunkX - (VISIBILITY + 1) * 16, z: chunkZ + i * 16 },
+      });
     }
   }
-  if (chunkZ < chunkZold) {
+  if (chunkZ < chunkZold && transform.chunkZLoad > 0) {
     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
       server.terrain.sendChunk(
         { socket: network.socket },
         chunkX + i * 16,
         chunkZ - (VISIBILITY - 1) * 16,
       );
+      send(network.socket, {
+        type: ServerToClientMessage.unloadChunk,
+        data: { x: chunkX + i * 16, z: chunkZ + (VISIBILITY + 1) * 16 },
+      });
     }
-  } else if (chunkZ > chunkZold) {
+  } else if (chunkZ > chunkZold && transform.chunkZLoad < 0) {
     for (let i = -VISIBILITY; i < VISIBILITY + 1; i += 1) {
       server.terrain.sendChunk(
         { socket: network.socket },
         chunkX + i * 16,
         chunkZ + (VISIBILITY - 1) * 16,
       );
+      send(network.socket, {
+        type: ServerToClientMessage.unloadChunk,
+        data: { x: chunkX + i * 16, z: chunkZ - (VISIBILITY + 1) * 16 },
+      });
     }
   }
   transform.chunkX = chunkX;
   transform.chunkZ = chunkZ;
+
+  if (chunkX < chunkXold) {
+    transform.chunkXLoad = 1;
+  } else if (chunkX > chunkXold) {
+    transform.chunkXLoad = -1;
+  }
+  if (chunkZ < chunkZold) {
+    transform.chunkZLoad = 1;
+  } else if (chunkZ > chunkZold) {
+    transform.chunkZLoad = -1;
+  }
 };
 
 export default (world: World, server: Server): System => {

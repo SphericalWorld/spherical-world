@@ -39,6 +39,10 @@ class Terrain extends TerrainBase<Chunk> {
     ).generateFoliageTexture();
   };
 
+  unloadChunk = (x: number, z: number): void => {
+    this.chunks.delete(getGeoId(x, z));
+  };
+
   generateBiomeColorMap(texture: WebGLTexture): void {
     const fb = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
