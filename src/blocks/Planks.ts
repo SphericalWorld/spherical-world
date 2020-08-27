@@ -1,11 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { PLANKS_OAK } from '../engine/Texture/textureConstants';
-import { PLANKS } from '../../common/blocks';
+import { planks } from '../../common/blocks/blocksInfo';
 
 const Planks = (): BlockData =>
-  Block({
-    id: PLANKS,
+  Block(planks, {
     textures: {
       top: PLANKS_OAK,
       bottom: PLANKS_OAK,

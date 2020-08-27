@@ -1,5 +1,5 @@
 import { vec3 } from 'gl-matrix';
-import type { Block } from '../../common/block';
+import type { Block } from '../../common/blocks';
 import type { CreateItem } from '../item';
 import Chunk from './Chunk';
 import { getGeoId } from '../../common/chunk';
@@ -7,6 +7,7 @@ import { send } from '../network/socket';
 import type { ChunkGeneratorThread } from '../threads';
 import ChunkMap from './ChunkMap';
 import { ServerToClientMessage } from '../../common/protocol';
+import { blocksInfo } from '../../common/blocks/blocksInfo';
 
 const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGeneratorThread) =>
   class Terrain {
@@ -149,7 +150,6 @@ const createTerrain = (createItem: CreateItem, chunkGeneratorThread: ChunkGenera
       return createItem(null, vec3.add(position, position, vec3.fromValues(0.5, 0.7, 0.5)), {
         itemTypeId: blockType,
         count: 1,
-        name: 'block',
         id: 'slot',
       });
     }

@@ -1,17 +1,9 @@
 import type { BlockData } from './Block';
 import model from '../models/flowerRed.json';
 import Block from './Block';
-import Flower from './Flower';
 import ModelComponent from './components/ModelComponent';
+import { flowerRed } from '../../common/blocks/blocksInfo';
 
-const FlowerRed = (): BlockData =>
-  Block(
-    {
-      id: 131,
-      baseRemoveTime: 0.2,
-    },
-    ModelComponent(model),
-    Flower(),
-  );
+const FlowerRed = (): BlockData => Block(flowerRed, ModelComponent(model));
 
 export default FlowerRed;

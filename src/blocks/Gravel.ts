@@ -1,11 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { TEXTURE_GRAVEL } from '../engine/Texture/textureConstants';
-import { GRAVEL } from '../../common/blocks';
+import { gravel } from '../../common/blocks/blocksInfo';
 
 const Gravel = (): BlockData =>
-  Block({
-    id: GRAVEL,
+  Block(gravel, {
     textures: {
       top: TEXTURE_GRAVEL,
       bottom: TEXTURE_GRAVEL,

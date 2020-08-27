@@ -1,12 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { OAK_LEAVES } from '../engine/Texture/textureConstants';
+import { oakLeaves } from '../../common/blocks/blocksInfo';
 
 const OakLeaves = (): BlockData =>
-  Block({
-    id: 5,
-    lightTransparent: false,
-    sightTransparent: true,
+  Block(oakLeaves, {
     buffer: {
       top: 1,
       bottom: 1,

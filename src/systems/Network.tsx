@@ -8,7 +8,7 @@ import { Transform, Camera, Inventory } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
-import { inventory } from '../hud/components/Inventory/inventory.module.scss';
+import { blocksInfo } from '../blocks/blockInfo';
 
 const onSyncGameData = (ecs: World) =>
   ecs.events
@@ -44,7 +44,6 @@ const onPlayerAddItem = (network: Network, player) =>
     .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
     .subscribe(({ data }) => {
       player[0].inventory.data.items[data.id] = data;
-      console.log(data, player[0].inventory.data.items);
     });
 
 export default (ecs: World, network: Network, input: Input, store: Store): System => {

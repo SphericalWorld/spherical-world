@@ -1,10 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { GRASS, GRASS_SIDE, DIRT } from '../engine/Texture/textureConstants';
+import { grass } from '../../common/blocks/blocksInfo';
 
 const Grass = (): BlockData =>
-  Block({
-    id: 1,
+  Block(grass, {
     buffer: {
       top: 1,
       bottom: 1,

@@ -1,10 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { SAND } from '../engine/Texture/textureConstants';
+import { sand } from '../../common/blocks/blocksInfo';
 
 const Sand = (): BlockData =>
-  Block({
-    id: 2,
+  Block(sand, {
     textures: {
       top: SAND,
       bottom: SAND,
@@ -13,7 +13,6 @@ const Sand = (): BlockData =>
       west: SAND,
       east: SAND,
     },
-    baseRemoveTime: 1,
   });
 
 export default Sand;

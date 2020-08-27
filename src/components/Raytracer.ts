@@ -1,8 +1,8 @@
-import { vec3, vec2 } from 'gl-matrix';
-import type { BlockFace, Block } from '../../common/block';
+import type { vec3, vec2 } from 'gl-matrix';
+import type { BlockFace, Block } from '../../common/blocks';
 import type { Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
-import { MemoryManager } from '../../common/ecs/MemoryManager';
+import type { MemoryManager } from '../../common/ecs/MemoryManager';
 
 export type BlockDetails = {
   block: Block;

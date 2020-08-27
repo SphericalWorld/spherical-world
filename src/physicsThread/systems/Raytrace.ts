@@ -1,5 +1,5 @@
 import { vec3, vec2 } from 'gl-matrix';
-import type { BlockFace } from '../../../common/block';
+import type { BlockFace } from '../../../common/blocks';
 import type { BlockDetails } from '../../components/Raytracer';
 import type { World } from '../../../common/ecs/World';
 import type Terrain from '../Terrain/Terrain';

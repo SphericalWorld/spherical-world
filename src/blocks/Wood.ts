@@ -1,11 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { OAK } from '../engine/Texture/textureConstants';
-import { WOOD } from '../../common/blocks';
+import { wood } from '../../common/blocks/blocksInfo';
 
 const Wood = (): BlockData =>
-  Block({
-    id: WOOD,
+  Block(wood, {
     buffer: {
       top: 1,
       bottom: 1,

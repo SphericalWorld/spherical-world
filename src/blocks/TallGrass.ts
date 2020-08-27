@@ -2,14 +2,12 @@ import type { BlockData } from './Block';
 import model from '../models/tallgrass.json';
 import Block from './Block';
 import ModelComponent from './components/ModelComponent';
+import { tallGrass } from '../../common/blocks/blocksInfo';
 
 const TallGrass = (): BlockData =>
   Block(
+    tallGrass,
     {
-      id: 129,
-      lightTransparent: true,
-      sightTransparent: true,
-      needPhysics: false,
       buffer: {
         top: 1,
         bottom: 1,
@@ -18,7 +16,6 @@ const TallGrass = (): BlockData =>
         west: 1,
         east: 1,
       },
-      baseRemoveTime: 0.2,
     },
     ModelComponent(model),
   );

@@ -1,12 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { PLANKS_OAK } from '../engine/Texture/textureConstants';
-import { WOODEN_SLAB } from '../../common/blocks';
+import { woodenSlab } from '../../common/blocks/blocksInfo';
 
 const WoodenSlab = (): BlockData =>
-  Block({
-    id: WOODEN_SLAB,
-    sightTransparent: true,
+  Block(woodenSlab, {
     textures: {
       top: PLANKS_OAK,
       bottom: PLANKS_OAK,

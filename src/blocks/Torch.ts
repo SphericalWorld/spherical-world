@@ -3,6 +3,7 @@ import { getIndex } from '../../common/chunk';
 import model from '../models/torch.json';
 import Block from './Block';
 import { getLight } from './components/ModelComponent';
+import { torch } from '../../common/blocks/blocksInfo';
 
 const getRotatedTourches = () => {
   const torches = [[], [], [], [], [], []];
@@ -45,13 +46,7 @@ const getRotatedTourches = () => {
 
 const Torch = () => {
   const torches = getRotatedTourches();
-  return Block({
-    id: 128,
-    lightTransparent: true,
-    sightTransparent: true,
-    selfTransparent: false,
-    needPhysics: false,
-
+  return Block(torch, {
     renderToChunk(
       chunk,
       x: number,

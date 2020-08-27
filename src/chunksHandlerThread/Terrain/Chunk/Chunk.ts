@@ -1,4 +1,4 @@
-import type { BlockFace } from '../../../../common/block';
+import type { BlockFace } from '../../../../common/blocks';
 import { getIndex } from '../../../../common/chunk';
 import {
   BLOCKS_IN_CHUNK,

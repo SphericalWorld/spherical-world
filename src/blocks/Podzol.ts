@@ -1,11 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { TEXTURE_PODZOL, TEXTURE_PODZOL_SIDE, DIRT } from '../engine/Texture/textureConstants';
-import { PODZOL } from '../../common/blocks';
+import { podzol } from '../../common/blocks/blocksInfo';
 
 const Podzol = (): BlockData =>
-  Block({
-    id: PODZOL,
+  Block(podzol, {
     buffer: {
       top: 1,
       bottom: 1,

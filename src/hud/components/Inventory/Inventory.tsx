@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
 import { createSelector } from 'reselect';
 import type { State } from '../../../reducers/rootReducer';
-import type { Slot } from '../../../../common/Inventory';
 import Label from '../../uiElements/Label';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { INVENTORY } from './inventoryConstants';
-import { setUIState as doSetUIState, useSetUIState } from '../../utils/StateRouter';
+import { useSetUIState } from '../../utils/StateRouter';
 import { useSwapSlots } from './inventoryActions';
 import {
   inventory,
@@ -21,16 +20,6 @@ import {
 } from './inventory.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
-
-type MappedProps = {
-  slots: ReadonlyArray<Slot | null>;
-};
-
-type DispatchProps = {
-  setUIState: typeof doSetUIState;
-};
-
-type Props = SpreadTypes<MappedProps, DispatchProps>;
 
 const Coin = ({ caption, className }: { caption: string; className: string }) => (
   <div className={`${coin} ${className}`}>

@@ -1,15 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { WATER_STILL } from '../engine/Texture/textureConstants';
+import { water } from '../../common/blocks/blocksInfo';
 
 const Water = (): BlockData =>
-  Block({
-    id: 127,
-    sightTransparent: true,
-    selfTransparent: true,
-    needPhysics: false,
-    fallSpeedCap: -3,
-    fallAcceleration: 0.5,
+  Block(water, {
     buffer: {
       top: 2,
       bottom: 2,

@@ -34,16 +34,17 @@ export type BlockData = {
     value: number,
     plane: number,
   ) => boolean;
-  getFlags: (number) => number;
+  getFlags: (flag: number) => number;
   getRotation: (flag: number) => number;
   renderToChunk?: RenderToChunk;
   sounds: {
     footsteps: ReadonlyArray<string>;
   };
   isSlab: boolean;
+  name: string;
 };
 
-const Block = <T extends object>(...components: T[]): SpreadTypes<BlockData, T> =>
+const Block = (...components: Partial<BlockData>[]): BlockData =>
   Object.assign({}, BasePropertiesComponent(), ...components);
 
 export default Block;

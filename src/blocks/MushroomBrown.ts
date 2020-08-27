@@ -1,18 +1,9 @@
 import type { BlockData } from './Block';
 import model from '../models/mushroomBrown.json';
 import Block from './Block';
-import Mushroom from './Mushroom';
 import ModelComponent from './components/ModelComponent';
-import { MUSHROOM_BROWN } from '../../common/blocks';
+import { mushroomBrown } from '../../common/blocks/blocksInfo';
 
-const MushroomBrown = (): BlockData =>
-  Block(
-    {
-      id: MUSHROOM_BROWN,
-      baseRemoveTime: 0.2,
-    },
-    ModelComponent(model),
-    Mushroom(),
-  );
+const MushroomBrown = (): BlockData => Block(mushroomBrown, ModelComponent(model));
 
 export default MushroomBrown;

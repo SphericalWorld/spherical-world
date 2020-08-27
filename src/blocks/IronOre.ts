@@ -1,10 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { IRON_ORE } from '../engine/Texture/textureConstants';
+import { ironOre } from '../../common/blocks/blocksInfo';
 
 const IronOre = (): BlockData =>
-  Block({
-    id: 9,
+  Block(ironOre, {
     textures: {
       top: IRON_ORE,
       bottom: IRON_ORE,

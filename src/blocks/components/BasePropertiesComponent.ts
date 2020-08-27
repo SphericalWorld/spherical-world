@@ -7,6 +7,7 @@ import {
   footstepsGrass16,
   footstepsGrass18,
 } from '../../sounds';
+import type { BlockData } from '../Block';
 
 export type ChunkData = Readonly<{
   flags: Uint8Array;
@@ -44,7 +45,7 @@ const putBlock = (
   return true;
 };
 
-const BasePropertiesComponent = () => ({
+const BasePropertiesComponent = (): BlockData => ({
   id: 0,
   fallSpeedCap: Number.MIN_SAFE_INTEGER,
   fallAcceleration: 1,
@@ -76,6 +77,7 @@ const BasePropertiesComponent = () => ({
     footsteps: [footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18],
   },
   isSlab: false,
+  name: 'Unnamed block',
 });
 
 export default BasePropertiesComponent;

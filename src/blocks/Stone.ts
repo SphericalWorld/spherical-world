@@ -1,10 +1,10 @@
 import type { BlockData } from './Block';
 import Block from './Block';
 import { STONE } from '../engine/Texture/textureConstants';
+import { stone } from '../../common/blocks/blocksInfo';
 
 const Stone = (): BlockData =>
-  Block({
-    id: 3,
+  Block(stone, {
     textures: {
       top: STONE,
       bottom: STONE,

@@ -44,7 +44,6 @@ export default (world: World, ds: DataStorage): System => {
           inventorySlot = createSlot({
             count: 0,
             itemTypeId: itemData.items.slot.itemTypeId,
-            name: '',
           });
           putItem(inventory.data, inventorySlot);
         }

@@ -1,4 +1,5 @@
 import type { EventTypes } from './constants/input/eventTypes';
+import type { Slot } from './Inventory';
 
 export enum ServerToClientMessage {
   syncGameData,
@@ -57,7 +58,7 @@ export type ServerToClientMessages =
     }>
   | Readonly<{
       type: ServerToClientMessage.playerAddItem;
-      data: string;
+      data: Slot;
     }>;
 
 export enum ClientToServerMessage {
