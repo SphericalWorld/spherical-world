@@ -110,7 +110,11 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     const draw = (position: Transform, visual: Visual): void => {
       runShader(visual.glObject.material.shader);
       visual.glObject.material.use();
-      const light = getLight(terrain)(...position.translation);
+      const light = getLight(terrain)(
+        position.translation[0],
+        position.translation[1],
+        position.translation[2],
+      );
       if (light) {
         gl.uniform4f(currentShader.uLighting, ...light);
       }

@@ -4,7 +4,6 @@ import { blocksFlags, blocksInfo, HAS_PHYSICS_MODEL } from '../../blocks/blockIn
 import Collider from '../../components/Collider';
 import Joint from '../../components/Joint';
 import type { System } from '../../../common/ecs/System';
-import type { World } from '../../../common/ecs';
 import Velocity from '../../components/Velocity';
 import Transform from '../../components/Transform';
 import Physics from '../../components/Physics';
@@ -12,6 +11,7 @@ import { createAABB } from '../physics/colliders/AABB';
 import { collide, testCollision, move } from '../physics/Collider';
 import type Terrain from '../Terrain';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
+import type { WorldPhysicsThread } from '../../Events';
 
 const oneVector = vec3.fromValues(1, 1, 1);
 const halfVector = vec3.fromValues(1, 0.5, 1);
@@ -92,11 +92,11 @@ const collideWithTerrain = (terrain: Terrain) => {
   };
 };
 
-export default (ecs: World, terrain: Terrain): System => {
-  const components = ecs.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
-  const dependentComponents = ecs.createSelector([Transform, Joint]);
+export default (world: WorldPhysicsThread, terrain: Terrain): System => {
+  const components = world.createSelector([Transform, Velocity, Physics, Collider], [Joint]);
+  const dependentComponents = world.createSelector([Transform, Joint]);
   const collideWithTerrainPApplied = collideWithTerrain(terrain);
-  const transformRegistry = ecs.components.get('transform');
+  const transformRegistry = world.components.get('transform');
 
   return (delta: number) => {
     for (const { transform, velocity, collider } of components) {

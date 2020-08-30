@@ -35,7 +35,7 @@ const getPutBlockEvents = (world: WorldMainThread, picker) =>
           PLAYER_PUT_BLOCK,
           {
             flags: face,
-            geoId: getGeoId(...emptyBlock.coordinates),
+            geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
             position: Array.from(emptyBlock.position),
             positionInChunk: Array.from(emptyBlock.positionInChunk),
             blockId: item.itemTypeId,
@@ -98,7 +98,7 @@ export default (world: WorldMainThread, network: Network): System => {
           world.dispatch({
             type: GameEvent.playerDestroyedBlock,
             payload: {
-              geoId: getGeoId(...block.coordinates),
+              geoId: getGeoId(block.coordinates[0], block.coordinates[1]),
               positionInChunk: Array.from(block.positionInChunk),
               position: Array.from(block.position),
             },
@@ -106,7 +106,7 @@ export default (world: WorldMainThread, network: Network): System => {
           network.emit({
             type: ClientToServerMessage.playerDestroyedBlock,
             data: {
-              geoId: getGeoId(...block.coordinates),
+              geoId: getGeoId(block.coordinates[0], block.coordinates[1]),
               positionInChunk: [
                 block.positionInChunk[0],
                 block.positionInChunk[1],

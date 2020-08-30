@@ -4,13 +4,14 @@ import type { InputContexts } from './inputContexts';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
 import type InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
+import type { MainThreadEvents } from '../Events';
 
 type MappedEvent = Readonly<{
   action: string;
   type: INPUT_TYPE;
-  gameEvent: string;
+  gameEvent: MainThreadEvents;
   data?: (e: InputEvent) => unknown;
-  onEnd?: string;
+  onEnd?: MainThreadEvents;
   caption?: string;
   category?: EVENT_CATEGORY;
   dispatchable?: boolean;
@@ -38,11 +39,11 @@ export const createContext = ({
   events: new Map(),
 });
 
-export const activate = (context: InputContext) => ({
+export const activate = (context: InputContext): InputContext => ({
   ...context,
   active: true,
 });
-export const deactivate = (context: InputContext) => ({
+export const deactivate = (context: InputContext): InputContext => ({
   ...context,
   active: false,
 });

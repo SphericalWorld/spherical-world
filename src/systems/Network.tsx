@@ -13,7 +13,7 @@ import type { WorldMainThread } from '../Events';
 const onSyncGameData = (world: WorldMainThread, network: Network) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.syncGameData && e)
-    .subscribe(({ data: { newObjects, deletedObjects = [], components = [] } }) => {
+    .subscribe(({ data: { newObjects = [], deletedObjects = [], components = [] } }) => {
       // console.log(newObjects, deletedObjects, components);
       for (const newObject of newObjects) {
         const Constructor = world.constructors.get(newObject.networkSync.name);

@@ -19,16 +19,25 @@ const getAngle = (x: number, z: number): number => Math.atan2(-z, x);
 const setMove = (userControls: UserControlled, direction, value: boolean): UserControlled => {
   switch (direction) {
     case DIRECTION_FORWARD:
-      userControls.movingForward = value;
+      userControls.movingAxes[0] = value
+        ? userControls.movingAxes[0] + 1
+        : userControls.movingAxes[0] - 1;
       break;
     case DIRECTION_BACK:
-      userControls.movingBackward = value;
+      userControls.movingAxes[0] = value
+        ? userControls.movingAxes[0] - 1
+        : userControls.movingAxes[0] + 1;
       break;
     case DIRECTION_LEFT:
-      userControls.movingLeft = value;
+      userControls.movingAxes[1] = value
+        ? userControls.movingAxes[1] + 1
+        : userControls.movingAxes[1] - 1;
+
       break;
     case DIRECTION_RIGHT:
-      userControls.movingRight = value;
+      userControls.movingAxes[1] = value
+        ? userControls.movingAxes[1] - 1
+        : userControls.movingAxes[1] + 1;
       break;
     default:
   }
@@ -84,27 +93,16 @@ export default (world: WorldPhysicsThread, terrain: Terrain): System => {
     // let deltaZ = -delta * speed * (running + 1) * (Math.cos(horizontalRotate) * movingX + (Math.cos(horizontalRotate + 1.570796327)) * movingZ);
     //
 
-    // console.log(userActions)
     // vec3.scaleAndAdd(velocity.linear, velocity.linear, transform.rotation, delta*0.01);
     // vec3.transformQuat(velocity.linear, velocity.linear, quat.rotateX(quat.create(), quat.create(), transform.rotation.x));
     // console.log( quat.rotateX(quat.create(), quat.create(), transform.rotation.x))
 
-    if (
-      userControls.movingForward ||
-      userControls.movingBackward ||
-      userControls.movingLeft ||
-      userControls.movingRight
-    ) {
-      const movingX = userControls.movingForward - userControls.movingBackward;
-      const movingZ = userControls.movingLeft - userControls.movingRight;
+    if (userControls.movingAxes[0] || userControls.movingAxes[1]) {
+      const [movingX, movingZ] = userControls.movingAxes;
       const angle = getAngle(movingX, movingZ);
       quat.rotateY(rotation, transform.rotation, angle);
 
       vec3.transformQuat(vXrotated, vX, rotation);
-
-      // const v2 = vec3.fromValues(0, 1, 0);
-      // vec3.transformQuat(v2, v2, rotation);
-
       vec3.transformQuat(vZrotated, vZ, rotation);
 
       vec3.set(userControls.velocity, -vXrotated[2], 0, -vZrotated[2]);

@@ -1,11 +1,11 @@
 import { vec3 } from 'gl-matrix';
 import type { System } from '../../../common/ecs/System';
-import type { World } from '../../../common/ecs';
 import Transform from '../../components/Transform';
 import UserControlled from '../../components/UserControlled';
 import Velocity from '../../components/Velocity';
+import type { WorldPhysicsThread } from '../../Events';
 
-export default (ecs: World): System => {
+export default (ecs: WorldPhysicsThread): System => {
   const components = ecs.createSelector([Transform, Velocity], [UserControlled]);
   const controlledComponents = ecs.createSelector([Transform, Velocity, UserControlled]);
 

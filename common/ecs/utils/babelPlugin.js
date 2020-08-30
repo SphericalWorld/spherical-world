@@ -75,6 +75,10 @@ module.exports = (babel) => {
         state.memorySize += 4;
         break;
       }
+      case 'getVec2': {
+        state.memorySize += 8;
+        break;
+      }
       case 'getVec3': {
         state.memorySize += 12;
         break;
