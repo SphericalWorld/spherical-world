@@ -62,7 +62,7 @@ export type ServerToClientMessages =
     }>;
 
 export enum ClientToServerMessage {
-  syncGameData = 1000, // to have no overlap
+  syncGameData,
   login,
   ping,
   playerStartedDestroyingBlock,
@@ -88,6 +88,7 @@ export type ClientToServerMessages =
     }>
   | Readonly<{
       type: ClientToServerMessage.playerStartedDestroyingBlock;
+      data: [number, number, number];
     }>
   | Readonly<{
       type: ClientToServerMessage.playerDestroyedBlock;

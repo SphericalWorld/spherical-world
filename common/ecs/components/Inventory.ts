@@ -2,7 +2,7 @@ import type { Component } from '../Component';
 import type { Inventory as InventoryData } from '../../Inventory/Inventory';
 import { createInventory } from '../../Inventory/Inventory';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
-import { Networkable } from '../../Networkable';
+import type { Networkable } from '../../Networkable';
 
 export default class Inventory implements Component, Networkable {
   static threads = [THREAD_MAIN];

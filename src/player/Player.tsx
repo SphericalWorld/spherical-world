@@ -48,9 +48,9 @@ import { BlockPicker } from './BlockPicker';
 import { materialLibrary, GlObject } from '../engine';
 import { Sound } from '../Sound';
 import { getBlock } from '../../common/terrain';
-import Terrain from '../Terrain';
+import type Terrain from '../Terrain';
 import { blocksFlags, HAS_PHYSICS_MODEL, blocksInfo } from '../blocks/blockInfo';
-import { UserControlled as CUserControlled, Transform as CTransform } from '../components';
+import type { UserControlled as CUserControlled, Transform as CTransform } from '../components';
 
 type Props = {
   id: Entity;

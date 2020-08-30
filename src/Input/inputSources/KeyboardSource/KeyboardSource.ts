@@ -1,6 +1,6 @@
 import type { InputSource } from '../../InputSource';
 import StateInputEvent, { STATE_DOWN, STATE_UP } from '../../StateInputEvent';
-import InputEvent from '../../InputEvent';
+import type InputEvent from '../../InputEvent';
 import { KEY_ANY } from '../../../../common/constants/input/keyboardRawEvents';
 
 export default class KeyboardSource implements InputSource {

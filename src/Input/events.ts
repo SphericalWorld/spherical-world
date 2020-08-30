@@ -24,37 +24,26 @@ import {
   CATEGORY_INTERFACE,
   CATEGORY_COMBAT_AND_BLOCKS,
 } from './eventTypes';
-import RangeInputEvent from './RangeInputEvent';
-import { MENU_TOGGLED, INVENTORY_TOGGLED, KEY_SELECT_BUTTON } from '../hud/hudConstants';
+import type RangeInputEvent from './RangeInputEvent';
+import { KEY_SELECT_BUTTON } from '../hud/hudConstants';
 import {
-  CAMERA_MOVED,
-  CAMERA_LOCKED,
-  CAMERA_UNLOCKED,
-  PLAYER_MOVED,
-  PLAYER_STOPED_MOVE,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
-  PLAYER_JUMPED,
-  PLAYER_STOPED_JUMP,
-  PLAYER_RUN,
-  PLAYER_STOPED_RUN,
-  PLAYER_ATTACKED,
-  PLAYER_STOPED_ATTACK,
-  PLAYER_START_PUT_BLOCK,
 } from '../player/events';
 import {
   PREVIOUS_ITEM_SELECTED,
   NEXT_ITEM_SELECTED,
 } from '../hud/components/MainPanel/mainPanelConstants';
+import { GameEvent } from '../Events';
 
 // TODO: move events to separate files
 
 export const cameraMovedEvent = {
   action: CAMERA_MOVED_EVENT,
   type: INPUT_TYPE_RANGE,
-  gameEvent: CAMERA_MOVED,
+  gameEvent: GameEvent.cameraMoved,
   data: ({ x, y, z }: RangeInputEvent) => ({
     x,
     y,
@@ -65,7 +54,7 @@ export const cameraMovedEvent = {
 export const cameraUnlockedEvent = {
   action: CAMERA_UNLOCKED_EVENT,
   type: INPUT_TYPE_ACTION,
-  gameEvent: CAMERA_UNLOCKED,
+  gameEvent: GameEvent.cameraUnlocked,
 };
 
 export const playerMoveForwardEvent = {
@@ -73,8 +62,8 @@ export const playerMoveForwardEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Move Forward',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_MOVED,
-  onEnd: PLAYER_STOPED_MOVE,
+  gameEvent: GameEvent.playerMoved,
+  onEnd: GameEvent.playerStopedMove,
   data: () => ({
     direction: DIRECTION_FORWARD,
   }),
@@ -85,8 +74,8 @@ export const playerMoveBackwardEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Move Backward',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_MOVED,
-  onEnd: PLAYER_STOPED_MOVE,
+  gameEvent: GameEvent.playerMoved,
+  onEnd: GameEvent.playerStopedMove,
   data: () => ({
     direction: DIRECTION_BACK,
   }),
@@ -97,8 +86,8 @@ export const playerMoveLeftEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Left',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_MOVED,
-  onEnd: PLAYER_STOPED_MOVE,
+  gameEvent: GameEvent.playerMoved,
+  onEnd: GameEvent.playerStopedMove,
   data: () => ({
     direction: DIRECTION_LEFT,
   }),
@@ -109,8 +98,8 @@ export const playerMoveRightEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Right',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_MOVED,
-  onEnd: PLAYER_STOPED_MOVE,
+  gameEvent: GameEvent.playerMoved,
+  onEnd: GameEvent.playerStopedMove,
   data: () => ({
     direction: DIRECTION_RIGHT,
   }),
@@ -121,8 +110,8 @@ export const playerJumpEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Jump',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_JUMPED,
-  onEnd: PLAYER_STOPED_JUMP,
+  gameEvent: GameEvent.playerJumped,
+  onEnd: GameEvent.playerStopedJump,
 };
 
 export const playerRunEvent = {
@@ -130,14 +119,14 @@ export const playerRunEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Run',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_RUN,
-  onEnd: PLAYER_STOPED_RUN,
+  gameEvent: GameEvent.playerRun,
+  onEnd: GameEvent.playerStopedRun,
 };
 
 export const cameraLockEvent = {
   action: CAMERA_LOCK_EVENT,
   type: INPUT_TYPE_ACTION,
-  gameEvent: CAMERA_LOCKED,
+  gameEvent: GameEvent.cameraLocked,
 };
 
 export const toggleMenuEvent = {
@@ -145,7 +134,7 @@ export const toggleMenuEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
-  gameEvent: MENU_TOGGLED,
+  gameEvent: GameEvent.menuToggled,
 };
 
 export const toggleInventoryEvent = {
@@ -153,7 +142,7 @@ export const toggleInventoryEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
-  gameEvent: INVENTORY_TOGGLED,
+  gameEvent: GameEvent.inventoryToggled,
 };
 
 export const selectNextItemEvent = {
@@ -179,8 +168,8 @@ export const playerAttackEvent = {
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Attack / Destroy block',
   type: INPUT_TYPE_STATE,
-  gameEvent: PLAYER_ATTACKED,
-  onEnd: PLAYER_STOPED_ATTACK,
+  gameEvent: GameEvent.playerAttacked,
+  onEnd: GameEvent.playerStopedAttack,
 };
 
 export const playerPutBlockEvent = {
@@ -188,7 +177,7 @@ export const playerPutBlockEvent = {
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Put Block',
   type: INPUT_TYPE_ACTION,
-  gameEvent: PLAYER_START_PUT_BLOCK,
+  gameEvent: GameEvent.playerTriedPutBlock,
 };
 
 export const keySetEvent = {

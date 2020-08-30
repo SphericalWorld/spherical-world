@@ -3,22 +3,16 @@ import type Terrain from '../Terrain';
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blockInfo';
 import {
-  PLAYER_MOVED,
-  PLAYER_STOPED_MOVE,
   DIRECTION_FORWARD,
   DIRECTION_BACK,
   DIRECTION_LEFT,
   DIRECTION_RIGHT,
-  PLAYER_RUN,
-  PLAYER_STOPED_RUN,
-  PLAYER_JUMPED,
-  PLAYER_STOPED_JUMP,
 } from '../../player/events';
 import type { System } from '../../../common/ecs/System';
-import { World } from '../../../common/ecs';
 import Transform from '../../components/Transform';
 import Velocity from '../../components/Velocity';
 import UserControlled from '../../components/UserControlled';
+import { GameEvent, WorldPhysicsThread } from '../../Events';
 
 const getAngle = (x: number, z: number): number => Math.atan2(-z, x);
 
@@ -41,20 +35,22 @@ const setMove = (userControls: UserControlled, direction, value: boolean): UserC
   return userControls;
 };
 
-export default (world: World, terrain: Terrain): System => {
+export default (world: WorldPhysicsThread, terrain: Terrain): System => {
   const components = world.createSelector([Transform, Velocity, UserControlled]);
   const moveEvents = world.events
-    .filter((el) => el.type === PLAYER_MOVED || el.type === PLAYER_STOPED_MOVE)
+    .filter((e) => (e.type === GameEvent.playerMoved || e.type === GameEvent.playerStopedMove) && e)
     .subscribeQueue();
 
   const jumpEvents = world.events
-    .filter((el) => el.type === PLAYER_JUMPED || el.type === PLAYER_STOPED_JUMP)
-    .map((el) => el.type === PLAYER_JUMPED)
+    .filter(
+      (e) => (e.type === GameEvent.playerJumped || e.type === GameEvent.playerStopedJump) && e,
+    )
+    .map((el) => el.type === GameEvent.playerJumped)
     .subscribeQueue();
 
   const runEvents = world.events
-    .filter((el) => el.type === PLAYER_RUN || el.type === PLAYER_STOPED_RUN)
-    .map((el) => el.type === PLAYER_RUN)
+    .filter((e) => (e.type === GameEvent.playerRun || e.type === GameEvent.playerStopedRun) && e)
+    .map((el) => el.type === GameEvent.playerRun)
     .subscribeQueue();
 
   const rotation = quat.create();
@@ -71,7 +67,7 @@ export default (world: World, terrain: Terrain): System => {
 
     moveEvents.events.reduce(
       (controls, { type, payload: { direction } }) =>
-        setMove(controls, direction, type === PLAYER_MOVED),
+        setMove(controls, direction, type === GameEvent.playerMoved),
       userControls,
     );
     runEvents.events.reduce((controls, isRunning) => {

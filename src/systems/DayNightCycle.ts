@@ -1,14 +1,14 @@
 import { vec3 } from 'gl-matrix';
-import type { World } from '../../common/ecs/World';
 import type { Time } from '../Time/Time';
 import type { System } from '../../common/ecs/System';
 import { Transform, Skybox } from '../components';
+import { WorldMainThread, GameEvent } from '../Events';
 
-export default (world: World, time: Time): System => {
+export default (world: WorldMainThread, time: Time): System => {
   const skyboxes = world.createSelector([Transform, Skybox]);
   world.events
-    .filter((e) => e.type === 'SET_DAY_TIME')
-    .subscribe(({ type, payload }) => {
+    .filter((e) => e.type === GameEvent.setDayTime && e)
+    .subscribe(({ payload }) => {
       time.setHoursMinutes(payload);
     });
 

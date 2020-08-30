@@ -2,14 +2,13 @@ import { vec3 } from 'gl-matrix';
 import type Network from '../network';
 import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../common/ecs/System';
-import type { World } from '../../common/ecs';
 import Camera from '../components/Camera';
 import Transform from '../components/Transform';
-import { CHUNK_LOADED } from '../Terrain/terrainConstants';
 import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
 import { ServerToClientMessage } from '../../common/protocol';
+import { WorldMainThread, GameEvent } from '../Events';
 
-const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
+const onChunkLoaded = (world: WorldMainThread, network: Network, terrain: Terrain) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.loadChunk && e)
     .subscribe(({ binaryData, data }) => {
@@ -30,25 +29,28 @@ const onChunkLoaded = (ecs: World, network: Network, terrain: Terrain) =>
       }
       // console.log(data, viewNew)
       terrain.loadChunk(blocksData, lightData, flagsData, data);
-      ecs.createEventAndDispatch(CHUNK_LOADED, {
-        data: blocksData,
-        lightData,
-        flagsData,
-        x: data.x,
-        z: data.z,
+      world.dispatch({
+        type: GameEvent.chunkLoaded,
+        payload: {
+          data: blocksData,
+          lightData,
+          flagsData,
+          x: data.x,
+          z: data.z,
+        },
       });
     });
 
-const onChunkUnLoaded = (ecs: World, network: Network, terrain: Terrain) =>
+const onChunkUnLoaded = (world: WorldMainThread, network: Network, terrain: Terrain) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.unloadChunk && e)
     .subscribe(({ data }) => {
       terrain.unloadChunk(data.x, data.z);
     });
 
-const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
-  ecs.events
-    .filter((e) => e.type === 'CHUNK_VBO_LOADED')
+const onChunkVBOLoaded = (world: WorldMainThread, terrain: Terrain) =>
+  world.events
+    .filter((e) => e.type === GameEvent.chunkVBOLoaded && e)
     .map((e) => e.payload)
     .subscribe((e) => {
       const chunk = terrain.chunks.get(e.geoId);
@@ -57,12 +59,12 @@ const onChunkVBOLoaded = (ecs: World, terrain: Terrain) =>
       }
     });
 
-export default (ecs: World, network: Network, terrain: Terrain): System => {
-  onChunkLoaded(ecs, network, terrain);
-  onChunkUnLoaded(ecs, network, terrain);
+export default (world: WorldMainThread, network: Network, terrain: Terrain): System => {
+  onChunkLoaded(world, network, terrain);
+  onChunkUnLoaded(world, network, terrain);
 
-  onChunkVBOLoaded(ecs, terrain);
-  const player = ecs.createSelector([Transform, Camera]);
+  onChunkVBOLoaded(world, terrain);
+  const player = world.createSelector([Transform, Camera]);
 
   const oldPosition: vec3 = vec3.create();
 

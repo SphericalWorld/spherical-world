@@ -1,7 +1,7 @@
 import type { Material } from './Material';
 import { gl } from '../glEngine';
-import Texture from '../Texture/Texture';
-import { GlShaderProgram } from '../glShader';
+import type Texture from '../Texture/Texture';
+import type { GlShaderProgram } from '../glShader';
 
 export const BLENDING_OPAQUE: 0 = 0;
 export const BLENDING_TRANSPARENT: 1 = 1;

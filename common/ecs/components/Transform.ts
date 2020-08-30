@@ -2,7 +2,7 @@ import { vec3, quat } from 'gl-matrix';
 import type { Component } from '../Component';
 import type { Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
-import { Networkable } from '../../Networkable';
+import type { Networkable } from '../../Networkable';
 import type { MemoryManager } from '../MemoryManager';
 
 const ZERO_VECTOR = vec3.create();

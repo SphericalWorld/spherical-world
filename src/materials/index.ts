@@ -11,8 +11,12 @@ import terrainOverlayProvider from './TerrainOverlay';
 import terrainAnimatedProvider from './TerrainAnimated';
 import terrainProvider from './Terrain';
 import blocksDropableProvider from './BlocksDroppable';
+import type { Material } from '../engine/Material';
 
-const materialsProvider = (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary) => {
+const materialsProvider = (
+  textureLibrary: TextureLibrary,
+  shaderLibrary: ShaderLibrary,
+): ReadonlyArray<Material> => {
   const terrainDiffuse = terrainDiffuseProvider(textureLibrary, shaderLibrary);
   const terrainOverlay = terrainOverlayProvider(textureLibrary, shaderLibrary);
   const terrainAnimated = terrainAnimatedProvider(textureLibrary, shaderLibrary);

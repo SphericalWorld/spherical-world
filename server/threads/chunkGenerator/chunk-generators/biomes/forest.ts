@@ -1,5 +1,5 @@
-import { Biome } from '../biome';
-import { ChunkGenerator, BlockPositionData } from '../../types';
+import type { Biome } from '../biome';
+import type { ChunkGenerator, BlockPositionData } from '../../types';
 import { AIR, TALL_GRASS, FLOWER_YELLOW, FLOWER_RED, TORCH } from '../../../../../common/blocks';
 import type { Chunk } from '../../Chunk';
 

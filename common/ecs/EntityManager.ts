@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import type { Entity } from './Entity';
 import type { World } from './World';
-import { Component } from './Component';
+import type { Component } from './Component';
 
 type ComponentLike = { componentName: string; new (...params: any[]): any };
 type Obj<T extends ComponentLike> = {
@@ -32,7 +32,7 @@ export type transform = (<A extends ComponentLike>(
     excludeComponents?: ReadonlyArray<ComponentLike>,
   ) => ReadonlyArray<Merge<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>, Obj<D>>>);
 
-export type GameObject<T> = ReturnType<transform>;
+export type GameObject<T> = ReturnType<transform>[number];
 
 export class EntitySelector<T> {
   includeComponents: T;

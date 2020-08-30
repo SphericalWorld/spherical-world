@@ -1,14 +1,6 @@
 import { readFile, outputFile } from 'fs-extra';
 import type ChunkMap from './ChunkMap';
-import type { Terrain } from './Terrain';
-// import type { ChunkGenerator } from '../threads/chunkGenerator/ChunkGenerator';
-import { BLOCKS_IN_CHUNK } from '../../common/constants/chunk';
-import { profileChunkGeneration } from '../../common/profileUtils';
-// import { generate, generateObjects } from '../threads/chunkGenerator/ChunkGenerator';
-import { getGeoId } from '../../common/chunk';
 import { ChunkBase } from './ChunkBase';
-
-const profileChunkGenerationFoliage = profileChunkGeneration('Foliage generation');
 
 const getChunkNear = (chunk: Chunk, x: number, y: number, z: number): Chunk => {
   let chunkTo = chunk;
@@ -31,11 +23,6 @@ type ChunkMetaData = {
 };
 
 class Chunk extends ChunkBase {
-  terrain: Terrain;
-  fileName: string;
-  metaFileName: string;
-  filePath: string;
-  metaPath: string;
   chunkGenerator: ChunkGenerator;
   changesCount = 0;
   terrainGenerated = false;
@@ -47,19 +34,6 @@ class Chunk extends ChunkBase {
   heightMap: ChunkMap<number>;
   rainfall: ChunkMap<number>;
   temperature: ChunkMap<number>;
-
-  constructor(terrain: Terrain, x: number, z: number) {
-    super(terrain, x, z);
-    // this.terrain = terrain;
-    // this.x = x;
-    // this.z = z;
-    // this.chunkGenerator = terrain.chunkGenerator;
-    // this.geoId = getGeoId(x, z);
-    // this.fileName = `${this.geoId}.bin`;
-    // this.metaFileName = `${this.geoId}.meta.json`;
-    // this.filePath = `./map/${this.terrain.locationName}/${this.fileName}`;
-    // this.metaPath = `./map/${this.terrain.locationName}/${this.metaFileName}`;
-  }
 
   async load(): Promise<Chunk> {
     this.data = await readFile(this.filePath);

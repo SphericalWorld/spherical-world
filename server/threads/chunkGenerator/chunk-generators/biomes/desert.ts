@@ -1,5 +1,5 @@
-import { Biome } from '../biome';
-import { ChunkGenerator, BlockPositionData } from '../../types';
+import type { Biome } from '../biome';
+import type { ChunkGenerator, BlockPositionData } from '../../types';
 import { DEAD_BUSH, AIR } from '../../../../../common/blocks';
 
 const generateWithSurroundingChunks = (

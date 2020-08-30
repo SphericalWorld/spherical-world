@@ -1,7 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import type { Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
-import { MemoryManager } from '../../common/ecs/MemoryManager';
+import type { MemoryManager } from '../../common/ecs/MemoryManager';
 
 export default class Velocity implements Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];

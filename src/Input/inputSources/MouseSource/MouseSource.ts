@@ -1,7 +1,7 @@
 import type { InputSource } from '../../InputSource';
 import RangeInputEvent from '../../RangeInputEvent';
 import StateInputEvent, { STATE_UP, STATE_DOWN } from '../../StateInputEvent';
-import InputEvent from '../../InputEvent';
+import type InputEvent from '../../InputEvent';
 import {
   MOUSE_MOVE,
   MOUSE_WHEEL_UP,

@@ -4,7 +4,7 @@ import { vec3, quat } from 'gl-matrix';
 import type { Component } from '../../common/ecs/Component';
 import type { Entity } from '../../common/ecs/Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../src/Thread/threadConstants';
-import { Networkable } from '../../common/Networkable';
+import type { Networkable } from '../../common/Networkable';
 import type { MemoryManager } from '../../common/ecs/MemoryManager';
 
 const ZERO_VECTOR = vec3.create();

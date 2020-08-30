@@ -1,4 +1,4 @@
-import { Component } from './Component';
+import type { Component } from './Component';
 
 export const BYTE = 1;
 export const UINT16 = 2;

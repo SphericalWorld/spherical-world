@@ -1,4 +1,4 @@
-import * as events from './eventTypes';
+import type * as events from './eventTypes';
 
 export * from './eventTypes';
 export type EventTypes = ValueOf<typeof events>;

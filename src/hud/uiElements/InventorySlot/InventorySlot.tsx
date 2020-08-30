@@ -45,10 +45,11 @@ const dropOptions = {
 
 const transitionOptions = {
   duration: 200,
-  onChange: (oldVal, newVal) => (oldVal < newVal ? animateIncrease : animateDecrease),
+  onChange: (oldVal: number, newVal: number) =>
+    oldVal < newVal ? animateIncrease : animateDecrease,
 };
 
-const Tooltip = (item) => <TooltipItem item={item} />;
+const Tooltip = (item: Slot) => <TooltipItem item={item} />;
 
 type InventorySlotFilledProps = Readonly<{
   slot: Slot;

@@ -1,12 +1,12 @@
 import { quat } from 'gl-matrix';
 import type { System } from '../../common/ecs/System';
-import type { World } from '../../common/ecs';
 import Transform from '../components/Transform';
 import Item from '../components/Item';
+import type { WorldMainThread } from '../Events';
 
 const ROTATION_SPEED = 1;
 
-export default (world: World): System => {
+export default (world: WorldMainThread): System => {
   const dropableItems = world.createSelector([Transform, Item]);
 
   return (delta: number) => {

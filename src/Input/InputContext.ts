@@ -1,16 +1,16 @@
-import type { GAME_EVENT_TYPE, GameEvent } from '../../common/GameEvent/GameEvent';
+import type { GameEvent1 } from '../../common/GameEvent/GameEvent';
 import type { INPUT_TYPE, EVENT_CATEGORY } from './eventTypes';
 import type { InputContexts } from './inputContexts';
 import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTypes';
-import InputEvent from './InputEvent';
+import type InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 
 type MappedEvent = Readonly<{
   action: string;
   type: INPUT_TYPE;
-  gameEvent: GAME_EVENT_TYPE;
+  gameEvent: string;
   data?: (e: InputEvent) => unknown;
-  onEnd?: GAME_EVENT_TYPE;
+  onEnd?: string;
   caption?: string;
   category?: EVENT_CATEGORY;
   dispatchable?: boolean;
@@ -50,7 +50,7 @@ export const deactivate = (context: InputContext) => ({
 export const getMappedInputEvent = (
   events: Map<string, MappedEvent>,
   inputEvent: InputEvent,
-): GameEvent | null => {
+): GameEvent1 | null => {
   const event = events.get(inputEvent.name);
   if (!event) return null;
   const { type, data, gameEvent, onEnd, dispatchable } = event;

@@ -1,6 +1,6 @@
-import { mat4, vec3 } from 'gl-matrix';
+import type { mat4, vec3 } from 'gl-matrix';
 import type { Component } from '../Component';
-import { Networkable } from '../../Networkable';
+import type { Networkable } from '../../Networkable';
 
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import type { MemoryManager } from '../MemoryManager';

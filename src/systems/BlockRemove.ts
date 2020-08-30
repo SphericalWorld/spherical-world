@@ -1,25 +1,21 @@
 import { vec3 } from 'gl-matrix';
-import type { World } from '../../common/ecs/World';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from '../../common/ecs/System';
 import { Transform, BlockRemover, Player, Visual, Raytracer, Joint } from '../components';
-import {
-  PLAYER_ATTACKED,
-  PLAYER_STOPED_ATTACK,
-  PLAYER_START_PUT_BLOCK,
-  PLAYER_PUT_BLOCK,
-} from '../player/events';
+import { PLAYER_PUT_BLOCK } from '../player/events';
 import { getGeoId } from '../../common/chunk';
 import { ClientToServerMessage } from '../../common/protocol';
+import { WorldMainThread, GameEvent } from '../Events';
+import type Network from '../network';
 // import { Sound } from '../Sound';
 
 // import woodHit from '../sounds/wood_hit.wav';
 
 // const blockRemoveSound = new Sound({ src: woodHit });
 
-const getPutBlockEvents = (world: World, picker) =>
+const getPutBlockEvents = (world: WorldMainThread, picker) =>
   world.events
-    .filter((e) => e.type === PLAYER_START_PUT_BLOCK)
+    .filter((e) => e.type === GameEvent.playerTriedPutBlock && e)
     .subscribe(() => {
       const { emptyBlock, face, hasEmptyBlock } = picker[0].raytracer;
       if (hasEmptyBlock) {
@@ -50,13 +46,15 @@ const getPutBlockEvents = (world: World, picker) =>
       }
     });
 
-const getPlayerAttackEvents = (world: World) =>
+const getPlayerAttackEvents = (world: WorldMainThread) =>
   world.events
-    .filter((e) => e.type === PLAYER_ATTACKED || e.type === PLAYER_STOPED_ATTACK)
-    .map((e) => e.type === PLAYER_ATTACKED)
+    .filter(
+      (e) => (e.type === GameEvent.playerAttacked || e.type === GameEvent.playerStopedAttack) && e,
+    )
+    .map((e) => e.type === GameEvent.playerAttacked)
     .subscribeQueue();
 
-export default (world: World): System => {
+export default (world: WorldMainThread, network: Network): System => {
   const removers = world.createSelector([Transform, BlockRemover, Visual, Joint]);
   const picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
@@ -81,11 +79,10 @@ export default (world: World): System => {
           blockRemover.removing = possibleRemoving;
         });
         if (removing !== blockRemover.removing) {
-          world.createEventAndDispatch(
-            ClientToServerMessage.playerStartedDestroyingBlock,
-            block.position,
-            true,
-          );
+          network.emit({
+            type: ClientToServerMessage.playerStartedDestroyingBlock,
+            data: block.position,
+          });
         }
       }
       if (
@@ -98,15 +95,26 @@ export default (world: World): System => {
         blockRemover.removedPart += (1 / blocksInfo[block.block].baseRemoveTime) * delta;
         if (blockRemover.removedPart >= 1) {
           blockRemover.removedPart = 0;
-          world.createEventAndDispatch(
-            ClientToServerMessage.playerDestroyedBlock,
-            {
+          world.dispatch({
+            type: GameEvent.playerDestroyedBlock,
+            payload: {
               geoId: getGeoId(...block.coordinates),
               positionInChunk: Array.from(block.positionInChunk),
               position: Array.from(block.position),
             },
-            true,
-          );
+          });
+          network.emit({
+            type: ClientToServerMessage.playerDestroyedBlock,
+            data: {
+              geoId: getGeoId(...block.coordinates),
+              positionInChunk: [
+                block.positionInChunk[0],
+                block.positionInChunk[1],
+                block.positionInChunk[2],
+              ],
+              position: [block.position[0], block.position[1], block.position[2]],
+            },
+          });
         }
       } else {
         visual.enabled = false;

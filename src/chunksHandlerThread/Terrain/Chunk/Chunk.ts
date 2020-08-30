@@ -21,7 +21,6 @@ import {
   CHUNK_STATUS_NEED_LOAD_ALL,
   CHUNK_STATUS_NEED_LOAD_LIGHT,
   CHUNK_STATUS_NEED_LOAD_VBO,
-  CHUNK_VBO_LOADED,
 } from '../../../Terrain/Chunk/chunkConstants';
 import {
   calcRecursionRed,
@@ -33,6 +32,7 @@ import {
   calcRecursionBlueRemove,
   calcRecursionGlobalRemove,
 } from './chunkLigting';
+import { GameEvent } from '../../../Events';
 
 type VectorArray<T> = {
   data: T;
@@ -610,7 +610,7 @@ export default class Chunk extends ChunkBase {
         payload: {
           events: [
             {
-              type: CHUNK_VBO_LOADED,
+              type: GameEvent.chunkVBOLoaded,
               payload: {
                 geoId: this.geoId,
                 subchunk: subchunkIndex,

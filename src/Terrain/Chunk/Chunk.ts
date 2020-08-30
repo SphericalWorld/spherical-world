@@ -25,7 +25,8 @@ type DataBuffers = {
 type GLBuffers = {
   vertexBuffer: WebGLBuffer;
   indexBuffer: WebGLBuffer;
-  vao: null;
+  vao: WebGLVertexArrayObject | null;
+  hasData: boolean;
 };
 
 type BufferData = Readonly<{
@@ -113,8 +114,8 @@ export default class Chunk extends ChunkBase {
       setTimeout(() => {
         const buffersData: GLBuffers = {
           vertexBuffer: null,
-          indexBuffer: null,
-          vao: null,
+          indexBuffer: gl.createBuffer(),
+          vao: gl.createVertexArray(),
           hasData,
           query: gl.createQuery(),
           queryInProgress: false,
@@ -122,10 +123,8 @@ export default class Chunk extends ChunkBase {
         };
         this.buffers[subchunk] = buffersData;
         buffersData.buffersInfo = buffersInfo;
-        buffersData.vao = gl.createVertexArray();
         gl.bindVertexArray(buffersData.vao);
 
-        buffersData.indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffersData.indexBuffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, buffers.indexBuffer, gl.STATIC_DRAW);
 

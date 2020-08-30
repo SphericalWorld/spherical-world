@@ -1,7 +1,7 @@
 import type { Component } from '../../common/ecs/Component';
 import type GlObject from '../engine/glObject';
 import { THREAD_MAIN } from '../Thread/threadConstants';
-import { Sound } from '../Sound';
+import type { Sound } from '../Sound';
 
 export default class Audio implements Component {
   static threads = [THREAD_MAIN];

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import type { World } from '../../common/ecs';
+import { WorldMainThread, GameEvent } from '../Events';
 
 type HudAPI = {
   runCommand: (command: string) => void;
@@ -26,11 +26,11 @@ const getComand = (input: string) => {
   return [data[1], ...paramsArray];
 };
 
-export const initHudAPI = (world: World): void => {
+export const initHudAPI = (world: WorldMainThread): void => {
   api.runCommand = (input: string) => {
     const [command, ...params] = getComand(input);
     if (command === 'setDayTime') {
-      world.dispatch({ type: 'SET_DAY_TIME', payload: params[0] });
+      world.dispatch({ type: GameEvent.setDayTime, payload: params[0] });
     }
   };
 };

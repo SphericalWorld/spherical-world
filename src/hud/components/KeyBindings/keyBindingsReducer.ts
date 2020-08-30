@@ -43,7 +43,7 @@ const initialState: KeyBindingsState = {
   editing: false,
 };
 
-const setKey = (state, payload) => ({
+const setKey = (state: KeyBindingsState, payload) => ({
   ...state,
   keyCategories: state.keyCategories.map((category) => ({
     ...category,
@@ -58,7 +58,7 @@ const setKey = (state, payload) => ({
   })),
 });
 
-const keyEditingStarted = (state, payload) => ({
+const keyEditingStarted = (state: KeyBindingsState, payload) => ({
   ...state,
   status: 'press key to bind to command',
   editing: true,
@@ -66,14 +66,14 @@ const keyEditingStarted = (state, payload) => ({
   keyPosition: payload.keyPosition,
 });
 
-const keyEditingStoped = (state, payload) => ({
+const keyEditingStoped = (state: KeyBindingsState, payload) => ({
   ...state,
   status: '',
   editing: false,
   key: payload,
 });
 
-const keySelectButton = (state, payload) =>
+const keySelectButton = (state: KeyBindingsState, payload) =>
   setKey(state, {
     action: state.action,
     ...(state.keyPosition === 'first' ? { firstKey: payload } : {}),

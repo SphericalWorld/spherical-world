@@ -1,9 +1,9 @@
-import type { GameEvent } from '../../common/GameEvent/GameEvent';
+import type { GameEvent1 } from '../../common/GameEvent/GameEvent';
 import type { InputSource } from './InputSource';
 import type { InputContext } from './InputContext';
 import type { InputContexts } from './inputContexts';
 import type { EventTypes } from '../../common/constants/input/eventTypes';
-import InputEvent from './InputEvent';
+import type InputEvent from './InputEvent';
 import { activate, deactivate, getMappedInputEvent, setKey as setContextKey } from './InputContext';
 import * as events from './events';
 
@@ -13,7 +13,7 @@ const inputProvider = (inputContexts: InputContext[]) => {
     contexts: InputContext[] = [];
     activeContexts: InputContext[];
     inputStates: Map<string, InputEvent> = new Map();
-    dispatchHandler: (event: GameEvent) => unknown;
+    dispatchHandler: (event: GameEvent1) => unknown;
 
     constructor() {
       this.contexts = inputContexts;
@@ -53,11 +53,11 @@ const inputProvider = (inputContexts: InputContext[]) => {
       }
     }
 
-    dispatch = (event: GameEvent): void => {
+    dispatch = (event: GameEvent1): void => {
       this.dispatchHandler(event);
     };
 
-    onDispatch(dispatchHandler: (event: GameEvent) => unknown) {
+    onDispatch(dispatchHandler: (event: GameEvent1) => unknown) {
       this.dispatchHandler = dispatchHandler;
     }
   }

@@ -39,7 +39,7 @@ const engineProvider = (network: Network, ecs: World) => {
         });
 
       network.events
-        .filter((e) => e.type === ServerToClientMessage.gameStart)
+        .filter((e) => e.type === ServerToClientMessage.gameStart && e)
         .subscribe(() => {
           if (document.hidden) {
             this.gameLoopWasStopped = true;

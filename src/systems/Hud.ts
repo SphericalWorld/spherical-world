@@ -1,9 +1,7 @@
-import type { World } from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import type { Input } from '../Input/Input';
 import type { Store } from '../store/store';
 import { Transform, UserControlled, Inventory } from '../components';
-import { MENU_TOGGLED, INVENTORY_TOGGLED } from '../hud/hudConstants';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
 import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
 import { connect } from '../util';
@@ -22,22 +20,29 @@ import { setKey } from '../Input/Input';
 import { throttle } from '../../common/utils';
 import { PLAYER_PUT_BLOCK } from '../player/events';
 import { ServerToClientMessage } from '../../common/protocol';
+import type { State } from '../reducers/rootReducer';
+import type Network from '../network';
+import { WorldMainThread, GameEvent } from '../Events';
 
 const mapState = ({
   keyBindings,
   hudData: {
     player: { inventory },
   },
-}) => ({
+}: State) => ({
   keyBindings,
   inventory,
 });
 
-const onMenuToggled = (events, toggleUIState) =>
-  events.filter((e) => e.type === MENU_TOGGLED).subscribe(() => toggleUIState(MAIN_MENU));
+const onMenuToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
+  world.events
+    .filter((e) => e.type === GameEvent.menuToggled && e)
+    .subscribe(() => toggleUIState(MAIN_MENU));
 
-const onInventoryToggled = (events, toggleUIState) =>
-  events.filter((e) => e.type === INVENTORY_TOGGLED).subscribe(() => toggleUIState(INVENTORY));
+const onInventoryToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
+  world.events
+    .filter((e) => e.type === GameEvent.inventoryToggled && e)
+    .subscribe(() => toggleUIState(INVENTORY));
 
 const onInventoryChanged = (events, store: Store) =>
   events
@@ -47,7 +52,7 @@ const onInventoryChanged = (events, store: Store) =>
 const onDispatchableEvent = (events, store: Store) =>
   events.filter((e) => e.dispatchable).subscribe((e) => store.dispatch(e));
 
-const onStateChanged = (input, player) => (
+const onStateChanged = (input: Input, player) => (
   { keyBindings: { editing }, inventory: inventoryOld },
   { keyBindings, inventory },
 ) => {
@@ -67,22 +72,22 @@ const onStateChanged = (input, player) => (
   }
 };
 
-const onPlayerAddItem = (events, store) =>
-  events
+const onPlayerAddItem = (network: Network, store: Store) =>
+  network.events
     .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
-    .subscribe(({ payload }) => {
-      store.dispatch(inventoryItemIncrease(payload.id));
+    .subscribe(({ data }) => {
+      store.dispatch(inventoryItemIncrease(data.id));
     });
 
-export default (ecs: World, store: Store, input: Input): System => {
-  const player = ecs.createSelector([Transform, UserControlled, Inventory]);
-  const toggleUIState = (...params) => store.dispatch(doToggleUIState(...params));
+export default (world: WorldMainThread, store: Store, input: Input, network: Network): System => {
+  const player = world.createSelector([Transform, UserControlled, Inventory]);
+  const toggleUIState = (stateName: string) => store.dispatch(doToggleUIState(stateName));
 
-  onMenuToggled(ecs.events, toggleUIState);
-  onInventoryToggled(ecs.events, toggleUIState);
-  onDispatchableEvent(ecs.events, store);
-  onInventoryChanged(ecs.events, store);
-  onPlayerAddItem(ecs.events, store);
+  onMenuToggled(world, toggleUIState);
+  onInventoryToggled(world, toggleUIState);
+  onDispatchableEvent(world.events, store);
+  onInventoryChanged(world.events, store);
+  onPlayerAddItem(network, store);
   connect(mapState, store)(onStateChanged(input, player));
   const syncData = throttle((data) => store.dispatch(doUpdateHudData(data)), 100);
   return () => {

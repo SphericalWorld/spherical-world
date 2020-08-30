@@ -1,5 +1,5 @@
 import type { Material } from './Material/Material';
-import Model from './Model';
+import type Model from './Model';
 
 type Options = Readonly<{
   model: Model;

@@ -20,7 +20,7 @@ export type Slot = {
 export type Inventory = {
   slots: Array<SlotID | null>;
   items: Record<SlotID, Slot>;
-  selectedItem?: SlotID;
+  selectedItem: SlotID | null;
 };
 
 export const createInventory = ({

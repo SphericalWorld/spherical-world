@@ -1,17 +1,17 @@
-import type { GameEvent } from '../../common/GameEvent/GameEvent';
 import EventObservable from '../../common/GameEvent/EventObservable';
-import { PLAYER_DESTROYED_BLOCK, PLAYER_PUT_BLOCK } from '../player/events';
+import { PLAYER_PUT_BLOCK } from '../player/events';
 import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';
 import Terrain from './Terrain';
 import Thread from '../Thread';
 import Chunk from './Terrain/Chunk';
+import { ChunkHandlerThreadEvents, GameEvent } from '../Events';
 
 // eslint-disable-next-line no-restricted-globals
 const thread = new Thread(THREAD_CHUNK_HANDLER, self);
 
 const terrain = new Terrain();
 
-const events: EventObservable<GameEvent> = new EventObservable();
+const events: EventObservable<ChunkHandlerThreadEvents> = new EventObservable();
 
 thread.events
   .filter((e) => e.type === 'UPDATE_COMPONENTS' && e.payload.events)
@@ -22,7 +22,7 @@ thread.events
   });
 
 events
-  .filter((e) => e.type === 'CHUNK_LOADED')
+  .filter((e) => e.type === GameEvent.chunkLoaded && e)
   .subscribe(({ payload: data }) => {
     const chunk = terrain.addChunk(
       new Chunk(data.data, data.lightData, data.flagsData, data.x, data.z),
@@ -33,7 +33,7 @@ events
 
 // TODO: combine place and remove
 events
-  .filter((e) => e.type === PLAYER_DESTROYED_BLOCK && e)
+  .filter((e) => e.type === GameEvent.playerDestroyedBlock && e)
   .map((e) => e.payload)
   .subscribe(({ geoId, positionInChunk: [x, y, z] }) => {
     const chunk = terrain.chunks.get(geoId);

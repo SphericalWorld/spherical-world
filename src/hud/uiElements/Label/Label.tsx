@@ -18,9 +18,7 @@ const sizes = {
 };
 
 const Label = ({ size = SIZE_SMALL, className = '', children }: Props): JSX.Element => (
-  <span type="label" className={`${label} ${sizes[size]} ${className}`}>
-    {children}
-  </span>
+  <span className={`${label} ${sizes[size]} ${className}`}>{children}</span>
 );
 
 export default Label;

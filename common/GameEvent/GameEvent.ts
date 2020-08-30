@@ -1,7 +1,4 @@
-import type { PLAYER_DESTROYED_BLOCK_TYPE } from '../../src/player/events';
 import type NetworkSync from '../ecs/components/NetworkSync';
-
-export type GAME_EVENT_TYPE = string;
 
 type SyncEvent = Readonly<{
   type: 'SYNC_GAME_DATA';
@@ -13,12 +10,11 @@ type SyncEvent = Readonly<{
   dispatchable: boolean;
 }>;
 
-export type GameEvent =
+export type GameEvent1 =
   | Readonly<{
       type: 'GAME_EVENT_TYPE';
       // +payload?: any;
       network?: boolean;
       dispatchable: boolean;
     }>
-  | PLAYER_DESTROYED_BLOCK_TYPE
   | SyncEvent;

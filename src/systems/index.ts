@@ -1,4 +1,3 @@
-import type { World } from '../../common/ecs/World';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { Time } from '../Time/Time';
@@ -14,9 +13,10 @@ import HudSystem from './Hud';
 import NetworkSystem from './Network';
 import DropableSystem from './Dropable';
 import ScriptingSystem from './ScriptingSystem';
+import type { WorldMainThread } from '../Events';
 
 export default (
-  world: World,
+  world: WorldMainThread,
   terrain: Terrain,
   network: Network,
   time: Time,
@@ -24,11 +24,11 @@ export default (
   store: Store,
 ): System[] => [
   TerrainSystem(world, network, terrain),
-  BlockRemoveSystem(world),
+  BlockRemoveSystem(world, network),
   DayNightCycleSystem(world, time),
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
-  HudSystem(world, store, input),
+  HudSystem(world, store, input, network),
   NetworkSystem(world, network, input, store),
   DropableSystem(world),
   ScriptingSystem(world),

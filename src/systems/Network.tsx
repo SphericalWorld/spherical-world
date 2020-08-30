@@ -1,4 +1,3 @@
-import type { World } from '../../common/ecs';
 import { React, render } from '../../common/ecs';
 import type { Input } from '../Input/Input';
 import type Network from '../network';
@@ -9,23 +8,24 @@ import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 import { blocksInfo } from '../blocks/blockInfo';
+import type { WorldMainThread } from '../Events';
 
-const onSyncGameData = (ecs: World) =>
-  ecs.events
-    .filter((e) => e.type === ServerToClientMessage.syncGameData)
-    .subscribe(({ payload: { newObjects, deletedObjects = [], components = [] } }) => {
+const onSyncGameData = (world: WorldMainThread, network: Network) =>
+  network.events
+    .filter((e) => e.type === ServerToClientMessage.syncGameData && e)
+    .subscribe(({ data: { newObjects, deletedObjects = [], components = [] } }) => {
       // console.log(newObjects, deletedObjects, components);
       for (const newObject of newObjects) {
-        const Constructor = ecs.constructors.get(newObject.networkSync.name);
+        const Constructor = world.constructors.get(newObject.networkSync.name);
         if (Constructor) {
-          render(() => <Constructor {...newObject} />, ecs);
+          render(() => <Constructor {...newObject} />, world);
         }
       }
       for (const deletedObject of deletedObjects) {
-        ecs.deleteEntity(deletedObject, false);
+        world.deleteEntity(deletedObject, false);
       }
       // console.log(components);
-      ecs.updateComponents(components);
+      world.updateComponents(components);
     });
 
 const onLoadControlSettings = (network: Network, input: Input, store: Store) =>
@@ -46,19 +46,20 @@ const onPlayerAddItem = (network: Network, player) =>
       player[0].inventory.data.items[data.id] = data;
     });
 
-export default (ecs: World, network: Network, input: Input, store: Store): System => {
-  const player = ecs.createSelector([Transform, Camera, Inventory]);
-  ecs.events
+export default (world: WorldMainThread, network: Network, input: Input, store: Store): System => {
+  const player = world.createSelector([Transform, Camera, Inventory]);
+  world.events
     .filter((el) => el.network === true)
     .subscribe(({ type, payload }) => {
       network.emit({ type, data: payload });
     });
 
   network.events.subscribe(({ type, data }) => {
-    ecs.dispatch({ type, payload: data });
+    // console.log(type, data);
+    // world.dispatch({ type, payload: data });
   });
 
-  onSyncGameData(ecs);
+  onSyncGameData(world, network);
   onLoadControlSettings(network, input, store);
   onPlayerAddItem(network, player);
 

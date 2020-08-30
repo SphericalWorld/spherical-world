@@ -4,11 +4,11 @@ export const Empty = Symbol('Empty');
 
 export default class EventObservable<T> {
   subscriptions: EventObservable<any>[] = [];
-  observer: (T) => unknown;
-  pipeline: Function[] = [];
+  observer: (data: T) => unknown;
+  pipeline: ((data: T) => T | typeof Empty)[] = [];
 
   subscribeQueue(): EventQueue<T> {
-    const queue = new EventQueue();
+    const queue = new EventQueue<T>();
     this.subscribe((event) => queue.push(event));
     return queue;
   }
@@ -20,7 +20,7 @@ export default class EventObservable<T> {
 
   emit(event: T): void {
     for (let i = 0; i < this.subscriptions.length; i += 1) {
-      let mappedEvent = event;
+      let mappedEvent: T | typeof Empty = event;
       for (let j = 0; j < this.subscriptions[i].pipeline.length; j += 1) {
         mappedEvent = this.subscriptions[i].pipeline[j](mappedEvent);
         if (mappedEvent === Empty) {
@@ -34,13 +34,13 @@ export default class EventObservable<T> {
   }
 
   filter<U extends T>(predicate: (value: T) => U | false): EventObservable<U> {
-    const filtered = new EventObservable();
+    const filtered = new EventObservable<U>();
     filtered.subscriptions = this.subscriptions;
     filtered.pipeline = [...this.pipeline, (event: T) => (predicate(event) ? event : Empty)];
     return filtered;
   }
 
-  map<U>(mapper: (T) => U): EventObservable<U> {
+  map<U>(mapper: (value: T) => U): EventObservable<U> {
     const mapped: EventObservable<U> = new EventObservable();
     mapped.subscriptions = this.subscriptions;
     mapped.pipeline = [...this.pipeline, (event: T) => mapper(event)];

@@ -6,7 +6,7 @@ import { getLight } from './components/ModelComponent';
 import { torch } from '../../common/blocks/blocksInfo';
 
 const getRotatedTourches = () => {
-  const torches = [[], [], [], [], [], []];
+  const torches: Array<Array<number>> = [[], [], [], [], [], []];
   const vec = vec3.create();
   const vecTmp = vec3.create();
 

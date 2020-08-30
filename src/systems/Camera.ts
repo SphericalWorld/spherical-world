@@ -1,5 +1,4 @@
 import { mat4, quat, vec3, vec4 } from 'gl-matrix';
-import type { World } from '../../common/ecs';
 import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
@@ -7,8 +6,8 @@ import { gl } from '../engine/glEngine';
 import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
-import { CAMERA_LOCKED, CAMERA_UNLOCKED, CAMERA_MOVED } from '../player/events';
 import { unproject } from '../../common/utils/vector';
+import { GameEvent, WorldMainThread } from '../Events';
 
 const resizeViewport = (viewport: Viewport): void => {
   const width = gl.canvas.clientWidth;
@@ -58,22 +57,22 @@ const getWorldPosition = (distance: number) => (
 const getWorldPositionNear = getWorldPosition(0);
 const getWorldPositionFar = getWorldPosition(1);
 
-const getCameraMovements = (world: World) =>
-  world.events.filter((el) => el.type === CAMERA_MOVED).subscribeQueue();
+const getCameraMovements = (world: WorldMainThread) =>
+  world.events.filter((e) => e.type === GameEvent.cameraMoved && e).subscribeQueue();
 
-const sumCameraMovements = ([x, y]: [number, number], { payload }) => [
+const sumCameraMovements = ([x, y]: [number, number], { payload }): [number, number] => [
   x + payload.x,
   y + payload.y,
 ];
 
-export default (world: World, input: Input): System => {
+export default (world: WorldMainThread, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);
   const bodyElement = document.getElementsByTagName('body')[0];
 
   const cameraMovements = getCameraMovements(world);
 
   world.events
-    .filter((el) => el.type === CAMERA_LOCKED)
+    .filter((e) => e.type === GameEvent.cameraLocked && e)
     .subscribe(() => {
       input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
       input.activateContext(GAMEPLAY_MAIN_CONTEXT);
@@ -81,7 +80,7 @@ export default (world: World, input: Input): System => {
     });
 
   world.events
-    .filter((el) => el.type === CAMERA_UNLOCKED)
+    .filter((e) => e.type === GameEvent.cameraUnlocked && e)
     .subscribe(() => {
       input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
       input.activateContext(GAMEPLAY_MENU_CONTEXT);

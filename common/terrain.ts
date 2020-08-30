@@ -1,5 +1,5 @@
-import type { vec3, vec4 } from 'gl-matrix';
-import type { Block } from './block';
+import type { vec4 } from 'gl-matrix';
+import type { Block } from './blocks';
 import { toChunkPosition, toPositionInChunk, getIndex } from './chunk';
 
 const RED_LIGHT_BIT_SHIFT: 12 = 12;

@@ -1,4 +1,4 @@
-import { GlShaderProgram } from './glShader';
+import type { GlShaderProgram } from './glShader';
 
 export class ShaderLibrary {
   shaders: Map<string, GlShaderProgram> = new Map();

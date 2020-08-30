@@ -1,5 +1,5 @@
 import { SimpleMaterial, BLENDING_TRANSPARENT } from '../engine/Material/SimpleMaterial';
-import TextureLibrary from '../engine/Texture/TextureLibrary';
+import type TextureLibrary from '../engine/Texture/TextureLibrary';
 import type { ShaderLibrary } from '../engine/ShaderLibrary';
 
 export default (textureLibrary: TextureLibrary, shaderLibrary: ShaderLibrary): SimpleMaterial =>

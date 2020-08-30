@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 
 type Props<T> = Readonly<{
-  onChange: (T, T) => string;
+  onChange: (oldValue: T, newValue: T) => string;
   defaultClassName?: string;
   duration: number;
 }>;
 
-const useCSSTransition = <T extends any>(
+const useCSSTransition = <T extends unknown>(
   value: T,
   { onChange, defaultClassName, duration }: Props<T>,
-): JSX.Element => {
+): { className: string } => {
   const [state, setState] = useState(value);
   const [className, setClassName] = useState(defaultClassName);
   const [timeoutId, setTimeoutId] = useState();

@@ -1,4 +1,3 @@
-import type { GameEvent, GAME_EVENT_TYPE } from '../GameEvent/GameEvent';
 import type { Thread, THREAD_ID } from '../Thread';
 import type { Entity } from './Entity';
 import type { System } from './System';
@@ -8,7 +7,6 @@ import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';
 import { THREAD_PHYSICS, THREAD_MAIN } from '../../src/Thread/threadConstants';
-import { ServerToClientMessage } from '../protocol';
 
 type SerializedComponent = {
   type: string;
@@ -27,7 +25,7 @@ type ComponentStatics = Readonly<{
 
 type ObjectConstructor = (any) => Component;
 
-export class World {
+export class World<Events = unknown> {
   constructors: Map<string, ObjectConstructor> = new Map();
   components: Map<string, Map<string, Component>> = new Map();
   entities: Set<Entity> = new Set();
@@ -36,10 +34,10 @@ export class World {
   threadsMap: Map<number, Thread> = new Map();
   componentTypes: Map<string, Class<Component> & ComponentStatics> = new Map();
   selectors: EntitySelector<ReadonlyArray<typeof Component>>[] = [];
-  eventsForThreads: GameEvent[] = [];
-  events: EventObservable<GameEvent> = new EventObservable();
+  eventsForThreads: Events[] = [];
+  events: EventObservable<Events> = new EventObservable();
   networkQueue = [];
-  listeners: Array<(event: GameEvent) => void> = [];
+  listeners: Array<(event: Events) => void> = [];
   thread: THREAD_ID;
   lastAddedObjects = [];
   lastDeletedObjects: string[] = [];
@@ -272,15 +270,12 @@ export class World {
     }
   }
 
-  dispatch(gameEvent: GameEvent): void {
-    // console.log(gameEvent);
-    if (gameEvent.type !== ServerToClientMessage.syncGameData) {
-      this.eventsForThreads.push(gameEvent);
-    }
+  dispatch(gameEvent: Events): void {
+    this.eventsForThreads.push(gameEvent);
     this.events.emit(gameEvent);
   }
 
-  createEventAndDispatch<T>(type: GAME_EVENT_TYPE, payload?: T, network?: boolean): void {
+  createEventAndDispatch<T>(type: Events['type'], payload?: T, network?: boolean): void {
     this.dispatch({ type, payload, network });
   }
 

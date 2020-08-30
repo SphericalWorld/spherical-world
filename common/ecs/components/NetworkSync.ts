@@ -1,6 +1,6 @@
 import type { Component } from '../Component';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
-import { Networkable } from '../../Networkable';
+import type { Networkable } from '../../Networkable';
 
 export default class NetworkSync implements Component, Networkable {
   static threads = [THREAD_MAIN];

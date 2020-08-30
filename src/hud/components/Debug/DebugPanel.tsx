@@ -1,6 +1,6 @@
 import React from 'react';
 import { debug } from './debug.module.scss';
-import { State } from '../../../reducers/rootReducer';
+import type { State } from '../../../reducers/rootReducer';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 
 const mapState = (state: State) => {

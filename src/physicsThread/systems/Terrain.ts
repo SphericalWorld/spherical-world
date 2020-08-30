@@ -1,11 +1,11 @@
 import type Terrain from '../Terrain';
 import type { System } from '../../../common/ecs/System';
 import type { World } from '../../../common/ecs';
-import { CHUNK_LOADED } from '../../Terrain/terrainConstants';
+import { WorldPhysicsThread, GameEvent } from '../../Events';
 
-const onChunkAdd = (ecs: World, terrain: Terrain) =>
+const onChunkAdd = (ecs: WorldPhysicsThread, terrain: Terrain) =>
   ecs.events
-    .filter((el) => el.type === CHUNK_LOADED && el)
+    .filter((e) => e.type === GameEvent.chunkLoaded && e)
     .subscribe(({ payload: { x, z, data, lightData, flagsData } }) =>
       terrain.loadChunk(x, z, data, lightData, flagsData),
     );

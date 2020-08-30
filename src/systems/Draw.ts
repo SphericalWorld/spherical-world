@@ -2,7 +2,7 @@ import { mat4 } from 'gl-matrix';
 import type { World } from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import { gl } from '../engine/glEngine';
-import { GlShaderProgram } from '../engine/glShader';
+import type { GlShaderProgram } from '../engine/glShader';
 import { Transform, Visual, Skybox, Camera } from '../components';
 import type { Time } from '../Time/Time';
 import Gradient from '../gradient';
