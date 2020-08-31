@@ -2,7 +2,6 @@ import { vec3 } from 'gl-matrix';
 import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from '../../common/ecs/System';
 import { Transform, BlockRemover, Player, Visual, Raytracer, Joint } from '../components';
-import { PLAYER_PUT_BLOCK } from '../player/events';
 import { getGeoId } from '../../common/chunk';
 import { ClientToServerMessage } from '../../common/protocol';
 import { WorldMainThread, GameEvent } from '../Events';
@@ -13,7 +12,7 @@ import type Network from '../network';
 
 // const blockRemoveSound = new Sound({ src: woodHit });
 
-const getPutBlockEvents = (world: WorldMainThread, picker) =>
+const getPutBlockEvents = (world: WorldMainThread, network: Network, picker) =>
   world.events
     .filter((e) => e.type === GameEvent.playerTriedPutBlock && e)
     .subscribe(() => {
@@ -31,9 +30,9 @@ const getPutBlockEvents = (world: WorldMainThread, picker) =>
         } else {
           inventory.items = { ...inventory.items };
         }
-        world.createEventAndDispatch(
-          PLAYER_PUT_BLOCK,
-          {
+        network.emit({
+          type: ClientToServerMessage.playerPutBlock,
+          data: {
             flags: face,
             geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
             position: Array.from(emptyBlock.position),
@@ -41,8 +40,18 @@ const getPutBlockEvents = (world: WorldMainThread, picker) =>
             blockId: item.itemTypeId,
             itemId: item.id,
           },
-          true,
-        );
+        });
+        world.dispatch({
+          type: GameEvent.playerPutBlock,
+          payload: {
+            flags: face,
+            geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
+            position: Array.from(emptyBlock.position),
+            positionInChunk: Array.from(emptyBlock.positionInChunk),
+            blockId: item.itemTypeId,
+            itemId: item.id,
+          },
+        });
       }
     });
 
@@ -59,7 +68,7 @@ export default (world: WorldMainThread, network: Network): System => {
   const picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
   const playerAttackEvents = getPlayerAttackEvents(world);
-  getPutBlockEvents(world, picker);
+  getPutBlockEvents(world, network, picker);
 
   const raytracerRegistry = world.components.get('raytracer');
   if (!raytracerRegistry) {

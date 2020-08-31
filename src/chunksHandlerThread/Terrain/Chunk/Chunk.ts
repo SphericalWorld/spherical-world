@@ -1,4 +1,3 @@
-import type { BlockFace } from '../../../../common/blocks';
 import { getIndex } from '../../../../common/chunk';
 import {
   BLOCKS_IN_CHUNK,
@@ -681,11 +680,11 @@ export default class Chunk extends ChunkBase {
     }
   }
 
-  putBlock(x: number, y: number, z: number, value: number, face: BlockFace): void {
+  putBlock(x: number, y: number, z: number, value: number, flags: number): void {
     const index = getIndex(x, y, z);
     let placed = true;
     if (blocksInfo[value]) {
-      placed = blocksInfo[value].putBlock(this, x, y, z, value, face);
+      placed = blocksInfo[value].putBlock(this, x, y, z, value, flags);
     } else {
       this.blocks[index] = value;
     }

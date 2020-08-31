@@ -18,7 +18,6 @@ import {
 } from '../Input/inputContexts';
 import { setKey } from '../Input/Input';
 import { throttle } from '../../common/utils';
-import { PLAYER_PUT_BLOCK } from '../player/events';
 import { ServerToClientMessage } from '../../common/protocol';
 import type { State } from '../reducers/rootReducer';
 import type Network from '../network';
@@ -44,9 +43,9 @@ const onInventoryToggled = (world: WorldMainThread, toggleUIState: typeof doTogg
     .filter((e) => e.type === GameEvent.inventoryToggled && e)
     .subscribe(() => toggleUIState(INVENTORY));
 
-const onInventoryChanged = (events, store: Store) =>
-  events
-    .filter((e) => e.type === PLAYER_PUT_BLOCK)
+const onInventoryChanged = (world: WorldMainThread, store: Store) =>
+  world.events
+    .filter((e) => e.type === GameEvent.playerPutBlock && e)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
 const onDispatchableEvent = (events, store: Store) =>
@@ -86,7 +85,7 @@ export default (world: WorldMainThread, store: Store, input: Input, network: Net
   onMenuToggled(world, toggleUIState);
   onInventoryToggled(world, toggleUIState);
   onDispatchableEvent(world.events, store);
-  onInventoryChanged(world.events, store);
+  onInventoryChanged(world, store);
   onPlayerAddItem(network, store);
   connect(mapState, store)(onStateChanged(input, player));
   const syncData = throttle((data) => store.dispatch(doUpdateHudData(data)), 100);

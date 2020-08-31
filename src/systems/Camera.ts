@@ -41,12 +41,14 @@ const resizeViewport = (viewport: Viewport): void => {
 };
 
 const getWorldPosition = (distance: number) => (
+  out: vec3,
   width: number,
   height: number,
   pMatrix: mat4,
   mvMatrix: mat4,
 ) =>
   unproject(
+    out,
     width / 2,
     height / 2,
     distance,
@@ -87,6 +89,8 @@ export default (world: WorldMainThread, input: Input): System => {
     });
 
   const rotationMatrixQuat = quat.create();
+  const worldPosition = vec3.create();
+  const worldPositionNear = vec3.create();
 
   const cameraSystem = () => {
     const movement = cameraMovements.events.reduce(sumCameraMovements, [0, 0]);
@@ -113,11 +117,11 @@ export default (world: WorldMainThread, input: Input): System => {
 
     // console.log(rotation)
     mat4.fromQuat(camera.mvMatrix, rotationMatrixQuat);
-    mat4.translate(camera.mvMatrix, camera.mvMatrix, [
-      -translation[0],
-      -translation[1] - PLAYER_CAMERA_HEIGHT,
-      -translation[2],
-    ]);
+    mat4.translate(
+      camera.mvMatrix,
+      camera.mvMatrix,
+      vec3.fromValues(-translation[0], -translation[1] - PLAYER_CAMERA_HEIGHT, -translation[2]),
+    );
     cameraMovements.clear();
 
     const sight = vec3.create();
@@ -125,13 +129,8 @@ export default (world: WorldMainThread, input: Input): System => {
       viewport: { viewportWidth, viewportHeight, pMatrix },
       mvMatrix,
     } = camera;
-    const worldPosition = getWorldPositionFar(viewportWidth, viewportHeight, pMatrix, mvMatrix);
-    const worldPositionNear = getWorldPositionNear(
-      viewportWidth,
-      viewportHeight,
-      pMatrix,
-      mvMatrix,
-    );
+    getWorldPositionFar(worldPosition, viewportWidth, viewportHeight, pMatrix, mvMatrix);
+    getWorldPositionNear(worldPositionNear, viewportWidth, viewportHeight, pMatrix, mvMatrix);
     vec3.subtract(sight, worldPosition, worldPositionNear);
     vec3.normalize(sight, sight);
 

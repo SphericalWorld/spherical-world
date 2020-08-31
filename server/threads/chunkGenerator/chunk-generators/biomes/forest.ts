@@ -6,7 +6,7 @@ import type { Chunk } from '../../Chunk';
 const generateWithSurroundingChunks = (
   generator: ChunkGenerator,
   { chunk, height, x, z }: BlockPositionData,
-) => {
+): Chunk => {
   const s = generator.simplexFoliage(x, z);
   chunk.generateAtIfEmpty(x, height, z, () => {
     if (s < 0) return AIR;

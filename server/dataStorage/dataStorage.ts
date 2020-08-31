@@ -68,7 +68,10 @@ export const getAllGameObjects = (ds: DataStorage, collectionName = 'gameObjects
   return items.map(deserializeGameObject);
 };
 
-export const deleteGameObject = (ds: DataStorage, collectionName = 'gameObjects') => {
+export const deleteGameObject = (
+  ds: DataStorage,
+  collectionName = 'gameObjects',
+): ((id: Entity) => Promise<void>) => {
   const collection = ds.db.connection.db('sphericalWorld').collection(collectionName);
   return async (id: Entity) => {
     await collection.deleteOne({ _id: id });

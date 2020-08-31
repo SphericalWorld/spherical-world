@@ -14,7 +14,6 @@ const onSyncGameData = (world: WorldMainThread, network: Network) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.syncGameData && e)
     .subscribe(({ data: { newObjects = [], deletedObjects = [], components = [] } }) => {
-      // console.log(newObjects, deletedObjects, components);
       for (const newObject of newObjects) {
         const Constructor = world.constructors.get(newObject.networkSync.name);
         if (Constructor) {
@@ -24,7 +23,6 @@ const onSyncGameData = (world: WorldMainThread, network: Network) =>
       for (const deletedObject of deletedObjects) {
         world.deleteEntity(deletedObject, false);
       }
-      // console.log(components);
       world.updateComponents(components);
     });
 

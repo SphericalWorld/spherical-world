@@ -10,6 +10,7 @@ export enum ServerToClientMessage {
   unloadChunk,
   chatMessage,
   playerAddItem,
+  playerPutBlock,
 }
 
 export type ServerToClientMessages =
@@ -59,6 +60,17 @@ export type ServerToClientMessages =
   | Readonly<{
       type: ServerToClientMessage.playerAddItem;
       data: Slot;
+    }>
+  | Readonly<{
+      type: ServerToClientMessage.playerPutBlock;
+      data: Readonly<{
+        flags: number;
+        geoId: string;
+        positionInChunk: [number, number, number];
+        position: [number, number, number];
+        blockId: number;
+        itemId: string;
+      }>;
     }>;
 
 export enum ClientToServerMessage {
@@ -67,17 +79,14 @@ export enum ClientToServerMessage {
   ping,
   playerStartedDestroyingBlock,
   playerDestroyedBlock,
+  playerPutBlock,
   chatMessage,
 }
 
 export type ClientToServerMessages =
   | Readonly<{
       type: ClientToServerMessage.syncGameData;
-      data: {
-        components?: never[];
-        newObjects?: never[];
-        deletedObjects?: never[];
-      };
+      data: [{ type: never; data: never[] }];
     }>
   | Readonly<{
       type: ClientToServerMessage.login;
@@ -96,6 +105,17 @@ export type ClientToServerMessages =
         geoId: string;
         positionInChunk: [number, number, number];
         position: [number, number, number];
+      }>;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.playerPutBlock;
+      data: Readonly<{
+        flags: number;
+        geoId: string;
+        positionInChunk: [number, number, number];
+        position: [number, number, number];
+        blockId: number;
+        itemId: string;
       }>;
     }>
   | Readonly<{

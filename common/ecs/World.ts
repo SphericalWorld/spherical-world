@@ -275,10 +275,6 @@ export class World<Events = unknown> {
     this.events.emit(gameEvent);
   }
 
-  createEventAndDispatch<T>(type: Events['type'], payload?: T, network?: boolean): void {
-    this.dispatch({ type, payload, network });
-  }
-
   registerConstructor(name: string, constructor: ObjectConstructor): void {
     this.constructors.set(name, (params) => !this.entities.has(params.id) && constructor(params));
   }

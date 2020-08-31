@@ -19,9 +19,9 @@ const onSyncGameData = (server: Server, world: World) =>
 
 const onPlayerPutBlock = (server: Server) =>
   server.events
-    .filter((e) => e.type === 'PLAYER_PUT_BLOCK' && e)
+    .filter((e) => e.type === ClientToServerMessage.playerPutBlock && e)
     .subscribe(({ socket, data }) => {
-      broadcastToLinked(socket.player, 'PLAYER_PUT_BLOCK', data);
+      broadcastToLinked(socket.player, ServerToClientMessage.playerPutBlock, data);
       socket.player.inventory.data.items[data.itemId].count -= 1;
       server.terrain.putBlockHandler(data);
     });

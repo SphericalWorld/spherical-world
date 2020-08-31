@@ -16,6 +16,7 @@ const multiplyVec4 = (mat: mat4, vec: vec4, dest: vec4 = vec): vec4 => {
 };
 
 export const unproject = (
+  out: vec3,
   winx: number,
   winy: number,
   winz: number,
@@ -31,7 +32,9 @@ export const unproject = (
     1,
   ];
   multiplyVec4(invMat, n, n);
-  return [n[0] / n[3], n[1] / n[3], n[2] / n[3]];
+  out[0] = n[0] / n[3];
+  out[1] = n[1] / n[3];
+  out[2] = n[2] / n[3];
 };
 
 export const randomize = (out: vec3, a: vec3, factor: number): vec3 => {

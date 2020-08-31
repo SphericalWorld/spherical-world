@@ -1,7 +1,7 @@
 import WebSocket, { Server as WebSocketServer } from 'ws';
 import type { Network } from '../components/index';
 import type { Entity } from '../../common/ecs/Entity';
-import type { ServerToClientMessages } from '../../common/protocol';
+import type { ServerToClientMessages, ServerToClientMessage } from '../../common/protocol';
 
 export type Socket = {
   player: Readonly<{ network: Network; id: Entity }>;
@@ -29,6 +29,6 @@ export const broadcast = (receivers: Socket[], payload: ServerToClientMessages):
 
 export const broadcastToLinked = (
   player: Readonly<{ network: Network }>,
-  type: string,
+  type: ServerToClientMessage,
   payload: ServerToClientMessages,
 ): void => player.network.linkedPlayers.forEach(({ network: { socket } }) => send(socket, payload));

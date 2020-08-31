@@ -1,5 +1,4 @@
 import EventObservable from '../../common/GameEvent/EventObservable';
-import { PLAYER_PUT_BLOCK } from '../player/events';
 import { THREAD_CHUNK_HANDLER } from '../Thread/threadConstants';
 import Terrain from './Terrain';
 import Thread from '../Thread';
@@ -44,7 +43,7 @@ events
   });
 
 events
-  .filter((e) => e.type === PLAYER_PUT_BLOCK)
+  .filter((e) => e.type === GameEvent.playerPutBlock && e)
   .map((e) => e.payload)
   .subscribe(({ geoId, positionInChunk: [x, y, z], blockId, flags }) => {
     const chunk = terrain.chunks.get(geoId);

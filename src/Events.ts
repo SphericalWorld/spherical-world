@@ -48,6 +48,17 @@ type ChunkVBOLoaded = Readonly<{
   };
 }>;
 
+type PlayerPutBlock = Readonly<{
+  type: GameEvent.playerPutBlock;
+  payload: {
+    geoId: string;
+    positionInChunk: [number, number, number];
+    blockId: number;
+    flags: number;
+    itemId: string;
+  };
+}>;
+
 export type MainThreadEvents =
   | Readonly<{
       type: GameEvent.cameraLocked;
@@ -82,6 +93,7 @@ export type MainThreadEvents =
       type: GameEvent.setDayTime;
       payload: string;
     }>
+  | PlayerPutBlock
   | ChunkVBOLoaded;
 
 export type PhysicsThreadEvents =
@@ -117,9 +129,7 @@ export type ChunkHandlerThreadEvents =
         positionInChunk: [number, number, number];
       };
     }>
-  | Readonly<{
-      type: GameEvent.playerPutBlock;
-    }>
+  | PlayerPutBlock
   | ChunkVBOLoaded;
 
 export type WorldMainThread = World<MainThreadEvents>;

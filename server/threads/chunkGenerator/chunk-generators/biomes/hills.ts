@@ -1,11 +1,12 @@
 import type { Biome } from '../biome';
 import type { ChunkGenerator, BlockPositionData } from '../../types';
 import { AIR, TALL_GRASS, FLOWER_YELLOW, FLOWER_RED, TORCH } from '../../../../../common/blocks';
+import type { Chunk } from '../../Chunk';
 
 const generateWithSurroundingChunks = (
   generator: ChunkGenerator,
   { chunk, height, x, z }: BlockPositionData,
-) => {
+): Chunk => {
   const s = generator.simplexFoliage(x, z);
   chunk.generateAt(x, height, z, () => {
     if (s < 0) return AIR;

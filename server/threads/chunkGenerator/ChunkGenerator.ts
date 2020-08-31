@@ -111,7 +111,7 @@ const generateRainfall = (simplex: Simplex2D) => ({ x, z }) =>
 const generateTemperature = (simplex: Simplex2D) => ({ x, z }) =>
   toByte(128 + simplex(x, z) * 128 * 2);
 
-const getBiomeType = ({ temperature, rainfall }, x: number, z: number) => {
+const getBiomeType = ({ temperature, rainfall }: Chunk, x: number, z: number) => {
   if (rainfall.get(x, z) < 45 && temperature.get(x, z) > 150) return BiomeType.desert;
   if (rainfall.get(x, z) > 100 && rainfall.get(x, z) < 200 && temperature.get(x, z) < 150)
     return BiomeType.forest;
