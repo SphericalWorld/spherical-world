@@ -3,6 +3,8 @@ import { chatWrapper, chat, messagesBox, message, input } from './chat.module.sc
 import { useMessage, useSocketSend } from '../../utils/socket/Socket';
 import type { IncomingMessage } from '../../utils/socket/Socket';
 
+const lastUserMessages = localStorage.getItem('lastUserMessages');
+
 export const getShortTime = (date: number): string => {
   const parsedDate = new Date(date);
   return parsedDate.toLocaleString('ru-RU', {
@@ -14,6 +16,10 @@ export const getShortTime = (date: number): string => {
 const Chat = (): JSX.Element => {
   const [messages, setMessages] = useState<ReadonlyArray<IncomingMessage>>([]);
   const [currentMessage, setCurrentMessage] = useState('');
+  const [lastMessages, setLastMessages] = useState<Array<string>>(
+    lastUserMessages ? JSON.parse(lastUserMessages) : [],
+  );
+  const [lastMessageindex, setLastMessageindex] = useState(-1);
 
   const ref = useRef<HTMLDivElement>();
   useLayoutEffect(() => {
@@ -59,11 +65,38 @@ const Chat = (): JSX.Element => {
           <input
             type="text"
             value={currentMessage}
-            onChange={(event) => setCurrentMessage(event.target.value)}
+            onChange={(event) => {
+              setCurrentMessage(event.target.value);
+              if (lastMessageindex !== 0) {
+                setLastMessageindex(0);
+              }
+            }}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowUp' && lastMessages) {
+                const newIndex =
+                  lastMessageindex + 1 > lastMessages.length - 1 ? 0 : lastMessageindex + 1;
+                setLastMessageindex(newIndex);
+                setCurrentMessage(lastMessages[newIndex]);
+              }
+              if (event.key === 'ArrowDown' && lastMessages) {
+                const newIndex =
+                  lastMessageindex - 1 < 0 ? lastMessages.length - 1 : lastMessageindex - 1;
+                setLastMessageindex(newIndex);
+                setCurrentMessage(lastMessages[newIndex]);
+              }
+            }}
             onKeyPress={(event) => {
               if (event.key === 'Enter') {
+                if (lastMessages.length >= 20) {
+                  lastMessages.pop();
+                }
+                lastMessages.unshift(currentMessage);
+                setLastMessages(lastMessages);
+                localStorage.setItem('lastUserMessages', JSON.stringify(lastMessages));
+
                 send(currentMessage);
                 setCurrentMessage('');
+                setLastMessageindex(0);
               }
             }}
           />
