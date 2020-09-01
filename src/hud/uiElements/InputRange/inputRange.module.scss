@@ -1,49 +1,47 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
+:root {
+  --track-color: transparent;
+  --thumb-color: var(--primary);
+  --radius: 0.1em;
+  --border-width: 0.1em;
 
-$track-color: transparent !default;
-$thumb-color: $primary !default;
-$radius: 0.1em !default;
-$border-width: 0.1em !default;
+  --track-radius: var(--radius);
+  --track-width: 100%;
+  --track-height: 0.5em;
+  --track-border-width: var(--border-width);
+  --track-border-color: var(--primary);
 
-$track-radius: $radius;
-$track-width: 100% !default;
-$track-height: 0.5em !default;
-$track-border-width: $border-width;
-$track-border-color: lighten($primary, 0.9) !default;
+  --thumb-radius: var(--radius);
+  --thumb-height: calc(var(--track-height) * 4);
+  --thumb-width: calc(var(--thumb-height) * 0.5);
+  --thumb-border-width: var(--border-width);
+  --thumb-border-color: var(--primary);
+  --track-color: transparent;
+  --thumb-color: var(--primary);
+  --radius: 0.1em;
+  --border-width: 0.1em;
 
-$thumb-radius: $radius;
-$thumb-height: $track-height * 4;
-$thumb-width: $thumb-height * 0.5;
-$thumb-border-width: $border-width;
-$thumb-border-color: $primary !default;
+  --track-radius: var(--radius);
+  --track-width: 100%;
+  --track-height: 0.5em;
+  --track-border-width: var(--border-width);
+  --track-border-color: var(--primary);
 
-@mixin track {
-  cursor: default;
-  height: $track-height;
-  transition: all 0.2s ease;
-  width: $track-width;
-}
-
-@mixin thumb {
-  background: linear-gradient($primary 60%, transparent 40%);
-  background-color: rgb(0, 0, 0);
-  background-size: 1em 0.55em;
-  border: $thumb-border-width solid $thumb-border-color;
-  border-radius: $thumb-radius;
-  border-width: $thumb-border-width 0.15em;
-  cursor: default;
-  height: $thumb-height;
-  width: $thumb-width;
+  --thumb-radius: var(--radius);
+  --thumb-height: calc(var(--track-height) * 4);
+  --thumb-width: calc(var(--thumb-height) * 0.5);
+  --thumb-border-width: var(--border-width);
+  --thumb-border-color: var(--primary);
 }
 
 .inputRange {
   appearance: none;
   background: transparent;
-  margin: $thumb-height / 2 0;
-  width: $track-width;
+  margin: calc(var(--thumb-height) / 2) 0;
+  width: var(--track-width);
 
   &::-moz-focus-outer {
     border: 0;
@@ -54,33 +52,61 @@ $thumb-border-color: $primary !default;
   }
 
   &::-webkit-slider-runnable-track {
-    @include track;
-    background: $track-color;
-    border: $track-border-width solid $track-border-color;
-    border-radius: $track-radius;
+    cursor: default;
+    height: var(--track-height);
+    transition: all 0.2s ease;
+    width: var(--track-width);
+
+    background: var(--track-color);
+    border: var(--track-border-width) solid var(--track-border-color);
+    border-radius: var(--track-radius);
   }
 
   &::-webkit-slider-thumb {
-    @include thumb;
+    background: linear-gradient(var(--primary) 60%, transparent 40%);
+    background-color: rgb(0, 0, 0);
+    background-size: 1em 0.55em;
+    border: var(--thumb-border-width) solid var(--thumb-border-color);
+    border-radius: var(--thumb-radius);
+    border-width: var(--thumb-border-width) 0.15em;
+    cursor: default;
+    height: var(--thumb-height);
+    width: var(--thumb-width);
+
     appearance: none;
-    margin-top: ((-$track-border-width * 2 + $track-height) / 2 - $thumb-height / 2);
+    margin-top: calc(
+      calc(calc(-2 * var(--track-border-width)) + calc(var(--track-height) / 2)) -
+        calc(var(--thumb-height) / 2)
+    );
   }
 
   &::-moz-range-track {
-    @include track;
-    background: $track-color;
-    border: $track-border-width solid $track-border-color;
-    border-radius: $track-radius;
-    height: $track-height / 2;
+    cursor: default;
+    height: var(--track-height);
+    transition: all 0.2s ease;
+    width: var(--track-width);
+
+    background: var(--track-color);
+    border: var(--track-border-width) solid var(--track-border-color);
+    border-radius: var(--track-radius);
+    height: calc(var(--track-height) / 2);
   }
 
   &::-moz-range-thumb {
-    @include thumb;
+    background: linear-gradient(var(--primary) 60%, transparent 40%);
+    background-color: rgb(0, 0, 0);
+    background-size: 1em 0.55em;
+    border: var(--thumb-border-width) solid var(--thumb-border-color);
+    border-radius: var(--thumb-radius);
+    border-width: var(--thumb-border-width) 0.15em;
+    cursor: default;
+    height: var(--thumb-height);
+    width: var(--thumb-width);
   }
 }
 
 .valueLabel {
-  color: $secondary;
+  color: var(--secondary);
 }
 
 .valueDescript {
@@ -90,8 +116,8 @@ $thumb-border-color: $primary !default;
 }
 
 .formInputRange {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
-

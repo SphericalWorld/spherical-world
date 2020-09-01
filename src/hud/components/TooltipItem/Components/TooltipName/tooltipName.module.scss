@@ -1,9 +1,11 @@
-@import '../../../../styles/fonts';
-@import '../../../../styles/colors';
-@import '../../../../styles/sizes';
+@import '../../../../styles/fonts.module';
+@import '../../../../styles/colors.module';
+@import '../../../../styles/sizes.module';
 
 .gridArea {
-  @extend %tooltip-font-name;
+  font-size: 1.1em;
+  font-weight: 800;
+  text-transform: capitalize;
   align-items: center;
   display: flex;
   grid-area: name;

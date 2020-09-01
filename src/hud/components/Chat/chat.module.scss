@@ -1,7 +1,11 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-@import '../../styles/spacing';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
+@import '../../styles/spacing.module';
+
+:root {
+  --input-width: calc(100% - calc(var(--space-m) + calc(var(--space-s) / 2)));
+}
 
 .chatWrapper {
   width: 30em;
@@ -49,7 +53,7 @@
 }
 
 .messagesBox:hover::-webkit-scrollbar-thumb {
-  background: $primary;
+  background: var(--primary);
   border-radius: 1em;
 }
 
@@ -69,8 +73,6 @@
   padding-top: var(--space-m);
 }
 
-$input-width: calc(100% - calc(var(--space-m) + calc(var(--space-s) / 2)));
-
 .input > input {
   background-color: rgba(0, 0, 0, 0.5);
   color: #fff;
@@ -78,6 +80,6 @@ $input-width: calc(100% - calc(var(--space-m) + calc(var(--space-s) / 2)));
   font-size: 1em;
   outline: 1px solid #fff;
   border: 1px solid #fff;
-  width: $input-width;
+  width: var(--input-width);
   padding: var(--space-s);
 }

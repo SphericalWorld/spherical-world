@@ -1,9 +1,10 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .content {
-  @extend %flex-column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-around;
   margin: 1.6em 1.3em;
   width: 20em;

@@ -9,6 +9,7 @@ import {
   labelValue,
   labelPercent,
 } from './progressBar.module.scss';
+import { fontMain } from '../../styles/fonts.module.scss';
 
 const colorRed = 'bf0000';
 const colorYellow = 'bfbf00';
@@ -70,10 +71,10 @@ const ProgressBar = ({
     <div className={`${content} ${className}`}>
       <div className={progressBar}>
         <span style={style} className={classnames(CSSColorClass, stripe)} />
-        <span className={labelValue}>{`${currentValue} / ${maxValue}`}</span>
+        <span className={classnames(labelValue, fontMain)}>{`${currentValue} / ${maxValue}`}</span>
       </div>
       <div className={percentInfo}>
-        <span className={labelPercent}>{`${percent} %`}</span>
+        <span className={classnames(labelPercent, fontMain)}>{`${percent} %`}</span>
       </div>
     </div>
   );

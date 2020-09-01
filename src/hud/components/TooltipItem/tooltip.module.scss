@@ -1,9 +1,9 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .toolTipGrid {
-  background: transparentize($background-main-menu, 0.1);
+  background: var(--background-main-menu-transparent);
   border-radius: 0.2em;
   display: grid;
   grid-template-areas:
@@ -17,14 +17,16 @@
 }
 
 .common {
-  @include tooltip-border($item-color-common);
+  border: 0.1em groove var(--item-color-common);
+  box-shadow: inset 0 0.3em 0.4em var(--item-color-common-shadow);
 }
 
 .uncommon {
-  @include tooltip-border($item-color-uncommon);
+  border: 0.1em groove var(--item-color-uncommon);
+  box-shadow: inset 0 0.3em 0.4em var(--item-color-uncommon-shadow);
 }
 
 .rare {
-  @include tooltip-border($item-color-rare);
+  border: 0.1em groove var(--item-color-rare);
+  box-shadow: inset 0 0.3em 0.4em var(--item-color-rare-shadow);
 }
-

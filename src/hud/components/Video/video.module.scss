@@ -1,18 +1,11 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-
-%flex {
-  @extend %flex-column;
-  justify-content: space-between;
-}
-
-// .content {
-//   @extend %grid-main-menu;
-// }
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .volumes {
-  @extend %flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   grid-area: mainContent;
   grid-row: auto / span 3;
   justify-content: space-around;
@@ -20,7 +13,9 @@
 }
 
 .labelSelect {
-  @extend %flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 0.5em 0;
   user-select: none;
 }

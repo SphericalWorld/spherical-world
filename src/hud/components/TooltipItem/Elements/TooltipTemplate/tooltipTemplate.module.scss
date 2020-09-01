@@ -1,10 +1,12 @@
-@import '../../../../styles/fonts';
-@import '../../../../styles/colors';
-@import '../../../../styles/sizes';
+@import '../../../../styles/fonts.module';
+@import '../../../../styles/colors.module';
+@import '../../../../styles/sizes.module';
 
 .templateTooltip {
-  @extend %tooltip-font-item-stats;
-  color: $item-color-common;
+  font-size: 0.9em;
+  font-weight: 800;
+  text-transform: capitalize;
+  color: var(--item-color-common);
   padding: 0.4em;
 }
 

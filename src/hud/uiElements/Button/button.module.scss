@@ -1,26 +1,21 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .button {
-  background-color: transparentize($primary, 0.3);
-  border: $px1 solid transparentize($shadow, 0.5);
-  border-radius: $px1 * 3;
-  color: $font-color-main-menu;
+  background-color: rgba(var(--primaryColorRGB), 0.7);
+  border: var(--px1) solid rgba(0, 0, 0, 0.2);
+  border-radius: calc(var(--px1) * 3);
+  color: var(--font-color-main-menu);
   cursor: pointer;
   text-decoration: none;
-  // text-shadow:
-  //   -$px1 -$px1 0 $shadow,
-  //   $px1 -$px1 0 $shadow,
-  //   -$px1 $px1 0 $shadow,
-  //   $px1 $px1 0 $shadow;
   text-transform: capitalize;
   transition: all 0.2s ease;
   user-select: none;
 }
 
 .button:hover {
-  background-color: transparentize($primary, 0.1);
+  background-color: rgba(var(--primaryColorRGB), 0.8);
 }
 
 .button:active {

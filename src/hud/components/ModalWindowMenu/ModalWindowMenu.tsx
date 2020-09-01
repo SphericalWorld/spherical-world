@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import React from 'react';
+import classnames from 'classnames';
 import {
   inner,
   wrapper,
@@ -9,7 +10,10 @@ import {
   cornerLeftBottom,
   cornerRightTop,
   cornerRightBottom,
+  corner,
 } from './modalWindowMenu.module.scss';
+import { alignment } from '../../styles/sizes.module.scss';
+import { fontMain } from '../../styles/fonts.module.scss';
 
 type Props = Readonly<{
   caption: string;
@@ -17,14 +21,14 @@ type Props = Readonly<{
 }>;
 
 const ModalWindowMenu = ({ caption, children }: Props): JSX.Element => (
-  <div className={wrapper}>
+  <div className={classnames(wrapper, alignment)}>
     <div className={inner}>
-      <header className={label}>{caption}</header>
+      <header className={classnames(label, fontMain)}>{caption}</header>
       <div className={frame}>
-        <div className={cornerLeftTop} />
-        <div className={cornerLeftBottom} />
-        <div className={cornerRightTop} />
-        <div className={cornerRightBottom} />
+        <div className={classnames(cornerLeftTop, corner)} />
+        <div className={classnames(cornerLeftBottom, corner)} />
+        <div className={classnames(cornerRightTop, corner)} />
+        <div className={classnames(cornerRightBottom, corner)} />
       </div>
       <section>{children}</section>
     </div>

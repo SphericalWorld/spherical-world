@@ -12,6 +12,8 @@ import {
   animateIncrease,
   animateDecrease,
 } from './inventorySlot.module.scss';
+import { fontMain } from '../../styles/fonts.module.scss';
+import { slotStyleClass } from '../../styles/sizes.module.scss';
 import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
 import useCSSTransition from '../../utils/CSSTransition';
 import TooltipTrigger from '../../components/Tooltip';
@@ -97,7 +99,10 @@ const InventorySlot = (props: Props) => {
   });
 
   return (
-    <li {...droppableProps} className={classnames(slotStyle, selected && selectedSlot)}>
+    <li
+      {...droppableProps}
+      className={classnames(slotStyle, fontMain, slotStyleClass, selected && selectedSlot)}
+    >
       {slot ? (
         <InventorySlotFilled
           slot={slot}

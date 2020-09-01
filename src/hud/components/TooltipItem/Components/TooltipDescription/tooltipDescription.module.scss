@@ -1,9 +1,11 @@
-@import '../../../../styles/fonts';
-@import '../../../../styles/colors';
-@import '../../../../styles/sizes';
+@import '../../../../styles/fonts.module';
+@import '../../../../styles/colors.module';
+@import '../../../../styles/sizes.module';
 
 .descriptionTooltip {
-  @extend %tooltip-font-description;
+  font-size: 0.7em;
+  font-weight: 200;
+  text-align: justify;
   color: #bccdd6;
   padding: 0.3em 0.7em;
 }
@@ -11,4 +13,3 @@
 .gridArea {
   grid-area: description;
 }
-
