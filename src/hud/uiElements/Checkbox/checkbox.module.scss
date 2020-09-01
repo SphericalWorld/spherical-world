@@ -1,16 +1,17 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .checkboxLabel {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
 .checkbox {
   appearance: none;
   background-color: transparent;
-  border: 0.1em solid $input-checkbox-border;
+  border: 0.1em solid var(--input-checkbox-border);
   border-radius: 0.1em;
   display: inline-block;
   outline: 0;
@@ -18,12 +19,15 @@
 }
 
 .checkbox:checked {
-  background-color: $primary;
+  background-color: var(--primary);
 }
 
 .checkbox:checked::after {
-  @extend %font-main;
-  color: $input-checkbox;
+  font-family: var(--main-font);
+  text-shadow: -2px 0 1px var(--font-color-main-shadow), 0 2px 1px var(--font-color-main-shadow),
+    2px 0 1px var(--font-color-main-shadow), 0 -2px 1px var(--font-color-main-shadow);
+
+  color: var(--input-checkbox);
   content: '🗸';
   font-weight: bold;
   left: 0.1em;

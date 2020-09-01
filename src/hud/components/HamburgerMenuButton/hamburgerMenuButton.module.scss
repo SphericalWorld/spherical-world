@@ -1,6 +1,6 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .wrapper {
   bottom: 0.5em;
@@ -10,8 +10,8 @@
 }
 
 .buttonMenu {
-  background-color: $button-menu-top;
-  border: 0.05em solid $button-menu-border;
+  background-color: var(--button-menu-top);
+  border: 0.05em solid var(--button-menu-border);
   border-radius: 0.3em;
   cursor: pointer;
   display: block;
@@ -26,7 +26,7 @@
 }
 
 .innerButtonMenu > * {
-  background: $button-menu-border;
+  background: var(--button-menu-border);
   border-radius: 0.1em;
   display: block;
   height: 0.25em;
@@ -36,5 +36,5 @@
 }
 
 .buttonMenu:hover {
-  background-color: $button-menu-bottom;
+  background-color: var(--button-menu-bottom);
 }

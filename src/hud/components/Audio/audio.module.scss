@@ -1,16 +1,5 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-
-%flex {
-  @extend %flex-column;
-  justify-content: space-between;
-}
-
-// .inner {
-//   @extend %grid-main-menu;
-//   width: 40em;
-// }
+@import '../../styles/fonts.module';
+@import '../../styles/sizes.module';
 
 .content {
   grid-area: mainContent;
@@ -23,7 +12,9 @@
 }
 
 .volumes {
-  @extend %flex;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 90%;
   justify-content: space-evenly;
 }

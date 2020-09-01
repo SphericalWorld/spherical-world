@@ -1,20 +1,22 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 @keyframes selectedSlotAnimation {
-  0% {opacity: 0;}
-  50% {opacity: 1;}
-  100% {opacity: 0;}
-}
+  0% {
+    opacity: 0;
+  }
 
-%size-img {
-  height: $size-slot;
-  width: $size-slot;
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .slot {
-  @extend %slot-style;
   list-style-type: none;
 }
 
@@ -33,7 +35,8 @@
 
 .selectedSlot {
   .slotInner {
-    box-shadow: $selected-slot 0 0 $size-of-shadow $size-of-shadow/3 inset, $selected-slot 0 0 $size-of-shadow/3 0;
+    box-shadow: var(--selected-slot) 0 0 var(--size-of-shadow) calc(var(--size-of-shadow) / 3) inset,
+      var(--selected-slot) 0 0 calc(var(--size-of-shadow) / 3) 0;
   }
 }
 
@@ -41,7 +44,8 @@
   .slotInner::after {
     animation: selectedSlotAnimation 600ms ease forwards;
     border-radius: 0.5em;
-    box-shadow: $selected-slot-animated 0 0 $size-of-shadow*3 $size-of-shadow/3 inset;
+    box-shadow: var(--selected-slot-animated) 0 0 calc(var(--size-of-shadow) * 3)
+      calc(var(--size-of-shadow) / 3) inset;
     content: '';
     height: 100%;
     left: 0;
@@ -52,7 +56,8 @@
 }
 
 .slotInner:hover {
-  box-shadow: $hover-slot 0 0 $size-of-shadow/2 $size-of-shadow/4 inset;
+  box-shadow: var(--selected-slot) 0 0 calc(var(--size-of-shadow) / 2)
+    calc(var(--size-of-shadow) / 4) inset;
 }
 
 .slotItem {
@@ -69,20 +74,38 @@
   box-shadow: inset 0 0 15px 0 rgba(60, 60, 60, 1);
 }
 
-@mixin keyframes($scale) {
-  @keyframes countChangeAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale($scale); }
-    100% { transform: scale(1); }
+@keyframes IncreaseChangeAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes DecreaseChangeAnimation {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.8);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }
 
 .animateIncrease {
-  @include keyframes(1.2);
-  animation: countChangeAnimation 200ms ease-in-out;
+  animation: IncreaseChangeAnimation 200ms ease-in-out;
 }
 
 .animateDecrease {
-  @include keyframes(0.8);
-  animation: countChangeAnimation 200ms ease-in-out;
+  animation: DecreaseChangeAnimation 200ms ease-in-out;
 }

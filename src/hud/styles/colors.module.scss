@@ -1,0 +1,59 @@
+:root {
+  --primary: rgb(90, 136, 140);
+  --secondary: rgb(205, 229, 208);
+
+  --primaryColorRGB: 90, 136, 140;
+  --secondaryColorRGB: 205, 229, 208;
+
+  --primary-80p: rgba(var(--primaryColorRGB), 0.8);
+  --primary-20p: rgba(var(--secondaryColorRGB), 0.2);
+
+  --shadow: rgb(0, 0, 0);
+  --white-shadow: rgb(255, 255, 255);
+
+  --bright-text: rgb(232, 232, 232);
+
+  --background-main-menu: rgb(0, 0, 0);
+  --background-main-menu-transparent: rgba(0, 0, 0, 0.9);
+  --font-color-main-menu: rgb(255, 255, 255);
+
+  --success: #0f0;
+  --warning: #fa0;
+  --alert: #f00;
+
+  --font-color-main: rgb(255, 255, 255);
+  --font-color-main-shadow: rgb(0, 0, 0);
+
+  --background-color-slot: rgb(5, 82, 72);
+  --border-color-slot: rgb(17, 52, 54);
+  --selected-slot: rgb(189, 205, 214);
+  --selected-slot-animated: rgb(30, 167, 241);
+
+  --border-pagination-page: 0.1em solid var(--border-color-slot);
+
+  --border-key-bindings: 0.4em ridge var(--primary-20p);
+  --font-color-key-bindings-header: #cece29;
+
+  --border-inventory: 0.15em ridge rgb(89, 134, 138);
+
+  --input-checkbox: hsl(0, 0%, 100%);
+  --input-checkbox-border: rgb(50, 76, 78);
+
+  --item-color-common: rgb(232, 232, 232);
+  --item-color-common-shadow: rgba(232, 232, 232, 0.25);
+  --item-color-uncommon: rgb(33, 156, 68);
+  --item-color-uncommon-shadow: rgba(33, 156, 68, 0.25);
+  --item-color-rare: rgb(77, 145, 209);
+  --item-color-rare-shadow: rgba(77, 145, 209, 0.25);
+
+  --full-hp-color: rgb(0, 153, 0);
+  --low-hp-color: rgb(153, 0, 0);
+  --mana-color: rgb(0, 0, 153);
+
+  --progress-bar-background: rgb(26, 26, 26);
+  --progress-bar-background-percent: rgb(51, 51, 51);
+
+  --button-menu-top: rgba(0, 0, 0, 0.1);
+  --button-menu-bottom: rgba(255, 255, 255, 0.1);
+  --button-menu-border: rgba(230, 230, 230, 0.7);
+}

@@ -1,33 +1,29 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-
-// .content {
-//   @extend %grid-main-menu;
-//   width: 40em;
-// }
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .header {
-  border-bottom: $border-key-bindings;
+  border-bottom: var(--border-key-bindings);
   grid-area: header;
   user-select: none;
 }
 
 .commandGroup {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   padding: 0.5em;
 }
 
 .labelCommandGroup {
-  color: $font-color-main;
+  color: var(--font-color-main);
 }
 
 .section {
   grid-area: mainContent;
   overflow-x: hidden;
   overflow-y: auto;
-  scroll-behavior: $primary transparent;
+  scroll-behavior: var(--primary) transparent;
 }
 
 .section::-webkit-scrollbar {
@@ -39,12 +35,13 @@
 }
 
 .section::-webkit-scrollbar-thumb {
-  background: $primary;
+  background: var(--primary);
   border-radius: 1em;
 }
 
 .command {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: flex-end;
   justify-content: center;
   margin: 0.3em 0;
@@ -57,7 +54,7 @@
 
 .label,
 .labelFirst {
-  color: $font-color-key-bindings-header;
+  color: var(--font-color-key-bindings-header);
 }
 
 .labelFirst {
@@ -66,8 +63,10 @@
 }
 
 .helpLine {
-  @extend %alignment-text-in-div;
-  border-top: $border-key-bindings;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border-top: var(--border-key-bindings);
   grid-area: helpline;
   user-select: none;
 }

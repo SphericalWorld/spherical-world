@@ -9,7 +9,6 @@ import { useSwapSlots } from './inventoryActions';
 import {
   inventory,
   inventorySlots,
-  slot as slotStyle,
   coins,
   coin,
   empty,
@@ -66,7 +65,7 @@ const Inventory = (): JSX.Element => {
               />
             ))}
             {slots.map(() => (
-              <li className={`${slotStyle} ${empty}`} />
+              <li className={empty} />
             ))}
           </ul>
         </div>

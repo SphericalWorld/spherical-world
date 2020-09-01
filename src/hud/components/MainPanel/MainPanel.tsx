@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { createSelector } from 'reselect';
+import classnames from 'classnames';
 import {
   mainPanel,
   itemsContainer,
@@ -10,6 +11,7 @@ import {
   paginationControl,
   mainPanelSection,
 } from './mainPanel.module.scss';
+import { fontMain } from '../../styles/fonts.module.scss';
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
 import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActions';
@@ -60,7 +62,7 @@ const MainPanel = (): JSX.Element => {
             <div className={paginationUp} />
             <div className={paginationDown} />
           </div>
-          <div className={paginationPage}>10</div>
+          <div className={classnames(paginationPage, fontMain)}>10</div>
         </div>
       </div>
     </section>

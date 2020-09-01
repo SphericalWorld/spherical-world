@@ -1,12 +1,11 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .select {
-  background-color: $primary-80p;
+  background-color: var(--primary-80p);
   border: 0;
-  border-bottom: 2px solid $primary;
+  border-bottom: 2px solid var(--primary);
   border-radius: 0;
   font-size: 1em;
   font-weight: bold;
@@ -19,4 +18,3 @@
     outline: 0;
   }
 }
-

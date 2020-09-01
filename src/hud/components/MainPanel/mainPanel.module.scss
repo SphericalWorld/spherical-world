@@ -1,23 +1,23 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
-
-%pagination-arrow {
-  font-size: $size-pagination-arrow;
-  font-weight: bold;
-}
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 .mainPanelSection {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   cursor: default;
   justify-content: center;
 }
 
 .mainPanel {
-  @extend %flex-row;
-  @extend %inventory;
-  border: 0.1em ridge $primary-20p;
-  border-radius: $size-of-shadow $size-of-shadow 0 0;
+  background: var(--primary);
+  box-shadow: inset 0 0 var(--size-of-shadow) rgba(255, 255, 255, 0.75),
+    inset 0 var(--size-of-shadow) var(--size-of-shadow) rgba(255, 255, 255, 0.75);
+  display: flex;
+  flex-direction: row;
+
+  border: 0.1em ridge var(--primary-20p);
+  border-radius: var(--size-of-shadow) var(--size-of-shadow) 0 0;
   bottom: 0;
   margin: 0 auto;
   overflow: visible;
@@ -27,21 +27,24 @@
 }
 
 .itemsContainer {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
 .pagination {
-  @extend %flex-row;
-  height: $size-pagination;
+  display: flex;
+  flex-direction: row;
+  height: var(--size-pagination);
   margin: auto;
-  width: $size-pagination / 1.3;
+  width: calc(var(--size-pagination) / 1.3);
 }
 
 .paginationControl {
-  @extend %flex-column;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   margin: auto;
   text-align: center;
@@ -49,47 +52,54 @@
 }
 
 .paginationUp {
-  @extend %alignment-text-in-div;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   height: 50%;
 }
 
 .paginationUp::after {
-  @extend %pagination-arrow;
-  content: $arrow-up;
+  font-size: var(--size-pagination-arrow);
+  font-weight: bold;
+  content: var(--arrow-up);
 }
 
 .paginationUp:hover::after {
-  font-size: $size-pagination-arrow * 1.2;
+  font-size: calc(var(--size-pagination-arrow) * 1.2);
 }
 
 .paginationUp:active::after {
-  font-size: $size-pagination-arrow;
+  font-size: var(--size-pagination-arrow);
 }
 
 .paginationDown {
-  @extend %alignment-text-in-div;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   height: 50%;
 }
 
 .paginationDown::after {
-  @extend %pagination-arrow;
-  content: $arrow-down;
+  font-size: var(--size-pagination-arrow);
+  font-weight: bold;
+  content: var(--arrow-down);
 }
 
 .paginationDown:hover::after {
-  font-size: $size-pagination-arrow * 1.2;
+  font-size: calc(var(--size-pagination-arrow) * 1.2);
 }
 
 .paginationDown:active::after {
-  font-size: $size-pagination-arrow;
+  font-size: var(--size-pagination-arrow);
 }
 
 .paginationPage {
-  @extend %font-main;
-  @extend %alignment-text-in-div;
-  border-bottom: $border-pagination-page;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border-bottom: var(--border-pagination-page);
   border-radius: 5em/2em;
-  border-top: $border-pagination-page;
+  border-top: var(--border-pagination-page);
   height: 50%;
   margin: auto;
   user-select: none;

@@ -1,9 +1,9 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/sizes.module';
 
 .content {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: flex-start;
   margin: 1em 2em;
 }

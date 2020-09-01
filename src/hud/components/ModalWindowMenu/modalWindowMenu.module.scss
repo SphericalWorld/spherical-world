@@ -1,27 +1,26 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
-%corner {
-  background-color: $primary;
-  border: 0.12em solid mix($font-color-main-shadow, $primary, 55%);
-  box-shadow: 0 0 0 0.16em transparentize($font-color-main-shadow, 0.1) inset;
-  height: $size-of-corner;
+.corner {
+  background-color: var(--primary);
+  border: 0.12em solid var(--primary);
+  box-shadow: 0 0 0 0.16em var(--font-color-main-shadow) inset;
+  height: var(--size-of-corner);
   position: absolute;
   transform: rotate(45deg);
-  width: $size-of-corner;
+  width: var(--size-of-corner);
 }
 
 .wrapper {
-  @extend %alignment;
   z-index: 999;
 }
 
 .inner {
-  background: transparentize($background-main-menu, 0.1);
-  border: 0.2em ridge $primary-20p;
-  box-shadow: inset 0 0 $size-of-shadow-main-menu/5 $size-of-shadow-main-menu/5
-    transparentize($white-shadow, 0.75);
+  background: var(--background-main-menu-transparent);
+  border: 0.2em ridge var(--primary-20p);
+  box-shadow: inset 0 0 calc(var(--size-of-shadow-main-menu) / 5)
+    calc(var(--size-of-shadow-main-menu) / 5) rgba(255, 255, 255, 0.75);
   pointer-events: all;
   position: relative;
 }
@@ -34,35 +33,30 @@
 }
 
 .cornerLeftTop {
-  @extend %corner;
-  left: -$size-of-half-corner;
-  top: -$size-of-half-corner;
+  left: calc(-1 * var(--size-of-half-corner));
+  top: calc(-1 * var(--size-of-half-corner));
 }
 
 .cornerRightTop {
-  @extend %corner;
-  right: -$size-of-half-corner;
-  top: -$size-of-half-corner;
+  right: calc(-1 * var(--size-of-half-corner));
+  top: calc(-1 * var(--size-of-half-corner));
 }
 
 .cornerLeftBottom {
-  @extend %corner;
-  bottom: -$size-of-half-corner;
-  left: -$size-of-half-corner;
+  bottom: calc(-1 * var(--size-of-half-corner));
+  left: calc(-1 * var(--size-of-half-corner));
 }
 
 .cornerRightBottom {
-  @extend %corner;
-  bottom: -$size-of-half-corner;
-  right: -$size-of-half-corner;
+  bottom: calc(-1 * var(--size-of-half-corner));
+  right: calc(-1 * var(--size-of-half-corner));
 }
 
 .label {
-  @extend %font-main;
-  background: transparentize($background-main-menu, 0.01);
-  border: $px1 * 3 ridge $primary-80p;
+  background: var(--background-main-menu-transparent);
+  border: calc(var(--px1) * 3) ridge var(--primary-80p);
   border-radius: 0.2em;
-  color: $font-color-main-menu;
+  color: var(--font-color-main-menu);
   font-size: 1.1em;
   left: 50%;
   padding: 0.3em 1em;

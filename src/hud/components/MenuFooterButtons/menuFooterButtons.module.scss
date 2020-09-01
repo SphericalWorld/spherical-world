@@ -1,16 +1,20 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/sizes.module';
 
 .footerButtons {
-  @extend %footer-flex;
+  display: flex;
+  flex-direction: row;
+  border-top: var(--border-key-bindings);
+  padding: 0.5em;
+
   grid-area: footer;
 }
 
 .footerButtons > * {
-  @extend %footer-buttons;
+  flex: 0 1 30%;
+  margin: 0 0.1em;
 }
 
 .footerButtons > .label {
-  @extend %footer-buttons-label;
+  flex: 0 1 15%;
 }

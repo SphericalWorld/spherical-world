@@ -1,17 +1,17 @@
-@import '../../styles/fonts';
-@import '../../styles/colors';
-@import '../../styles/sizes';
+@import '../../styles/fonts.module';
+@import '../../styles/colors.module';
+@import '../../styles/sizes.module';
 
 @keyframes animate-shine {
   0% {
     opacity: 0;
     width: 0;
   }
-  
+
   50% {
     opacity: 0.4;
   }
-  
+
   100% {
     opacity: 0;
     width: 99%;
@@ -19,13 +19,14 @@
 }
 
 .content {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
 .progressBar {
-  background-color: $progress-bar-background;
+  background-color: var(--progress-bar-background);
   border-radius: 0.4em;
   height: 1em;
   margin-right: auto;
@@ -42,7 +43,7 @@
 }
 
 .mana {
-  background: $mana-color;
+  background: var(--mana-color);
   position: relative;
 }
 
@@ -60,14 +61,13 @@
 }
 
 .labelValue {
-  @extend %font-main;
   font-weight: 100;
   left: 50%;
   position: absolute;
 }
 
 .percentInfo {
-  background-color: $progress-bar-background-percent;
+  background-color: var(--progress-bar-background-percent);
   border-radius: 5px;
   height: 1em;
   margin-left: -1em;
@@ -76,8 +76,9 @@
 }
 
 .labelPercent {
-  @extend %font-main;
-  @extend %alignment-text-in-div;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   font-weight: 100;
   height: 100%;
   white-space: nowrap;
