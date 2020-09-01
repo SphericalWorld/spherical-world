@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { select } from './select.module.scss';
+import { select } from './select.module.css';
 
 type Item<ValueType> = Readonly<{
   value: ValueType;

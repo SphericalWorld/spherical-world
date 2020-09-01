@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
-import { chatWrapper, chat, messagesBox, message, input } from './chat.module.scss';
+import { chatWrapper, chat, messagesBox, message, input } from './chat.module.css';
 import { useMessage, useSocketSend } from '../../utils/socket/Socket';
 import type { IncomingMessage } from '../../utils/socket/Socket';
 

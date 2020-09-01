@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Label from '../Label';
-import { inputRange, valueLabel, valueDescript, formInputRange } from './inputRange.module.scss';
+import { inputRange, valueLabel, valueDescript, formInputRange } from './inputRange.module.css';
 
 type Props = Readonly<{
   value?: number;

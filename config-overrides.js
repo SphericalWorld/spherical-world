@@ -50,7 +50,7 @@ module.exports = function override(config, env) {
     globalObject: 'this',
   };
   assetLoaders
-    .find((loader) => loader.test.toString().includes('module\\.(scss'))
+    .find((loader) => loader.test.toString().includes('module\\.css'))
     .use.splice(1, 0, '@teamsupercell/typings-for-css-modules-loader');
 
   assetLoaders[assetLoaders.length - 1].exclude.push(/\.vert$/, /\.frag$/);

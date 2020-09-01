@@ -1,6 +1,6 @@
-@import '../../styles/fonts.module';
-@import '../../styles/colors.module';
-@import '../../styles/sizes.module';
+@import '../../styles/fonts.module.css';
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
 
 @keyframes selectedSlotAnimation {
   0% {
@@ -31,6 +31,17 @@
   position: absolute;
   right: 0;
   user-select: none;
+}
+
+
+.slotStyleClass {
+  height: var(--size-slot);
+  width: var(--size-slot);
+  background-color: var(--background-color-slot);
+  border: var(--size-border) solid var(--border-color-slot);
+  border-radius: 0.7em;
+  font-size: 0.8em;
+  margin: 0.1em -0.11em;
 }
 
 .selectedSlot {

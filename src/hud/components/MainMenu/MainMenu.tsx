@@ -8,7 +8,7 @@ import { AUDIO } from '../Audio/audioConstants';
 import { VIDEO } from '../Video/videoConstants';
 import { MAIN_MENU } from './mainMenuConstants';
 
-import { content } from './mainMenu.module.scss';
+import { content } from './mainMenu.module.css';
 
 const MainMenu = (): JSX.Element => {
   const dispatch = useDispatch();

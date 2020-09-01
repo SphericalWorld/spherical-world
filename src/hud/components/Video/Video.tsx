@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { VIDEO } from './videoConstants';
 import { Label, Select } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import { labelSelect, volumes } from './video.module.scss';
+import { labelSelect, volumes } from './video.module.css';
 import { useSetUIState } from '../../utils/StateRouter';
 import MenuFooterButtons from '../MenuFooterButtons';
 import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';

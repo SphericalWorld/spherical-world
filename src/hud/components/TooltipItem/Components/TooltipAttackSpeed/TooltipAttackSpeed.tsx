@@ -1,6 +1,6 @@
 import React from 'react';
 import TooltipTemplate from '../../Elements/TooltipTemplate';
-import { gridArea } from './tooltipAttackSpeed.module.scss';
+import { gridArea } from './tooltipAttackSpeed.module.css';
 
 type Props = Readonly<{
   attackSpeed: number;

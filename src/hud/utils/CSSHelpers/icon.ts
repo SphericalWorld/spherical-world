@@ -1,4 +1,4 @@
-import { imageDiamond, imageIronIngot } from './icon.module.scss';
+import { imageDiamond, imageIronIngot } from './icon.module.css';
 
 const images = {
   diamond: imageDiamond,

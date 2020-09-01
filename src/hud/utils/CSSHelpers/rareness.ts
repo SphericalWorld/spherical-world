@@ -1,5 +1,5 @@
 import type { Rareness } from '../../../../common/Inventory/Inventory';
-import { common, uncommon, rare } from './rareness.module.scss';
+import { common, uncommon, rare } from './rareness.module.css';
 
 const colors = [common, uncommon, rare];
 

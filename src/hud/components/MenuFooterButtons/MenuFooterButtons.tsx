@@ -1,5 +1,5 @@
 import React from 'react';
-import { footerButtons, label } from './menuFooterButtons.module.scss';
+import { footerButtons, label } from './menuFooterButtons.module.css';
 import { Button, Label } from '../../uiElements';
 
 type Props = Readonly<{

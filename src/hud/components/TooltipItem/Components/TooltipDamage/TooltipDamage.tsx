@@ -1,6 +1,6 @@
 import React from 'react';
 import TooltipTemplate from '../../Elements/TooltipTemplate';
-import { gridArea } from './tooltipDamage.module.scss';
+import { gridArea } from './tooltipDamage.module.css';
 
 type Props = Readonly<{
   damage: number;

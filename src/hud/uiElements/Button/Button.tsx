@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { button, small, big } from './button.module.scss';
+import { button, small, big } from './button.module.css';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';

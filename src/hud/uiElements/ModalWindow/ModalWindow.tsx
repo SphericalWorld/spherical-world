@@ -3,8 +3,14 @@ import type { ReactNode } from 'react';
 import classnames from 'classnames';
 import Button from '../Button';
 import Label from '../Label';
-import { inner, inventoryName, header, wrapper, buttonClose } from './modalWindow.module.scss';
-import { alignment } from '../../styles/sizes.module.scss';
+import {
+  inner,
+  inventoryName,
+  header,
+  wrapper,
+  buttonClose,
+  alignment,
+} from './modalWindow.module.css';
 
 type Props = Readonly<{
   caption: string;

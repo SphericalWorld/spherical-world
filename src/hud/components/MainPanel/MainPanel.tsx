@@ -10,8 +10,8 @@ import {
   paginationPage,
   paginationControl,
   mainPanelSection,
-} from './mainPanel.module.scss';
-import { fontMain } from '../../styles/fonts.module.scss';
+} from './mainPanel.module.css';
+import { fontMain } from '../../styles/fonts.module.css';
 import InventorySlot from '../../uiElements/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
 import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActions';

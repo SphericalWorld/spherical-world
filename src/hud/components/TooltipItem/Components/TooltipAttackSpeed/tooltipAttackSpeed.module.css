@@ -1,0 +1,7 @@
+@import '../../../../styles/fonts.module.css';
+@import '../../../../styles/colors.module.css';
+@import '../../../../styles/sizes.module.css';
+
+.gridArea {
+  grid-area: attackSpeed;
+}

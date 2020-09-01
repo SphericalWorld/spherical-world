@@ -22,5 +22,5 @@ yarn-error.log*
 /map
 dist
 
-*.scss.flow
-*.scss.d.ts
+*.css.flow
+*.css.d.ts

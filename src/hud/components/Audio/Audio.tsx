@@ -3,7 +3,7 @@ import { useSetUIState } from '../../utils/StateRouter';
 import { AUDIO } from './audioConstants';
 import { Label, Checkbox, InputRange } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';
-import { content, cbEnSound, labelVolume, inputVolume, volumes } from './audio.module.scss';
+import { content, cbEnSound, labelVolume, inputVolume, volumes } from './audio.module.css';
 import MenuFooterButtons from '../MenuFooterButtons';
 import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';
 

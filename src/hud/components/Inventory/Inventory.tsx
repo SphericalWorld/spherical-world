@@ -16,7 +16,7 @@ import {
   silver,
   bronze,
   icon,
-} from './inventory.module.scss';
+} from './inventory.module.css';
 import InventorySlot from '../../uiElements/InventorySlot';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 

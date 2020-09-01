@@ -8,8 +8,8 @@ import {
   stripe,
   labelValue,
   labelPercent,
-} from './progressBar.module.scss';
-import { fontMain } from '../../styles/fonts.module.scss';
+} from './progressBar.module.css';
+import { fontMain } from '../../styles/fonts.module.css';
 
 const colorRed = 'bf0000';
 const colorYellow = 'bfbf00';

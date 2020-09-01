@@ -1,4 +1,4 @@
-@import '../../styles/colors.module';
+@import '../../styles/colors.module.css';
 
 .common {
   color: var(--item-color-common);

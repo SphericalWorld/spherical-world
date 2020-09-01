@@ -1,5 +1,5 @@
 import React from 'react';
-import { debug } from './debug.module.scss';
+import { debug } from './debug.module.css';
 import type { State } from '../../../reducers/rootReducer';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 

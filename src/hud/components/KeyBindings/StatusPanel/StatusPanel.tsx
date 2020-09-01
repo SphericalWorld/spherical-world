@@ -1,7 +1,7 @@
 import React from 'react';
 import type { State } from '../../../../reducers/rootReducer';
 import Label from '../../../uiElements/Label';
-import { labelCommandGroup } from './statusPanel.module.scss';
+import { labelCommandGroup } from './statusPanel.module.css';
 import { useMemoizedSelector } from '../../../../util/reducerUtils';
 
 const StatusPanel = (): JSX.Element => {

@@ -5,7 +5,7 @@ import TooltipDamage from './Components/TooltipDamage';
 import TooltipDescription from './Components/TooltipDescription';
 import TooltipImage from './Components/TooltipImage';
 import TooltipAttackSpeed from './Components/TooltipAttackSpeed';
-import { toolTipGrid, common, uncommon, rare } from './tooltip.module.scss';
+import { toolTipGrid, common, uncommon, rare } from './tooltip.module.css';
 
 const colors = [common, uncommon, rare];
 

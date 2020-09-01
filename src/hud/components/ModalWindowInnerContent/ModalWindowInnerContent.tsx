@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import React from 'react';
-import { content } from './modalWindowInnerContent.module.scss';
+import { content } from './modalWindowInnerContent.module.css';
 
 type Props = Readonly<{
   children: ReactNode;

@@ -1,5 +1,5 @@
-@import '../../styles/fonts.module';
-@import '../../styles/sizes.module';
+@import '../../styles/fonts.module.css';
+@import '../../styles/sizes.module.css';
 
 .content {
   display: grid;

@@ -11,9 +11,9 @@ import {
   cornerRightTop,
   cornerRightBottom,
   corner,
-} from './modalWindowMenu.module.scss';
-import { alignment } from '../../styles/sizes.module.scss';
-import { fontMain } from '../../styles/fonts.module.scss';
+} from './modalWindowMenu.module.css';
+import { alignment } from '../../styles/sizes.module.css';
+import { fontMain } from '../../styles/fonts.module.css';
 
 type Props = Readonly<{
   caption: string;

@@ -2,7 +2,7 @@ import type { ReactNode, ReactElement } from 'react';
 import React, { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import Portal from '../../uiElements/Portal';
-import { tooltip, wrapper, hidden } from './tooltip.module.scss';
+import { tooltip, wrapper, hidden } from './tooltip.module.css';
 
 type Props<P> = Readonly<{
   children: ReactNode;

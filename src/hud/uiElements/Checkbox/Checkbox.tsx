@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import Label from '../Label';
-import { checkbox, small, big, checkboxLabel, checkboxName } from './checkbox.module.scss';
+import { checkbox, small, big, checkboxLabel, checkboxName } from './checkbox.module.css';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';

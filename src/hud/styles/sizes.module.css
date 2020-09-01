@@ -1,4 +1,4 @@
-@import './colors.module';
+@import './colors.module.css';
 
 :root {
   --size-slot: 4em;

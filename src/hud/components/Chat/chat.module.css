@@ -1,7 +1,7 @@
-@import '../../styles/fonts.module';
-@import '../../styles/colors.module';
-@import '../../styles/sizes.module';
-@import '../../styles/spacing.module';
+@import '../../styles/fonts.module.css';
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
+@import '../../styles/spacing.module.css';
 
 :root {
   --input-width: calc(100% - calc(var(--space-m) + calc(var(--space-s) / 2)));

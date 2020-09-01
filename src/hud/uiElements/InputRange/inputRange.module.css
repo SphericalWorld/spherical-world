@@ -1,24 +1,8 @@
-@import '../../styles/fonts.module';
-@import '../../styles/colors.module';
-@import '../../styles/sizes.module';
+@import '../../styles/fonts.module.css';
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
 
 :root {
-  --track-color: transparent;
-  --thumb-color: var(--primary);
-  --radius: 0.1em;
-  --border-width: 0.1em;
-
-  --track-radius: var(--radius);
-  --track-width: 100%;
-  --track-height: 0.5em;
-  --track-border-width: var(--border-width);
-  --track-border-color: var(--primary);
-
-  --thumb-radius: var(--radius);
-  --thumb-height: calc(var(--track-height) * 4);
-  --thumb-width: calc(var(--thumb-height) * 0.5);
-  --thumb-border-width: var(--border-width);
-  --thumb-border-color: var(--primary);
   --track-color: transparent;
   --thumb-color: var(--primary);
   --radius: 0.1em;

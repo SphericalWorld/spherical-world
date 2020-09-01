@@ -1,6 +1,6 @@
 import React from 'react';
 import TooltipText from '../TooltipText';
-import { templateTooltip, labelTooltip, valueTooltip } from './tooltipTemplate.module.scss';
+import { templateTooltip, labelTooltip, valueTooltip } from './tooltipTemplate.module.css';
 
 type Props = Readonly<{
   value: number;

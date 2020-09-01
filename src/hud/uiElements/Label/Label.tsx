@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import classnames from 'classnames';
-import { label, small, big } from './label.module.scss';
-import { fontMain } from '../../styles/fonts.module.scss';
+import { label, small, big } from './label.module.css';
+import { fontMain } from '../../styles/fonts.module.css';
 
 export const SIZE_SMALL: 'small' = 'small';
 export const SIZE_BIG: 'big' = 'big';

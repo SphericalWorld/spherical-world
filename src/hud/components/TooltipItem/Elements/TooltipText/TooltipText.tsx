@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import React from 'react';
-import { defaultColor, text } from './tooltipText.module.scss';
+import { defaultColor, text } from './tooltipText.module.css';
 
 type Props = Readonly<{
   children?: ReactNode;

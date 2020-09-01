@@ -1,4 +1,4 @@
-@import './colors.module';
+@import './colors.module.css';
 
 :root {
   --arrow-up: '\25B2';

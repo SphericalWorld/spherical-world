@@ -1,0 +1,12 @@
+@import '../../../../styles/fonts.module.css';
+@import '../../../../styles/colors.module.css';
+@import '../../../../styles/sizes.module.css';
+
+.defaultColor {
+  color: var(--item-color-common);
+}
+
+.text {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1em;
+}

@@ -19,7 +19,7 @@ import {
   label,
   labelFirst,
   labelCommandGroup,
-} from './keyBindings.module.scss';
+} from './keyBindings.module.css';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 import MenuFooterButtons from '../MenuFooterButtons';
 import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';

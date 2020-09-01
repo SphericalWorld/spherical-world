@@ -1,5 +1,5 @@
 import React from 'react';
-import { imgPlayer, avatar, lvlPlayer } from './playerAvatar.module.scss';
+import { imgPlayer, avatar, lvlPlayer } from './playerAvatar.module.css';
 
 const PlayerAvatar = (): JSX.Element => (
   <div className={avatar}>

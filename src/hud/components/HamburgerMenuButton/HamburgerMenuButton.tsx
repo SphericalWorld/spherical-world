@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { useToggleUIState } from '../../utils/StateRouter';
 import { MAIN_MENU } from '../MainMenu/mainMenuConstants';
-import { wrapper, buttonMenu, innerButtonMenu } from './hamburgerMenuButton.module.scss';
+import { wrapper, buttonMenu, innerButtonMenu } from './hamburgerMenuButton.module.css';
 
 const HamburgerMenuButton = (): JSX.Element => {
   const toggleUIState = useToggleUIState();
