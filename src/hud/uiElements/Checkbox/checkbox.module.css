@@ -23,7 +23,6 @@
 }
 
 .checkbox:checked::after {
-  font-family: var(--main-font);
   text-shadow: -2px 0 1px var(--font-color-main-shadow), 0 2px 1px var(--font-color-main-shadow),
     2px 0 1px var(--font-color-main-shadow), 0 -2px 1px var(--font-color-main-shadow);
 

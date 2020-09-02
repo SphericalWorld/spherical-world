@@ -12,7 +12,7 @@ import {
   cornerRightBottom,
   corner,
 } from './modalWindowMenu.module.css';
-import { alignment } from '../../styles/sizes.module.css';
+import { alignment } from '../../styles/alignment.module.css';
 import { fontMain } from '../../styles/fonts.module.css';
 
 type Props = Readonly<{

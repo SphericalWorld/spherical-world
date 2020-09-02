@@ -1,0 +1,14 @@
+.alignment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  bottom: 9em;
+  cursor: default;
+  justify-content: center;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+}

@@ -3,6 +3,10 @@
 @import '../../styles/sizes.module.css';
 
 .corner {
+  --size-of-corner: 0.6em;
+  --sqrt2: 1.41421356237;
+  --size-of-half-corner: calc(var(--size-of-corner) / var(--sqrt2));
+
   background-color: var(--primary);
   border: 0.12em solid var(--primary);
   box-shadow: 0 0 0 0.16em var(--font-color-main-shadow) inset;

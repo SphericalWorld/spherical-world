@@ -26,67 +26,67 @@
   background: transparent;
   margin: calc(var(--thumb-height) / 2) 0;
   width: var(--track-width);
+}
 
-  &::-moz-focus-outer {
-    border: 0;
-  }
+.inputRange::-moz-focus-outer {
+  border: 0;
+}
 
-  &:focus {
-    outline: 0;
-  }
+.inputRange:focus {
+  outline: 0;
+}
 
-  &::-webkit-slider-runnable-track {
-    cursor: default;
-    height: var(--track-height);
-    transition: all 0.2s ease;
-    width: var(--track-width);
+.inputRange::-webkit-slider-runnable-track {
+  cursor: default;
+  height: var(--track-height);
+  transition: all 0.2s ease;
+  width: var(--track-width);
 
-    background: var(--track-color);
-    border: var(--track-border-width) solid var(--track-border-color);
-    border-radius: var(--track-radius);
-  }
+  background: var(--track-color);
+  border: var(--track-border-width) solid var(--track-border-color);
+  border-radius: var(--track-radius);
+}
 
-  &::-webkit-slider-thumb {
-    background: linear-gradient(var(--primary) 60%, transparent 40%);
-    background-color: rgb(0, 0, 0);
-    background-size: 1em 0.55em;
-    border: var(--thumb-border-width) solid var(--thumb-border-color);
-    border-radius: var(--thumb-radius);
-    border-width: var(--thumb-border-width) 0.15em;
-    cursor: default;
-    height: var(--thumb-height);
-    width: var(--thumb-width);
+.inputRange::-webkit-slider-thumb {
+  background: linear-gradient(var(--primary) 60%, transparent 40%);
+  background-color: rgb(0, 0, 0);
+  background-size: 1em 0.55em;
+  border: var(--thumb-border-width) solid var(--thumb-border-color);
+  border-radius: var(--thumb-radius);
+  border-width: var(--thumb-border-width) 0.15em;
+  cursor: default;
+  height: var(--thumb-height);
+  width: var(--thumb-width);
 
-    appearance: none;
-    margin-top: calc(
-      calc(calc(-2 * var(--track-border-width)) + calc(var(--track-height) / 2)) -
-        calc(var(--thumb-height) / 2)
-    );
-  }
+  appearance: none;
+  margin-top: calc(
+    calc(calc(-2 * var(--track-border-width)) + calc(var(--track-height) / 2)) -
+      calc(var(--thumb-height) / 2)
+  );
+}
 
-  &::-moz-range-track {
-    cursor: default;
-    height: var(--track-height);
-    transition: all 0.2s ease;
-    width: var(--track-width);
+.inputRange::-moz-range-track {
+  cursor: default;
+  height: var(--track-height);
+  transition: all 0.2s ease;
+  width: var(--track-width);
 
-    background: var(--track-color);
-    border: var(--track-border-width) solid var(--track-border-color);
-    border-radius: var(--track-radius);
-    height: calc(var(--track-height) / 2);
-  }
+  background: var(--track-color);
+  border: var(--track-border-width) solid var(--track-border-color);
+  border-radius: var(--track-radius);
+  height: calc(var(--track-height) / 2);
+}
 
-  &::-moz-range-thumb {
-    background: linear-gradient(var(--primary) 60%, transparent 40%);
-    background-color: rgb(0, 0, 0);
-    background-size: 1em 0.55em;
-    border: var(--thumb-border-width) solid var(--thumb-border-color);
-    border-radius: var(--thumb-radius);
-    border-width: var(--thumb-border-width) 0.15em;
-    cursor: default;
-    height: var(--thumb-height);
-    width: var(--thumb-width);
-  }
+.inputRange::-moz-range-thumb {
+  background: linear-gradient(var(--primary) 60%, transparent 40%);
+  background-color: rgb(0, 0, 0);
+  background-size: 1em 0.55em;
+  border: var(--thumb-border-width) solid var(--thumb-border-color);
+  border-radius: var(--thumb-radius);
+  border-width: var(--thumb-border-width) 0.15em;
+  cursor: default;
+  height: var(--thumb-height);
+  width: var(--thumb-width);
 }
 
 .valueLabel {
