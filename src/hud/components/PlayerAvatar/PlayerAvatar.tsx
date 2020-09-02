@@ -1,10 +1,12 @@
 import React from 'react';
-import { imgPlayer, avatar, lvlPlayer } from './playerAvatar.module.css';
+import { imgPlayer, avatar, lvlPlayer, lvl } from './playerAvatar.module.css';
 
 const PlayerAvatar = (): JSX.Element => (
   <div className={avatar}>
     <div className={imgPlayer} />
-    <div className={lvlPlayer}>30</div>
+    <div className={lvlPlayer}>
+      <span className={lvl}>30</span>
+    </div>
   </div>
 );
 

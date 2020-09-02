@@ -12,9 +12,9 @@
   letter-spacing: 0.1em;
   padding: 0.25em;
   width: 100%;
+}
 
-  &:focus,
-  &:active {
-    outline: 0;
-  }
+.select:focus,
+.select:active {
+  outline: 0;
 }

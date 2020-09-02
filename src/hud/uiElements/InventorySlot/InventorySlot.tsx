@@ -11,9 +11,9 @@ import {
   dragOver,
   animateIncrease,
   animateDecrease,
+  slotStyleClass,
 } from './inventorySlot.module.css';
 import { fontMain } from '../../styles/fonts.module.css';
-import { slotStyleClass } from '../../styles/sizes.module.css';
 import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
 import useCSSTransition from '../../utils/CSSTransition';
 import TooltipTrigger from '../../components/Tooltip';

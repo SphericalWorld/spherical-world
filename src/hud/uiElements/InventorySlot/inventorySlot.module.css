@@ -33,7 +33,6 @@
   user-select: none;
 }
 
-
 .slotStyleClass {
   height: var(--size-slot);
   width: var(--size-slot);
@@ -41,29 +40,25 @@
   border: var(--size-border) solid var(--border-color-slot);
   border-radius: 0.7em;
   font-size: 0.8em;
-  margin: 0.1em -0.11em;
+  margin: 0.1em -0.1em;
 }
 
-.selectedSlot {
-  .slotInner {
-    box-shadow: var(--selected-slot) 0 0 var(--size-of-shadow) calc(var(--size-of-shadow) / 3) inset,
-      var(--selected-slot) 0 0 calc(var(--size-of-shadow) / 3) 0;
-  }
+.selectedSlot .slotInner {
+  box-shadow: var(--selected-slot) 0 0 var(--size-of-shadow) calc(var(--size-of-shadow) / 3) inset,
+    var(--selected-slot) 0 0 calc(var(--size-of-shadow) / 3) 0;
 }
 
-.selectedSlot {
-  .slotInner::after {
-    animation: selectedSlotAnimation 600ms ease forwards;
-    border-radius: 0.5em;
-    box-shadow: var(--selected-slot-animated) 0 0 calc(var(--size-of-shadow) * 3)
-      calc(var(--size-of-shadow) / 3) inset;
-    content: '';
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
+.selectedSlot .slotInner::after {
+  animation: selectedSlotAnimation 600ms ease forwards;
+  border-radius: 0.5em;
+  box-shadow: var(--selected-slot-animated) 0 0 calc(var(--size-of-shadow) * 3)
+    calc(var(--size-of-shadow) / 3) inset;
+  content: '';
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 .slotInner:hover {

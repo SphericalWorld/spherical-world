@@ -3,42 +3,10 @@
 :root {
   --size-slot: 4em;
 
-  --size-pagination: calc(var(--size-slot) / 1.125);
-  --size-pagination-arrow: calc(var(--size-slot) / 2.7);
-
   --size-border: calc(var(--size-slot) / 18);
 
   --size-of-shadow: 0.9em;
   --size-of-shadow-main-menu: 1em;
 
   --px1: 0.06em;
-
-  --size-of-corner: 0.6em;
-  --sqrt2: 1.41421356237;
-  --size-of-half-corner: calc(var(--size-of-corner) / var(--sqrt2));
-}
-
-.slotStyleClass {
-  height: var(--size-slot);
-  width: var(--size-slot);
-  background-color: var(--background-color-slot);
-  border: var(--size-border) solid var(--border-color-slot);
-  border-radius: 0.7em;
-  font-size: 0.8em;
-  margin: 0.1em -0.11em;
-}
-
-.alignment {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  bottom: 9em;
-  cursor: default;
-  justify-content: center;
-  left: 0;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 0;
 }
