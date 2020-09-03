@@ -1,5 +1,5 @@
 import { getIndex } from '../../../../common/chunk';
-import { SIGHT_TRANSPARENT, blocksFlags } from '../../../blocks/blockInfo';
+import { blocksInfo } from '../../../blocks/blockInfo';
 import {
   ROW,
   ROW_NESTED_CHUNK,
@@ -79,7 +79,7 @@ const calcRecursion = (
       return;
     }
     const index = getIndex(x, y, z);
-    if (chunk.blocks[index] && !blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+    if (chunk.blocks[index] && !blocksInfo[chunk.blocks[index]].sightTransparent) {
       chunk.light[index] &= reversedMask;
     } else {
       chunk.light[index] = calcCurrent(chunk, x, y, z, index);
@@ -99,7 +99,7 @@ const calcRecursion = (
     }
     const index = getIndex(x, y, z);
     const lightTmp = chunk.light[index];
-    if (chunk.blocks[index] && !blocksFlags[chunk.blocks[index]][SIGHT_TRANSPARENT]) {
+    if (chunk.blocks[index] && !blocksInfo[chunk.blocks[index]].sightTransparent) {
       chunk.light[index] &= reversedMask;
     } else {
       chunk.light[index] = calcCurrent(chunk, x, y, z, index);

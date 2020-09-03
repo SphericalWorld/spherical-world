@@ -36,7 +36,7 @@ export type BlockData = {
   ) => boolean;
   getFlags: (flag: number) => number;
   getRotation: (flag: number) => number;
-  renderToChunk?: RenderToChunk;
+  renderToChunk: RenderToChunk;
   sounds: {
     footsteps: ReadonlyArray<string>;
   };

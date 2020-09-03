@@ -2,26 +2,24 @@ import type { BlockData } from './Block';
 import Block from './Block';
 import { TEXTURE_PODZOL, TEXTURE_PODZOL_SIDE, DIRT } from '../engine/Texture/textureConstants';
 import { podzol } from '../../common/blocks/blocksInfo';
+import { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
+
+const cube = new Cube({
+  from: [0, 0, 0],
+  to: [1, 1, 1],
+  faces: {
+    top: { texture: TEXTURE_PODZOL },
+    bottom: { texture: DIRT },
+    north: { texture: TEXTURE_PODZOL_SIDE },
+    south: { texture: TEXTURE_PODZOL_SIDE },
+    west: { texture: TEXTURE_PODZOL_SIDE },
+    east: { texture: TEXTURE_PODZOL_SIDE },
+  },
+});
 
 const Podzol = (): BlockData =>
   Block(podzol, {
-    buffer: {
-      top: 1,
-      bottom: 1,
-      north: 1,
-      south: 1,
-      west: 1,
-      east: 1,
-    },
-
-    textures: {
-      top: TEXTURE_PODZOL,
-      bottom: DIRT,
-      north: TEXTURE_PODZOL_SIDE,
-      south: TEXTURE_PODZOL_SIDE,
-      west: TEXTURE_PODZOL_SIDE,
-      east: TEXTURE_PODZOL_SIDE,
-    },
+    cube,
   });
 
 export default Podzol;

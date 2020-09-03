@@ -78,6 +78,15 @@ const BasePropertiesComponent = (): BlockData => ({
   },
   isSlab: false,
   name: 'Unnamed block',
+  renderToChunk(
+    chunk,
+    x: number,
+    y: number,
+    z: number,
+    { vertexBuffer, indexBuffer, vertexCount },
+  ) {
+    return this.cube.render(chunk, x, y, z, { vertexBuffer, indexBuffer, vertexCount }, this.id);
+  },
 });
 
 export default BasePropertiesComponent;

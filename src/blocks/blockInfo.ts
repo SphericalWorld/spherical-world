@@ -63,7 +63,6 @@ const blocks = [
 // TODO: try typed arrays everywhere, preferable 32 bit
 const blocksTextureInfo = createArray<Uint32Array>(256, () => new Uint32Array(6));
 const blocksFlags = createArray<Uint32Array>(256, () => new Uint32Array(5));
-const bufferInfo = createArray<Uint32Array>(256, () => new Uint32Array(6));
 const blocksInfo = createArray<BlockData>(256, Block());
 
 export const LIGHT_TRANSPARENT: 0 = 0;
@@ -95,13 +94,6 @@ for (const block of blocks) {
   blocksTextureInfo[block.id][3] = block.textures.south;
   blocksTextureInfo[block.id][4] = block.textures.west;
   blocksTextureInfo[block.id][5] = block.textures.east;
-
-  bufferInfo[block.id][0] = block.buffer.top || 0;
-  bufferInfo[block.id][1] = block.buffer.bottom || 0;
-  bufferInfo[block.id][2] = block.buffer.north || 0;
-  bufferInfo[block.id][3] = block.buffer.south || 0;
-  bufferInfo[block.id][4] = block.buffer.west || 0;
-  bufferInfo[block.id][5] = block.buffer.east || 0;
 }
 
-export { blocksTextureInfo, blocksFlags, bufferInfo, blocksInfo };
+export { blocksTextureInfo, blocksFlags, blocksInfo };

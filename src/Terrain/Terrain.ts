@@ -223,6 +223,8 @@ export const drawOpaqueChunkData = (
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
+  const matrixCopy = mat4.clone(mvMatrix);
+
   terrain.material.use();
   terrain.material.shader.use();
   drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -238,6 +240,9 @@ export const drawOpaqueChunkData = (
 
       const { buffersInfo } = chunk.buffers[subchunk];
       gl.bindVertexArray(chunk.buffers[subchunk].vao);
+      vec3.set(tmpVec, chunk.x, 0, chunk.z);
+      mat4.translate(mvMatrix, matrixCopy, tmpVec);
+      gl.uniformMatrix4fv(terrain.material.shader.uMVMatrix, false, mvMatrix);
 
       for (let i = 0; i < buffersInfo.length - 1; i += 1) {
         if (buffersInfo[i].indexCount) {
@@ -294,7 +299,6 @@ export const drawOpaqueChunkData = (
   gl.uniformMatrix4fv(terrain.occlusionCullingShader.uPMatrix, false, pMatrix);
 
   // gl.bindVertexArray(null);
-  const matrixCopy = mat4.clone(mvMatrix);
   mvMatrix = mat4.clone(matrixCopy);
   for (const chunk of chunksToRender) {
     for (let subchunk = 15; subchunk > 0; subchunk -= 1) {
@@ -362,9 +366,12 @@ export const drawTransparentChunkData = (
   cameraPosition: vec3,
   skyColor: [number, number, number],
   globalColor: [number, number, number, number],
+  mvMatrix,
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
+  const matrixCopy = mat4.clone(mvMatrix);
+
   terrain.material.use();
 
   drawFog(terrain, shader, skyColor, cameraPosition[0], cameraPosition[1], cameraPosition[2]);
@@ -393,6 +400,9 @@ export const drawTransparentChunkData = (
       const { buffersInfo } = chunk.buffers[subchunk];
 
       if (buffersInfo[ii].indexCount) {
+        vec3.set(tmpVec, chunk.x, 0, chunk.z);
+        mat4.translate(mvMatrix, matrixCopy, tmpVec);
+        gl.uniformMatrix4fv(shader.uMVMatrix, false, mvMatrix);
         gl.bindBuffer(gl.ARRAY_BUFFER, chunk.buffers[subchunk].vertexBuffer);
         gl.vertexAttribPointer(shader.aVertexPosition, 3, gl.FLOAT, false, 40, 0);
         gl.vertexAttribPointer(shader.aTextureCoord, 2, gl.FLOAT, false, 40, 12);

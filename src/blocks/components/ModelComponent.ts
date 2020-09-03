@@ -24,9 +24,9 @@ const ModelComponent = (model: MeshJSON): { renderToChunk: RenderToChunk } => ({
 
     for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
       vertexBuffer.push(
-        model.vertexPositions[i * 3] + x + chunk.x,
+        model.vertexPositions[i * 3] + x,
         model.vertexPositions[i * 3 + 1] + y,
-        model.vertexPositions[i * 3 + 2] + z + chunk.z,
+        model.vertexPositions[i * 3 + 2] + z,
         model.vertexTextureCoords[i * 2],
         model.vertexTextureCoords[i * 2 + 1],
         this.id,

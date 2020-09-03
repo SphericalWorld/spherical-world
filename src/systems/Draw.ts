@@ -97,6 +97,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       1,
     ];
     // console.log(globalColor)s
+    mvPushMatrix();
     drawOpaqueChunkData(
       terrain,
       cameraPosition.translation,
@@ -106,7 +107,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       mvMatrix,
       cameraPosition.translation,
     );
-
+    mvPopMatrix();
     const draw = (position: Transform, visual: Visual): void => {
       runShader(visual.glObject.material.shader);
       visual.glObject.material.use();
@@ -154,8 +155,10 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     gl.enable(gl.BLEND);
 
     runShader(terrain.material.shader);
-    drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor);
 
+    mvPushMatrix();
+    drawTransparentChunkData(terrain, cameraPosition.translation, skyColor, globalColor, mvMatrix);
+    mvPopMatrix();
     for (const { transform, visual } of components) {
       if (!visual.glObject.material.transparent || !visual.enabled) {
         continue;

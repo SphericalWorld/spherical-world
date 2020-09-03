@@ -59,9 +59,9 @@ const Torch = () => {
 
       for (let i = 0; i < model.vertexPositions.length / 3; i += 1) {
         vertexBuffer.push(
-          torches[flag][i * 3] + x + chunk.x,
+          torches[flag][i * 3] + x,
           torches[flag][i * 3 + 1] + y,
-          torches[flag][i * 3 + 2] + z + chunk.z,
+          torches[flag][i * 3 + 2] + z,
           model.vertexTextureCoords[i * 2],
           model.vertexTextureCoords[i * 2 + 1],
           this.id,
