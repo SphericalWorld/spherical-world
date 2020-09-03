@@ -85,7 +85,7 @@ const BasePropertiesComponent = (): BlockData => ({
     z: number,
     { vertexBuffer, indexBuffer, vertexCount },
   ) {
-    return this.cube.render(chunk, x, y, z, { vertexBuffer, indexBuffer, vertexCount }, this.id);
+    return this.model.render(chunk, x, y, z, { vertexBuffer, indexBuffer, vertexCount }, this.id);
   },
 });
 

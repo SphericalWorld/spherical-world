@@ -1,19 +1,22 @@
 import type Chunk from './Chunk';
 import { getIndex } from '../../../../common/chunk';
 
-type UVProperties = [number, number, number, number];
+type UVProperties = readonly [number, number, number, number];
 
 type CubeProperties = Readonly<{
-  from: [number, number, number];
-  to: [number, number, number];
+  from: readonly [number, number, number];
+  to: readonly [number, number, number];
   faces: Readonly<{
-    top?: { texture: number; uv?: UVProperties };
-    bottom?: { texture: number; uv?: UVProperties };
-    north?: { texture: number; uv?: UVProperties };
-    south?: { texture: number; uv?: UVProperties };
-    west?: { texture: number; uv?: UVProperties };
-    east?: { texture: number; uv?: UVProperties };
+    top?: Readonly<{ texture: string; uv?: UVProperties }>;
+    bottom?: Readonly<{ texture: string; uv?: UVProperties }>;
+    north?: Readonly<{ texture: string; uv?: UVProperties }>;
+    south?: Readonly<{ texture: string; uv?: UVProperties }>;
+    west?: Readonly<{ texture: string; uv?: UVProperties }>;
+    east?: Readonly<{ texture: string; uv?: UVProperties }>;
   }>;
+  textures: {
+    [key: string]: number;
+  };
 }>;
 
 const getColorComponent = (
@@ -146,7 +149,7 @@ const defaultUV = [
   [0, 0],
 ];
 
-const transformUV = ([u, v, uMax, vMax]: [number, number, number, number]) => [
+const transformUV = ([u, v, uMax, vMax]: UVProperties) => [
   [uMax / 16, vMax / 16],
   [u / 16, vMax / 16],
   [uMax / 16, v / 16],
@@ -163,6 +166,10 @@ export class Cube {
     east: number[];
   };
 
+  textures: {
+    [key: string]: number;
+  };
+
   cubeProperies: CubeProperties;
 
   constructor(cubeProperies: CubeProperties) {
@@ -171,6 +178,7 @@ export class Cube {
       from: [x, y, z],
       to: [xTo, yTo, zTo],
     } = cubeProperies;
+    this.textures = cubeProperies.textures;
     this.faces = {
       top: {
         vertexes: [
@@ -259,7 +267,7 @@ export class Cube {
         this.faces.top,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.top?.texture,
+        this.textures[this.cubeProperies.faces.top?.texture],
         block,
         1,
         chunk,
@@ -281,7 +289,7 @@ export class Cube {
         this.faces.bottom,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.bottom?.texture,
+        this.textures[this.cubeProperies.faces.bottom?.texture],
         block,
         0.5,
         chunk,
@@ -304,7 +312,7 @@ export class Cube {
         this.faces.north,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.north?.texture,
+        this.textures[this.cubeProperies.faces.north?.texture],
         block,
         0.6,
         chunk,
@@ -327,7 +335,7 @@ export class Cube {
         this.faces.south,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.south?.texture,
+        this.textures[this.cubeProperies.faces.south?.texture],
         block,
         0.6,
         chunk,
@@ -350,7 +358,7 @@ export class Cube {
         this.faces.west,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.west?.texture,
+        this.textures[this.cubeProperies.faces.west?.texture],
         block,
         0.8,
         chunk,
@@ -373,7 +381,7 @@ export class Cube {
         this.faces.east,
         buffers,
         buffers.vertexCount + vertexCount,
-        this.cubeProperies.faces.east?.texture,
+        this.textures[this.cubeProperies.faces.east?.texture],
         block,
         0.8,
         chunk,
@@ -404,7 +412,6 @@ export class Cube {
     dy: number,
     dz: number,
   ): number {
-    // if (chunk.getBlock(x, y + 1, z))
     const textureU = texture / 16;
     const textureV = Math.floor(textureU) / 16;
 
@@ -438,7 +445,6 @@ export class Cube {
     for (let index = 0; index < face.indexes.length; index++) {
       buffers.indexBuffer.push(face.indexes[index] + vertexCount);
     }
-    // buffers.indexBuffer.push(...this.faces.top.indexes);
 
     return face.vertexes.length;
   }

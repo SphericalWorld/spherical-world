@@ -3,23 +3,23 @@ import Block from './Block';
 import { IRON_ORE } from '../engine/Texture/textureConstants';
 import { ironOre } from '../../common/blocks/blocksInfo';
 import { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
+import { cube } from './Cube';
 
-const cube = new Cube({
-  from: [0, 0, 0],
-  to: [1, 1, 1],
-  faces: {
-    top: { texture: IRON_ORE },
-    bottom: { texture: IRON_ORE },
-    north: { texture: IRON_ORE },
-    south: { texture: IRON_ORE },
-    west: { texture: IRON_ORE },
-    east: { texture: IRON_ORE },
+const model = new Cube({
+  ...cube,
+  textures: {
+    top: IRON_ORE,
+    bottom: IRON_ORE,
+    north: IRON_ORE,
+    south: IRON_ORE,
+    west: IRON_ORE,
+    east: IRON_ORE,
   },
 });
 
 const IronOre = (): BlockData =>
   Block(ironOre, {
-    cube,
+    model,
   });
 
 export default IronOre;

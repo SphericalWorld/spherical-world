@@ -3,23 +3,23 @@ import Block from './Block';
 import { COAL_ORE } from '../engine/Texture/textureConstants';
 import { coalOre } from '../../common/blocks/blocksInfo';
 import { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
+import { cube } from './Cube';
 
-const cube = new Cube({
-  from: [0, 0, 0],
-  to: [1, 1, 1],
-  faces: {
-    top: { texture: COAL_ORE },
-    bottom: { texture: COAL_ORE },
-    north: { texture: COAL_ORE },
-    south: { texture: COAL_ORE },
-    west: { texture: COAL_ORE },
-    east: { texture: COAL_ORE },
+const model = new Cube({
+  ...cube,
+  textures: {
+    top: COAL_ORE,
+    bottom: COAL_ORE,
+    north: COAL_ORE,
+    south: COAL_ORE,
+    west: COAL_ORE,
+    east: COAL_ORE,
   },
 });
 
 const CoalOre = (): BlockData =>
   Block(coalOre, {
-    cube,
+    model,
   });
 
 export default CoalOre;

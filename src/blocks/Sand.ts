@@ -3,23 +3,23 @@ import Block from './Block';
 import { SAND } from '../engine/Texture/textureConstants';
 import { sand } from '../../common/blocks/blocksInfo';
 import { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
+import { cube } from './Cube';
 
-const cube = new Cube({
-  from: [0, 0, 0],
-  to: [1, 1, 1],
-  faces: {
-    top: { texture: SAND },
-    bottom: { texture: SAND },
-    north: { texture: SAND },
-    south: { texture: SAND },
-    west: { texture: SAND },
-    east: { texture: SAND },
+const model = new Cube({
+  ...cube,
+  textures: {
+    top: SAND,
+    bottom: SAND,
+    north: SAND,
+    south: SAND,
+    west: SAND,
+    east: SAND,
   },
 });
 
 const Sand = (): BlockData =>
   Block(sand, {
-    cube,
+    model,
   });
 
 export default Sand;
