@@ -1,4 +1,4 @@
-import { vec3 } from 'gl-matrix';
+import { vec3, quat } from 'gl-matrix';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
 import { blocksFlags, blocksInfo, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
@@ -107,7 +107,12 @@ export default (world: WorldPhysicsThread, terrain: Terrain): System => {
       if (!joint.parentTransform) {
         joint.parentTransform = transformRegistry.get(joint.parent);
       }
-      vec3.add(transform.translation, joint.parentTransform.translation, joint.distance);
+      // TODO: proper handling of joints
+      const qwe = quat.invert(quat.create(), joint.parentTransform.rotation);
+      vec3.transformQuat(transform.translation, joint.distance, qwe);
+
+      vec3.sub(transform.translation, joint.parentTransform.translation, transform.translation);
+      quat.mul(transform.rotation, qwe, quat.fromEuler(quat.create(), 0, 0, 90));
     }
   };
 };

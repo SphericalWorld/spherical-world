@@ -215,4 +215,10 @@ export const makeTextureFromText = (textToWrite: string, textSize = 56): Texture
   return new Texture(null, makeTexture(textureCanvas, gl.TEXTURE_2D, gl.RGBA));
 };
 
+export const imageToPixelArray = (image: HTMLImageElement): ImageData => {
+  ctx.drawImage(image, 0, 0, image.width, image.height);
+  const pixelData = ctx.getImageData(0, 0, image.width, image.height);
+  return pixelData;
+};
+
 export default GlTextureLibrary;

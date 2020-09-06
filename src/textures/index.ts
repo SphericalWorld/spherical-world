@@ -40,6 +40,8 @@ import grassColorMap from './colormap/grass.png';
 
 import skybox from './skybox.png';
 import player from './player.png';
+import flame from './particles/flame.png';
+
 import {
   PLANKS_OAK,
   TEXTURE_COBBLESTONE_MOSSY,
@@ -116,6 +118,8 @@ const texturesProvider = async (): Promise<Texture[]> =>
     Texture.create(grassColorMap, { name: 'grassColorMap' }),
     Texture.create(skybox, { name: 'skybox' }),
     Texture.create(player, { name: 'player' }),
+    Texture.create(flame, { name: 'flame' }),
+
     // terrain: {},
     // terrainAnimated: {}
   ]);

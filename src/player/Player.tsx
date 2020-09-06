@@ -51,6 +51,7 @@ import { getBlock } from '../../common/terrain';
 import type Terrain from '../Terrain';
 import { blocksFlags, HAS_PHYSICS_MODEL, blocksInfo } from '../blocks/blockInfo';
 import type { UserControlled as CUserControlled, Transform as CTransform } from '../components';
+import { PlayerHands } from './PlayerHands';
 
 type Props = {
   id: Entity;
@@ -143,7 +144,7 @@ export const Player = ({
       <PlayerScriptComponent />
       <Inventory {...inventory.data} />
       {isMainPlayer
-        ? [<UserControlled />, <Camera {...camera} />]
+        ? [<UserControlled />, <Camera {...camera} />, <PlayerHands parent={id} />]
         : [
             <Visual object={new GlObject({ model, material })} />,
             <TextBillboard

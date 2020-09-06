@@ -166,6 +166,8 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       draw(transform, visual);
     }
     gl.disable(gl.BLEND);
+
+    // cameraPosition.translation draw player data
   };
   return drawSystem;
 };

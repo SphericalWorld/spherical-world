@@ -12,6 +12,7 @@ import terrainAnimatedProvider from './TerrainAnimated';
 import terrainProvider from './Terrain';
 import blocksDropableProvider from './BlocksDroppable';
 import type { Material } from '../engine/Material';
+import flameProvider from './Flame';
 
 const materialsProvider = (
   textureLibrary: TextureLibrary,
@@ -21,6 +22,8 @@ const materialsProvider = (
   const terrainOverlay = terrainOverlayProvider(textureLibrary, shaderLibrary);
   const terrainAnimated = terrainAnimatedProvider(textureLibrary, shaderLibrary);
   const blocksDropable = blocksDropableProvider(textureLibrary, shaderLibrary);
+  const flame = flameProvider(textureLibrary, shaderLibrary);
+
   const terrain = terrainProvider(textureLibrary, shaderLibrary, [
     terrainDiffuse,
     terrainOverlay,
@@ -37,6 +40,7 @@ const materialsProvider = (
     terrainAnimated,
     terrain,
     blocksDropable,
+    flame,
   ];
 };
 
