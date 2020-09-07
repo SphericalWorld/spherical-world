@@ -1,9 +1,11 @@
+import { vec3 } from 'gl-matrix';
 import type { BlockData } from './Block';
 import Block from './Block';
 import { PLANKS_OAK } from '../engine/Texture/textureConstants';
 import { woodenSlab } from '../../common/blocks/blocksInfo';
 import { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
 import { slab } from './Slab';
+import { createAABB } from '../physicsThread/physics/colliders/AABB';
 
 const model = new Cube({
   ...slab,
@@ -19,8 +21,8 @@ const model = new Cube({
 
 const WoodenSlab = (): BlockData =>
   Block(woodenSlab, {
-    isSlab: true,
     model,
+    collisionBox: createAABB(vec3.create(), vec3.fromValues(1, 0.5, 1)),
   });
 
 export default WoodenSlab;

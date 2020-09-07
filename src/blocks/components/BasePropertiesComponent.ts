@@ -1,3 +1,4 @@
+import { vec3 } from 'gl-matrix';
 import { getIndex } from '../../../common/chunk';
 import identity from '../../../common/fp/combinators/identity';
 import { SLICE } from '../../../common/constants/chunk';
@@ -8,6 +9,7 @@ import {
   footstepsGrass18,
 } from '../../sounds';
 import type { BlockData } from '../Block';
+import { createAABB } from '../../physicsThread/physics/colliders/AABB';
 
 export type ChunkData = Readonly<{
   flags: Uint8Array;
@@ -76,7 +78,6 @@ const BasePropertiesComponent = (): BlockData => ({
   sounds: {
     footsteps: [footstepsGrass13, footstepsGrass15, footstepsGrass16, footstepsGrass18],
   },
-  isSlab: false,
   name: 'Unnamed block',
   renderToChunk(
     chunk,
@@ -87,6 +88,7 @@ const BasePropertiesComponent = (): BlockData => ({
   ) {
     return this.model.render(chunk, x, y, z, { vertexBuffer, indexBuffer, vertexCount }, this.id);
   },
+  collisionBox: createAABB(vec3.create(), vec3.fromValues(1, 1, 1)),
 });
 
 export default BasePropertiesComponent;

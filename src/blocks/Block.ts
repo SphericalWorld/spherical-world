@@ -1,5 +1,6 @@
 import type { RenderToChunk, ChunkData } from './components/BasePropertiesComponent';
 import BasePropertiesComponent from './components/BasePropertiesComponent';
+import type { AABB } from '../physicsThread/physics/colliders/AABB';
 
 export type BlockData = {
   id: number;
@@ -40,8 +41,8 @@ export type BlockData = {
   sounds: {
     footsteps: ReadonlyArray<string>;
   };
-  isSlab: boolean;
   name: string;
+  collisionBox: AABB;
 };
 
 const Block = (...components: Partial<BlockData>[]): BlockData =>

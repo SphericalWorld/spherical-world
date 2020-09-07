@@ -7,22 +7,16 @@ import type { System } from '../../../common/ecs/System';
 import Velocity from '../../components/Velocity';
 import Transform from '../../components/Transform';
 import Physics from '../../components/Physics';
-import { createAABB } from '../physics/colliders/AABB';
 import { collide, testCollision, move } from '../physics/Collider';
 import type Terrain from '../Terrain';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';
 import type { WorldPhysicsThread } from '../../Events';
 
-const oneVector = vec3.fromValues(1, 1, 1);
-const halfVector = vec3.fromValues(1, 0.5, 1);
 const upVector = vec3.fromValues(0, 1, 0);
 
 const isChunkNotLoaded = (chunk) => chunk.state === CHUNK_STATUS_NEED_LOAD_ALL;
 
 const calculateMovement = (terrain: Terrain) => {
-  const blockAABB = createAABB(vec3.create(), oneVector);
-  const blockAABBSlab = createAABB(vec3.create(), halfVector);
-
   return (
     { translation }: Transform,
     velocity: Velocity,
@@ -39,8 +33,7 @@ const calculateMovement = (terrain: Terrain) => {
       Math.floor(blockPosition[1]),
       toPositionInChunk(blockPosition[2]),
     );
-    const { isSlab } = blocksInfo[block];
-    const blockModel = isSlab ? blockAABBSlab : blockAABB;
+    const blockModel = blocksInfo[block].collisionBox;
     if (!blocksFlags[block][HAS_PHYSICS_MODEL]) return;
     blockModel.move(blockPosition);
     if (testCollision(collider.shape, blockModel)) {
