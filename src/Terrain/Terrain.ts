@@ -79,16 +79,14 @@ const drawFog = (
   z: number,
 ) => {
   const blockInDown = getBlockDetails(terrain, x, y, z);
-  if (blockInDown) {
-    if (blockInDown === WATER) {
-      gl.uniform1f(shader.uFogDensity, 0.09);
-      gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1c / 256, 0x48 / 256, 1);
-      gl.uniform1i(shader.uFogType, 1);
-    } else {
-      gl.uniform1f(shader.uFogDensity, 0.007);
-      gl.uniform4f(shader.uFogColor, ...skyColor, 1);
-      gl.uniform1i(shader.uFogType, 0);
-    }
+  if (blockInDown === WATER) {
+    gl.uniform1f(shader.uFogDensity, 0.09);
+    gl.uniform4f(shader.uFogColor, 0x03 / 256, 0x1c / 256, 0x48 / 256, 1);
+    gl.uniform1i(shader.uFogType, 1);
+  } else {
+    gl.uniform1f(shader.uFogDensity, 0.007);
+    gl.uniform4f(shader.uFogColor, ...skyColor, 1);
+    gl.uniform1i(shader.uFogType, 0);
   }
 };
 

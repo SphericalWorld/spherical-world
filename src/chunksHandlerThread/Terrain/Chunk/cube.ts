@@ -129,6 +129,7 @@ const addVertex = (u: number, v: number) => (
 
   if (s1 !== -1 || s2 !== -1) {
     [cf, c] = getLight(xRes, yRes, zRes, chunk);
+    // [cf, c] = [1, 0];
   }
   const [r, g, b, vGlobal] = getLightColor(light, c, cf, s1, s1f, s2, s2f);
 
@@ -143,10 +144,10 @@ const addVertexBR = addVertex(1, 1);
 const vertexLightCalc = [addVertexBL, addVertexTL, addVertexBR, addVertexTR];
 
 const defaultUV = [
-  [1 / 16, 1 / 16],
-  [0, 1 / 16],
   [1 / 16, 0],
   [0, 0],
+  [1 / 16, 1 / 16],
+  [0, 1 / 16],
 ];
 
 const transformUV = ([u, v, uMax, vMax]: UVProperties) => [
@@ -212,32 +213,32 @@ export class Cube {
       },
       south: {
         vertexes: [
-          [x, y, z],
           [x, y, zTo],
-          [x, yTo, z],
+          [x, y, z],
           [x, yTo, zTo],
+          [x, yTo, z],
         ],
-        indexes: [0, 1, 3, 0, 3, 2],
+        indexes: [0, 3, 1, 0, 2, 3],
         uv: cubeProperies.faces.south?.uv ? transformUV(cubeProperies.faces.south.uv) : defaultUV,
       },
       west: {
         vertexes: [
-          [xTo, yTo, zTo],
-          [x, yTo, zTo],
           [xTo, y, zTo],
           [x, y, zTo],
+          [xTo, yTo, zTo],
+          [x, yTo, zTo],
         ],
-        indexes: [0, 1, 3, 0, 3, 2],
+        indexes: [0, 3, 1, 0, 2, 3],
         uv: cubeProperies.faces.west?.uv ? transformUV(cubeProperies.faces.west.uv) : defaultUV,
       },
       east: {
         vertexes: [
-          [xTo, yTo, z],
-          [x, yTo, z],
           [xTo, y, z],
           [x, y, z],
+          [xTo, yTo, z],
+          [x, yTo, z],
         ],
-        indexes: [0, 3, 1, 0, 2, 3],
+        indexes: [0, 1, 3, 0, 3, 2],
         uv: cubeProperies.faces.east?.uv ? transformUV(cubeProperies.faces.east.uv) : defaultUV,
       },
     };
