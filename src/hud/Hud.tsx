@@ -5,6 +5,7 @@ import { KEY_BINDINGS } from './components/KeyBindings/keyBindingsConstants';
 import { AUDIO } from './components/Audio/audioConstants';
 import { VIDEO } from './components/Video/videoConstants';
 import { INVENTORY } from './components/Inventory/inventoryConstants';
+import { CRAFT } from './components/Craft/craftConstants';
 import MainMenu from './components/MainMenu';
 import MainPanel from './components/MainPanel/MainPanel';
 import PlayerStats from './components/PlayerStats/PlayerStats';
@@ -15,6 +16,7 @@ import Video from './components/Video/Video';
 import Inventory from './components/Inventory/Inventory';
 import DebugPanel from './components/Debug/DebugPanel';
 import Chat from './components/Chat';
+import Craft from './components/Craft';
 
 const Hud = (): JSX.Element => (
   <div>
@@ -23,6 +25,7 @@ const Hud = (): JSX.Element => (
     <Route on={INVENTORY} component={Inventory} />
     <Route on={AUDIO} component={Audio} />
     <Route on={VIDEO} component={Video} />
+    <Route on={CRAFT} component={Craft} />
     <DebugPanel />
     <MainPanel />
     <Chat />

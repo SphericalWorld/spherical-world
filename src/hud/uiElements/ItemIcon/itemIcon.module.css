@@ -1,0 +1,21 @@
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
+
+.imageIcon {
+  display: flex;
+  justify-content: center;
+}
+
+.img {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.emptyImg {
+  background-color: var(--selected-slot-animated);
+
+  width: var(--size-slot);
+  height: var(--size-slot);
+  border-radius: 0.5em;
+}

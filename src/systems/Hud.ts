@@ -22,6 +22,7 @@ import { ServerToClientMessage } from '../../common/protocol';
 import type { State } from '../reducers/rootReducer';
 import type Network from '../network';
 import { WorldMainThread, GameEvent } from '../Events';
+import { CRAFT } from '../hud/components/Craft/craftConstants';
 
 const mapState = ({
   keyBindings,
@@ -42,6 +43,11 @@ const onInventoryToggled = (world: WorldMainThread, toggleUIState: typeof doTogg
   world.events
     .filter((e) => e.type === GameEvent.inventoryToggled && e)
     .subscribe(() => toggleUIState(INVENTORY));
+
+const onCraftToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
+  world.events
+    .filter((e) => e.type === GameEvent.craftToggled && e)
+    .subscribe(() => toggleUIState(CRAFT));
 
 const onInventoryChanged = (world: WorldMainThread, store: Store) =>
   world.events
@@ -84,6 +90,7 @@ export default (world: WorldMainThread, store: Store, input: Input, network: Net
 
   onMenuToggled(world, toggleUIState);
   onInventoryToggled(world, toggleUIState);
+  onCraftToggled(world, toggleUIState);
   onDispatchableEvent(world.events, store);
   onInventoryChanged(world, store);
   onPlayerAddItem(network, store);

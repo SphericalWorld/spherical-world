@@ -40,5 +40,5 @@
 
 .buttonClose:hover {
   background-color: var(--alert);
-  box-shadow: inset 0 0 1em rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0.3em rgba(0, 0, 0, 50%);
 }
