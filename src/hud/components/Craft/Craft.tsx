@@ -5,11 +5,10 @@ import { useSetUIState } from '../../utils/StateRouter';
 import { CRAFT } from './craftConstants';
 import { Button, InputText, ItemIcon, Label } from '../../uiElements';
 import {
-  blockCraft,
-  settingsCraft,
+  craftSettings,
   sortButton,
   inputText,
-  recipesBlock,
+  recipesSection,
   itemCount,
   itemImg,
   recipeName,
@@ -36,48 +35,46 @@ const ItemIconCount = ({ count }: { count: number }): JSX.Element => (
 const Craft = (): JSX.Element => {
   const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(CRAFT, false), [setUIState]);
-  const [indexRecipe, setIndexRecipe] = useState(0);
+  const [RecipeIndex, setRecipeIndex] = useState(0);
 
   return (
     <ModalWindow caption="craft" onClose={close}>
-      <div className={blockCraft}>
-        <div className={settingsCraft}>
-          <Button size="small" className={sortButton}>
-            sort <span>⇅</span>
-          </Button>
-          <InputText className={inputText} description="Search" />
-        </div>
-        <div className={recipesBlock}>
-          <div className={recipesListWrapper}>
-            <div className={recipesList}>
-              {recipes.map((recipe, ind) => (
-                <div className={recipesListItem} role="button" onClick={() => setIndexRecipe(ind)}>
-                  <ItemIcon />
-                  <div className={recipeNameList}>
-                    <Label>{blocksInfo[recipe.itemId].name}</Label>
-                  </div>
+      <div className={craftSettings}>
+        <Button size="small" className={sortButton}>
+          sort <span>⇅</span>
+        </Button>
+        <InputText className={inputText} description="Search" />
+      </div>
+      <div className={recipesSection}>
+        <div className={recipesListWrapper}>
+          <div className={recipesList}>
+            {recipes.map((recipe, ind) => (
+              <div className={recipesListItem} role="button" onClick={() => setRecipeIndex(ind)}>
+                <ItemIcon />
+                <div className={recipeNameList}>
+                  <Label>{blocksInfo[recipe.itemId].name}</Label>
                 </div>
-              ))}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={craftIngredients}>
+          <div className={craftHead}>
+            <ItemIconCount count={recipes[RecipeIndex].count} />
+            <div className={recipeName}>
+              <Label>{blocksInfo[recipes[RecipeIndex].itemId].name}</Label>
             </div>
           </div>
-          <div className={craftIngredients}>
-            <div className={craftHead}>
-              <ItemIconCount count={recipes[indexRecipe].count} />
-              <div className={recipeName}>
-                <Label>{blocksInfo[recipes[indexRecipe].itemId].name}</Label>
-              </div>
-            </div>
-            <Label> ingredients </Label>
-            <div className={ingredientsList}>
-              {recipes[indexRecipe].ingredients.map((ingredient) => (
-                <div className={ingredientCraft}>
-                  <ItemIconCount count={ingredient.count} />
-                  <div className={recipeName}>
-                    <Label>{blocksInfo[ingredient.id].name}</Label>
-                  </div>
+          <Label> ingredients </Label>
+          <div className={ingredientsList}>
+            {recipes[RecipeIndex].ingredients.map((ingredient) => (
+              <div className={ingredientCraft}>
+                <ItemIconCount count={ingredient.count} />
+                <div className={recipeName}>
+                  <Label>{blocksInfo[ingredient.id].name}</Label>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

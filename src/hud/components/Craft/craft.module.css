@@ -1,10 +1,6 @@
 @import '../../styles/spacing.module.css';
 
-.blockCraft {
-  /* min-height: 50vh; */
-}
-
-.settingsCraft {
+.craftSettings {
   display: flex;
   justify-content: space-between;
   padding: var(--space-s);
@@ -18,7 +14,7 @@
   width: 55%;
 }
 
-.recipesBlock {
+.recipesSection {
   display: flex;
   flex-direction: row;
   max-height: 55vh;
