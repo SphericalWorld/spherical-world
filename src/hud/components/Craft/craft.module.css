@@ -1,0 +1,119 @@
+@import '../../styles/spacing.module.css';
+
+.craftSettings {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-s);
+}
+
+.sortButton {
+  width: 15%;
+}
+
+.inputText {
+  width: 55%;
+}
+
+.recipesSection {
+  display: flex;
+  flex-direction: row;
+  max-height: 55vh;
+}
+
+.recipesListItem {
+  display: flex;
+  align-items: center;
+  padding: var(--space-xs);
+}
+
+.recipesListItem:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.recipesListItem img {
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.recipeNameList {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 var(--space-xs);
+}
+
+.ingredientCraft {
+  display: flex;
+  align-items: center;
+  margin: var(--space-xs);
+}
+
+.itemImg {
+  position: relative;
+}
+
+.itemCount {
+  bottom: 0;
+  position: absolute;
+  right: 0;
+}
+
+.recipeName {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 var(--space-xs);
+}
+
+.craftIngredients {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 70%;
+}
+
+.recipesListWrapper {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 30%;
+  border-right: var(--size-border) solid var(--border-color-slot);
+}
+
+.recipesList {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.recipesList::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+.recipesList::-webkit-scrollbar-track {
+  border-radius: 1em;
+}
+
+.recipesList::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 1em;
+}
+
+.recipesList:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1em;
+}
+
+.ingredientsList {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--space-xs);
+}
+
+.craftHead {
+  display: flex;
+  align-items: center;
+  padding: var(--space-xs);
+  border-bottom: var(--size-border) solid var(--border-color-slot);
+}

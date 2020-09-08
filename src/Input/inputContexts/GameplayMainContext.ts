@@ -15,6 +15,7 @@ import {
   toggleInventoryEvent,
   selectNextItemEvent,
   selectPreviousItemEvent,
+  toggleCraftEvent,
 } from '../events';
 
 export const GAMEPLAY_MAIN_CONTEXT: 'GAMEPLAY_MAIN_CONTEXT' = 'GAMEPLAY_MAIN_CONTEXT';
@@ -39,6 +40,7 @@ const createGameplayMainContext = (): InputContext =>
       toggleInventoryEvent,
       selectNextItemEvent,
       selectPreviousItemEvent,
+      toggleCraftEvent,
     ],
   });
 

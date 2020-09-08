@@ -15,6 +15,7 @@ import {
   PLAYER_ATTACK_EVENT,
   PLAYER_PUT_BLOCK_EVENT,
   SET_KEY_EVENT,
+  TOGGLE_CRAFT_EVENT,
 } from '../../common/constants/input/eventTypes';
 import {
   INPUT_TYPE_RANGE,
@@ -186,4 +187,12 @@ export const keySetEvent = {
   gameEvent: KEY_SELECT_BUTTON,
   dispatchable: true,
   data: ({ data }: { data: string }) => data,
+};
+
+export const toggleCraftEvent = {
+  action: TOGGLE_CRAFT_EVENT,
+  category: CATEGORY_INTERFACE,
+  caption: 'Craft',
+  type: INPUT_TYPE_ACTION,
+  gameEvent: GameEvent.craftToggled,
 };

@@ -21,6 +21,7 @@ export enum GameEvent {
   playerStopedAttack,
   setDayTime,
   chunkVBOLoaded,
+  craftToggled,
 }
 
 type ChunkLoadedEvent = Readonly<{
@@ -75,6 +76,9 @@ export type MainThreadEvents =
     }>
   | Readonly<{
       type: GameEvent.inventoryToggled;
+    }>
+  | Readonly<{
+      type: GameEvent.craftToggled;
     }>
   | Readonly<{
       type: GameEvent.menuToggled;

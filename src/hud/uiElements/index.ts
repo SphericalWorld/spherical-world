@@ -6,3 +6,5 @@ export { default as Label } from './Label';
 export { default as ModalWindow } from './ModalWindow';
 export { default as Select } from './Select';
 export { default as ProgressBar } from './ProgressBar';
+export { default as InputText } from './InputText';
+export { default as ItemIcon } from './ItemIcon';

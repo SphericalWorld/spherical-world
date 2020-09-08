@@ -3,7 +3,7 @@
 @import '../../styles/sizes.module.css';
 
 .label {
-  text-align: center;
+  /* text-align: center; */
   text-transform: capitalize;
 }
 

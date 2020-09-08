@@ -24,7 +24,7 @@
   --font-color-main: rgb(255, 255, 255);
   --font-color-main-shadow: rgb(0, 0, 0);
 
-  --background-color-slot: rgb(5, 82, 72);
+  --background-color-slot: rgba(51, 119, 131, 0.7);
   --border-color-slot: rgb(17, 52, 54);
   --selected-slot: rgb(189, 205, 214);
   --selected-slot-animated: rgb(30, 167, 241);

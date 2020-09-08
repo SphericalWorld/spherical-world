@@ -1,0 +1,42 @@
+@import '../../styles/fonts.module.css';
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
+
+.input {
+  display: block;
+  width: 100%;
+  padding: var(--space-xs) var(--space-s);
+  font-size: 14px;
+  font-family: inherit;
+  border-radius: 6px;
+  border: 1px solid #cdd9ed;
+  background: #fff;
+  transition: border 0.3s ease;
+}
+
+.input::placeholder {
+  color: #cbd1dc;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #113436;
+}
+
+.formInputText {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.input {
+  border-radius: 6px;
+}
+
+.input {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  margin-top: 0;
+  margin-bottom: 0;
+}
