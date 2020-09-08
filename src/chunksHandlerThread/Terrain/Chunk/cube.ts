@@ -404,7 +404,7 @@ export class Cube {
     face,
     buffers,
     vertexCount: number,
-    texture,
+    texture: number,
     block: number,
     globalLightIntensity: number,
     chunk,

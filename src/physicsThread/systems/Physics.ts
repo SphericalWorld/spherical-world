@@ -1,6 +1,6 @@
 import { vec3, quat } from 'gl-matrix';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
-import { blocksFlags, blocksInfo, HAS_PHYSICS_MODEL } from '../../blocks/blockInfo';
+import { blocksInfo } from '../../blocks/blockInfo';
 import Collider from '../../components/Collider';
 import Joint from '../../components/Joint';
 import type { System } from '../../../common/ecs/System';
@@ -33,8 +33,8 @@ const calculateMovement = (terrain: Terrain) => {
       Math.floor(blockPosition[1]),
       toPositionInChunk(blockPosition[2]),
     );
+    if (!blocksInfo[block].needPhysics) return;
     const blockModel = blocksInfo[block].collisionBox;
-    if (!blocksFlags[block][HAS_PHYSICS_MODEL]) return;
     blockModel.move(blockPosition);
     if (testCollision(collider.shape, blockModel)) {
       const manifold = collide(

@@ -5,7 +5,7 @@ import {
   CHUNK_HEIGHT,
   SLICE,
 } from '../../../../common/constants/chunk';
-import { blocksFlags, blocksInfo } from '../../../blocks/blockInfo';
+import { blocksInfo } from '../../../blocks/blockInfo';
 import ChunkBase from '../../../Terrain/Chunk/ChunkBase';
 
 import {
@@ -212,9 +212,9 @@ export default class Chunk extends ChunkBase {
         let lightLevel = 15;
         while (y > 0) {
           const index = getIndex(x, y, z);
-          if (!blocksFlags[this.blocks[index]][1]) {
+          if (!blocksInfo[this.blocks[index]].sightTransparent) {
             lightLevel = 0;
-          } else if (!blocksFlags[this.blocks[index]][0]) {
+          } else if (!blocksInfo[this.blocks[index]].lightTransparent) {
             lightLevel -= 1;
           }
           if (!lightLevel) {
@@ -236,7 +236,7 @@ export default class Chunk extends ChunkBase {
     for (let x = 0; x < CHUNK_WIDTH; x += 1) {
       for (let z = 0; z < CHUNK_WIDTH; z += 1) {
         let y = CHUNK_HEIGHT - 1;
-        while (y > 0 && blocksFlags[this.blocks[getIndex(x, y, z)]][1]) {
+        while (y > 0 && blocksInfo[this.blocks[getIndex(x, y, z)]].sightTransparent) {
           y -= 1;
           this.calcGlobalRecursion(x, y + 1, z);
         }
@@ -272,7 +272,7 @@ export default class Chunk extends ChunkBase {
       return;
     }
     this.state = CHUNK_STATUS_NEED_LOAD_VBO;
-    if (blocksFlags[this.blocks[getIndex(x, y, z)]][0]) {
+    if (blocksInfo[this.blocks[getIndex(x, y, z)]].lightTransparent) {
       return;
     }
     while (y > -1 && !this.blocks[index]) {
@@ -303,7 +303,7 @@ export default class Chunk extends ChunkBase {
       this.calcGlobalRecursion(x, y, z);
     }
     y = ytmp;
-    if (blocksFlags[block][0]) {
+    if (blocksInfo[block].lightTransparent) {
       this.calcRecursionRedRemove(x, y, z);
       this.calcRecursionGreenRemove(x, y, z);
       this.calcRecursionBlueRemove(x, y, z);

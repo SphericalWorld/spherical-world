@@ -1,29 +1,3 @@
-// const playerProvider = (store, BlockRemover, BlockPicker) => {
-//   class Player {
-//     name: string;
-//     constructor(params, app) {
-//       this.blockRemovingSpeed = 2;
-//
-//       this.level = 3;
-//       this.exp = 200;
-//       this.expForLevel = 250;
-//       this.maxHp = 10000;
-//       this.hp = 7500;
-//       this.mana = 6500;
-//       this.maxMana = 10000;
-//       setInterval(() => {
-//         this.exp += 1;
-//         if (this.exp === this.expForLevel) {
-//           this.exp = 0;
-//         }
-//       }, 200);
-//     }
-//
-//   return Player;
-// };
-//
-// export default playerProvider;
-
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
 import { GameObject, World, React } from '../../common/ecs';
@@ -49,7 +23,7 @@ import { materialLibrary, GlObject } from '../engine';
 import { Sound } from '../Sound';
 import { getBlock } from '../../common/terrain';
 import type Terrain from '../Terrain';
-import { blocksFlags, HAS_PHYSICS_MODEL, blocksInfo } from '../blocks/blockInfo';
+import { blocksInfo } from '../blocks/blockInfo';
 import type { UserControlled as CUserControlled, Transform as CTransform } from '../components';
 import { PlayerHands } from './PlayerHands';
 
@@ -108,7 +82,7 @@ class PlayerScript extends Script {
           translation[1] - 1,
           translation[2],
         );
-        if (blocksFlags[block][HAS_PHYSICS_MODEL]) {
+        if (blocksInfo[block].needPhysics) {
           this.footsteps[block].play();
           this.deltaMove = 0;
         }
@@ -132,7 +106,6 @@ export const Player = ({
 
   return (
     <GameObject id={id}>
-      {/* <transform qwe="asd" /> */}
       <Transform {...transform} />
       <Collider
         type={COLLIDER_AABB}

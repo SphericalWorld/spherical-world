@@ -60,32 +60,10 @@ const blocks = [
   WoodenSlab(),
 ];
 
-// TODO: try typed arrays everywhere, preferable 32 bit
 const blocksTextureInfo = createArray<Uint32Array>(256, () => new Uint32Array(6));
-const blocksFlags = createArray<Uint32Array>(256, () => new Uint32Array(5));
 const blocksInfo = createArray<BlockData>(256, Block());
 
-export const LIGHT_TRANSPARENT: 0 = 0;
-export const SIGHT_TRANSPARENT: 1 = 1;
-export const HAS_PHYSICS_MODEL: 2 = 2;
-export const HAS_GRAPHICS_MODEL: 3 = 3;
-
-// [  0: block.lightTransparent,
-//   1: block.sightTransparent,
-//   2: block.needPhysics,
-//   3: block.model.hasModel,
-//   4: block.selfTransparent,
-//   5: block.fallSpeedCap,
-//   6: block.fallAcceleration;
-//   7: block.model;
-
 for (const block of blocks) {
-  blocksFlags[block.id][LIGHT_TRANSPARENT] = block.lightTransparent ? 1 : 0;
-  blocksFlags[block.id][SIGHT_TRANSPARENT] = block.sightTransparent ? 1 : 0;
-  blocksFlags[block.id][HAS_PHYSICS_MODEL] = block.needPhysics ? 1 : 0;
-  blocksFlags[block.id][HAS_GRAPHICS_MODEL] = 'model' in block ? 1 : 0;
-  blocksFlags[block.id][4] = block.selfTransparent ? 1 : 0;
-
   blocksInfo[block.id] = block;
 
   blocksTextureInfo[block.id][0] = block.textures.top;
@@ -96,4 +74,4 @@ for (const block of blocks) {
   blocksTextureInfo[block.id][5] = block.textures.east;
 }
 
-export { blocksTextureInfo, blocksFlags, blocksInfo };
+export { blocksTextureInfo, blocksInfo };

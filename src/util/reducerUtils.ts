@@ -15,7 +15,7 @@ export const useMemoizedSelector: typeof useSelector = (selector) => {
 export const createReducer = <T>(
   initialState: T,
   fnMap: ReducersMap<T>,
-): ((state: T | void, action: Action) => T) => {
+): ((state: T | undefined, action: Action) => T) => {
   return (state = initialState, { type, payload }) => {
     const handler = fnMap[type];
 
@@ -25,17 +25,4 @@ export const createReducer = <T>(
 
 export const reduceReducers = <T>(...reducers: Reducer<T>[]): Reducer<T> => {
   return (previous, current) => reducers.reduce((p, r) => r(p, current), previous);
-};
-
-export const createConditionalSliceReducer = (sliceName: string, fnMap) => {
-  const sliceReducer = createReducer({}, fnMap);
-  return (state, action) => {
-    if (fnMap[action.type]) {
-      return {
-        ...state,
-        [sliceName]: sliceReducer(state[sliceName], action),
-      };
-    }
-    return state;
-  };
 };

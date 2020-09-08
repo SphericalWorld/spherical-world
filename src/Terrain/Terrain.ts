@@ -54,7 +54,7 @@ class Terrain extends TerrainBase<Chunk> {
   }
 }
 
-export const getVisibleChunks = (terrain: Terrain, pMatrix: mat4, mvMatrix: mat4) => {
+export const getVisibleChunks = (terrain: Terrain, pMatrix: mat4, mvMatrix: mat4): void => {
   const m = mat4.create();
   mat4.multiply(m, pMatrix, mvMatrix);
 
@@ -215,8 +215,8 @@ export const drawOpaqueChunkData = (
   cameraPosition: vec3,
   skyColor: [number, number, number],
   globalColor: [number, number, number, number],
-  pMatrix,
-  mvMatrix,
+  pMatrix: mat4,
+  mvMatrix: mat4,
   pos,
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
@@ -364,7 +364,7 @@ export const drawTransparentChunkData = (
   cameraPosition: vec3,
   skyColor: [number, number, number],
   globalColor: [number, number, number, number],
-  mvMatrix,
+  mvMatrix: mat4,
 ): void => {
   const { shader } = terrain.material as { shader: ChunkProgram };
   const { chunksToRender } = terrain;
