@@ -6,7 +6,7 @@ module.exports = (babel) => {
     if (node.static) return;
 
     if (!node.value || node.value.type !== 'CallExpression') return;
-    const getMethod = path.node.value.callee.property.name;
+    const getMethod = path.node.value.callee.property && path.node.value.callee.property.name;
     if (methods.includes(getMethod)) {
       const setMethod = getMethod.replace('get', 'set');
       const dataNode =

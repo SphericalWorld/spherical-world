@@ -1,6 +1,7 @@
 import { gl } from '../glEngine';
 import { imageToPixelArray } from '../Texture/TextureLibrary';
 import type { Texture } from '../Texture';
+import type { TexturableShader } from '../../shaders/TexturableShader';
 
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
