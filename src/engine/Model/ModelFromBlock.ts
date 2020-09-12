@@ -57,12 +57,12 @@ export class ModelFromBlock {
       vertexTextureCoords,
       indices,
     };
-    vertexCount += renderFace(block.model.faces.top, buffers, vertexCount);
-    vertexCount += renderFace(block.model.faces.bottom, buffers, vertexCount);
-    vertexCount += renderFace(block.model.faces.north, buffers, vertexCount);
-    vertexCount += renderFace(block.model.faces.south, buffers, vertexCount);
-    vertexCount += renderFace(block.model.faces.west, buffers, vertexCount);
-    vertexCount += renderFace(block.model.faces.east, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.top, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.bottom, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.north, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.south, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.west, buffers, vertexCount);
+    vertexCount += renderFace(block.faces.east, buffers, vertexCount);
     // vertexCount += 4;
 
     // vertexCount += renderFace(0, 0, 0, faces1.bottom, buffers, vertexCount);

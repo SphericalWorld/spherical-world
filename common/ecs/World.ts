@@ -172,7 +172,7 @@ export class World<Events = unknown> {
           const component = componentMap.get(selector.includeComponents[i].componentName);
           if (selector.includeComponents[i].componentName === 'script') {
             component.setGameObject(componentMap);
-            component.start();
+            component.start(this);
           }
 
           selectedComponents[selector.includeComponents[i].componentName] = component;
@@ -271,7 +271,8 @@ export class World<Events = unknown> {
   }
 
   dispatch(gameEvent: Events): void {
-    this.eventsForThreads.push(gameEvent);
+    const { uiEvent, ...eventForThread } = gameEvent;
+    this.eventsForThreads.push(eventForThread);
     this.events.emit(gameEvent);
   }
 

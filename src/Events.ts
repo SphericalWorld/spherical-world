@@ -1,4 +1,5 @@
 import type { World } from '../common/ecs';
+import type { Slot } from '../common/Inventory';
 
 export enum GameEvent {
   cameraLocked,
@@ -22,6 +23,9 @@ export enum GameEvent {
   setDayTime,
   chunkVBOLoaded,
   craftToggled,
+  previousItemSelected,
+  nextItemSelected,
+  itemSelected,
 }
 
 type ChunkLoadedEvent = Readonly<{
@@ -98,7 +102,11 @@ export type MainThreadEvents =
       payload: string;
     }>
   | PlayerPutBlock
-  | ChunkVBOLoaded;
+  | ChunkVBOLoaded
+  | Readonly<{
+      type: GameEvent.itemSelected;
+      payload: Slot | null;
+    }>;
 
 export type PhysicsThreadEvents =
   | Readonly<{

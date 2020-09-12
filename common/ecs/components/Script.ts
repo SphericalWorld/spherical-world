@@ -2,6 +2,7 @@ import type { Component } from '../Component';
 import type { Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import type { MemoryManager } from '../MemoryManager';
+import type { World } from '../World';
 
 export default class Script implements Component {
   static threads = [THREAD_MAIN];
@@ -17,7 +18,7 @@ export default class Script implements Component {
     this.gameObject = gameObject;
   }
 
-  start() {}
+  start(world: World) {}
 
   update(delta: number) {}
 }

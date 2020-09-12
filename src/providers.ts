@@ -41,6 +41,8 @@ import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
 import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
 import { initHudAPI } from './hud/HudApi';
+import { blocksInfo } from './blocks/blockInfo';
+import { createModelFromBlock } from './engine/Model/ModelFromBlock';
 
 type Threads = Readonly<{
   physicsThread: Worker;
@@ -117,7 +119,14 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   input.onDispatch((event) => world.dispatch(event));
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
   initHudAPI(world);
+  const material = materialLibrary.get('blocksDropable');
 
+  for (const block of blocksInfo) {
+    if (block && block.model) {
+      block.asItem = createModelFromBlock(block.model);
+      block.asItem.createVBO(material);
+    }
+  }
   return Main(network, world);
 };
 

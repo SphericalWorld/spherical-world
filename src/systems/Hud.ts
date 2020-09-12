@@ -10,7 +10,6 @@ import {
   inventoryItemDecrease,
   inventoryItemIncrease,
 } from '../hud/hudActions';
-import { toggleUIState as doToggleUIState } from '../hud/utils/StateRouter';
 import {
   GAMEPLAY_MAIN_CONTEXT,
   GAMEPLAY_MENU_CONTEXT,
@@ -22,7 +21,6 @@ import { ServerToClientMessage } from '../../common/protocol';
 import type { State } from '../reducers/rootReducer';
 import type Network from '../network';
 import { WorldMainThread, GameEvent } from '../Events';
-import { CRAFT } from '../hud/components/Craft/craftConstants';
 
 const mapState = ({
   keyBindings,
@@ -34,28 +32,15 @@ const mapState = ({
   inventory,
 });
 
-const onMenuToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
-  world.events
-    .filter((e) => e.type === GameEvent.menuToggled && e)
-    .subscribe(() => toggleUIState(MAIN_MENU));
-
-const onInventoryToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
-  world.events
-    .filter((e) => e.type === GameEvent.inventoryToggled && e)
-    .subscribe(() => toggleUIState(INVENTORY));
-
-const onCraftToggled = (world: WorldMainThread, toggleUIState: typeof doToggleUIState) =>
-  world.events
-    .filter((e) => e.type === GameEvent.craftToggled && e)
-    .subscribe(() => toggleUIState(CRAFT));
-
 const onInventoryChanged = (world: WorldMainThread, store: Store) =>
   world.events
     .filter((e) => e.type === GameEvent.playerPutBlock && e)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
 const onDispatchableEvent = (events, store: Store) =>
-  events.filter((e) => e.dispatchable).subscribe((e) => store.dispatch(e));
+  events
+    .filter((e) => e.uiEvent)
+    .subscribe((e) => store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent));
 
 const onStateChanged = (input: Input, player) => (
   { keyBindings: { editing }, inventory: inventoryOld },
@@ -86,11 +71,7 @@ const onPlayerAddItem = (network: Network, store: Store) =>
 
 export default (world: WorldMainThread, store: Store, input: Input, network: Network): System => {
   const player = world.createSelector([Transform, UserControlled, Inventory]);
-  const toggleUIState = (stateName: string) => store.dispatch(doToggleUIState(stateName));
 
-  onMenuToggled(world, toggleUIState);
-  onInventoryToggled(world, toggleUIState);
-  onCraftToggled(world, toggleUIState);
   onDispatchableEvent(world.events, store);
   onInventoryChanged(world, store);
   onPlayerAddItem(network, store);

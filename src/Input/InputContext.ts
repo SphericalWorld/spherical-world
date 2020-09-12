@@ -6,7 +6,7 @@ import type InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 import type { MainThreadEvents } from '../Events';
 
-type MappedEvent = Readonly<{
+export type MappedEvent = Readonly<{
   action: string;
   type: INPUT_TYPE;
   gameEvent: MainThreadEvents;
@@ -14,7 +14,7 @@ type MappedEvent = Readonly<{
   onEnd?: MainThreadEvents;
   caption?: string;
   category?: EVENT_CATEGORY;
-  dispatchable?: boolean;
+  uiEvent?: never;
 }>;
 
 export type InputContext = Readonly<{
@@ -54,21 +54,21 @@ export const getMappedInputEvent = (
 ): GameEvent1 | null => {
   const event = events.get(inputEvent.name);
   if (!event) return null;
-  const { type, data, gameEvent, onEnd, dispatchable } = event;
+  const { type, data, gameEvent, onEnd, uiEvent } = event;
   const payload = data && data(inputEvent);
   switch (type) {
     case INPUT_TYPE_ACTION:
       if (inputEvent.status === STATE_DOWN) {
-        return { type: gameEvent, payload, dispatchable };
+        return { type: gameEvent, payload, uiEvent };
       }
       return null;
     case INPUT_TYPE_STATE:
       if (inputEvent.status === STATE_DOWN) {
-        return { type: gameEvent, payload, dispatchable };
+        return { type: gameEvent, payload, uiEvent };
       }
-      return { type: onEnd, payload, dispatchable };
+      return { type: onEnd, payload, uiEvent };
     case INPUT_TYPE_RANGE:
-      return { type: gameEvent, payload, dispatchable };
+      return { type: gameEvent, payload, uiEvent };
     default:
       return null;
   }

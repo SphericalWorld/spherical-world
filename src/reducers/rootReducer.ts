@@ -33,6 +33,4 @@ export type State = {
 
 const rootReducer = reduceReducers<State>(combinedReducer);
 
-// export type State = $ObjMap<typeof reducers, $ExtractFunctionReturn>;
-
 export default rootReducer;

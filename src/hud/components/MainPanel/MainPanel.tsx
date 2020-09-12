@@ -16,6 +16,8 @@ import InventorySlot from '../../uiElements/InventorySlot';
 import type { State } from '../../../reducers/rootReducer';
 import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActions';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
+import { useHudApi } from '../../HudApi';
+import { GameEvent } from '../../../Events';
 
 const slotsSelector = createSelector(
   (state: State) => state.mainPanel.slots,
@@ -30,6 +32,7 @@ const MainPanel = (): JSX.Element => {
   const slots = useMemoizedSelector((state: State) => slotsSelector(state));
   const selectInventoryItem = useSelectInventoryItem();
   const swapSlots = useSwapSlots();
+  const hudApi = useHudApi();
 
   const swap = useCallback(
     (e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'mainPanel', e.id),
@@ -39,7 +42,8 @@ const MainPanel = (): JSX.Element => {
     if (slots[selectedItemIndex]) {
       selectInventoryItem(slots[selectedItemIndex].id);
     }
-  }, [selectInventoryItem, selectedItemIndex, slots]);
+    hudApi.dispatchGameEvent({ type: GameEvent.itemSelected, payload: slots[selectedItemIndex] });
+  }, [selectInventoryItem, selectedItemIndex, slots, hudApi]);
 
   return (
     <section className={mainPanelSection}>

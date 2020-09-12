@@ -38,6 +38,8 @@ import {
   NEXT_ITEM_SELECTED,
 } from '../hud/components/MainPanel/mainPanelConstants';
 import { GameEvent } from '../Events';
+import { STATE_ROUTER_TOGGLE } from '../hud/utils/StateRouter/stateRouterConstants';
+import type { MappedEvent } from './InputContext';
 
 // TODO: move events to separate files
 
@@ -136,6 +138,7 @@ export const toggleMenuEvent = {
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.menuToggled,
+  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'MAIN_MENU' } },
 };
 
 export const toggleInventoryEvent = {
@@ -144,6 +147,7 @@ export const toggleInventoryEvent = {
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.inventoryToggled,
+  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'INVENTORY' } },
 };
 
 export const selectNextItemEvent = {
@@ -151,8 +155,10 @@ export const selectNextItemEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Select next item',
   type: INPUT_TYPE_RANGE,
-  gameEvent: NEXT_ITEM_SELECTED,
-  dispatchable: true,
+  gameEvent: GameEvent.nextItemSelected,
+  uiEvent: {
+    type: NEXT_ITEM_SELECTED,
+  },
 };
 
 export const selectPreviousItemEvent = {
@@ -160,8 +166,10 @@ export const selectPreviousItemEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Select previous item',
   type: INPUT_TYPE_RANGE,
-  gameEvent: PREVIOUS_ITEM_SELECTED,
-  dispatchable: true,
+  gameEvent: GameEvent.previousItemSelected,
+  uiEvent: {
+    type: PREVIOUS_ITEM_SELECTED,
+  },
 };
 
 export const playerAttackEvent = {
@@ -185,14 +193,15 @@ export const keySetEvent = {
   action: SET_KEY_EVENT,
   type: INPUT_TYPE_ACTION,
   gameEvent: KEY_SELECT_BUTTON,
-  dispatchable: true,
   data: ({ data }: { data: string }) => data,
+  uiEvent: ({ payload }: { data: string }) => ({ type: 'KEY_SELECT_BUTTON', payload }),
 };
 
-export const toggleCraftEvent = {
+export const toggleCraftEvent: MappedEvent = {
   action: TOGGLE_CRAFT_EVENT,
   category: CATEGORY_INTERFACE,
   caption: 'Craft',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.craftToggled,
+  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'CRAFT' } },
 };
