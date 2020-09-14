@@ -1,6 +1,6 @@
 import { vec3, quat } from 'gl-matrix';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
-import { blocksInfo } from '../../blocks/blockInfo';
+import { blocksInfo } from '../../blocks/blocksInfoAllThreads';
 import Collider from '../../components/Collider';
 import Joint from '../../components/Joint';
 import type { System } from '../../../common/ecs/System';

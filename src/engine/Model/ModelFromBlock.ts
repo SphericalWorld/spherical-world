@@ -80,10 +80,7 @@ export class ModelFromBlock {
 }
 
 export const createModelFromBlock = (block: BlockData): ModelFromBlock => {
-  console.time('qwe=');
   const model = new ModelFromBlock();
   model.loadFromImageData(block);
-  console.timeEnd('qwe=');
-
   return model;
 };

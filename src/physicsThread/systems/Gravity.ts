@@ -1,5 +1,5 @@
 import { getBlock } from '../../../common/terrain';
-import { blocksInfo } from '../../blocks/blockInfo';
+import { blocksInfo } from '../../blocks/blocksInfoAllThreads';
 import type Terrain from '../Terrain/Terrain';
 import Transform from '../../components/Transform';
 import type { System } from '../../../common/ecs/System';

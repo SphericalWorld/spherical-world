@@ -39,10 +39,10 @@ import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/thre
 import inputProvider from './Input/inputProvider';
 import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
-import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
+import { textureLibrary, shaderLibrary, materialLibrary, GlObject } from './engine';
 import { initHudAPI } from './hud/HudApi';
-import { blocksInfo } from './blocks/blockInfo';
-import { createModelFromBlock } from './engine/Model/ModelFromBlock';
+import type { MainThreadEvents } from './Events';
+import { generateBlockModels } from './blocks/blocksInfo';
 
 type Threads = Readonly<{
   physicsThread: Worker;
@@ -50,7 +50,7 @@ type Threads = Readonly<{
 }>;
 
 const createECS = ({ physicsThread, chunksHandlerThread }: Threads) => {
-  const world = new World(THREAD_MAIN);
+  const world = new World<MainThreadEvents>(THREAD_MAIN);
   world.registerComponentTypes(
     BlockRemover,
     Camera,
@@ -119,14 +119,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   input.onDispatch((event) => world.dispatch(event));
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
   initHudAPI(world);
-  const material = materialLibrary.get('blocksDropable');
-
-  for (const block of blocksInfo) {
-    if (block && block.model) {
-      block.asItem = createModelFromBlock(block.model);
-      block.asItem.createVBO(material);
-    }
-  }
+  generateBlockModels();
   return Main(network, world);
 };
 

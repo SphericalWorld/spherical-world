@@ -1,5 +1,5 @@
 import { getIndex } from '../../../../common/chunk';
-import { blocksInfo } from '../../../blocks/blockInfo';
+import { blocksInfo } from '../../../blocks/blocksInfoAllThreads';
 import {
   ROW,
   ROW_NESTED_CHUNK,

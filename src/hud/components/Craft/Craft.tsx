@@ -24,14 +24,14 @@ import {
   craftingCount,
   inputCraftCountLabel,
 } from './craft.module.css';
-import { blocksInfo } from '../../../../common/blocks/blocksInfo';
 import { recipes } from './recipes';
 import { fontMain } from '../../styles/fonts.module.css';
 import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
+import { blocksInfo } from '../../../blocks/blocksInfo';
 
-const ItemIconCount = ({ count }: { count: number }): JSX.Element => (
+const ItemIconCount = ({ count, src }: { count: number; src: string }): JSX.Element => (
   <div className={itemImg}>
-    <ItemIcon />
+    <ItemIcon src={src} />
     <span className={classnames(itemCount, fontMain)}>{count}</span>
   </div>
 );
@@ -39,7 +39,7 @@ const ItemIconCount = ({ count }: { count: number }): JSX.Element => (
 const Craft = (): JSX.Element => {
   const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(CRAFT, false), [setUIState]);
-  const [RecipeIndex, setRecipeIndex] = useState(0);
+  const [recipeIndex, setRecipeIndex] = useState(0);
 
   return (
     <ModalWindow caption="craft" onClose={close}>
@@ -54,7 +54,7 @@ const Craft = (): JSX.Element => {
           <div className={classnames(recipesList, scrollbarBox)}>
             {recipes.map((recipe, ind) => (
               <div className={recipesListItem} role="button" onClick={() => setRecipeIndex(ind)}>
-                <ItemIcon />
+                <ItemIcon src={blocksInfo[recipe.itemId]?.itemImage} />
                 <div className={recipeNameList}>
                   <Label>{blocksInfo[recipe.itemId].name}</Label>
                 </div>
@@ -64,16 +64,19 @@ const Craft = (): JSX.Element => {
         </div>
         <div className={craftIngredients}>
           <div className={craftHead}>
-            <ItemIconCount count={recipes[RecipeIndex].count} />
+            <ItemIconCount
+              count={recipes[recipeIndex].count}
+              src={blocksInfo[recipes[recipeIndex].itemId].itemImage}
+            />
             <div className={recipeName}>
-              <Label>{blocksInfo[recipes[RecipeIndex].itemId].name}</Label>
+              <Label>{blocksInfo[recipes[recipeIndex].itemId].name}</Label>
             </div>
           </div>
           <Label> ingredients </Label>
           <div className={ingredientsList}>
-            {recipes[RecipeIndex].ingredients.map((ingredient) => (
+            {recipes[recipeIndex].ingredients.map((ingredient) => (
               <div className={ingredientCraft}>
-                <ItemIconCount count={ingredient.count} />
+                <ItemIconCount count={ingredient.count} src={blocksInfo[ingredient.id].itemImage} />
                 <div className={recipeName}>
                   <Label>{blocksInfo[ingredient.id].name}</Label>
                 </div>
@@ -84,8 +87,8 @@ const Craft = (): JSX.Element => {
             <Button size="small">Create</Button>
             <div className={inputCraftCountLabel}>
               <input type="number" className={inputCraftCount} min="1" />
-              {recipes[RecipeIndex].count !== 1 ? (
-                <Label> X {recipes[RecipeIndex].count} </Label>
+              {recipes[recipeIndex].count !== 1 ? (
+                <Label> X {recipes[recipeIndex].count} </Label>
               ) : (
                 ''
               )}

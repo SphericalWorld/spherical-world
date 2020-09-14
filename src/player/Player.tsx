@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
-import { GameObject, World, React } from '../../common/ecs';
+import { GameObject, React } from '../../common/ecs';
 import playerModel from '../models/player.json';
 import type { TransformProps, InventoryProps } from '../components/react';
 import {
@@ -23,9 +23,10 @@ import { materialLibrary, GlObject } from '../engine';
 import { Sound } from '../Sound';
 import { getBlock } from '../../common/terrain';
 import type Terrain from '../Terrain';
-import { blocksInfo } from '../blocks/blockInfo';
+import { blocksInfo } from '../blocks/blocksInfo';
 import type { UserControlled as CUserControlled, Transform as CTransform } from '../components';
 import { PlayerHands } from './PlayerHands';
+import type { WorldMainThread } from '../Events';
 
 type Props = {
   id: Entity;
@@ -131,7 +132,7 @@ export const Player = ({
   );
 };
 
-const playerProvider = (ecs: World, terrain: Terrain) => {
+const playerProvider = (ecs: WorldMainThread, terrain: Terrain) => {
   ecs.registerConstructor('PLAYER', Player);
   PlayerScript.terrain = terrain;
   // ecs.registerComponentTypes(PlayerScript);

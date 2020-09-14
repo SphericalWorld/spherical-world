@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
-import { World, GameObject, React } from '../../common/ecs';
+import { GameObject, React } from '../../common/ecs';
 import type { TransformProps, InventoryProps } from '../components/react';
 import {
   Transform,
@@ -13,8 +13,9 @@ import {
 } from '../components/react';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
-import { blocksTextureInfo } from '../blocks/blockInfo';
+import { blocksTextureInfo } from '../blocks/blocksInfo';
 import { materialLibrary, GlObject } from '../engine';
+import type { WorldMainThread } from '../Events';
 
 export const ITEM: 'ITEM' = 'ITEM';
 const SIZE = 0.2;
@@ -66,7 +67,7 @@ export const Item = ({ transform, id, inventory }: Props): JSX.Element => {
   );
 };
 
-const itemProvider = (ecs: World) => {
+const itemProvider = (ecs: WorldMainThread): void => {
   ecs.registerConstructor(ITEM, Item);
 };
 

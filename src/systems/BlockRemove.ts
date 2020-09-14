@@ -1,11 +1,11 @@
 import { vec3 } from 'gl-matrix';
-import { blocksInfo } from '../blocks/blockInfo';
 import type { System } from '../../common/ecs/System';
 import { Transform, BlockRemover, Player, Visual, Raytracer, Joint } from '../components';
 import { getGeoId } from '../../common/chunk';
 import { ClientToServerMessage } from '../../common/protocol';
 import { WorldMainThread, GameEvent } from '../Events';
 import type Network from '../network';
+import { blocksInfo } from '../blocks/blocksInfo';
 // import { Sound } from '../Sound';
 
 // import woodHit from '../sounds/wood_hit.wav';

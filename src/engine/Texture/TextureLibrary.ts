@@ -215,6 +215,20 @@ export const makeTextureFromText = (textToWrite: string, textSize = 56): Texture
   return new Texture(null, makeTexture(textureCanvas, gl.TEXTURE_2D, gl.RGBA));
 };
 
+export const imageFromTexture = (
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+): string => {
+  textureCanvas.width = width;
+  textureCanvas.height = height;
+  const imageData = ctx.createImageData(textureCanvas.width, textureCanvas.height);
+  imageData.data.set(data);
+  ctx.putImageData(imageData, 0, 0);
+
+  return textureCanvas.toDataURL();
+};
+
 export const imageToPixelArray = (image: HTMLImageElement): ImageData => {
   ctx.drawImage(image, 0, 0, image.width, image.height);
   const pixelData = ctx.getImageData(0, 0, image.width, image.height);

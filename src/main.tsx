@@ -1,9 +1,10 @@
 import type Network from './network';
 import { initWebGL } from './engine/glEngine';
-import { World, React, render } from '../common/ecs';
+import { React, render } from '../common/ecs';
 import { Player } from './player/Player';
 import { Skybox } from './Skybox';
 import { ServerToClientMessage, ClientToServerMessage } from '../common/protocol';
+import type { WorldMainThread } from './Events';
 
 let tex = 0;
 setInterval(() => {
@@ -13,9 +14,9 @@ setInterval(() => {
   }
 }, 100);
 
-const engineProvider = (network: Network, ecs: World) => {
+const engineProvider = (network: Network, ecs: WorldMainThread) => {
   class Engine {
-    ecs: World = ecs;
+    ecs: WorldMainThread = ecs;
     lastTime = 0;
     gameLoopWasStopped = false;
 

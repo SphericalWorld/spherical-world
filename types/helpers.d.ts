@@ -1,3 +1,4 @@
+// Do not delete or global types wont work anymore :(
 export type SetDifference<A, B> = A extends B ? never : A;
 
 declare global {

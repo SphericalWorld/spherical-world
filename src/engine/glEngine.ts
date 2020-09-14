@@ -4,7 +4,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
 }
 
 const getContext = () => {
-  const gl = canvas.getContext('webgl2', { antialias: false });
+  const gl = canvas.getContext('webgl2', { antialias: false }); // , preserveDrawingBuffer: true
   if (!gl) {
     throw new Error('Can not initialize webgl2 context');
   }

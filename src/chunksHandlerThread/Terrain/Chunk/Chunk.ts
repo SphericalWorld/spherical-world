@@ -5,7 +5,7 @@ import {
   CHUNK_HEIGHT,
   SLICE,
 } from '../../../../common/constants/chunk';
-import { blocksInfo } from '../../../blocks/blockInfo';
+import { blocksInfo } from '../../../blocks/blocksInfoAllThreads';
 import ChunkBase from '../../../Terrain/Chunk/ChunkBase';
 
 import {

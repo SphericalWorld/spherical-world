@@ -4,7 +4,7 @@ import { Transform, Visual, Joint, Script } from '../components/react';
 import { React, GameObject } from '../../common/ecs';
 import { materialLibrary, GlObject } from '../engine';
 import { createModelFromSprite } from '../engine/Model/ModelFromSprite';
-import { blocksInfo } from '../blocks/blockInfo';
+import { blocksInfo } from '../blocks/blocksInfo';
 import { WorldMainThread, GameEvent } from '../Events';
 
 type Props = Readonly<{

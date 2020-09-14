@@ -4,6 +4,7 @@ import Diffuse from './Diffuse';
 import DiffuseAnimated from './DiffuseAnimated';
 import Skybox from './Skybox';
 import OcclusionCulling from './OcclusionCulling';
+import DiffuseInventory from './DiffuseInventory';
 
 const shadersProvider = () => [
   billboard,
@@ -12,6 +13,7 @@ const shadersProvider = () => [
   new DiffuseAnimated(),
   new Skybox(),
   new OcclusionCulling(),
+  new DiffuseInventory(),
 ];
 
 export default shadersProvider;

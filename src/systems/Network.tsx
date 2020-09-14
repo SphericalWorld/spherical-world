@@ -7,7 +7,6 @@ import { Transform, Camera, Inventory } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
-import { blocksInfo } from '../blocks/blockInfo';
 import type { WorldMainThread } from '../Events';
 
 const onSyncGameData = (world: WorldMainThread, network: Network) =>

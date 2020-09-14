@@ -13,6 +13,7 @@ import terrainProvider from './Terrain';
 import blocksDropableProvider from './BlocksDroppable';
 import type { Material } from '../engine/Material';
 import flameProvider from './Flame';
+import BlocksInventory from './BlocksInventory';
 
 const materialsProvider = (
   textureLibrary: TextureLibrary,
@@ -35,6 +36,7 @@ const materialsProvider = (
     blockRemoverProvider(textureLibrary, shaderLibrary),
     skyboxProvider(textureLibrary, shaderLibrary),
     playerProvider(textureLibrary, shaderLibrary),
+    BlocksInventory(textureLibrary, shaderLibrary),
     terrainDiffuse,
     terrainOverlay,
     terrainAnimated,

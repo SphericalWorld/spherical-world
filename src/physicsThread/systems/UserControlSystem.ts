@@ -1,7 +1,7 @@
 import { vec3, quat } from 'gl-matrix';
 import type Terrain from '../Terrain';
 import { getBlock } from '../../../common/terrain';
-import { blocksInfo } from '../../blocks/blockInfo';
+import { blocksInfo } from '../../blocks/blocksInfoAllThreads';
 import {
   DIRECTION_FORWARD,
   DIRECTION_BACK,
