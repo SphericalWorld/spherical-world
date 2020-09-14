@@ -3,7 +3,14 @@ import type { ReactNode } from 'react';
 import classnames from 'classnames';
 import Button from '../Button';
 import Label from '../Label';
-import { inner, inventoryName, header, wrapper, buttonClose } from './modalWindow.module.css';
+import {
+  inner,
+  inventoryName,
+  header,
+  wrapper,
+  buttonClose,
+  mainSection,
+} from './modalWindow.module.css';
 import { alignment } from '../../styles/alignment.module.css';
 
 type Props = Readonly<{
@@ -23,7 +30,7 @@ const ModalWindow = ({ caption, children, onClose }: Props): JSX.Element => (
           </span>
         </Button>
       </header>
-      <section>{children}</section>
+      <section className={mainSection}>{children}</section>
     </div>
   </div>
 );

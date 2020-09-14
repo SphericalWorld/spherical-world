@@ -31,8 +31,8 @@
 }
 
 .recipesListItem img {
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.7em;
+  height: 1.7em;
 }
 
 .recipeNameList {
@@ -41,6 +41,10 @@
   align-items: center;
   justify-content: center;
   margin: 0 var(--space-xs);
+}
+
+.recipeNameList > * {
+  color: var(--font-color-key-bindings-header);
 }
 
 .ingredientCraft {
@@ -81,28 +85,11 @@
 }
 
 .recipesList {
+  --scrollbarBackgroundColor: rgba(255, 255, 255, 0.5);
   display: flex;
   flex-direction: column;
   height: 100%;
   overflow: auto;
-}
-
-.recipesList::-webkit-scrollbar {
-  width: 0.8em;
-}
-
-.recipesList::-webkit-scrollbar-track {
-  border-radius: 1em;
-}
-
-.recipesList::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 1em;
-}
-
-.recipesList:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 1em;
 }
 
 .ingredientsList {
@@ -113,7 +100,33 @@
 
 .craftHead {
   display: flex;
+
   align-items: center;
   padding: var(--space-xs);
   border-bottom: var(--size-border) solid var(--border-color-slot);
+}
+
+.craftingCount {
+  border-top: var(--size-border) solid var(--border-color-slot);
+
+  margin-top: auto;
+  padding: var(--space-s);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.inputCraftCountLabel {
+  width: 50%;
+  text-align: left;
+}
+
+.inputCraftCount {
+  width: 20%;
+  border-radius: 6px;
+  padding: var(--space-xxs) 0 var(--space-xxs) var(--space-xs);
+}
+
+.inputCraftCount:focus {
+  outline: none;
 }

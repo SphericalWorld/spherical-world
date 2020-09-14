@@ -15,7 +15,7 @@
 .emptyImg {
   background-color: var(--selected-slot-animated);
 
-  width: var(--size-slot);
-  height: var(--size-slot);
+  width: 3.5em;
+  height: 3.5em;
   border-radius: 0.5em;
 }

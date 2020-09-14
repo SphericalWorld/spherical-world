@@ -19,7 +19,7 @@ export const recipes = [
         count: 2,
       },
     ],
-    count: 4,
+    count: 1,
   },
   {
     id: 'recipe3',
