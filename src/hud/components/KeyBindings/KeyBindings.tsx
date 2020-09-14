@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import classnames from 'classnames';
 import type { KeyPosition } from './keyBindingsTypes';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';
 import type { State } from '../../../reducers/rootReducer';
@@ -10,6 +11,7 @@ import Button from '../../uiElements/Button';
 import Label from '../../uiElements/Label';
 import StatusPanel from './StatusPanel';
 import ModalWindowMenu from '../ModalWindowMenu';
+
 import {
   command,
   header,
@@ -20,6 +22,7 @@ import {
   labelFirst,
   labelCommandGroup,
 } from './keyBindings.module.css';
+import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 import MenuFooterButtons from '../MenuFooterButtons';
 import ModalWindowInnerContent from '../ModalWindowInnerContent/ModalWindowInnerContent';
@@ -95,7 +98,7 @@ const KeyBindings = (): JSX.Element => {
           <Label className={label}>key 1</Label>
           <Label className={label}>key 2</Label>
         </header>
-        <section className={section}>
+        <section className={classnames(section, scrollbarBox)}>
           <section>
             {keyCategories.map((category) => (
               <ActionCategory onSetKey={startEditKey} key={category.name} {...category} />

@@ -29,6 +29,7 @@
 }
 
 .messagesBox {
+  --scrollbarBackgroundColor: transparent;
   display: flex;
   flex-direction: column;
 
@@ -37,19 +38,6 @@
   overflow-y: auto;
   background-color: rgba(0, 0, 0, 0.5);
   padding: var(--space-xxs);
-}
-
-.messagesBox::-webkit-scrollbar {
-  width: 0.8em;
-}
-
-.messagesBox::-webkit-scrollbar-track {
-  border-radius: 1em;
-}
-
-.messagesBox::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 1em;
 }
 
 .messagesBox:hover::-webkit-scrollbar-thumb {

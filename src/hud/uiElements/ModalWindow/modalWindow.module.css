@@ -9,36 +9,51 @@
 .inner {
   display: flex;
   flex-direction: column;
-  background: var(--primary);
-  border: 0.1em ridge var(--primary-20p);
+  /* background: var(--primary); */
+  background: var(--background-main-menu-transparent);
+  border: 0.2em ridge var(--primary-20p);
+  box-shadow: inset 0 0 calc(var(--size-of-shadow-main-menu) / 5)
+    calc(var(--size-of-shadow-main-menu) / 5) rgba(255, 255, 255, 0.75);
   justify-content: space-around;
   pointer-events: all;
   width: 39em;
 }
 
 .header {
-  background: var(--primary);
-  /* box-shadow: inset 0 0 var(--size-of-shadow) rgba(255, 255, 255, 0.75),
-    inset 0 var(--size-of-shadow) var(--size-of-shadow) rgba(255, 255, 255, 0.75); */
   display: flex;
   flex-direction: row;
-  border-bottom: var(--border-inventory);
+  /* border-bottom: var(--border-inventory); */
   flex: 1 1 1.5em;
   justify-content: flex-end;
   user-select: none;
 }
 
 .inventoryName {
-  margin: 0.2em auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--background-main-menu-transparent);
+  border-bottom: 0.1em ridge var(--primary-20p);
+  box-shadow: inset 0 0 calc(var(--size-of-shadow-main-menu) / 5)
+    calc(var(--size-of-shadow-main-menu) / 5) rgba(255, 255, 255, 0.75);
+  width: 100%;
 }
 
 .buttonClose {
   background-color: var(--alert);
   font-size: 1.1em;
   margin: 0;
+  border-radius: none;
 }
 
 .buttonClose:hover {
   background-color: var(--alert);
   box-shadow: inset 0 0 0.3em rgba(0, 0, 0, 50%);
+}
+
+.mainSection {
+  background: var(--background-main-menu-transparent);
+  box-shadow: inset 0 0 calc(var(--size-of-shadow-main-menu) / 5)
+    calc(var(--size-of-shadow-main-menu) / 5) rgba(255, 255, 255, 0.75);
 }

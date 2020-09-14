@@ -20,23 +20,11 @@
 }
 
 .section {
+  --scrollbarBackgroundColor: var(--primary);
   grid-area: mainContent;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: var(--primary) transparent;
-}
-
-.section::-webkit-scrollbar {
-  width: 0.8em;
-}
-
-.section::-webkit-scrollbar-track {
-  border-radius: 1em;
-}
-
-.section::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 1em;
 }
 
 .command {

@@ -1,7 +1,9 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import classnames from 'classnames';
 import { chatWrapper, chat, messagesBox, message, input } from './chat.module.css';
 import { useMessage, useSocketSend } from '../../utils/socket/Socket';
 import type { IncomingMessage } from '../../utils/socket/Socket';
+import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
 
 const lastUserMessages = localStorage.getItem('lastUserMessages');
 
@@ -53,7 +55,7 @@ const Chat = (): JSX.Element => {
   return (
     <div className={chatWrapper}>
       <div className={chat}>
-        <div className={messagesBox} ref={ref}>
+        <div className={classnames(messagesBox, scrollbarBox)} ref={ref}>
           {messages.map((el) => (
             <div key={el.id} className={message}>
               <span>[{getShortTime(el.time)}]</span>

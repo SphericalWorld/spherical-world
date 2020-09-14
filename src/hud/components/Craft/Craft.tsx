@@ -20,10 +20,14 @@ import {
   recipesListItem,
   recipeNameList,
   craftHead,
+  inputCraftCount,
+  craftingCount,
+  inputCraftCountLabel,
 } from './craft.module.css';
 import { blocksInfo } from '../../../../common/blocks/blocksInfo';
 import { recipes } from './recipes';
 import { fontMain } from '../../styles/fonts.module.css';
+import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
 
 const ItemIconCount = ({ count }: { count: number }): JSX.Element => (
   <div className={itemImg}>
@@ -47,7 +51,7 @@ const Craft = (): JSX.Element => {
       </div>
       <div className={recipesSection}>
         <div className={recipesListWrapper}>
-          <div className={recipesList}>
+          <div className={classnames(recipesList, scrollbarBox)}>
             {recipes.map((recipe, ind) => (
               <div className={recipesListItem} role="button" onClick={() => setRecipeIndex(ind)}>
                 <ItemIcon />
@@ -75,6 +79,18 @@ const Craft = (): JSX.Element => {
                 </div>
               </div>
             ))}
+          </div>
+          <div className={craftingCount}>
+            <Button size="small">Create</Button>
+            <div className={inputCraftCountLabel}>
+              <input type="number" className={inputCraftCount} min="1" />
+              {recipes[RecipeIndex].count !== 1 ? (
+                <Label> X {recipes[RecipeIndex].count} </Label>
+              ) : (
+                ''
+              )}
+            </div>
+            <Button size="small">all resources</Button>
           </div>
         </div>
       </div>
