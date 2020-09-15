@@ -13,9 +13,23 @@
 }
 
 .emptyImg {
-  background-color: var(--selected-slot-animated);
+  background-color: var(--border-color-slot);
+  border: 2px solid var(--selected-slot-animated);
+  box-sizing: border-box;
+  border-radius: 0.5em;
+}
 
+.smallImg {
+  width: 1.7em;
+  height: 1.7em;
+}
+
+.mediumImg {
   width: 3.5em;
   height: 3.5em;
-  border-radius: 0.5em;
+}
+
+.bigImg {
+  width: 5em;
+  height: 5em;
 }

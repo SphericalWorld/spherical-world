@@ -40,6 +40,7 @@ const Craft = (): JSX.Element => {
   const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(CRAFT, false), [setUIState]);
   const [recipeIndex, setRecipeIndex] = useState(0);
+  const [amountToCraft, setAmountToCraft] = useState(1);
 
   return (
     <ModalWindow caption="craft" onClose={close}>
@@ -54,7 +55,7 @@ const Craft = (): JSX.Element => {
           <div className={classnames(recipesList, scrollbarBox)}>
             {recipes.map((recipe, ind) => (
               <div className={recipesListItem} role="button" onClick={() => setRecipeIndex(ind)}>
-                <ItemIcon src={blocksInfo[recipe.itemId]?.itemImage} />
+                <ItemIcon size="small" src={blocksInfo[recipe.itemId]?.itemImage} />
                 <div className={recipeNameList}>
                   <Label>{blocksInfo[recipe.itemId].name}</Label>
                 </div>
@@ -86,9 +87,18 @@ const Craft = (): JSX.Element => {
           <div className={craftingCount}>
             <Button size="small">Create</Button>
             <div className={inputCraftCountLabel}>
-              <input type="number" className={inputCraftCount} min="1" />
+              <input
+                type="number"
+                value={amountToCraft}
+                onChange={(event) => setAmountToCraft(Number(event?.target.value))}
+                className={classnames(inputCraftCount, fontMain)}
+                min="1"
+              />
               {recipes[recipeIndex].count !== 1 ? (
-                <Label> X {recipes[recipeIndex].count} </Label>
+                <Label>
+                  &nbsp; X {recipes[recipeIndex].count} &nbsp; = &nbsp;
+                  {recipes[recipeIndex].count * amountToCraft}
+                </Label>
               ) : (
                 ''
               )}
