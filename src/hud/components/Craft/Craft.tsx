@@ -40,7 +40,7 @@ const Craft = (): JSX.Element => {
   const setUIState = useSetUIState();
   const close = useCallback(() => setUIState(CRAFT, false), [setUIState]);
   const [recipeIndex, setRecipeIndex] = useState(0);
-  const [countCraft, setCountCraft] = useState(1);
+  const [amountToCraft, setAmountToCraft] = useState(1);
 
   return (
     <ModalWindow caption="craft" onClose={close}>
@@ -89,16 +89,15 @@ const Craft = (): JSX.Element => {
             <div className={inputCraftCountLabel}>
               <input
                 type="number"
-                value={countCraft}
-                onChange={(event) => setCountCraft(Number(event?.target.value))}
+                value={amountToCraft}
+                onChange={(event) => setAmountToCraft(Number(event?.target.value))}
                 className={classnames(inputCraftCount, fontMain)}
                 min="1"
               />
               {recipes[recipeIndex].count !== 1 ? (
                 <Label>
-                  {' '}
-                  &nbsp; X {recipes[recipeIndex].count} &nbsp; = &nbsp;{' '}
-                  {recipes[recipeIndex].count * countCraft}{' '}
+                  &nbsp; X {recipes[recipeIndex].count} &nbsp; = &nbsp;
+                  {recipes[recipeIndex].count * amountToCraft}
                 </Label>
               ) : (
                 ''
