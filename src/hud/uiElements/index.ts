@@ -8,3 +8,4 @@ export { default as Select } from './Select';
 export { default as ProgressBar } from './ProgressBar';
 export { default as InputText } from './InputText';
 export { default as ItemIcon } from './ItemIcon';
+export { default as InputNumber } from './InputNumber';

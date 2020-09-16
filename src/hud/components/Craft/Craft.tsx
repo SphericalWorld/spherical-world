@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { useSetUIState } from '../../utils/StateRouter';
 import { CRAFT } from './craftConstants';
-import { Button, InputText, ItemIcon, Label } from '../../uiElements';
+import { Button, InputText, ItemIcon, Label, InputNumber } from '../../uiElements';
 import {
   craftSettings,
   sortButton,
@@ -20,9 +20,9 @@ import {
   recipesListItem,
   recipeNameList,
   craftHead,
-  inputCraftCount,
   craftingCount,
   inputCraftCountLabel,
+  inputCraftCount,
 } from './craft.module.css';
 import { recipes } from './recipes';
 import { fontMain } from '../../styles/fonts.module.css';
@@ -87,12 +87,9 @@ const Craft = (): JSX.Element => {
           <div className={craftingCount}>
             <Button size="small">Create</Button>
             <div className={inputCraftCountLabel}>
-              <input
-                type="number"
-                value={amountToCraft}
-                onChange={(event) => setAmountToCraft(Number(event?.target.value))}
-                className={classnames(inputCraftCount, fontMain)}
-                min="1"
+              <InputNumber
+                onChange={(number) => setAmountToCraft(number)}
+                className={inputCraftCount}
               />
               {recipes[recipeIndex].count !== 1 ? (
                 <Label>
