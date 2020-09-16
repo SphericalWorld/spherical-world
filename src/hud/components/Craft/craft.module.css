@@ -118,18 +118,5 @@
 }
 
 .inputCraftCount {
-  width: 20%;
-  font-size: 1em;
-  background-color: #000;
-  border: 1px solid var(--primary);
-  border-radius: 6px;
-  padding: var(--space-xxs) 0 var(--space-xxs) var(--space-s);
-}
-
-.inputCraftCount::-webkit-inner-spin-button {
-  background-color: #ff0;
-}
-
-.inputCraftCount:focus {
-  outline: none;
+  width: 30%;
 }

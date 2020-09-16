@@ -1,0 +1,55 @@
+@import '../../styles/fonts.module.css';
+@import '../../styles/colors.module.css';
+@import '../../styles/sizes.module.css';
+
+.formInputNumber {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  font-size: 1em;
+  background-color: #000;
+  border: 1px solid var(--primary);
+  border-radius: 6px 0 0 6px;
+  text-align: center;
+}
+
+.input::-webkit-inner-spin-button {
+  display: none;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.spinButtons {
+  display: flex;
+  flex-direction: column;
+}
+
+.spinButton {
+  border: 1px solid var(--primary);
+  background-color: var(--primary);
+}
+
+.spinButtonSign {
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.plusSpinButton {
+  border-radius: 0 6px 0 0;
+  border-bottom: 1px solid var(--border-color-slot);
+}
+
+.minusSpinButton {
+  border-radius: 0 0 6px;
+  border-top: 1px solid var(--border-color-slot);
+}
+
+.spinButton:active {
+  box-shadow: inset 1px 1px 16px 0 #fff;
+}
