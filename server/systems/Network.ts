@@ -34,6 +34,14 @@ const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) =>
       saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(data));
     });
 
+const onPlayerCraftAttempt = (server: Server, ds: DataStorage) =>
+  server.events
+    .filter((e) => e.type === ClientToServerMessage.playerCraftAttempt && e)
+    .subscribe(({ socket, data }) => {
+      // console.log('12222;', data, socket.player.inventory);
+      // import { craftRecipes } from '';
+    });
+
 const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (
   socket: Socket,
 ) => {
@@ -144,6 +152,7 @@ export default (
   onPlayerPutBlock(server);
   onPlayerDestroyedBlock(server, ds);
   onLogin(server, ds, createPlayer, players, world);
+  onPlayerCraftAttempt(server);
 
   const networkSystem = () => {};
   return networkSystem;

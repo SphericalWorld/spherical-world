@@ -28,6 +28,8 @@ import { recipes } from './recipes';
 import { fontMain } from '../../styles/fonts.module.css';
 import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
 import { blocksInfo } from '../../../blocks/blocksInfo';
+import { useHudApi } from '../../HudApi';
+import { GameEvent } from '../../../Events';
 
 const ItemIconCount = ({ count, src }: { count: number; src: string }): JSX.Element => (
   <div className={itemImg}>
@@ -41,6 +43,7 @@ const Craft = (): JSX.Element => {
   const close = useCallback(() => setUIState(CRAFT, false), [setUIState]);
   const [recipeIndex, setRecipeIndex] = useState(0);
   const [amountToCraft, setAmountToCraft] = useState(1);
+  const api = useHudApi();
 
   return (
     <ModalWindow caption="craft" onClose={close}>
@@ -85,7 +88,20 @@ const Craft = (): JSX.Element => {
             ))}
           </div>
           <div className={craftingCount}>
-            <Button size="small">Create</Button>
+            <Button
+              size="small"
+              onClick={() =>
+                api.dispatchGameEvent({
+                  type: GameEvent.playerCraftAttempt,
+                  payload: {
+                    amount: amountToCraft,
+                    recipeId: recipes[recipeIndex].id,
+                  },
+                })
+              }
+            >
+              Create
+            </Button>
             <div className={inputCraftCountLabel}>
               <InputNumber
                 onChange={(number) => setAmountToCraft(number)}

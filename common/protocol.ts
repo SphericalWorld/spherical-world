@@ -81,6 +81,7 @@ export enum ClientToServerMessage {
   playerDestroyedBlock,
   playerPutBlock,
   chatMessage,
+  playerCraftAttempt,
 }
 
 export type ClientToServerMessages =
@@ -121,4 +122,11 @@ export type ClientToServerMessages =
   | Readonly<{
       type: ClientToServerMessage.chatMessage;
       data: string;
+    }>
+  | Readonly<{
+      type: ClientToServerMessage.playerCraftAttempt;
+      data: {
+        amount: number;
+        recipeId: string;
+      };
     }>;

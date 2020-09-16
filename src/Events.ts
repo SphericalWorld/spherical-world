@@ -26,6 +26,7 @@ export enum GameEvent {
   previousItemSelected,
   nextItemSelected,
   itemSelected,
+  playerCraftAttempt,
 }
 
 type ChunkLoadedEvent = Readonly<{
@@ -106,6 +107,13 @@ export type MainThreadEvents =
   | Readonly<{
       type: GameEvent.itemSelected;
       payload: Slot | null;
+    }>
+  | Readonly<{
+      type: GameEvent.playerCraftAttempt;
+      payload: {
+        amount: number;
+        recipeId: string;
+      };
     }>;
 
 export type PhysicsThreadEvents =

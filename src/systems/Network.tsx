@@ -7,7 +7,7 @@ import { Transform, Camera, Inventory } from '../components';
 import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
-import type { WorldMainThread } from '../Events';
+import { WorldMainThread, GameEvent } from '../Events';
 
 const onSyncGameData = (world: WorldMainThread, network: Network) =>
   network.events
@@ -50,6 +50,12 @@ export default (world: WorldMainThread, network: Network, input: Input, store: S
     .subscribe(({ type, payload }) => {
       network.emit({ type, data: payload });
     });
+
+  world.events.subscribe((event) => {
+    if (event.type === GameEvent.playerCraftAttempt) {
+      network.emit({ type: ClientToServerMessage.playerCraftAttempt, data: event.payload });
+    }
+  });
 
   network.events.subscribe(({ type, data }) => {
     // console.log(type, data);
