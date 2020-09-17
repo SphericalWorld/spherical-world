@@ -9,6 +9,71 @@ import { Transform, Network, Inventory } from '../components';
 import defaultInputBindings from '../../common/constants/input/defaultInputBindings';
 import { saveGameObject, getGameObject } from '../dataStorage';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
+import { craftRecipes as recipes } from '../../common/craft/recipes';
+import type { Slot, Inventory as InventoryData } from '../../common/Inventory';
+import { findItemToAdd } from './Dropable';
+import { createSlot, putItem, deleteItem } from '../../common/Inventory';
+
+//-----
+const isNessesaryAmountItemInInventory = (
+  item: { ingredientId: number; amount: number },
+  inventoryItems: Record<string, Slot>,
+) => {
+  const inventoryItemsArray = Object.values(inventoryItems);
+  const amountInInventory = inventoryItemsArray.reduce((acc, inventoryItem) => {
+    if (inventoryItem.itemTypeId === item.ingredientId) {
+      acc += inventoryItem.count;
+      return acc;
+    }
+    return acc;
+  }, 0);
+  return amountInInventory >= item.amount;
+};
+
+const canCraft = (
+  ingredientsAmountArray: ReadonlyArray<{ ingredientId: number; amount: number }>,
+  inventoryItems: Record<string, Slot>,
+) => {
+  return ingredientsAmountArray.every((ingredientAmount) =>
+    isNessesaryAmountItemInInventory(ingredientAmount, inventoryItems),
+  );
+};
+
+export const findItemSlot = (inventory: InventoryData, itemId: number) => {
+  for (const slot of inventory.slots) {
+    if (slot !== null) {
+      const currentItem = inventory.items[slot];
+      if (currentItem.itemTypeId === itemId) {
+        return currentItem;
+      }
+    }
+  }
+  return null;
+};
+
+export const decreaseItemAmount = (
+  inventory: InventoryData,
+  ingredientId: number,
+  amount: number,
+): number => {
+  const slotToDecrease = findItemSlot(inventory, ingredientId);
+  if (slotToDecrease) {
+    if (slotToDecrease.count > amount) {
+      slotToDecrease.count -= amount;
+      return 0;
+    }
+    if (slotToDecrease.count < amount) {
+      deleteItem(inventory, slotToDecrease);
+      return amount - slotToDecrease.count;
+    }
+    if (slotToDecrease.count === amount) {
+      deleteItem(inventory, slotToDecrease);
+      return 0;
+    }
+  }
+  return 0;
+};
+//-----
 
 const onSyncGameData = (server: Server, world: World) =>
   server.events
@@ -34,12 +99,46 @@ const onPlayerDestroyedBlock = (server: Server, ds: DataStorage) =>
       saveGameObject(ds, 'dropableItems')(server.terrain.removeBlockHandler(data));
     });
 
-const onPlayerCraftAttempt = (server: Server, ds: DataStorage) =>
+const onPlayerCraftAttempt = (server: Server, ds: DataStorage, world: World) =>
   server.events
     .filter((e) => e.type === ClientToServerMessage.playerCraftAttempt && e)
     .subscribe(({ socket, data }) => {
-      // console.log('12222;', data, socket.player.inventory);
-      // import { craftRecipes } from '';
+      // console.log('12222;', data, socket.player.inventory.data);
+
+      const recipe = recipes[data.recipeId];
+      const ingredientsAmount = recipe.ingredients.map((ingredient) => {
+        return { ingredientId: ingredient.id, amount: ingredient.count * data.amount };
+      });
+      if (canCraft(ingredientsAmount, socket.player.inventory.data.items)) {
+        ingredientsAmount.map((ingredient) => {
+          let diff = decreaseItemAmount(
+            socket.player.inventory.data,
+            ingredient.ingredientId,
+            ingredient.amount,
+          );
+          do {
+            diff = decreaseItemAmount(socket.player.inventory.data, ingredient.ingredientId, diff);
+          } while (diff !== 0);
+        });
+
+        let inventorySlot = findItemToAdd(socket.player.inventory, {
+          count: data.amount * recipe.count,
+          itemTypeId: recipe.itemId,
+        });
+        if (!inventorySlot) {
+          inventorySlot = createSlot({
+            count: 0,
+            itemTypeId: recipe.itemId,
+          });
+          putItem(socket.player.inventory.data, inventorySlot);
+        }
+        inventorySlot.count += data.amount * recipe.count;
+
+        world.pushToNetworkqueue({
+          id: socket.player.id,
+          payload: { type: ServerToClientMessage.playerAddItem, data: inventorySlot },
+        });
+      }
     });
 
 const registerNewPlayer = (ds: DataStorage, createPlayer: CreatePlayer) => async (
@@ -152,7 +251,7 @@ export default (
   onPlayerPutBlock(server);
   onPlayerDestroyedBlock(server, ds);
   onLogin(server, ds, createPlayer, players, world);
-  onPlayerCraftAttempt(server);
+  onPlayerCraftAttempt(server, ds, world);
 
   const networkSystem = () => {};
   return networkSystem;

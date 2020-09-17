@@ -21,6 +21,8 @@
 }
 
 .slotInner {
+  display: flex;
+  justify-content: center;
   border-radius: 0.5em;
   height: 100%;
   position: relative;
@@ -61,7 +63,7 @@
   width: 100%;
 }
 
-.slotInner:hover {
+.slot:hover .slotInner {
   box-shadow: var(--selected-slot) 0 0 calc(var(--size-of-shadow) / 2)
     calc(var(--size-of-shadow) / 4) inset;
 }
@@ -114,4 +116,19 @@
 
 .animateDecrease {
   animation: DecreaseChangeAnimation 200ms ease-in-out;
+}
+
+.smallImg {
+  width: 1.7em;
+  height: 1.7em;
+}
+
+.mediumImg {
+  width: 3.5em;
+  height: 3.5em;
+}
+
+.bigImg {
+  width: 5em;
+  height: 5em;
 }

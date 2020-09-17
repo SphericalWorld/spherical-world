@@ -40,6 +40,12 @@ export const putItem = ({ slots, items }: Inventory, item: Slot): void => {
   items[item.id] = item;
 };
 
+export const deleteItem = ({ slots, items }: Inventory, item: Slot): void => {
+  const slotIndex = slots.findIndex((element) => element === item.id);
+  slots[slotIndex] = null;
+  delete items[item.id];
+};
+
 export const createSlot = ({
   itemTypeId,
   count = 0,
@@ -61,56 +67,106 @@ export const createSlot = ({
   icon,
 });
 
+// export const createStubItems = (): Inventory => ({
+//   items: {
+//     id1: {
+//       id: 'id1',
+//       name: 'sand',
+//       count: 52,
+//       itemTypeId: 2,
+//       rareness: RARENESS_COMMON,
+//     },
+//     id2: {
+//       id: 'id2',
+//       name: 'iron',
+//       count: 24,
+//       itemTypeId: 9,
+//       rareness: RARENESS_UNCOMMON,
+//       icon: 'ironIngot',
+//     },
+//     id3: {
+//       id: 'id3',
+//       name: 'dirt',
+//       count: 12,
+//       itemTypeId: 1,
+//       rareness: RARENESS_COMMON,
+//     },
+//     id4: {
+//       id: 'id4',
+//       name: 'diamonds',
+//       count: 7,
+//       itemTypeId: 100500,
+//       rareness: RARENESS_RARE,
+//       icon: 'diamond',
+//     },
+//     id5: {
+//       id: 'id5',
+//       name: 'torch',
+//       count: 10,
+//       itemTypeId: 128,
+//       rareness: RARENESS_COMMON,
+//       icon: 'torchOn',
+//     },
+//     id6: {
+//       id: 'id1',
+//       name: 'sand',
+//       count: 22,
+//       itemTypeId: 2,
+//       rareness: RARENESS_COMMON,
+//     },
+//   },
+//   slots: [
+//     null,
+//     'id1',
+//     null,
+//     'id2',
+//     'id3',
+//     null,
+//     'id4',
+//     'id5',
+//     null,
+//     null,
+//     'id6',
+//     null,
+//     null,
+//     null,
+//     null,
+//     null,
+//   ],
+//   selectedItem: 'id1',
+// });
 export const createStubItems = (): Inventory => ({
   items: {
     id1: {
       id: 'id1',
-      name: 'sand',
-      count: 52,
-      itemTypeId: 2,
+      name: 'oak',
+      count: 1,
+      itemTypeId: 4,
       rareness: RARENESS_COMMON,
     },
     id2: {
       id: 'id2',
-      name: 'iron',
-      count: 24,
-      itemTypeId: 9,
-      rareness: RARENESS_UNCOMMON,
-      icon: 'ironIngot',
+      name: 'oak',
+      count: 1,
+      itemTypeId: 4,
+      rareness: RARENESS_COMMON,
     },
     id3: {
       id: 'id3',
-      name: 'dirt',
-      count: 12,
-      itemTypeId: 1,
+      name: 'oak',
+      count: 1,
+      itemTypeId: 4,
       rareness: RARENESS_COMMON,
-    },
-    id4: {
-      id: 'id4',
-      name: 'diamonds',
-      count: 7,
-      itemTypeId: 100500,
-      rareness: RARENESS_RARE,
-      icon: 'diamond',
-    },
-    id5: {
-      id: 'id5',
-      name: 'torch',
-      count: 10,
-      itemTypeId: 128,
-      rareness: RARENESS_COMMON,
-      icon: 'torchOn',
     },
   },
   slots: [
-    null,
     'id1',
-    null,
     'id2',
     'id3',
     null,
-    'id4',
-    'id5',
+    null,
+    null,
+    null,
     null,
     null,
     null,

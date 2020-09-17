@@ -10,7 +10,6 @@ import {
   spinButtonSign,
 } from './inputNumber.module.css';
 import { fontMain } from '../../styles/fonts.module.css';
-// import Button from '../Button';
 
 type Props = Readonly<{
   className?: string;
@@ -18,15 +17,15 @@ type Props = Readonly<{
 }>;
 
 const InputNumber = ({ className, onChange }: Props): JSX.Element => {
-  const [amountToCraft, setAmountToCraft] = useState(1);
+  const [amount, setAmount] = useState(1);
   return (
     <div className={`${formInputNumber} ${className}`}>
       <input
         type="number"
-        value={amountToCraft}
+        value={amount}
         onChange={(event) => {
           const parsedValue = Number(event?.target.value);
-          setAmountToCraft(parsedValue <= 0 ? 1 : parsedValue);
+          setAmount(parsedValue <= 0 ? 1 : parsedValue);
           onChange(parsedValue <= 0 ? 1 : parsedValue);
         }}
         className={classnames(input, fontMain)}
@@ -35,8 +34,8 @@ const InputNumber = ({ className, onChange }: Props): JSX.Element => {
       <div className={spinButtons}>
         <button
           onClick={() => {
-            setAmountToCraft(amountToCraft + 1);
-            onChange(amountToCraft + 1);
+            setAmount(amount + 1);
+            onChange(amount + 1);
           }}
           className={classnames(spinButton, plusSpinButton)}
           type="button"
@@ -45,8 +44,8 @@ const InputNumber = ({ className, onChange }: Props): JSX.Element => {
         </button>
         <button
           onClick={() => {
-            setAmountToCraft(amountToCraft > 1 ? amountToCraft - 1 : 1);
-            onChange(amountToCraft > 1 ? amountToCraft - 1 : 1);
+            setAmount(amount > 1 ? amount - 1 : 1);
+            onChange(amount > 1 ? amount - 1 : 1);
           }}
           className={classnames(spinButton, minusSpinButton)}
           type="button"

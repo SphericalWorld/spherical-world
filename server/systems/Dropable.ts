@@ -9,7 +9,7 @@ import { throttle } from '../../common/utils';
 import { deserializeItem } from '../item';
 import { ServerToClientMessage } from '../../common/protocol';
 
-const findItemToAdd = (inventory: Inventory, item: Slot) => {
+export const findItemToAdd = (inventory: Inventory, item: Slot) => {
   for (const slot of inventory.data.slots) {
     if (slot !== null) {
       const currentItem = inventory.data.items[slot];

@@ -12,6 +12,9 @@ import {
   animateIncrease,
   animateDecrease,
   slotStyleClass,
+  smallImg,
+  mediumImg,
+  bigImg,
 } from './inventorySlot.module.css';
 import { fontMain } from '../../styles/fonts.module.css';
 import { useDraggable, useDroppable } from '../../utils/DragAndDrop';
@@ -27,6 +30,7 @@ type Props = Readonly<{
   onDrop?: (any) => unknown;
   draggableMeta?: unknown;
   position?: number;
+  src?: string;
 }>;
 
 const SLOT: 'INVENTORY_SLOT' = 'INVENTORY_SLOT';
@@ -57,28 +61,37 @@ type InventorySlotFilledProps = Readonly<{
   slot: Slot;
   isDragging: boolean;
   canDrop: boolean;
-  draggableProps: unknown;
+  draggableProps?: unknown;
+  src?: string;
+  size?: 'small' | 'medium' | 'big';
 }>;
 
-const InventorySlotFilled = (props: InventorySlotFilledProps) => {
-  const { slot, isDragging, draggableProps, canDrop } = props;
+const sizeCSS = {
+  small: smallImg,
+  medium: mediumImg,
+  big: bigImg,
+};
+
+export const InventorySlotFilled = (props: InventorySlotFilledProps) => {
+  const { slot, isDragging, draggableProps, canDrop, src, size = 'medium' } = props;
   const { icon = '_no_image_' } = slot;
   const { className } = useCSSTransition(slot.count, transitionOptions);
-
+  // console.log(slot);
   return (
-    <TooltipTrigger tooltip={Tooltip} tooltipProps={slot}>
+    <TooltipTrigger tooltip={Tooltip} tooltipProps={slot} icon={src}>
       <div className={slotInner}>
-        <div
+        <img
           {...draggableProps}
           className={classnames(
             slotItem,
             isDragging && dragging,
-            slot && getIcon(icon),
+            sizeCSS[size],
             canDrop && dragOver,
           )}
-        >
-          <span className={classnames(slotItemCount, className)}>{slot.count}</span>
-        </div>
+          src={src}
+          alt="ItemIcon"
+        />
+        <span className={classnames(slotItemCount, className)}>{slot.count}</span>
       </div>
     </TooltipTrigger>
   );
@@ -91,7 +104,7 @@ const InventorySlotEmpty = ({ canDrop }: { canDrop: boolean }) => (
 );
 
 const InventorySlot = (props: Props) => {
-  const { slot, selected = false } = props;
+  const { slot, src, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, {
     ...props,
@@ -109,6 +122,7 @@ const InventorySlot = (props: Props) => {
           draggableProps={draggableProps}
           isDragging={isDragging}
           canDrop={canDrop}
+          src={src}
         />
       ) : (
         <InventorySlotEmpty canDrop={canDrop} />

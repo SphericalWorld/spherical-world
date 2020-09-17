@@ -19,6 +19,7 @@ import {
 } from './inventory.module.css';
 import InventorySlot from '../../uiElements/InventorySlot';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
+import { blocksInfo } from '../../../blocks/blocksInfo';
 
 const Coin = ({ caption, className }: { caption: string; className: string }) => (
   <div className={`${coin} ${className}`}>
@@ -49,7 +50,7 @@ const Inventory = (): JSX.Element => {
   const swap = useCallback((e) => swapSlots(e.from, e.draggableMeta.source, e.to, 'inventory'), [
     swapSlots,
   ]);
-
+  console.log(slots);
   return (
     <ModalWindow caption="author's inventory" onClose={close}>
       <div>
@@ -62,6 +63,7 @@ const Inventory = (): JSX.Element => {
                 draggable
                 draggableMeta={{ source: 'inventory' }}
                 onDrop={swap}
+                src={blocksInfo[slot?.itemTypeId]?.itemImage}
               />
             ))}
             {slots.map(() => (

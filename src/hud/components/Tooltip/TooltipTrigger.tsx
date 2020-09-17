@@ -8,6 +8,7 @@ type Props<P> = Readonly<{
   children: ReactNode;
   tooltip: (P) => ReactElement<any>;
   tooltipProps?: P;
+  icon: string;
 }>;
 
 type Ref = { current: null | HTMLDivElement };
@@ -31,6 +32,7 @@ const TooltipTrigger = <P extends any>({
   children,
   tooltip: Tooltip,
   tooltipProps = {},
+  icon,
 }: Props<P>): JSX.Element => {
   const [isHidden, setHidden] = useState(true);
   const [style, setStyle] = useState({});
@@ -54,7 +56,7 @@ const TooltipTrigger = <P extends any>({
         {children}
       </div>
       <Portal ref={tooltipRef} className={classnames(isHidden && hidden, tooltip)} style={style}>
-        <Tooltip {...tooltipProps} />
+        <Tooltip {...tooltipProps} icon={icon} />
       </Portal>
     </>
   );

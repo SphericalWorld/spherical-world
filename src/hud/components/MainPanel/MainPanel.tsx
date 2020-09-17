@@ -18,6 +18,7 @@ import { useSelectInventoryItem, useSwapSlots } from '../Inventory/inventoryActi
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 import { useHudApi } from '../../HudApi';
 import { GameEvent } from '../../../Events';
+import { blocksInfo } from '../../../blocks/blocksInfo';
 
 const slotsSelector = createSelector(
   (state: State) => state.mainPanel.slots,
@@ -58,6 +59,7 @@ const MainPanel = (): JSX.Element => {
               draggableMeta={{ source: 'mainPanel' }}
               draggable
               onDrop={swap}
+              src={blocksInfo[slot?.itemTypeId]?.itemImage}
             />
           ))}
         </ul>
