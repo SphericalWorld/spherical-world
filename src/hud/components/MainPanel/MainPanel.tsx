@@ -59,7 +59,7 @@ const MainPanel = (): JSX.Element => {
               draggableMeta={{ source: 'mainPanel' }}
               draggable
               onDrop={swap}
-              src={blocksInfo[slot?.itemTypeId]?.itemImage}
+              iconImgSrc={blocksInfo[slot?.itemTypeId]?.itemImage}
             />
           ))}
         </ul>

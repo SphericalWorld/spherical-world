@@ -30,7 +30,7 @@ type Props = Readonly<{
   onDrop?: (any) => unknown;
   draggableMeta?: unknown;
   position?: number;
-  src?: string;
+  iconImgSrc?: string;
 }>;
 
 const SLOT: 'INVENTORY_SLOT' = 'INVENTORY_SLOT';
@@ -62,7 +62,7 @@ type InventorySlotFilledProps = Readonly<{
   isDragging: boolean;
   canDrop: boolean;
   draggableProps?: unknown;
-  src?: string;
+  iconImgSrc?: string;
   size?: 'small' | 'medium' | 'big';
 }>;
 
@@ -73,12 +73,12 @@ const sizeCSS = {
 };
 
 export const InventorySlotFilled = (props: InventorySlotFilledProps) => {
-  const { slot, isDragging, draggableProps, canDrop, src, size = 'medium' } = props;
+  const { slot, isDragging, draggableProps, canDrop, iconImgSrc, size = 'medium' } = props;
   const { icon = '_no_image_' } = slot;
   const { className } = useCSSTransition(slot.count, transitionOptions);
   // console.log(slot);
   return (
-    <TooltipTrigger tooltip={Tooltip} tooltipProps={slot} icon={src}>
+    <TooltipTrigger tooltip={Tooltip} tooltipProps={slot} icon={iconImgSrc}>
       <div className={slotInner}>
         <img
           {...draggableProps}
@@ -88,7 +88,7 @@ export const InventorySlotFilled = (props: InventorySlotFilledProps) => {
             sizeCSS[size],
             canDrop && dragOver,
           )}
-          src={src}
+          src={iconImgSrc}
           alt="ItemIcon"
         />
         <span className={classnames(slotItemCount, className)}>{slot.count}</span>
@@ -104,7 +104,7 @@ const InventorySlotEmpty = ({ canDrop }: { canDrop: boolean }) => (
 );
 
 const InventorySlot = (props: Props) => {
-  const { slot, src, selected = false } = props;
+  const { slot, iconImgSrc, selected = false } = props;
   const { isDragging, ...draggableProps } = useDraggable(dragOptions, SLOT, props);
   const { canDrop, ...droppableProps } = useDroppable(dropOptions, SLOT, {
     ...props,
@@ -122,7 +122,7 @@ const InventorySlot = (props: Props) => {
           draggableProps={draggableProps}
           isDragging={isDragging}
           canDrop={canDrop}
-          src={src}
+          iconImgSrc={iconImgSrc}
         />
       ) : (
         <InventorySlotEmpty canDrop={canDrop} />

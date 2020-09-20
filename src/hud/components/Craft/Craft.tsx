@@ -34,15 +34,18 @@ import { InventorySlotFilled } from '../../uiElements/InventorySlot/InventorySlo
 
 const ItemIconCount = ({
   count,
-  src,
+  iconImgSrc,
   itemId,
 }: {
   count: number;
-  src: string;
+  iconImgSrc: string;
   itemId: number;
 }): JSX.Element => (
   <div className={itemImg}>
-    <InventorySlotFilled slot={{ id: 'slot', name: blocksInfo[itemId].name }} src={src} />
+    <InventorySlotFilled
+      slot={{ id: 'slot', name: blocksInfo[itemId].name }}
+      iconImgSrc={iconImgSrc}
+    />
     <span className={classnames(itemCount, fontMain)}>{count}</span>
   </div>
 );
@@ -70,7 +73,7 @@ const Craft = (): JSX.Element => {
                 <InventorySlotFilled
                   size="small"
                   slot={{ id: 'slot', name: blocksInfo[recipe.itemId].name }}
-                  src={blocksInfo[recipe.itemId]?.itemImage}
+                  iconImgSrc={blocksInfo[recipe.itemId]?.itemImage}
                 />
 
                 <div className={recipeNameList}>
@@ -85,7 +88,7 @@ const Craft = (): JSX.Element => {
             <ItemIconCount
               itemId={recipes[recipeIndex].itemId}
               count={recipes[recipeIndex].count}
-              src={blocksInfo[recipes[recipeIndex].itemId].itemImage}
+              iconImgSrc={blocksInfo[recipes[recipeIndex].itemId].itemImage}
             />
             <div className={recipeName}>
               <Label>{blocksInfo[recipes[recipeIndex].itemId].name}</Label>
@@ -98,7 +101,7 @@ const Craft = (): JSX.Element => {
                 <ItemIconCount
                   itemId={ingredient.id}
                   count={ingredient.count}
-                  src={blocksInfo[ingredient.id].itemImage}
+                  iconImgSrc={blocksInfo[ingredient.id].itemImage}
                 />
                 <div className={recipeName}>
                   <Label>{blocksInfo[ingredient.id].name}</Label>

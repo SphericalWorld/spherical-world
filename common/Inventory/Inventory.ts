@@ -46,6 +46,76 @@ export const deleteItem = ({ slots, items }: Inventory, item: Slot): void => {
   delete items[item.id];
 };
 
+export const findItemToAdd = (inventory: Inventory, item: Slot): Slot | null => {
+  for (const slot of inventory.slots) {
+    if (slot !== null) {
+      const currentItem = inventory.items[slot];
+      if (currentItem.itemTypeId === item.itemTypeId && currentItem.count + item.count < 64) {
+        return currentItem;
+      }
+    }
+  }
+  return null;
+};
+
+const isNessesaryAmountItemInInventory = (
+  item: { ingredientId: number; amount: number },
+  inventoryItems: ReadonlyArray<Slot>,
+) => {
+  const amountInInventory = inventoryItems.reduce((acc, inventoryItem) => {
+    if (inventoryItem.itemTypeId === item.ingredientId) {
+      acc += inventoryItem.count;
+      return acc;
+    }
+    return acc;
+  }, 0);
+  return amountInInventory >= item.amount;
+};
+
+export const canCraft = (
+  ingredientsAmountArray: ReadonlyArray<{ ingredientId: number; amount: number }>,
+  inventoryItems: ReadonlyArray<Slot>,
+): boolean => {
+  return ingredientsAmountArray.every((ingredientAmount) =>
+    isNessesaryAmountItemInInventory(ingredientAmount, inventoryItems),
+  );
+};
+
+const findItemSlot = (inventory: Inventory, itemId: number) => {
+  for (const slot of inventory.slots) {
+    if (slot !== null) {
+      const currentItem = inventory.items[slot];
+      if (currentItem.itemTypeId === itemId) {
+        return currentItem;
+      }
+    }
+  }
+  return null;
+};
+
+export const decreaseItemAmount = (
+  inventory: Inventory,
+  ingredientId: number,
+  amount: number,
+): number => {
+  const slotToDecrease = findItemSlot(inventory, ingredientId);
+  if (slotToDecrease) {
+    if (slotToDecrease.count > amount) {
+      slotToDecrease.count -= amount;
+      return 0;
+    }
+    if (slotToDecrease.count < amount) {
+      deleteItem(inventory, slotToDecrease);
+      return amount - slotToDecrease.count;
+    }
+    if (slotToDecrease.count === amount) {
+      deleteItem(inventory, slotToDecrease);
+      return 0;
+    }
+  }
+  return 0;
+};
+
 export const createSlot = ({
   itemTypeId,
   count = 0,
