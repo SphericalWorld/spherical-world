@@ -24,16 +24,28 @@ import {
   inputCraftCountLabel,
   inputCraftCount,
 } from './craft.module.css';
-import { recipes } from './recipes';
 import { fontMain } from '../../styles/fonts.module.css';
 import { scrollbarBox } from '../../uiElements/Scrollbar/scrollbar.module.css';
 import { blocksInfo } from '../../../blocks/blocksInfo';
 import { useHudApi } from '../../HudApi';
 import { GameEvent } from '../../../Events';
+import { craftRecipesArray as recipes } from '../../../../common/craft/recipes';
+import { InventorySlotFilled } from '../../uiElements/InventorySlot/InventorySlot';
 
-const ItemIconCount = ({ count, src }: { count: number; src: string }): JSX.Element => (
+const ItemIconCount = ({
+  count,
+  iconImgSrc,
+  itemId,
+}: {
+  count: number;
+  iconImgSrc: string;
+  itemId: number;
+}): JSX.Element => (
   <div className={itemImg}>
-    <ItemIcon src={src} />
+    <InventorySlotFilled
+      slot={{ id: 'slot', name: blocksInfo[itemId].name }}
+      iconImgSrc={iconImgSrc}
+    />
     <span className={classnames(itemCount, fontMain)}>{count}</span>
   </div>
 );
@@ -58,7 +70,12 @@ const Craft = (): JSX.Element => {
           <div className={classnames(recipesList, scrollbarBox)}>
             {recipes.map((recipe, ind) => (
               <div className={recipesListItem} role="button" onClick={() => setRecipeIndex(ind)}>
-                <ItemIcon size="small" src={blocksInfo[recipe.itemId]?.itemImage} />
+                <InventorySlotFilled
+                  size="small"
+                  slot={{ id: 'slot', name: blocksInfo[recipe.itemId].name }}
+                  iconImgSrc={blocksInfo[recipe.itemId]?.itemImage}
+                />
+
                 <div className={recipeNameList}>
                   <Label>{blocksInfo[recipe.itemId].name}</Label>
                 </div>
@@ -69,8 +86,9 @@ const Craft = (): JSX.Element => {
         <div className={craftIngredients}>
           <div className={craftHead}>
             <ItemIconCount
+              itemId={recipes[recipeIndex].itemId}
               count={recipes[recipeIndex].count}
-              src={blocksInfo[recipes[recipeIndex].itemId].itemImage}
+              iconImgSrc={blocksInfo[recipes[recipeIndex].itemId].itemImage}
             />
             <div className={recipeName}>
               <Label>{blocksInfo[recipes[recipeIndex].itemId].name}</Label>
@@ -80,7 +98,11 @@ const Craft = (): JSX.Element => {
           <div className={ingredientsList}>
             {recipes[recipeIndex].ingredients.map((ingredient) => (
               <div className={ingredientCraft}>
-                <ItemIconCount count={ingredient.count} src={blocksInfo[ingredient.id].itemImage} />
+                <ItemIconCount
+                  itemId={ingredient.id}
+                  count={ingredient.count}
+                  iconImgSrc={blocksInfo[ingredient.id].itemImage}
+                />
                 <div className={recipeName}>
                   <Label>{blocksInfo[ingredient.id].name}</Label>
                 </div>

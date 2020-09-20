@@ -312,7 +312,7 @@ export class World<Events = unknown> {
     }
   }
 
-  pushToNetworkqueue(data) {
+  pushToNetworkQueue(data) {
     this.networkQueue.push(data);
   }
 }

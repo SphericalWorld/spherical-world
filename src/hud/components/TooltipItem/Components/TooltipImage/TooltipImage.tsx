@@ -1,6 +1,6 @@
 import React from 'react';
 import TooltipText from '../../Elements/TooltipText';
-import { getIcon } from '../../../../utils/CSSHelpers';
+// import { getIcon } from '../../../../utils/CSSHelpers';
 import { imageTooltip, gridArea, imgItem } from './tooltipImage.module.css';
 
 type Props = Readonly<{
@@ -9,7 +9,7 @@ type Props = Readonly<{
 
 const TooltipImage = ({ icon }: Props): JSX.Element => (
   <TooltipText className={`${imageTooltip} ${gridArea}`}>
-    <div className={`${getIcon(icon)} ${imgItem}`} />
+    <img src={icon} alt="TolltipItemIcon" className={imgItem} />
   </TooltipText>
 );
 
