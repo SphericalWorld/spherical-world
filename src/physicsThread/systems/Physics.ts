@@ -1,12 +1,8 @@
 import { vec3, quat } from 'gl-matrix';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
 import { blocksInfo } from '../../blocks/blocksInfoAllThreads';
-import Collider from '../../components/Collider';
-import Joint from '../../components/Joint';
+import { Collider, Joint, Velocity, Transform, Physics } from '../../components';
 import type { System } from '../../../common/ecs/System';
-import Velocity from '../../components/Velocity';
-import Transform from '../../components/Transform';
-import Physics from '../../components/Physics';
 import { collide, testCollision, move } from '../physics/Collider';
 import type Terrain from '../Terrain';
 import { CHUNK_STATUS_NEED_LOAD_ALL } from '../../Terrain/Chunk/chunkConstants';

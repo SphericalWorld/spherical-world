@@ -1,1 +1,1 @@
-export { default, NetworkSyncComponent } from '../../common/ecs/components/NetworkSync';
+export { NetworkSync } from '../../common/ecs/components/NetworkSync';

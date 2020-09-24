@@ -18,7 +18,8 @@ export const useContext = <T extends unknown>(context: Context<T>): T =>
 
 const worlds: Context<World> = createContext();
 
-export const GameObject = <T extends any>(params: T): React$Element<any> => params;
+export const GameObject = <T extends any>(params: T & { id?: Entity }): React$Element<any> =>
+  params;
 
 export const createElement: React$CreateElement = <Props extends { id: Entity }, T extends Props>(
   component: StatelessFunctionalComponent<T>,
@@ -32,7 +33,14 @@ export const createElement: React$CreateElement = <Props extends { id: Entity },
   if (component !== GameObject) {
     const { id = EntityManager.generateId(), ...props } = origProps === null ? {} : origProps;
     const newProps = { id, ...props };
-    const res: { children: any[] } = component(newProps) as any;
+
+    const res: { children: any[] } = component.prototype?.constructor.isComponent
+      ? {
+          type: component,
+          props: newProps,
+          key: null,
+        }
+      : component(newProps);
     if (res.children instanceof Array) {
       res.children = res.children.concat(children);
     }
@@ -50,5 +58,5 @@ export const createElement: React$CreateElement = <Props extends { id: Entity },
 
 export const render = <T>(component: StatelessFunctionalComponent<T>, world: World): void => {
   worlds.stack.push(world);
-  createElement(component, null);
+  return createElement(component, null);
 };

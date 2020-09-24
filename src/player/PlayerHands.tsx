@@ -1,6 +1,6 @@
 import { vec3, quat } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
-import { Transform, Visual, Joint, Script } from '../components/react';
+import { Visual, Joint, Script, Transform } from '../components';
 import { React, GameObject } from '../../common/ecs';
 import { materialLibrary, GlObject } from '../engine';
 import { createModelFromSprite } from '../engine/Model/ModelFromSprite';
@@ -11,7 +11,7 @@ type Props = Readonly<{
   parent: Entity;
 }>;
 
-class PlayerScript extends Script {
+class PlayerHandsScript extends Script {
   start(world: WorldMainThread) {
     world.events
       .filter((e) => e.type === GameEvent.itemSelected && e)
@@ -28,8 +28,6 @@ class PlayerScript extends Script {
   }
 }
 
-export const PlayerScriptComponent = (): JSX.Element => new PlayerScript();
-
 export const PlayerHands = ({ parent }: Props): JSX.Element => {
   const material = materialLibrary.get('blocksDropable');
   // const material = materialLibrary.get('flame');
@@ -42,7 +40,7 @@ export const PlayerHands = ({ parent }: Props): JSX.Element => {
       {/* <Transform rotation={quat.fromEuler(quat.create(), 0, 0, 90)} /> */}
       <Transform rotation={quat.fromEuler(quat.create(), 90, 90, 0)} />
       {/* TODO check if main player */}
-      <PlayerScriptComponent />
+      <PlayerHandsScript />
       <Visual object={object} />
       {/* <Joint parent={parent} distance={vec3.fromValues(-0.5, -1.1, 0.6)} /> */}
       <Joint parent={parent} distance={vec3.fromValues(-1.5, -0.1, 1.6)} />

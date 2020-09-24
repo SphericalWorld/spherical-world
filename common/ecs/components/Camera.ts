@@ -1,9 +1,8 @@
 import type { mat4, vec3 } from 'gl-matrix';
-import type { Component } from '../Component';
+import { Component } from '../Component';
 import type { Networkable } from '../../Networkable';
 
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
-import type { MemoryManager } from '../MemoryManager';
 
 export type Viewport = {
   viewportWidth: number;
@@ -11,27 +10,28 @@ export type Viewport = {
   pMatrix: mat4;
 };
 
-export default class Camera implements Component, Networkable {
+/**
+ * Component to store data about Camera
+ */
+export class Camera extends Component<{ yaw: number; pitch: number }> implements Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'camera' = 'camera';
   static networkable = true;
-  static memoryManager: MemoryManager;
 
-  yaw = Camera.memoryManager.getFloat32();
-  pitch = Camera.memoryManager.getFloat32();
+  yaw = Component.memoryManager.getFloat32();
+  pitch = Component.memoryManager.getFloat32();
 
-  readonly mvMatrix: mat4 = Camera.memoryManager.getMat4();
-  readonly sight: vec3 = Camera.memoryManager.getVec3();
-  readonly worldPosition: vec3 = Camera.memoryManager.getVec3();
-  readonly offset: number;
+  readonly mvMatrix: mat4 = Component.memoryManager.getMat4();
+  readonly sight: vec3 = Component.memoryManager.getVec3();
+  readonly worldPosition: vec3 = Component.memoryManager.getVec3();
   readonly viewport: Viewport;
 
-  constructor({ offset, yaw = 0, pitch = 0 }: { yaw: number; pitch: number; offset: number }) {
-    this.offset = offset;
+  constructor({ yaw = 0, pitch = 0 }: { yaw: number; pitch: number }) {
+    super();
     this.viewport = {
-      viewportWidth: Camera.memoryManager.getUint16(),
-      viewportHeight: Camera.memoryManager.getUint16(),
-      pMatrix: Camera.memoryManager.getMat4(),
+      viewportWidth: Component.memoryManager.getUint16(),
+      viewportHeight: Component.memoryManager.getUint16(),
+      pMatrix: Component.memoryManager.getMat4(),
     };
     this.yaw = yaw;
     this.pitch = pitch;
@@ -60,12 +60,3 @@ export default class Camera implements Component, Networkable {
     }
   }
 }
-
-/**
- * Component to store data about Camera
- */
-export const CameraComponent = (props: { yaw: number; pitch: number }): JSX.Element => ({
-  type: Camera,
-  props,
-  key: null,
-});

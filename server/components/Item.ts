@@ -1,1 +1,1 @@
-export { default } from '../../common/ecs/components/Item';
+export { Item } from '../../common/ecs/components/Item';

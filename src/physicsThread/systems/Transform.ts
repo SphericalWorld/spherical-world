@@ -1,7 +1,6 @@
 import { vec3 } from 'gl-matrix';
 import type { System } from '../../../common/ecs/System';
-import Transform from '../../components/Transform';
-import UserControlled from '../../components/UserControlled';
+import { Transform, UserControlled } from '../../components';
 import type { WorldPhysicsThread } from '../../Events';
 
 export default (ecs: WorldPhysicsThread): System => {

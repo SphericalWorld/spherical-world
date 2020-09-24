@@ -95,13 +95,13 @@ export class MemoryManager {
     );
   }
 
-  allocate(component: Component): number {
+  allocate(component: Component): number | null {
     const { offsetPointer } = this.memory[component.componentName];
     const normalizedSize = Math.ceil(component.memorySize / 4) * 4;
     const offset = Atomics.add(offsetPointer, 0, normalizedSize);
     this.currentComponentLocalOffset = offset;
     this.currentComponentMemory = this.memory[component.componentName].data;
-
+    if (!normalizedSize) return null;
     return offset;
   }
 

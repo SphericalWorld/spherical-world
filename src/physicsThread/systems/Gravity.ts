@@ -1,11 +1,9 @@
 import { getBlock } from '../../../common/terrain';
 import { blocksInfo } from '../../blocks/blocksInfoAllThreads';
 import type Terrain from '../Terrain/Terrain';
-import Transform from '../../components/Transform';
+import { Transform, Gravity, Velocity } from '../../components';
 import type { System } from '../../../common/ecs/System';
 import type { World } from '../../../common/ecs';
-import Gravity from '../../components/Gravity';
-import Velocity from '../../components/Velocity';
 
 export default (ecs: World, terrain: Terrain): System => {
   const components = ecs.createSelector([Gravity, Velocity, Transform]);

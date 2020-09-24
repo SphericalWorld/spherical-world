@@ -1,1 +1,1 @@
-export { default } from '../../common/ecs/components/Inventory';
+export { Inventory } from '../../common/ecs/components/Inventory';

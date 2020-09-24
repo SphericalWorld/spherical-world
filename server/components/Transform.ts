@@ -1,39 +1,45 @@
 // export { default } from '../../common/ecs/components/Transform';
 
 import { vec3, quat } from 'gl-matrix';
-import type { Component } from '../../common/ecs/Component';
+import { Component } from '../../common/ecs/Component';
 import type { Entity } from '../../common/ecs/Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../src/Thread/threadConstants';
 import type { Networkable } from '../../common/Networkable';
-import type { MemoryManager } from '../../common/ecs/MemoryManager';
 
 const ZERO_VECTOR = vec3.create();
 const ZERO_QUAT = quat.create();
 
-export default class Transform implements Component, Networkable {
+export type TransformProps = {
+  translation?: vec3;
+  parent?: Entity;
+  rotation?: quat;
+};
+
+/**
+ * Contains positional data, such as coordinates and rotation
+ * @param {vec3} translation 3D world coordinates
+ * @param {Entity} parent parent object in hierarchy
+ */
+export class Transform extends Component<TransformProps> implements Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'transform' = 'transform';
   static networkable = true;
-  static memoryManager: MemoryManager;
 
-  readonly translation: vec3 = Transform.memoryManager.getVec3();
-  readonly rotation: quat = Transform.memoryManager.getQuat();
+  readonly translation: vec3 = Component.memoryManager.getVec3();
+  readonly rotation: quat = Component.memoryManager.getQuat();
 
   parent: Entity | null;
-  offset: number;
 
   constructor({
     translation = ZERO_VECTOR,
     rotation = ZERO_QUAT,
     parent,
-    offset,
   }: {
     translation: vec3;
     rotation: quat;
     parent?: Entity;
-    offset: number;
   }) {
-    this.offset = offset;
+    super();
 
     vec3.copy(this.translation, translation);
     quat.copy(this.rotation, rotation);
@@ -62,20 +68,3 @@ export default class Transform implements Component, Networkable {
     }
   }
 }
-
-export type TransformProps = {
-  translation?: vec3;
-  parent?: Entity;
-  rotation?: quat;
-};
-
-/**
- * Contains positional data, such as coordinates and rotation
- * @param {vec3} translation 3D world coordinates
- * @param {Entity} parent parent object in hierarchy
- */
-export const TransformComponent = (props: TransformProps): JSX.Element => ({
-  type: Transform,
-  props,
-  key: null,
-});

@@ -96,12 +96,18 @@ module.exports = (babel) => {
     }
     // path.node.name = path.node.name.split('').reverse().join('');
   };
-
   const transpileConstructor = (path, state) => {
     const { node } = path;
     if (node.static) return;
     if (node.kind !== 'constructor') return;
-    node.body.body.unshift(
+    node.body.body.splice(
+      node.body.body.findIndex(
+        (el) =>
+          el.type === 'ExpressionStatement' &&
+          el.expression.callee &&
+          el.expression.callee.type === 'Super',
+      ) + 1,
+      0,
       t.variableDeclaration('const', [
         t.variableDeclarator(
           t.identifier('data'),

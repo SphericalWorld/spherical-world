@@ -2,7 +2,7 @@ import type { Thread, THREAD_ID } from '../Thread';
 import type { Entity } from './Entity';
 import type { System } from './System';
 import type { transform } from './EntityManager';
-import type { Component } from './Component';
+import { Component } from './Component';
 import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';
@@ -92,6 +92,7 @@ export class World<Events = unknown> {
   }
 
   registerComponentTypes(...componentTypes: Function[]): void {
+    Component.memoryManager = this.memoryManager;
     for (const componentType of componentTypes) {
       componentType.memoryManager = this.memoryManager;
       this.componentTypes.set(componentType.componentName, componentType);
@@ -187,7 +188,10 @@ export class World<Events = unknown> {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
       if (!component.data.offset) {
-        component.data = Object.assign(Reflect.construct(constructor, []), component.data);
+        component.data = Object.assign(
+          Reflect.construct(constructor, [component.data]),
+          component.data,
+        );
       } else {
         this.memoryManager.useAlocatedMemory(component.data.offset, constructor);
         component.data = Reflect.construct(constructor, [component.data]);
@@ -204,8 +208,9 @@ export class World<Events = unknown> {
   createEntity<T extends Component[]>(id: Entity | null, ...components: T): ReturnType<transform> {
     const createComponentInstance = (component) => {
       const offset = this.memoryManager.allocate(component.type);
-      component.props.offset = offset;
-      return new component.type(component.props);
+      const res = new component.type(component.props);
+      if (res.offset !== null) res.offset = offset;
+      return res;
     };
     const entityId = id !== null ? id : EntityManager.generateId();
     components = components.map((el) => (el.type ? createComponentInstance(el) || el : el));

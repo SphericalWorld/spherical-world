@@ -1,4 +1,4 @@
-import type NetworkSync from '../ecs/components/NetworkSync';
+import type { NetworkSync } from '../ecs/components/NetworkSync';
 
 type SyncEvent = Readonly<{
   type: 'SYNC_GAME_DATA';

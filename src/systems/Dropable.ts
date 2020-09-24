@@ -1,7 +1,6 @@
 import { quat } from 'gl-matrix';
 import type { System } from '../../common/ecs/System';
-import Transform from '../components/Transform';
-import Item from '../components/Item';
+import { Transform, Item } from '../components';
 import type { WorldMainThread } from '../Events';
 
 const ROTATION_SPEED = 1;

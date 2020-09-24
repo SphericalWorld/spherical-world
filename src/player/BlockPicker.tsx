@@ -2,7 +2,7 @@ import type { Entity } from '../../common/ecs';
 import GlObject from '../engine/glObject';
 import { React, GameObject } from '../../common/ecs';
 import { createCube } from '../engine/Model';
-import { Transform, Player, Raytracer, Visual } from '../components/react';
+import { Transform, Player, Raytracer, Visual } from '../components';
 import { BlockRemover } from './BlockRemover';
 import { materialLibrary } from '../engine';
 

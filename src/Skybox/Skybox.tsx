@@ -1,6 +1,6 @@
 import type { Entity } from '../../common/ecs';
 import { React, GameObject } from '../../common/ecs';
-import { Transform, Visual, Skybox as SkyboxComponent, Joint } from '../components/react';
+import { Transform, Visual, Skybox as SkyboxComponent, Joint } from '../components';
 import { createCube } from '../engine/Model';
 import { materialLibrary, GlObject } from '../engine';
 

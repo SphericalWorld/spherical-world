@@ -4,7 +4,6 @@ import { GameObject, React } from '../../common/ecs';
 import playerModel from '../models/player.json';
 import type { TransformProps, InventoryProps } from '../components/react';
 import {
-  Transform,
   Camera,
   Collider,
   Physics,
@@ -14,7 +13,8 @@ import {
   Visual,
   Inventory,
   Script,
-} from '../components/react';
+  Transform,
+} from '../components';
 import Model from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 import { TextBillboard } from '../gameObjects';
@@ -24,7 +24,7 @@ import { Sound } from '../Sound';
 import { getBlock } from '../../common/terrain';
 import type Terrain from '../Terrain';
 import { blocksInfo } from '../blocks/blocksInfo';
-import type { UserControlled as CUserControlled, Transform as CTransform } from '../components';
+
 import { PlayerHands } from './PlayerHands';
 import type { WorldMainThread } from '../Events';
 
@@ -60,8 +60,8 @@ class PlayerScript extends Script {
 
   lastPosition = vec3.create();
   deltaMove = 0;
-  movementData: CUserControlled = null;
-  transform: CTransform = null;
+  movementData: UserControlled = null;
+  transform: Transform = null;
 
   start() {
     this.movementData = this.gameObject.get('userControlled');
@@ -92,8 +92,6 @@ class PlayerScript extends Script {
   }
 }
 
-export const PlayerScriptComponent = (): JSX.Element => new PlayerScript();
-
 export const Player = ({
   id,
   transform,
@@ -115,7 +113,7 @@ export const Player = ({
       <Physics />
       <Velocity />
       <Gravity />
-      <PlayerScriptComponent />
+      <PlayerScript />
       <Inventory {...inventory.data} />
       {isMainPlayer
         ? [<UserControlled />, <Camera {...camera} />, <PlayerHands parent={id} />]

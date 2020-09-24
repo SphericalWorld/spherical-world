@@ -1,9 +1,7 @@
-export { default as Transform } from './Transform';
-export { default as Network } from './Network';
-export { default as NetworkSync } from './NetworkSync';
-export { default as PlayerData } from './PlayerData';
-export { default as Inventory } from './Inventory';
-export { default as Item } from './Item';
-export { default as Camera } from './Camera';
-export { TransformComponent } from './Transform';
-export { CameraComponent } from './Camera';
+export { Transform } from './Transform';
+export { Network } from './Network';
+export { NetworkSync } from './NetworkSync';
+export { PlayerData } from './PlayerData';
+export { Inventory } from './Inventory';
+export { Item } from './Item';
+export { Camera } from './Camera';

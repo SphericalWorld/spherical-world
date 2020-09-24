@@ -3,14 +3,14 @@ import type { Entity } from '../../common/ecs';
 import { GameObject, React } from '../../common/ecs';
 import type { TransformProps, InventoryProps } from '../components/react';
 import {
-  Transform,
   Visual,
   Collider,
   Physics,
   Velocity,
   Gravity,
   Item as ItemComponent,
-} from '../components/react';
+  Transform,
+} from '../components';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';
 import { blocksTextureInfo } from '../blocks/blocksInfo';

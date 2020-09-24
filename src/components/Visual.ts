@@ -1,8 +1,12 @@
-import type { Component } from '../../common/ecs/Component';
+import { Component } from '../../common/ecs/Component';
 import type GlObject from '../engine/glObject';
 import { THREAD_MAIN } from '../Thread/threadConstants';
 
-export default class Visual implements Component {
+/**
+ * Component with data to render Entity in 3D game world
+ * @param {GlObject} glObject object with visual data to render
+ */
+export class Visual extends Component<{ object: GlObject }> {
   static threads = [THREAD_MAIN];
   static componentName: 'visual' = 'visual';
 
@@ -10,14 +14,8 @@ export default class Visual implements Component {
 
   glObject: GlObject;
 
-  constructor(glObject: GlObject) {
-    this.glObject = glObject;
+  constructor({ object }: { object: GlObject }) {
+    super();
+    this.glObject = object;
   }
 }
-
-/**
- * Component with data to render Entity in 3D game world
- * @param {GlObject} glObject object with visual data to render
- */
-export const VisualComponent = ({ object }: { object: GlObject }): JSX.Element =>
-  new Visual(object);

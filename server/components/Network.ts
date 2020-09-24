@@ -1,17 +1,18 @@
 import type { Socket } from '../network/socket';
-import type { Component } from '../../common/ecs/Component';
+import { Component } from '../../common/ecs/Component';
 import type { Entity } from '../../common/ecs/Entity';
 
 import { THREAD_MAIN } from '../../src/Thread/threadConstants';
 
-export default class Network implements Component {
+export class Network extends Component<{ socket: Socket }> {
   static threads = [THREAD_MAIN];
   static componentName: 'network' = 'network';
 
   socket: Socket;
   linkedPlayers: Readonly<{ network: Network; id: Entity }>[] = [];
 
-  constructor(socket: Socket) {
+  constructor({ socket }: { socket: Socket }) {
+    super();
     this.socket = socket;
   }
 

@@ -1,6 +1,6 @@
 import type { System } from '../System';
 import type { World } from '../World';
-import Script from '../components/Script';
+import { Script } from '../components/Script';
 
 export default (ecs: World): System => {
   const components = ecs.createSelector([Script]);

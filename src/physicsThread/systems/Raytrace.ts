@@ -5,10 +5,7 @@ import type { World } from '../../../common/ecs/World';
 import type Terrain from '../Terrain/Terrain';
 import type { System } from '../../../common/ecs/System';
 import { toChunkPosition, toPositionInChunk } from '../../../common/chunk';
-import Transform from '../../components/Transform';
-import Raytracer from '../../components/Raytracer';
-import UserControlled from '../../components/UserControlled';
-import Camera from '../../components/Camera';
+import { Transform, Raytracer, UserControlled, Camera } from '../../components';
 
 type RaytraceInfo = Readonly<{
   block: BlockDetails;

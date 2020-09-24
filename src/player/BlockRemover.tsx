@@ -1,10 +1,5 @@
 import type { Entity } from '../../common/ecs';
-import {
-  BlockRemover as BlockRemoverComponent,
-  Transform,
-  Visual,
-  Joint,
-} from '../components/react';
+import { BlockRemover as BlockRemoverComponent, Transform, Visual, Joint } from '../components';
 import { React, GameObject } from '../../common/ecs';
 import { createCube } from '../engine/Model';
 import { materialLibrary, GlObject } from '../engine';

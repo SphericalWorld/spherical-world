@@ -1,7 +1,7 @@
 import type { vec3 } from 'gl-matrix';
 import type { Entity } from '../../../common/ecs';
 import { GameObject, React } from '../../../common/ecs';
-import { Joint, Transform, Visual } from '../../components/react';
+import { Joint, Visual, Transform } from '../../components';
 import { createBillboard } from '../../engine/Model';
 import { GlObject } from '../../engine';
 import { SimpleMaterial, BLENDING_TRANSPARENT } from '../../engine/Material';

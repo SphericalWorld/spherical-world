@@ -28,8 +28,8 @@ export default (
   DayNightCycleSystem(world, time),
   CameraSystem(world, input),
   DrawSystem(world, terrain, time),
-  HudSystem(world, store, input, network),
   NetworkSystem(world, network, input, store),
   DropableSystem(world),
   ScriptingSystem(world),
+  HudSystem(world, store, input, network),
 ];

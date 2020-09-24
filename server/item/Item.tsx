@@ -3,22 +3,20 @@ import type { Entity } from '../../common/ecs/Entity';
 import type { World } from '../../common/ecs/World';
 import type { Slot } from '../../common/Inventory';
 import { Transform, NetworkSync, Item, Inventory } from '../components';
-import { TransformComponent } from '../components/Transform';
+import { React, GameObject, render } from '../../common/ecs';
 
 const createItem = (world: World) => (id: Entity | null, position: vec3, slot: Slot) => {
-  const player = world.createEntity(
-    id,
-    new NetworkSync({ name: 'ITEM' }),
-    TransformComponent({ translation: position }),
-    new Item(),
-    new Inventory({
-      slots: [],
-      items: {
-        slot,
-      },
-    }),
+  return render(
+    () => (
+      <GameObject id={id}>
+        <NetworkSync name="ITEM" />
+        <Transform translation={position} />
+        <Item />
+        <Inventory slots={[]} items={{ slot }} />
+      </GameObject>
+    ),
+    world,
   );
-  return player;
 };
 
 export const deserializeItem = (world: World) => ({
@@ -30,14 +28,17 @@ export const deserializeItem = (world: World) => ({
   transform: Transform;
   inventory: Inventory;
 }) => {
-  const player = world.createEntity(
-    id,
-    new NetworkSync({ name: 'ITEM' }),
-    TransformComponent({ ...transform }),
-    new Item(),
-    Inventory.deserialize(inventory),
+  render(
+    () => (
+      <GameObject id={id}>
+        <NetworkSync name="ITEM" />
+        <Transform {...transform} />
+        <Item />
+        <Inventory {...inventory.data} />
+      </GameObject>
+    ),
+    world,
   );
-  return player;
 };
 
 export type CreateItem = ReturnType<typeof createItem>;

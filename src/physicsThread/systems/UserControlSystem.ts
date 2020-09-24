@@ -9,9 +9,7 @@ import {
   DIRECTION_RIGHT,
 } from '../../player/events';
 import type { System } from '../../../common/ecs/System';
-import Transform from '../../components/Transform';
-import Velocity from '../../components/Velocity';
-import UserControlled from '../../components/UserControlled';
+import { Transform, Velocity, UserControlled } from '../../components';
 import { GameEvent, WorldPhysicsThread } from '../../Events';
 
 const getAngle = (x: number, z: number): number => Math.atan2(-z, x);
