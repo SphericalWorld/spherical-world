@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
 
-const generateID = () => new ObjectID();
+const generateID = (): ObjectID => new ObjectID();
 
 export default generateID;

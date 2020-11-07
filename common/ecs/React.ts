@@ -3,7 +3,7 @@ import type { World } from './World';
 import type { Entity } from './Entity';
 import { EntityManager } from './EntityManager';
 
-export const Fragment = () => null;
+export const Fragment = (): null => null;
 
 type Context<T> = Readonly<{
   stack: T[];

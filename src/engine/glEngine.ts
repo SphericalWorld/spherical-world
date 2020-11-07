@@ -13,7 +13,7 @@ const getContext = () => {
 
 const gl = getContext();
 
-export const initWebGL = () => {
+export const initWebGL = (): void => {
   try {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.enable(gl.DEPTH_TEST);

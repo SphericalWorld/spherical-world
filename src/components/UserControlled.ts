@@ -5,7 +5,7 @@ import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
 /**
  * Component to make entity controllable by user inputs
  */
-export class UserControlled extends Component<{}> {
+export class UserControlled extends Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'userControlled' = 'userControlled';
 

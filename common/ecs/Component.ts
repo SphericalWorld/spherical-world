@@ -8,9 +8,9 @@ import type { MemoryManager } from './MemoryManager';
 // }
 class Component<T> {
   static isComponent = true;
-  offset: 0;
+  offset = 0;
 }
-class Component2<T> {
+class Component2<T = {}> {
   props: T;
   render: () => JSX.Element;
   context: any;

@@ -37,7 +37,6 @@ import {
 import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/threadConstants';
 
 import inputProvider from './Input/inputProvider';
-import inputSourcesProvider from './Input/inputSources/inputSourcesProvider';
 import inputContextsProvider from './Input/inputContexts';
 import { textureLibrary, shaderLibrary, materialLibrary, GlObject } from './engine';
 import { initHudAPI } from './hud/HudApi';
@@ -113,9 +112,8 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const terrain = getTerrain();
   playerProvider(world, terrain);
   itemProvider(world);
-  const inputSources = inputSourcesProvider();
   const inputContexts = inputContextsProvider();
-  const input = inputProvider(inputSources, inputContexts);
+  const input = inputProvider(inputContexts);
   input.onDispatch((event) => world.dispatch(event));
   world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
   initHudAPI(world);

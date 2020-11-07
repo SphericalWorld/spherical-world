@@ -4,10 +4,11 @@ import type InputEvent from '../../InputEvent';
 import { KEY_ANY } from '../../../../common/constants/input/keyboardRawEvents';
 
 export default class KeyboardSource implements InputSource {
-  onEvent: (event: InputEvent) => unknown;
+  dispatch: (event: InputEvent) => unknown;
   pressedKeys: Set<string> = new Set();
 
-  constructor() {
+  constructor(dispatch: (event: InputEvent) => unknown) {
+    this.dispatch = dispatch;
     window.addEventListener('keydown', (e: KeyboardEvent) => this.onKeyDown(e));
     window.addEventListener('keyup', (e: KeyboardEvent) => this.onKeyUp(e));
   }
@@ -15,14 +16,14 @@ export default class KeyboardSource implements InputSource {
   onKeyDown(e: KeyboardEvent): void {
     const isPressed = this.pressedKeys.has(e.code);
     if (!isPressed) {
-      this.onEvent(new StateInputEvent(e.code, STATE_DOWN));
-      this.onEvent(new StateInputEvent(KEY_ANY, STATE_DOWN, e.code));
+      this.dispatch(new StateInputEvent(e.code, STATE_DOWN));
+      this.dispatch(new StateInputEvent(KEY_ANY, STATE_DOWN, e.code));
     }
     this.pressedKeys.add(e.code);
   }
 
   onKeyUp(e: KeyboardEvent): void {
-    this.onEvent(new StateInputEvent(e.code, STATE_UP));
+    this.dispatch(new StateInputEvent(e.code, STATE_UP));
     this.pressedKeys.delete(e.code);
   }
 }

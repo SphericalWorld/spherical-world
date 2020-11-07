@@ -5,7 +5,7 @@ import { THREAD_MAIN } from '../Thread/threadConstants';
 /**
  * Component to allow entity to destroy blocks. Used to destroy blocks by players
  */
-export class BlockRemover extends Component<{}> {
+export class BlockRemover extends Component {
   static threads = [THREAD_MAIN];
   static componentName: 'blockRemover' = 'blockRemover';
 

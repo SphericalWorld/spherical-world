@@ -30,15 +30,7 @@ export class Transform extends Component<TransformProps> implements Networkable 
 
   parent: Entity | null;
 
-  constructor({
-    translation = ZERO_VECTOR,
-    rotation = ZERO_QUAT,
-    parent,
-  }: {
-    translation: vec3;
-    rotation: quat;
-    parent?: Entity;
-  }) {
+  constructor({ translation = ZERO_VECTOR, rotation = ZERO_QUAT, parent }: TransformProps) {
     super();
 
     vec3.copy(this.translation, translation);

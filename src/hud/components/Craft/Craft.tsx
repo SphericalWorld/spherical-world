@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import ModalWindow from '../../uiElements/ModalWindow';
 import { useSetUIState } from '../../utils/StateRouter';
 import { CRAFT } from './craftConstants';
-import { Button, InputText, ItemIcon, Label, InputNumber } from '../../uiElements';
+import { Button, InputText, Label, InputNumber } from '../../uiElements';
 import {
   craftSettings,
   sortButton,

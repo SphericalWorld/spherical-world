@@ -161,7 +161,6 @@ class GlTextureLibrary {
         atlas.textures.push(tex);
       }
     }
-    console.log(atlas);
 
     return Texture.createFromCanvas({
       canvas: this.textureCanvas,

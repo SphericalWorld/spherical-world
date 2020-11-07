@@ -7,7 +7,7 @@ import { blocksInfo, blocksTextureInfo } from './blocksInfoAllThreads';
 import type { BlockData } from './Block';
 import type Model from '../engine/Model';
 
-export const generateBlockModels = () => {
+export const generateBlockModels = (): void => {
   console.time('blocks=');
 
   const fb = gl.createFramebuffer();

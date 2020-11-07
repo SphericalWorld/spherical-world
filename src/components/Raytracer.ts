@@ -13,7 +13,7 @@ export type BlockDetails = {
 /**
  * Component to change position of Entity by moving it to 3D world cursor position
  */
-export class Raytracer extends Component<{}> {
+export class Raytracer extends Component {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'raytracer' = 'raytracer';
 

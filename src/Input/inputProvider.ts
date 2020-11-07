@@ -1,11 +1,10 @@
-import type { Input } from './Input';
-import type { InputSource } from './InputSource';
+import { Input } from './Input';
 import type { InputContext } from './InputContext';
-import inputProvider from './Input';
+import inputSourcesProvider from './inputSources';
+import type InputEvent from './InputEvent';
 
-export default (inputSources: InputSource[], inputContexts: InputContext[]): Input => {
-  const InputClass = inputProvider(inputContexts);
-  const instance = new InputClass();
-  instance.addEventSource(...inputSources);
-  return instance;
+export default (inputContexts: InputContext[]): Input => {
+  const input = new Input(inputContexts);
+  inputSourcesProvider((event: InputEvent) => input.onEvent(event));
+  return input;
 };

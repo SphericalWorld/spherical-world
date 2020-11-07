@@ -76,7 +76,7 @@ export default (world: WorldMainThread, input: Input): System => {
   world.events
     .filter((e) => e.type === GameEvent.cameraLocked && e)
     .subscribe(() => {
-      input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
+      // input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
       input.activateContext(GAMEPLAY_MAIN_CONTEXT);
       bodyElement.requestPointerLock();
     });

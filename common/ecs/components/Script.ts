@@ -3,7 +3,7 @@ import type { Entity } from '../Entity';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../../../src/Thread/threadConstants';
 import type { World } from '../World';
 
-export class Script extends Component<{}> {
+export class Script extends Component {
   static threads = [THREAD_MAIN];
   static componentName: 'script' = 'script';
   static networkable = true;

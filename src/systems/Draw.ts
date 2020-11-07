@@ -79,11 +79,11 @@ export default (world: World, terrain: Terrain, time: Time): System => {
     runShader(terrain.material.shader);
     gl.uniform1f(terrain.material.shader.uTime, time.currentTimeFromStart / 1000); // TODO remove
 
-    let skyColor = Math.floor(skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
-    skyColor = [
-      ((skyColor & 0xff0000) >> 16) / 256,
-      ((skyColor & 0xff00) >> 8) / 256,
-      (skyColor & 0xff) / 256,
+    const skyColorByte = Math.floor(skyColorGradient.getAtPosition(50 * (time.dayLightLevel + 1)));
+    const skyColor = [
+      ((skyColorByte & 0xff0000) >> 16) / 256,
+      ((skyColorByte & 0xff00) >> 8) / 256,
+      (skyColorByte & 0xff) / 256,
       (time.dayLightLevel + 1) / 2,
     ];
 
