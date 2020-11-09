@@ -2,7 +2,7 @@ import { mat4, quat, vec3, vec4 } from 'gl-matrix';
 import type { Viewport } from '../components/Camera';
 import type { Input } from '../Input/Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
-import { gl } from '../engine/glEngine';
+import { canvas, gl } from '../engine/glEngine';
 import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
 import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
@@ -10,11 +10,11 @@ import { unproject } from '../../common/utils/vector';
 import { GameEvent, WorldMainThread } from '../Events';
 
 const resizeViewport = (viewport: Viewport): void => {
-  const width = gl.canvas.clientWidth;
-  const height = gl.canvas.clientHeight;
-  if (gl.canvas.width !== width || gl.canvas.height !== height) {
-    gl.canvas.width = width;
-    gl.canvas.height = height;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     viewport.viewportWidth = gl.drawingBufferWidth;
     viewport.viewportHeight = gl.drawingBufferHeight;

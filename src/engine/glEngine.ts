@@ -1,7 +1,12 @@
-export const canvas = document.getElementById('glcanvas');
-if (!(canvas instanceof HTMLCanvasElement)) {
-  throw new Error();
-}
+const getCanvas = () => {
+  const canvas = document.getElementById('glcanvas');
+  if (!(canvas instanceof HTMLCanvasElement)) {
+    throw new Error();
+  }
+  return canvas;
+};
+
+const canvas = getCanvas();
 
 const getContext = () => {
   const gl = canvas.getContext('webgl2', { antialias: false }); // , preserveDrawingBuffer: true
@@ -24,4 +29,4 @@ export const initWebGL = (): void => {
   }
 };
 
-export { gl };
+export { gl, canvas };

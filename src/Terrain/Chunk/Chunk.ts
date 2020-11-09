@@ -22,18 +22,21 @@ type DataBuffers = {
   indexBuffer: ArrayBuffer;
 };
 
-type GLBuffers = {
-  vertexBuffer: WebGLBuffer;
-  indexBuffer: WebGLBuffer;
-  vao: WebGLVertexArrayObject | null;
-  hasData: boolean;
-};
-
 type BufferData = Readonly<{
   index: number;
   indexCount: number;
   offset: number;
 }>;
+
+type GLBuffers = {
+  vertexBuffer: WebGLBuffer;
+  indexBuffer: WebGLBuffer;
+  vao: WebGLVertexArrayObject | null;
+  hasData: boolean;
+  queryInProgress: boolean;
+  occluded: boolean;
+  buffersInfo: ReadonlyArray<BufferData>;
+};
 
 export default class Chunk extends ChunkBase {
   frustum: Frustum;
@@ -45,6 +48,9 @@ export default class Chunk extends ChunkBase {
     indexBuffer: null,
     vao: null,
     hasData: false,
+    queryInProgress: false,
+    occluded: false,
+    buffersInfo: [],
   }));
 
   terrain: Terrain;
@@ -121,9 +127,9 @@ export default class Chunk extends ChunkBase {
             query: gl.createQuery(),
             queryInProgress: false,
             occluded: false,
+            buffersInfo,
           };
           this.buffers[subchunk] = buffersData;
-          buffersData.buffersInfo = buffersInfo;
           gl.bindVertexArray(buffersData.vao);
 
           gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffersData.indexBuffer);

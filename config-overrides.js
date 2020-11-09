@@ -16,10 +16,15 @@ const getBabelLoader = (config) => {
   return babelLoader;
 };
 
+const disableEslint = (config) => {
+  config.plugins = config.plugins.filter((el) => !(el && el.options && el.options.eslintPath));
+};
+
 module.exports = function override(config, env) {
   const {
     module: { rules },
   } = config;
+  disableEslint(config);
   const assetLoaders = rules[rules.length - 1].oneOf;
 
   getBabelLoader(config).options.presets = babelConfig.presets;
