@@ -62,10 +62,10 @@ const getWorldPositionFar = getWorldPosition(1);
 const getCameraMovements = (world: WorldMainThread) =>
   world.events.filter((e) => e.type === GameEvent.cameraMoved && e).subscribeQueue();
 
-const sumCameraMovements = ([x, y]: [number, number], { payload }): [number, number] => [
-  x + payload.x,
-  y + payload.y,
-];
+const sumCameraMovements = (
+  [x, y]: [number, number],
+  { payload }: { payload: { x: number; y: number } },
+): [number, number] => [x + payload.x, y + payload.y];
 
 export default (world: WorldMainThread, input: Input): System => {
   const cameras = world.createSelector([Transform, Camera]);

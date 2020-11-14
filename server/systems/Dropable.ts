@@ -2,7 +2,6 @@ import { vec3 } from 'gl-matrix';
 import type { System } from '../../common/ecs/System';
 import type { World } from '../../common/ecs';
 import { Transform, Item, Inventory, PlayerData } from '../components';
-import { createSlot, putItem, findItemToAdd } from '../../common/Inventory';
 import type { DataStorage } from '../dataStorage';
 import { updateGameObject, getAllGameObjects, deleteGameObject } from '../dataStorage';
 import { throttle } from '../../common/utils';
@@ -27,15 +26,7 @@ export default (world: World, ds: DataStorage): System => {
       );
       if (item) {
         const itemData = item.inventory.data;
-        let inventorySlot = findItemToAdd(inventory.data, itemData.items.slot);
-        if (!inventorySlot) {
-          inventorySlot = createSlot({
-            count: 0,
-            itemTypeId: itemData.items.slot.itemTypeId,
-          });
-          putItem(inventory.data, inventorySlot);
-        }
-        inventorySlot.count += 1;
+        const inventorySlot = inventory.data.putItemIntoAnySlots(itemData.items.slot);
         world.deleteEntity(item.id);
         world.pushToNetworkQueue({
           id,

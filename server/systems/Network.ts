@@ -10,13 +10,7 @@ import defaultInputBindings from '../../common/constants/input/defaultInputBindi
 import { saveGameObject, getGameObject } from '../dataStorage';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 import { craftRecipes as recipes } from '../../common/craft/recipes';
-import {
-  createSlot,
-  putItem,
-  findItemToAdd,
-  canCraft,
-  decreaseItemAmount,
-} from '../../common/Inventory';
+import { canCraft, decreaseItemAmount } from '../../common/Inventory';
 
 const onSyncGameData = (server: Server, world: World) =>
   server.events
@@ -63,18 +57,10 @@ const onPlayerCraftAttempt = (server: Server, ds: DataStorage, world: World) =>
           } while (diff !== 0);
         });
 
-        let inventorySlot = findItemToAdd(socket.player.inventory.data, {
+        const inventorySlot = socket.player.inventory.data.putItemIntoAnySlots({
           count: data.amount * recipe.count,
           itemTypeId: recipe.itemId,
         });
-        if (!inventorySlot) {
-          inventorySlot = createSlot({
-            count: 0,
-            itemTypeId: recipe.itemId,
-          });
-          putItem(socket.player.inventory.data, inventorySlot);
-        }
-        inventorySlot.count += data.amount * recipe.count;
 
         world.pushToNetworkQueue({
           id: socket.player.id,

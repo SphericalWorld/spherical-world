@@ -1,10 +1,10 @@
 import WebSocket, { Server as WebSocketServer } from 'ws';
-import type { Network } from '../components/index';
+import type { Network, Inventory } from '../components/index';
 import type { Entity } from '../../common/ecs/Entity';
 import type { ServerToClientMessages, ServerToClientMessage } from '../../common/protocol';
 
 export type Socket = {
-  player: Readonly<{ network: Network; id: Entity }>;
+  player: Readonly<{ network: Network; id: Entity; inventory: Inventory }>;
   ws: WebSocket;
   wss: WebSocketServer;
   sendSerialized: (data: ArrayBuffer) => void;

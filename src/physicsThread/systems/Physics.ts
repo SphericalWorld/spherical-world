@@ -42,7 +42,14 @@ const calculateMovement = (terrain: Terrain) => {
         },
       );
       if ((manifold.normal[0] || manifold.normal[2]) && blockModel.max[1] - translation[1] <= 0.5) {
-        vec3.scaleAndAdd(translation, translation, upVector, blockModel.max[1] - translation[1]);
+        const blockAbove = chunk.getBlock(
+          toPositionInChunk(blockPosition[0]),
+          Math.floor(blockPosition[1] + 1),
+          toPositionInChunk(blockPosition[2]),
+        );
+        if (!blocksInfo[blockAbove].needPhysics) {
+          vec3.scaleAndAdd(translation, translation, upVector, blockModel.max[1] - translation[1]);
+        }
       }
       vec3.scaleAndAdd(translation, translation, manifold.normal, manifold.penetration);
       move(collider.shape, translation);

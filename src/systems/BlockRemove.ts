@@ -46,8 +46,12 @@ const getPutBlockEvents = (world: WorldMainThread, network: Network, picker) =>
           payload: {
             flags: face,
             geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
-            position: Array.from(emptyBlock.position),
-            positionInChunk: Array.from(emptyBlock.positionInChunk),
+            position: [emptyBlock.position[0], emptyBlock.position[1], emptyBlock.position[2]],
+            positionInChunk: [
+              emptyBlock.positionInChunk[0],
+              emptyBlock.positionInChunk[1],
+              emptyBlock.positionInChunk[2],
+            ],
             blockId: item.itemTypeId,
             itemId: item.id,
           },

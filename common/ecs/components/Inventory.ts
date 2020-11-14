@@ -1,6 +1,5 @@
 import { Component } from '../Component';
-import type { Inventory as InventoryData } from '../../Inventory/Inventory';
-import { createInventory } from '../../Inventory/Inventory';
+import { Inventory as InventoryData } from '../../Inventory/Inventory';
 import { THREAD_MAIN } from '../../../src/Thread/threadConstants';
 import type { Networkable } from '../../Networkable';
 
@@ -21,7 +20,7 @@ export class Inventory extends Component<InventoryProps> implements Networkable 
 
   constructor({ slots, items, selectedItem }: InventoryData = {}) {
     super();
-    this.data = createInventory({ slots, items, selectedItem });
+    this.data = InventoryData.create({ slots, items, selectedItem });
   }
 
   serialize(): unknown {

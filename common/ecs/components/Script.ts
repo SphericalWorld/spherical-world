@@ -18,7 +18,7 @@ export class Script extends Component {
     this.gameObject = gameObject;
   }
 
-  start(world: World) {}
+  start(world: World): void {}
 
-  update(delta: number) {}
+  update(delta: number): void {}
 }

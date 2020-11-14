@@ -2,14 +2,16 @@ import { getIndex } from '../../../common/chunk';
 import type { MeshJSON } from '../../engine/Model/Model';
 import type { RenderToChunk, ChunkData } from './BasePropertiesComponent';
 
-const calcLightLevels = (light: number) => [
+type LightData = [number, number, number, number];
+
+const calcLightLevels = (light: number): LightData => [
   0.8 ** (15 - ((light >>> 12) & 0xf)),
   0.8 ** (15 - ((light >>> 8) & 0xf)),
   0.8 ** (15 - ((light >>> 4) & 0xf)),
   0.8 ** ((15 - light) & 0xf),
 ];
 
-export const getLight = (chunk: ChunkData, x: number, y: number, z: number) =>
+export const getLight = (chunk: ChunkData, x: number, y: number, z: number): LightData =>
   calcLightLevels(chunk.light[getIndex(x, y, z)]);
 
 const ModelComponent = (model: MeshJSON): { renderToChunk: RenderToChunk } => ({

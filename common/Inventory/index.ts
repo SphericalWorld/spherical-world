@@ -1,10 +1,2 @@
-export type { SlotID, Slot, Inventory } from './Inventory';
-export {
-  createInventory,
-  createSlot,
-  putItem,
-  deleteItem,
-  findItemToAdd,
-  canCraft,
-  decreaseItemAmount,
-} from './Inventory';
+export type { SlotID, Slot } from './Inventory';
+export { createSlot, canCraft, decreaseItemAmount, Inventory } from './Inventory';

@@ -27,5 +27,5 @@ export class Network extends Component<Props> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  toJSON() {}
+  toJSON(): string {}
 }

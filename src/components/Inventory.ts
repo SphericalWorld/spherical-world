@@ -1,6 +1,6 @@
 import { Component } from '../../common/ecs/Component';
-import type { Inventory as InventoryData, Slot } from '../../common/Inventory/Inventory';
-import { createInventory } from '../../common/Inventory/Inventory';
+import type { Slot } from '../../common/Inventory/Inventory';
+import { Inventory as InventoryData } from '../../common/Inventory/Inventory';
 import { THREAD_MAIN } from '../Thread/threadConstants';
 import { blocksInfo } from '../../common/blocks/blocksInfo';
 
@@ -27,7 +27,7 @@ export class Inventory extends Component<InventoryProps> {
 
   constructor({ slots, items, selectedItem }: InventoryData = {}) {
     super();
-    this.data = createInventory({
+    this.data = InventoryData.create({
       slots,
       items: Object.fromEntries(
         Object.entries(items).map(([key, item]) => [key, addItemDefaults(item)]),

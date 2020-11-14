@@ -17,46 +17,86 @@ export type Slot = {
   icon?: string;
 };
 
-export type Inventory = {
+type InventoryData = {
+  slots?: Array<SlotID | null>;
+  items?: Record<SlotID, Slot>;
+  selectedItem?: SlotID | null;
+};
+
+export const createSlot = ({
+  itemTypeId,
+  count = 0,
+  name,
+  rareness,
+  icon,
+}: {
+  itemTypeId: number;
+  count: number;
+  name: string;
+  rareness?: Rareness;
+  icon?: string;
+}): Slot => ({
+  id: uuid(),
+  itemTypeId,
+  count,
+  name,
+  rareness,
+  icon,
+});
+
+export class Inventory {
   slots: Array<SlotID | null>;
   items: Record<SlotID, Slot>;
   selectedItem: SlotID | null;
-};
 
-export const createInventory = ({
-  slots = [],
-  items = {},
-  selectedItem = null,
-}: Inventory): Inventory => ({
-  slots,
-  items,
-  selectedItem,
-});
+  constructor({ slots = [], items = {}, selectedItem = null }: InventoryData) {
+    this.slots = slots;
+    this.items = items;
+    this.selectedItem = selectedItem;
+  }
 
-export const putItem = ({ slots, items }: Inventory, item: Slot): void => {
-  const freeSlot = slots.findIndex((slot) => !slot);
-  if (freeSlot === -1) return;
-  slots[freeSlot] = item.id;
-  items[item.id] = item;
-};
+  putItemIntoFreeSlot(item: Slot): void {
+    const freeSlot = this.slots.findIndex((slot) => !slot);
+    if (freeSlot === -1) return; // TODO: throw an error and handle it
+    this.slots[freeSlot] = item.id;
+    this.items[item.id] = item;
+  }
 
-export const deleteItem = ({ slots, items }: Inventory, item: Slot): void => {
-  const slotIndex = slots.findIndex((element) => element === item.id);
-  slots[slotIndex] = null;
-  delete items[item.id];
-};
+  deleteItem(item: Slot): void {
+    const slotIndex = this.slots.findIndex((element) => element === item.id);
+    this.slots[slotIndex] = null;
+    delete this.items[item.id];
+  }
 
-export const findItemToAdd = (inventory: Inventory, item: Slot): Slot | null => {
-  for (const slot of inventory.slots) {
-    if (slot !== null) {
-      const currentItem = inventory.items[slot];
-      if (currentItem.itemTypeId === item.itemTypeId && currentItem.count + item.count < 64) {
-        return currentItem;
+  findItemToAdd(item: Slot): Slot | null {
+    for (const slot of this.slots) {
+      if (slot !== null) {
+        const currentItem = this.items[slot];
+        if (currentItem.itemTypeId === item.itemTypeId && currentItem.count + item.count < 64) {
+          return currentItem;
+        }
       }
     }
+    return null;
   }
-  return null;
-};
+
+  putItemIntoAnySlots(item: Slot): Slot {
+    let inventorySlot = this.findItemToAdd(item);
+    if (!inventorySlot) {
+      inventorySlot = createSlot({
+        count: 0,
+        itemTypeId: item.itemTypeId,
+      });
+      this.putItemIntoFreeSlot(inventorySlot);
+    }
+    inventorySlot.count += item.count;
+    return inventorySlot;
+  }
+
+  static create(data: InventoryData): Inventory {
+    return new Inventory(data);
+  }
+}
 
 const isNessesaryAmountItemInInventory = (
   item: { ingredientId: number; amount: number },
@@ -64,8 +104,7 @@ const isNessesaryAmountItemInInventory = (
 ) => {
   const amountInInventory = inventoryItems.reduce((acc, inventoryItem) => {
     if (inventoryItem.itemTypeId === item.ingredientId) {
-      acc += inventoryItem.count;
-      return acc;
+      return acc + inventoryItem.count;
     }
     return acc;
   }, 0);
@@ -105,37 +144,16 @@ export const decreaseItemAmount = (
       return 0;
     }
     if (slotToDecrease.count < amount) {
-      deleteItem(inventory, slotToDecrease);
+      inventory.deleteItem(slotToDecrease);
       return amount - slotToDecrease.count;
     }
     if (slotToDecrease.count === amount) {
-      deleteItem(inventory, slotToDecrease);
+      inventory.deleteItem(slotToDecrease);
       return 0;
     }
   }
   return 0;
 };
-
-export const createSlot = ({
-  itemTypeId,
-  count = 0,
-  name,
-  rareness,
-  icon,
-}: {
-  itemTypeId: number;
-  count: number;
-  name: string;
-  rareness?: Rareness;
-  icon?: string;
-}): Slot => ({
-  id: uuid(),
-  itemTypeId,
-  count,
-  name,
-  rareness,
-  icon,
-});
 
 // export const createStubItems = (): Inventory => ({
 //   items: {
