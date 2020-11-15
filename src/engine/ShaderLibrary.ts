@@ -1,9 +1,9 @@
 import type { GlShaderProgram } from './glShader';
 
-export class ShaderLibrary {
-  shaders: Map<string, GlShaderProgram> = new Map();
+export class ShaderLibrary<TShader extends GlShaderProgram = GlShaderProgram> {
+  shaders: Map<string, TShader> = new Map();
 
-  get(name: string): GlShaderProgram {
+  get(name: string): TShader {
     const shader = this.shaders.get(name);
     if (!shader) {
       throw Error(`Shader ${name} is not registered`);
@@ -11,7 +11,7 @@ export class ShaderLibrary {
     return shader;
   }
 
-  add(...shaders: GlShaderProgram[]): this {
+  add(...shaders: TShader[]): this {
     for (const shader of shaders) {
       this.shaders.set(shader.name, shader);
     }

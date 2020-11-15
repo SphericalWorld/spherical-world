@@ -8,7 +8,7 @@ import { connect } from '../util';
 import {
   updateHudData as doUpdateHudData,
   inventoryItemDecrease,
-  inventoryItemIncrease,
+  inventoryItemSet,
 } from '../hud/hudActions';
 import {
   GAMEPLAY_MAIN_CONTEXT,
@@ -66,7 +66,7 @@ const onPlayerAddItem = (network: Network, store: Store) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
     .subscribe(({ data }) => {
-      store.dispatch(inventoryItemIncrease(data.id));
+      store.dispatch(inventoryItemSet(data));
     });
 
 export default (world: WorldMainThread, store: Store, input: Input, network: Network): System => {

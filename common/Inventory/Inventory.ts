@@ -17,6 +17,11 @@ export type Slot = {
   icon?: string;
 };
 
+export type SlotInfo = {
+  slot: Slot;
+  position: number;
+};
+
 type InventoryData = {
   slots?: Array<SlotID | null>;
   items?: Record<SlotID, Slot>;
@@ -55,11 +60,12 @@ export class Inventory {
     this.selectedItem = selectedItem;
   }
 
-  putItemIntoFreeSlot(item: Slot): void {
-    const freeSlot = this.slots.findIndex((slot) => !slot);
-    if (freeSlot === -1) return; // TODO: throw an error and handle it
-    this.slots[freeSlot] = item.id;
+  putItemIntoFreeSlot(item: Slot): number {
+    const freeSlotPosition = this.slots.findIndex((slot) => !slot);
+    if (freeSlotPosition === -1) return -1; // TODO: throw an error and handle it
+    this.slots[freeSlotPosition] = item.id;
     this.items[item.id] = item;
+    return freeSlotPosition;
   }
 
   deleteItem(item: Slot): void {
@@ -68,29 +74,56 @@ export class Inventory {
     delete this.items[item.id];
   }
 
-  findItemToAdd(item: Slot): Slot | null {
-    for (const slot of this.slots) {
+  findItemToAdd(item: Slot): SlotInfo | null {
+    const slotIndex = this.slots.findIndex((slot) => {
       if (slot !== null) {
         const currentItem = this.items[slot];
         if (currentItem.itemTypeId === item.itemTypeId && currentItem.count + item.count < 64) {
           return currentItem;
         }
       }
+    });
+    if (slotIndex === -1) {
+      return null;
     }
-    return null;
+    return {
+      position: slotIndex,
+      slot: this.items[this.slots[slotIndex]],
+    };
   }
 
-  putItemIntoAnySlots(item: Slot): Slot {
-    let inventorySlot = this.findItemToAdd(item);
-    if (!inventorySlot) {
-      inventorySlot = createSlot({
-        count: 0,
-        itemTypeId: item.itemTypeId,
-      });
-      this.putItemIntoFreeSlot(inventorySlot);
+  getFreeSlot(): SlotInfo {
+    const slot = createSlot({
+      count: 0,
+    });
+    const position = this.putItemIntoFreeSlot(slot);
+    return { slot, position };
+  }
+
+  putItemIntoAnySlots(item: Slot): SlotInfo {
+    let slotInfo = this.findItemToAdd(item);
+    if (!slotInfo) {
+      slotInfo = this.getFreeSlot();
+      slotInfo.slot.itemTypeId = item.itemTypeId;
     }
-    inventorySlot.count += item.count;
-    return inventorySlot;
+    slotInfo.slot.count += item.count;
+    return slotInfo;
+  }
+
+  decreaseItemAmountInSlot(slot: Slot, amount: number): number {
+    if (slot.count > amount) {
+      slot.count -= amount;
+      return 0;
+    }
+    if (slot.count < amount) {
+      this.deleteItem(slot);
+      return amount - slot.count;
+    }
+    if (slot.count === amount) {
+      this.deleteItem(slot);
+      return 0;
+    }
+    return 0;
   }
 
   static create(data: InventoryData): Inventory {

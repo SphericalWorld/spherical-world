@@ -40,7 +40,8 @@ const onPlayerAddItem = (network: Network, player) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.playerAddItem && e)
     .subscribe(({ data }) => {
-      player[0].inventory.data.items[data.id] = data;
+      player[0].inventory.data.items[data.slot.id] = data.position;
+      player[0].inventory.data.slots[data.position] = data.slot.id;
     });
 
 export default (world: WorldMainThread, network: Network, input: Input, store: Store): System => {

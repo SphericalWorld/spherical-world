@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Rareness } from '../../../../common/Inventory/Inventory';
+import type { Slot } from '../../../../common/Inventory/Inventory';
 import TooltipName from './Components/TooltipName';
 import TooltipDamage from './Components/TooltipDamage';
 import TooltipDescription from './Components/TooltipDescription';
@@ -17,17 +17,8 @@ const TooltipDefinitions = [
   TooltipAttackSpeed,
 ];
 
-type ItemType = Readonly<{
-  name: string;
-  rareness: Rareness;
-  damage?: number;
-  icon?: string;
-  description?: string;
-  attackSpeed?: number;
-}>;
-
 type Props = Readonly<{
-  item: ItemType;
+  item: Slot;
   icon: string;
 }>;
 

@@ -6,49 +6,25 @@ import fragmentShaderData from './chunk.frag';
 export default class ChunkProgram extends GlShaderProgram {
   name = 'chunk';
 
-  attributes = [
-    'aVertexPosition',
-    'aTextureCoord',
-    'aVertexColor',
-    'aVertexGlobalColor',
-    'aBlockData',
-  ];
+  aVertexPosition = this.createAttribute('aVertexPosition');
+  aTextureCoord = this.createAttribute('aTextureCoord');
+  aVertexColor = this.createAttribute('aVertexColor');
+  aVertexGlobalColor = this.createAttribute('aVertexGlobalColor');
+  aBlockData = this.createAttribute('aBlockData');
 
-  uniforms = [
-    'uPMatrix',
-    'uMVMatrix',
-    'uBlocksTexture',
-    'uGrassColorMapTexture',
-    'uBlocksOverlayTexture',
-    'uAnimationTexture',
-    'uGlobalColor',
-    'uBufferNum',
-    'uTime',
-    'uFogColor',
-    'uFogDensity',
-    'uFogType',
-    'uAnimTextures',
-  ];
-
-  aVertexPosition = 0;
-  aTextureCoord = 0;
-  aVertexColor = 0;
-  aVertexGlobalColor = 0;
-  aBlockData = 0;
-
-  uPMatrix: WebGLUniformLocation;
-  uMVMatrix: WebGLUniformLocation;
-  uBlocksTexture: WebGLUniformLocation;
-  uGrassColorMapTexture: WebGLUniformLocation;
-  uBlocksOverlayTexture: WebGLUniformLocation;
-  uAnimationTexture: WebGLUniformLocation;
-  uGlobalColor: WebGLUniformLocation;
-  uBufferNum: WebGLUniformLocation;
-  uTime: WebGLUniformLocation;
-  uFogColor: WebGLUniformLocation;
-  uFogDensity: WebGLUniformLocation;
-  uFogType: WebGLUniformLocation;
-  uAnimTextures: WebGLUniformLocation;
+  uPMatrix = this.createUniform('uPMatrix');
+  uMVMatrix = this.createUniform('uMVMatrix');
+  uBlocksTexture = this.createUniform('uBlocksTexture');
+  uGrassColorMapTexture = this.createUniform('uGrassColorMapTexture');
+  uBlocksOverlayTexture = this.createUniform('uBlocksOverlayTexture');
+  uAnimationTexture = this.createUniform('uAnimationTexture');
+  uGlobalColor = this.createUniform('uGlobalColor');
+  uBufferNum = this.createUniform('uBufferNum');
+  uTime = this.createUniform('uTime');
+  uFogColor = this.createUniform('uFogColor');
+  uFogDensity = this.createUniform('uFogDensity');
+  uFogType = this.createUniform('uFogType');
+  uAnimTextures = this.createUniform('uAnimTextures');
 
   constructor() {
     super(
@@ -72,7 +48,6 @@ export default class ChunkProgram extends GlShaderProgram {
         },
       }),
     );
-    this.link();
     this.use();
 
     gl.uniform1i(this.uBlocksTexture, 0);

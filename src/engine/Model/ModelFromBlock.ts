@@ -1,6 +1,6 @@
 import { gl } from '../glEngine';
-import type { BlockData } from '../../blocks/Block';
 import type { TexturableShader } from '../../shaders/TexturableShader';
+import type { Cube } from '../../chunksHandlerThread/Terrain/Chunk/cube';
 
 const VERTEX_POSITION_SIZE: 3 = 3;
 const TEXTURE_COORDINATES_SIZE: 2 = 2;
@@ -47,7 +47,7 @@ export class ModelFromBlock {
     gl.bindVertexArray(null);
   }
 
-  loadFromImageData(block: BlockData): void {
+  loadFromImageData(block: Cube): void {
     const vertexPositions: number[] = [];
     const indices: number[] = [];
     const vertexTextureCoords: number[] = [];
@@ -72,14 +72,15 @@ export class ModelFromBlock {
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-    this.elementsCount = indices.length;
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexTextureCoords), gl.STATIC_DRAW);
+
+    this.elementsCount = indices.length;
   }
 }
 
-export const createModelFromBlock = (block: BlockData): ModelFromBlock => {
+export const createModelFromBlock = (block: Cube): ModelFromBlock => {
   const model = new ModelFromBlock();
   model.loadFromImageData(block);
   return model;

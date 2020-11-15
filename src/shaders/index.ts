@@ -1,4 +1,4 @@
-import { billboard } from './Billboard';
+import Billboard from './Billboard';
 import Chunk from './Chunk';
 import Diffuse from './Diffuse';
 import DiffuseAnimated from './DiffuseAnimated';
@@ -7,7 +7,7 @@ import OcclusionCulling from './OcclusionCulling';
 import DiffuseInventory from './DiffuseInventory';
 
 const shadersProvider = () => [
-  billboard,
+  new Billboard(),
   new Chunk(),
   new Diffuse(),
   new DiffuseAnimated(),

@@ -1,6 +1,7 @@
 import type { RenderToChunk, ChunkData } from './components/BasePropertiesComponent';
 import BasePropertiesComponent from './components/BasePropertiesComponent';
 import type { AABB } from '../physicsThread/physics/colliders/AABB';
+import type { Cube } from '../chunksHandlerThread/Terrain/Chunk/cube';
 
 export type BlockData = {
   id: number;
@@ -43,6 +44,7 @@ export type BlockData = {
   };
   name: string;
   collisionBox: AABB;
+  model: Cube;
 };
 
 const Block = (...components: Partial<BlockData>[]): BlockData =>

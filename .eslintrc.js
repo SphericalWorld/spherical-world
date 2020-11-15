@@ -44,5 +44,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error',
     'max-classes-per-file': 'off',
     'consistent-return': 'off', // garbage rule, forbids totally valid cases
+    'no-use-before-define': 'off', // sometimes doesn't work properly and redundand with TS checker
   },
 };

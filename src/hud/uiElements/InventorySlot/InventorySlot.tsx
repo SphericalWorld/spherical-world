@@ -72,7 +72,7 @@ const sizeCSS = {
   big: bigImg,
 };
 
-export const InventorySlotFilled = (props: InventorySlotFilledProps) => {
+export const InventorySlotFilled = (props: InventorySlotFilledProps): JSX.Element => {
   const { slot, isDragging, draggableProps, canDrop, iconImgSrc, size = 'medium' } = props;
   const { icon = '_no_image_' } = slot;
   const { className } = useCSSTransition(slot.count, transitionOptions);

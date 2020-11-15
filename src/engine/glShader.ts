@@ -70,16 +70,6 @@ class GlShaderProgram {
     }
   }
 
-  async load(): Promise<void> {
-    this.link();
-    for (const attribute of this.attributes) {
-      this.setAttribLocation.call(this, attribute);
-    }
-    for (const uniform of this.uniforms) {
-      this.setUniformLocation.call(this, uniform);
-    }
-  }
-
   link(): void {
     for (const attribute of this.attributes) {
       this.setAttribLocation(attribute);
@@ -100,6 +90,16 @@ class GlShaderProgram {
 
   use(): void {
     gl.useProgram(this.program);
+  }
+
+  createUniform(uniformName: string): WebGLUniformLocation {
+    return gl.getUniformLocation(this.program, uniformName);
+  }
+
+  createAttribute(attribName: string): number {
+    const res = gl.getAttribLocation(this.program, attribName);
+    gl.enableVertexAttribArray(res);
+    return res;
   }
 }
 

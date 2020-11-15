@@ -7,16 +7,15 @@ import fragmentShaderData from './diffuseInventory.frag';
 export default class DiffuseInventoryProgram extends GlShaderProgram implements TexturableShader {
   name = 'diffuseInventory';
 
-  attributes = ['aVertexPosition', 'aTextureCoord'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'uTexture'];
+  aVertexPosition = this.createAttribute('aVertexPosition');
+  aTextureCoord = this.createAttribute('aTextureCoord');
 
-  uTexture: WebGLUniformLocation;
-  aVertexPosition = 0;
-  aTextureCoord = 0;
+  uPMatrix = this.createUniform('uPMatrix');
+  uMVMatrix = this.createUniform('uMVMatrix');
+  uTexture = this.createUniform('uTexture');
 
   constructor() {
     super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
-    this.link();
     this.use();
     gl.uniform1i(this.uTexture, 0);
   }

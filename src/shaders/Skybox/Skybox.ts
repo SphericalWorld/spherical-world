@@ -4,15 +4,17 @@ import fragmentShaderData from './skybox.frag';
 
 export default class SkyboxProgram extends GlShaderProgram {
   name = 'skybox';
-  attributes = ['aVertexPosition', 'aTextureCoord'];
-  uniforms = ['uPMatrix', 'uMVMatrix', 'uTime', 'uLighting', 'uTexture', 'uSunPosition'];
+  aVertexPosition = this.createAttribute('aVertexPosition');
+  aTextureCoord = this.createAttribute('aTextureCoord');
 
-  uTime: WebGLUniformLocation;
-  uLighting: WebGLUniformLocation;
-  uSunPosition: WebGLUniformLocation;
+  uPMatrix = this.createUniform('uPMatrix');
+  uMVMatrix = this.createUniform('uMVMatrix');
+  uTime = this.createUniform('uTime');
+  uLighting = this.createUniform('uLighting');
+  uTexture = this.createUniform('uTexture');
+  uSunPosition = this.createUniform('uSunPosition');
 
   constructor() {
     super(new GlVertexShader(vertexShaderData), new GlFragmentShader(fragmentShaderData));
-    this.link();
   }
 }
