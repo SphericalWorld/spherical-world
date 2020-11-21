@@ -28,7 +28,7 @@ type InventoryData = {
   selectedItem?: SlotID | null;
 };
 
-export const createSlot = ({
+const createSlot = ({
   itemTypeId,
   count = 0,
   name,
@@ -297,5 +297,5 @@ export const createStubItems = (): Inventory => ({
     null,
     null,
   ],
-  selectedItem: 'id1',
+  selectedItem: 'id1', // TODO: move selected item out of inventory to the player
 });

@@ -13,14 +13,15 @@ type SerializedComponent = {
   data: [Entity, Component][];
 };
 
-type ComponentStatics = Readonly<{
-  threadsConstructors: (ComponentStatics) => void;
-}>;
+type SerializedComponent2 = {
+  type: string;
+  data: Component;
+};
 
 // declare class ComponentWithStatics<T extends string> {
 //   // static threadsConstructors: (component: ComponentWithStatics<T>) => string;
 //   static componentName: T;
-//   // static networkable?: boolean;
+//   static networkable?: boolean;
 // }
 
 type ObjectConstructor = (any) => Component;
@@ -32,7 +33,7 @@ export class World<Events = unknown> {
   systems: System[] = [];
   threads: Thread[] = [];
   threadsMap: Map<number, Thread> = new Map();
-  componentTypes: Map<string, Class<Component> & ComponentStatics> = new Map();
+  componentTypes: Map<string, typeof Component> = new Map();
   selectors: EntitySelector<ReadonlyArray<typeof Component>>[] = [];
   eventsForThreads: Events[] = [];
   events: EventObservable<Events> = new EventObservable();
@@ -45,7 +46,7 @@ export class World<Events = unknown> {
   memoryManager: MemoryManager = new MemoryManager();
   interthreadDescriptors: SharedArrayBuffer = new SharedArrayBuffer(8);
   interthreadDescriptors2: SharedArrayBuffer = new SharedArrayBuffer(4);
-  pseudoSyncTimer: number;
+  pseudoSyncTimer = 0;
   private threadTicker: Float64Array = new Float64Array(this.interthreadDescriptors, 0, 1);
   private mutexes: Int32Array = new Int32Array(this.interthreadDescriptors2, 0, 1);
 
@@ -91,7 +92,7 @@ export class World<Events = unknown> {
     });
   }
 
-  registerComponentTypes(...componentTypes: Function[]): void {
+  registerComponentTypes(...componentTypes: typeof Component[]): void {
     Component.memoryManager = this.memoryManager;
     for (const componentType of componentTypes) {
       componentType.memoryManager = this.memoryManager;
@@ -151,7 +152,7 @@ export class World<Events = unknown> {
     }
   }
 
-  registerEntity(entityId: Entity, components: SerializedComponent[]): void {
+  registerEntity(entityId: Entity, components: SerializedComponent2[]): void {
     for (const component of components) {
       const componentRegistry = this.components.get(component.type);
       componentRegistry.set(entityId, component.data);
@@ -184,9 +185,13 @@ export class World<Events = unknown> {
     this.entities.add(entityId);
   }
 
-  addExistedEntity(id: Entity, ...components: SerializedComponent[]): void {
+  addExistedEntity(id: Entity, ...components: SerializedComponent2[]): void {
     for (const component of components) {
       const constructor = this.componentTypes.get(component.type);
+      if (!constructor)
+        throw new Error(
+          `constructor for component ${component.type} is not registered in ${this.thread}`,
+        );
       if (!component.data.offset) {
         component.data = Object.assign(
           Reflect.construct(constructor, [component.data]),

@@ -76,7 +76,7 @@ export class MemoryManager {
   currentComponentLocalOffset = 0;
   currentComponentMemory: SharedArrayBuffer = new SharedArrayBuffer(0);
 
-  registerComponentType(component: Component): void {
+  registerComponentType(component: typeof Component): void {
     const data = new SharedArrayBuffer(1024 * 1024 * 10);
     const offsetPointer = new Uint32Array(data, 0, 1);
     offsetPointer[0] = 4;
@@ -95,7 +95,7 @@ export class MemoryManager {
     );
   }
 
-  allocate(component: Component): number | null {
+  allocate(component: typeof Component): number | null {
     const { offsetPointer } = this.memory[component.componentName];
     const normalizedSize = Math.ceil(component.memorySize / 4) * 4;
     const offset = Atomics.add(offsetPointer, 0, normalizedSize);
@@ -105,7 +105,7 @@ export class MemoryManager {
     return offset;
   }
 
-  useAlocatedMemory(offset: number, component: Component): void {
+  useAlocatedMemory(offset: number, component: typeof Component): void {
     this.currentComponentLocalOffset = offset;
     this.currentComponentMemory = this.memory[component.componentName].data;
   }
