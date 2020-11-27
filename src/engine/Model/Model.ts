@@ -1,4 +1,4 @@
-import { gl } from '../glEngine';
+import { gl, glCreateBuffer } from '../glEngine';
 import type { Material } from '../Material/Material';
 import type { TexturableShader } from '../../shaders/TexturableShader';
 
@@ -12,9 +12,9 @@ export type MeshJSON = Readonly<{
 }>;
 
 class Model {
-  vertexBuffer: WebGLBuffer = gl.createBuffer();
-  indexBuffer: WebGLBuffer = gl.createBuffer();
-  texCoordBuffer: WebGLBuffer = gl.createBuffer();
+  vertexBuffer: WebGLBuffer = glCreateBuffer();
+  indexBuffer: WebGLBuffer = glCreateBuffer();
+  texCoordBuffer: WebGLBuffer = glCreateBuffer();
   elementsCount = 0;
 
   vao: WebGLVertexArrayObject;

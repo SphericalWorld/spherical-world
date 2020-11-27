@@ -1,6 +1,6 @@
 import type { mat4 } from 'gl-matrix';
 import ChunkBase from './ChunkBase';
-import { gl } from '../../engine/glEngine';
+import { gl, glCreateBuffer } from '../../engine/glEngine';
 import { CHUNK_STATUS_LOADED } from './chunkConstants';
 import type ChunkProgram from '../../shaders/Chunk/Chunk';
 import type Terrain from '../Terrain';
@@ -11,7 +11,7 @@ let timeOld = 0;
 let chunksLoaded = 0;
 
 const createBuffer = (data: ArrayBuffer): WebGLBuffer => {
-  const buffer = gl.createBuffer();
+  const buffer = glCreateBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
   return buffer;
@@ -121,7 +121,7 @@ export default class Chunk extends ChunkBase {
         () => {
           const buffersData: GLBuffers = {
             vertexBuffer: null,
-            indexBuffer: gl.createBuffer(),
+            indexBuffer: glCreateBuffer(),
             vao: gl.createVertexArray(),
             hasData,
             query: gl.createQuery(),

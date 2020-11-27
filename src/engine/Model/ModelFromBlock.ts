@@ -1,4 +1,4 @@
-import { gl } from '../glEngine';
+import { gl, glCreateBuffer } from '../glEngine';
 import type { TexturableShader } from '../../shaders/TexturableShader';
 import type { Cube } from '../../chunksHandlerThread/Terrain/Chunk/cube';
 
@@ -20,9 +20,9 @@ const renderFace = (face, buffers, vertexCount: number): number => {
 };
 
 export class ModelFromBlock {
-  vertexBuffer: WebGLBuffer = gl.createBuffer();
-  indexBuffer: WebGLBuffer = gl.createBuffer();
-  texCoordBuffer: WebGLBuffer = gl.createBuffer();
+  vertexBuffer: WebGLBuffer = glCreateBuffer();
+  indexBuffer: WebGLBuffer = glCreateBuffer();
+  texCoordBuffer: WebGLBuffer = glCreateBuffer();
   elementsCount = 0;
   vao: WebGLVertexArrayObject = gl.createVertexArray();
 

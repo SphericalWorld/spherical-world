@@ -31,9 +31,6 @@ class Chunk extends ChunkBase {
   southChunk: Chunk = this;
   westChunk: Chunk = this;
   eastChunk: Chunk = this;
-  heightMap: ChunkMap<number>;
-  rainfall: ChunkMap<number>;
-  temperature: ChunkMap<number>;
 
   async load(): Promise<Chunk> {
     this.data = await readFile(this.filePath);

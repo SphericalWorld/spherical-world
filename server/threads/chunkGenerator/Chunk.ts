@@ -1,5 +1,4 @@
 import { readFile, outputFile } from 'fs-extra';
-import type ChunkMap from '../../terrain/ChunkMap';
 import type { Terrain } from './Terrain';
 import { BLOCKS_IN_CHUNK } from '../../../common/constants/chunk';
 import { profileChunkGeneration } from '../../../common/profileUtils';
@@ -38,9 +37,6 @@ export class Chunk extends ChunkBase {
   southChunk: Chunk = this;
   westChunk: Chunk = this;
   eastChunk: Chunk = this;
-  heightMap: ChunkMap<number>;
-  rainfall: ChunkMap<number>;
-  temperature: ChunkMap<number>;
   generationFlags: { [key: string]: boolean } = {};
 
   async load(): Promise<Chunk> {

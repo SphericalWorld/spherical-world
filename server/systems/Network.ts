@@ -6,7 +6,7 @@ import type { DataStorage } from '../dataStorage';
 
 import { broadcastToLinked, send, Socket } from '../network/socket';
 import { Transform, Network, Inventory } from '../components';
-import defaultInputBindings from '../../common/constants/input/defaultInputBindings';
+import { defaultInputBindings } from '../../common/constants/input/defaultInputBindings';
 import { saveGameObject, getGameObject } from '../dataStorage';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 import { craftRecipes as recipes } from '../../common/craft/recipes';

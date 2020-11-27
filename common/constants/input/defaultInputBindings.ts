@@ -16,6 +16,7 @@ import {
   INVENTORY_PREVIOUS_ITEM,
   SET_KEY_EVENT,
   TOGGLE_CRAFT_EVENT,
+  EventTypes,
 } from './eventTypes';
 import {
   KEY_UNBOUND,
@@ -43,8 +44,9 @@ import {
   MOUSE_WHEEL_UP,
   MOUSE_WHEEL_DOWN,
 } from './mouseRawEvents';
+import type { InputRawEvents } from './rawEvents';
 
-export default [
+export const defaultInputBindings: ReadonlyArray<[EventTypes, InputRawEvents, InputRawEvents]> = [
   [CAMERA_LOCK_EVENT, MOUSE_LEFT_BUTTON, KEY_UNBOUND],
   [TOGGLE_MENU_EVENT, KEY_ESCAPE, KEY_UNBOUND],
 

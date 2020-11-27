@@ -90,7 +90,7 @@ const branch = (
   }
 };
 
-const iterateRoot = (chunk, height, x, y, z) => {
+const iterateRoot = (chunk, height: number, x: number, y: number, z: number) => {
   for (let i = 0; i < height; i += 1) {
     chunk.setAtNoFlags(x, y + i, z, WOOD);
   }
@@ -120,5 +120,3 @@ export const generateTree = (
     return chunk;
   };
 };
-
-export default generateTree;

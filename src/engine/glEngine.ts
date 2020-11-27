@@ -29,4 +29,12 @@ export const initWebGL = (): void => {
   }
 };
 
+export const glCreateBuffer = (): WebGLBuffer => {
+  const buffer = gl.createBuffer();
+  if (!buffer) {
+    throw new Error('Fatal error: unable to allocate WebGL buffer');
+  }
+  return buffer;
+};
+
 export { gl, canvas };

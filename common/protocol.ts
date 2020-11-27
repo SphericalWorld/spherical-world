@@ -1,4 +1,5 @@
 import type { EventTypes } from './constants/input/eventTypes';
+import type { InputRawEvents } from './constants/input/rawEvents';
 import type { Slot } from './Inventory';
 import type { SlotInfo } from './Inventory/Inventory';
 
@@ -27,7 +28,7 @@ export type ServerToClientMessages =
   | Readonly<{ type: ServerToClientMessage.loggedIn; data: Readonly<{ id: string }> }>
   | Readonly<{
       type: ServerToClientMessage.loadControlSettings;
-      data: { controls: [[EventTypes, unknown, unknown]] };
+      data: { controls: ReadonlyArray<[EventTypes, InputRawEvents, InputRawEvents]> };
     }>
   | Readonly<{
       type: ServerToClientMessage.loadChunk;

@@ -4,7 +4,7 @@ import type ChunkProgram from '../shaders/Chunk/Chunk';
 import { WATER } from '../../common/blocks';
 import { toChunkPosition, toPositionInChunk, getGeoId } from '../../common/chunk';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
-import { gl } from '../engine/glEngine';
+import { gl, glCreateBuffer } from '../engine/glEngine';
 import TerrainBase from './TerrainBase';
 import { CHUNK_STATUS_LOADED } from './Chunk/chunkConstants';
 import Chunk from './Chunk/Chunk';
@@ -196,13 +196,13 @@ const vertices = [
 // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, model.indexBuffer);
 
-const positionBuffer = gl.createBuffer();
+const positionBuffer = glCreateBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
 gl.enableVertexAttribArray(0);
 
-const indexBuffer = gl.createBuffer();
+const indexBuffer = glCreateBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cubeVertexIndices, gl.STATIC_DRAW);
 
@@ -332,7 +332,7 @@ export const drawOpaqueChunkData = (
   const currentChunk = terrain.chunks.get(
     getGeoId(Math.floor(pos[0] / 16) * 16, Math.floor(pos[2] / 16) * 16),
   );
-  const toPos = (dimension) => (dimension >= 0 ? dimension % 16 : 16 + (dimension % 16));
+  const toPos = (dimension: number) => (dimension >= 0 ? dimension % 16 : 16 + (dimension % 16));
   if (currentChunk) {
     const x = toPos(pos[0]);
     const z = toPos(pos[2]);

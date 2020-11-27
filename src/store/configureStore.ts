@@ -17,7 +17,7 @@ export default function configureStore(preloadedState: State | null): Store<Stat
 
   if (process.env.NODE_ENV !== 'production') {
     if ('hot' in module) {
-      module.hot.accept('../reducers/rootReducer', () => {
+      module.hot?.accept('../reducers/rootReducer', () => {
         const newRootReducer = require('../reducers/rootReducer').default;
         store.replaceReducer(newRootReducer);
       });

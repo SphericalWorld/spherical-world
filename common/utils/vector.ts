@@ -1,5 +1,4 @@
-import type { vec4 } from 'gl-matrix';
-import { vec3, mat4 } from 'gl-matrix';
+import { vec3, mat4, vec4 } from 'gl-matrix';
 
 const PI2 = Math.PI * 2;
 
@@ -15,6 +14,8 @@ const multiplyVec4 = (mat: mat4, vec: vec4, dest: vec4 = vec): vec4 => {
   return dest;
 };
 
+const n = vec4.create();
+
 export const unproject = (
   out: vec3,
   winx: number,
@@ -22,15 +23,13 @@ export const unproject = (
   winz: number,
   mat: mat4,
   viewport: vec4,
-): vec3 => {
+): void => {
   const invMat = mat4.create();
   mat4.invert(invMat, mat);
-  const n = [
-    (2 * (winx - viewport[0])) / viewport[2] - 1,
-    (2 * (winy - viewport[1])) / viewport[3] - 1,
-    2 * winz - 1,
-    1,
-  ];
+  n[0] = (2.0 * (winx - viewport[0])) / viewport[2] - 1.0;
+  n[1] = (2.0 * (winy - viewport[1])) / viewport[3] - 1.0;
+  n[2] = 2.0 * winz - 1.0;
+  n[3] = 1.0;
   multiplyVec4(invMat, n, n);
   out[0] = n[0] / n[3];
   out[1] = n[1] / n[3];

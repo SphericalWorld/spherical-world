@@ -34,14 +34,39 @@ export type transform = (<A extends ComponentLike>(
 
 export type GameObject<T> = ReturnType<transform>[number];
 
-export class EntitySelector<T> {
-  includeComponents: T;
-  excludeComponents: Class<Component>[];
+export class EntitySelector<T extends typeof Component> {
+  includeComponents: T[];
+  excludeComponents: T[];
   components: GameObject<T>[] = [];
+  world: World;
 
-  constructor(world: World, includeComponents: T, excludeComponents: Class<Component>[] = []) {
+  constructor(world: World, includeComponents: T[], excludeComponents: Class<Component>[] = []) {
+    this.world = world;
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;
+  }
+
+  addEntity(entityId: Entity, componentMap: Map<string, Component<{}>>): void {
+    if (
+      this.includeComponents.every((componentType) =>
+        componentMap.has(componentType.componentName),
+      ) &&
+      !this.excludeComponents.find((componentType) => componentMap.has(componentType.componentName))
+    ) {
+      const selectedComponents = {
+        id: entityId,
+      };
+      for (let i = 0; i < this.includeComponents.length; i += 1) {
+        const component = componentMap.get(this.includeComponents[i].componentName);
+        if (this.includeComponents[i].componentName === 'script') {
+          component.setGameObject(componentMap);
+          component.start(this.world);
+        }
+
+        selectedComponents[this.includeComponents[i].componentName] = component;
+      }
+      this.components.push(selectedComponents);
+    }
   }
 }
 

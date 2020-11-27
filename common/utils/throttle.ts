@@ -1,6 +1,9 @@
-const throttle = <A>(fn: (A) => void, delay: number): ((A) => void) => {
+const throttle = <A extends unknown[]>(
+  fn: (...params: A) => void,
+  delay: number,
+): ((...params: A) => void) => {
   let lastInvoke = 0;
-  return (...params: A[]) => {
+  return (...params: A) => {
     const now = Date.now();
     if (now > lastInvoke + delay) {
       lastInvoke = Date.now();

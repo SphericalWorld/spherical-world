@@ -5,7 +5,6 @@ import type { Socket } from './network/socket';
 import parseJson from '../common/utils/parseString';
 import type { Terrain as ITerrain } from './terrain/Terrain';
 import EventObservable from '../common/GameEvent/EventObservable';
-import { send } from './network/socket';
 import {
   ClientToServerMessages,
   ClientToServerMessage,

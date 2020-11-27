@@ -1,10 +1,12 @@
-import type ChunkMap from './ChunkMap';
+import ChunkMap from './ChunkMap';
 import type { Terrain } from './Terrain';
 // import type { ChunkGenerator } from '../threads/chunkGenerator/ChunkGenerator';
 import { getGeoId } from '../../common/chunk';
 
 // just to have proper class shape before we get actual data, so we won't get multiple hidden classes
 const temporaryArrayBuffer = new SharedArrayBuffer(0);
+
+const emptyHeightMap = ChunkMap.of(0).map(() => 0);
 
 export class ChunkBase {
   terrain: Terrain;
@@ -27,9 +29,9 @@ export class ChunkBase {
   southChunk: ChunkBase = this;
   westChunk: ChunkBase = this;
   eastChunk: ChunkBase = this;
-  heightMap: ChunkMap<number>;
-  rainfall: ChunkMap<number>;
-  temperature: ChunkMap<number>;
+  heightMap: ChunkMap<number> = emptyHeightMap;
+  rainfall: ChunkMap<number> = emptyHeightMap;
+  temperature: ChunkMap<number> = emptyHeightMap;
 
   constructor(
     terrain: Terrain,

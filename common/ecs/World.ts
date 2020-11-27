@@ -13,7 +13,7 @@ type SerializedComponent = {
   data: [Entity, Component][];
 };
 
-type SerializedComponent2 = {
+export type SerializedComponent2 = {
   type: string;
   data: Component;
 };
@@ -159,28 +159,7 @@ export class World<Events = unknown> {
     }
     const componentMap = new Map(components.map(({ type, data }) => [type, data]));
     for (const selector of this.selectors) {
-      if (
-        !selector.includeComponents.find(
-          (componentType) => !componentMap.has(componentType.componentName),
-        ) &&
-        !selector.excludeComponents.find((componentType) =>
-          componentMap.has(componentType.componentName),
-        )
-      ) {
-        const selectedComponents = {
-          id: entityId,
-        };
-        for (let i = 0; i < selector.includeComponents.length; i += 1) {
-          const component = componentMap.get(selector.includeComponents[i].componentName);
-          if (selector.includeComponents[i].componentName === 'script') {
-            component.setGameObject(componentMap);
-            component.start(this);
-          }
-
-          selectedComponents[selector.includeComponents[i].componentName] = component;
-        }
-        selector.components.push(selectedComponents);
-      }
+      selector.addEntity(entityId, componentMap);
     }
     this.entities.add(entityId);
   }

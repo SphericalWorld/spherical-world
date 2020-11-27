@@ -1,4 +1,4 @@
-import { gl } from '../glEngine';
+import { gl, glCreateBuffer } from '../glEngine';
 import { imageToPixelArray } from '../Texture/TextureLibrary';
 import type { Texture } from '../Texture';
 import type { TexturableShader } from '../../shaders/TexturableShader';
@@ -99,7 +99,11 @@ const renderFace = (
   y: number,
   z: number,
   face: Face,
-  buffers,
+  buffers: {
+    vertexPositions: number[];
+    vertexTextureCoords: number[];
+    indices: number[];
+  },
   vertexCount: number,
 ): number => {
   for (let index = 0; index < 4; index += 1) {
@@ -116,9 +120,9 @@ const renderFace = (
 };
 
 export class ModelFromSprite {
-  vertexBuffer: WebGLBuffer = gl.createBuffer();
-  indexBuffer: WebGLBuffer = gl.createBuffer();
-  texCoordBuffer: WebGLBuffer = gl.createBuffer();
+  vertexBuffer: WebGLBuffer = glCreateBuffer();
+  indexBuffer: WebGLBuffer = glCreateBuffer();
+  texCoordBuffer: WebGLBuffer = glCreateBuffer();
   elementsCount = 0;
   vao: WebGLVertexArrayObject = gl.createVertexArray();
 

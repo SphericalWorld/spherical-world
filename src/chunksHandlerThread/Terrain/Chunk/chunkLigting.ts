@@ -34,7 +34,7 @@ const calcRecursion = (
     ) -
       dec);
 
-  const updateIfLightAdd = (index: number, lightTmp, chunk: Chunk, ...params) => {
+  const updateIfLightAdd = (index: number, lightTmp: number, chunk: Chunk, ...params) => {
     if (lightTmp > (chunk.light[index] & mask)) {
       if (chunk.state === CHUNK_STATUS_LOADED) {
         chunk.state = CHUNK_STATUS_NEED_LOAD_VBO;
@@ -44,7 +44,7 @@ const calcRecursion = (
     }
   };
 
-  const updateIfLightRemove = (index, lightTmp, chunk: Chunk, ...params) =>
+  const updateIfLightRemove = (index: number, lightTmp: number, chunk: Chunk, ...params) =>
     lightTmp > (chunk.light[index] & mask) && calcRecursionRemoveInternal(chunk, ...params);
 
   const updateIfLight = mode ? updateIfLightAdd : updateIfLightRemove;

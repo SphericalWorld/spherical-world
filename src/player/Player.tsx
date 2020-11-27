@@ -2,7 +2,7 @@ import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
 import { GameObject, React } from '../../common/ecs';
 import playerModel from '../models/player.json';
-import type { TransformProps, InventoryProps } from '../components/react';
+import type { TransformProps, InventoryProps } from '../components';
 import {
   Camera,
   Collider,

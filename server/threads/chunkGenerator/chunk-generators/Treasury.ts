@@ -61,7 +61,7 @@ const generateRoom = (generator, chunk: Chunk) => {
   }
 };
 
-const generateTreasury = (seed: number): ((chunk: Chunk) => Chunk) => {
+export const generateTreasury = (seed: number): ((chunk: Chunk) => Chunk) => {
   const simplex = new Simplex(PRNG(`${seed}`));
   const generator: Generator = {
     simplex,
@@ -76,5 +76,3 @@ const generateTreasury = (seed: number): ((chunk: Chunk) => Chunk) => {
     return chunk;
   };
 };
-
-export default generateTreasury;

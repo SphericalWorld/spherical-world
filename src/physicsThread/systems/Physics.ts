@@ -73,16 +73,16 @@ const collideWithTerrain = (terrain: Terrain) => {
         calculate(transform, velocity, vec3.fromValues(x, toY, z), collider);
       }
     }
-    for (let x = fromX; x <= toX; x += 1) {
-      for (let y = fromY; y <= toY; y += 1) {
-        calculate(transform, velocity, vec3.fromValues(x, y, fromZ), collider);
-        calculate(transform, velocity, vec3.fromValues(x, y, toZ), collider);
-      }
-    }
     for (let z = fromZ; z <= toZ; z += 1) {
       for (let y = fromY; y <= toY; y += 1) {
         calculate(transform, velocity, vec3.fromValues(fromX, y, z), collider);
         calculate(transform, velocity, vec3.fromValues(toX, y, z), collider);
+      }
+    }
+    for (let x = fromX; x <= toX; x += 1) {
+      for (let y = fromY; y <= toY; y += 1) {
+        calculate(transform, velocity, vec3.fromValues(x, y, fromZ), collider);
+        calculate(transform, velocity, vec3.fromValues(x, y, toZ), collider);
       }
     }
   };

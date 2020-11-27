@@ -1,5 +1,4 @@
 import { mat4 } from 'gl-matrix';
-import type { World } from '../../common/ecs/World';
 import type { System } from '../../common/ecs/System';
 import { gl } from '../engine/glEngine';
 import type { GlShaderProgram } from '../engine/glShader';
@@ -13,8 +12,9 @@ import Terrain, {
 } from '../Terrain/Terrain';
 import { getLight } from '../../common/terrain';
 import type SkyboxProgram from '../shaders/Skybox';
+import type { WorldMainThread } from '../Events';
 
-export default (world: World, terrain: Terrain, time: Time): System => {
+export default (world: WorldMainThread, terrain: Terrain, time: Time): System => {
   const components = world.createSelector([Transform, Visual], [Skybox]);
   const skyboxes = world.createSelector([Transform, Visual, Skybox]);
   const cameras = world.createSelector([Camera, Transform]);
@@ -142,7 +142,7 @@ export default (world: World, terrain: Terrain, time: Time): System => {
       currentShader = (currentShader as any) as SkyboxProgram;
 
       gl.uniform1f(currentShader.uTime, time.dayPercent);
-      gl.uniform4f(currentShader.uLighting, ...skyColor);
+      gl.uniform4f(currentShader.uLighting, skyColor[0], skyColor[1], skyColor[2], skyColor[3]);
       gl.uniform3f(currentShader.uSunPosition, ...skybox.sunPosition);
 
       mvPushMatrix();

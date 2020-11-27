@@ -5,8 +5,8 @@ import { toByte } from '../../../common/utils/numberUtils';
 import range from '../../../common/range';
 import { createSimplex2D, createSimplex3D } from '../../util/simplex';
 import ChunkMap from '../../terrain/ChunkMap';
-import generateTree from './chunk-generators/Tree';
-import generateTreasury from './chunk-generators/Treasury';
+import { generateTree } from './chunk-generators/Tree';
+import { generateTreasury } from './chunk-generators/Treasury';
 
 import {
   AIR,
@@ -74,9 +74,9 @@ const createChunkGenerator = (seed: number): ChunkGenerator => {
 //     Math.floor(62 + Math.abs(mountains(x, z)) ** 4 * 60 - 12),
 //   );
 
-function ridgenoise(noise, nx, ny) {
-  return 2 * (0.5 - Math.abs(noise(nx, ny) / 2));
-}
+// function ridgenoise(noise, nx, ny) {
+//   return 2 * (0.5 - Math.abs(noise(nx, ny) / 2));
+// }
 
 const RIVER_THRESHOLD = 0.91;
 
@@ -84,7 +84,7 @@ const generateHeightMap = (
   hills: Simplex2D,
   mountains: Simplex2D,
   simplexHeightMapRivers: Simplex2D,
-) => ({ x, z }) => {
+) => ({ x, z }: { x: number; z: number }) => {
   const data =
     2 * (0.5 - Math.abs(simplexHeightMapRivers(x, z) + simplexHeightMapRivers(x * 4, z * 4) / 4));
   const res = data >= 0 ? Math.sqrt(data) : 0;
@@ -105,10 +105,10 @@ const generateHeightMap = (
   );
 };
 
-const generateRainfall = (simplex: Simplex2D) => ({ x, z }) =>
+const generateRainfall = (simplex: Simplex2D) => ({ x, z }: { x: number; z: number }) =>
   toByte(128 + simplex(x, z) * 128 * 2);
 
-const generateTemperature = (simplex: Simplex2D) => ({ x, z }) =>
+const generateTemperature = (simplex: Simplex2D) => ({ x, z }: { x: number; z: number }) =>
   toByte(128 + simplex(x, z) * 128 * 2);
 
 const getBiomeType = ({ temperature, rainfall }: Chunk, x: number, z: number) => {

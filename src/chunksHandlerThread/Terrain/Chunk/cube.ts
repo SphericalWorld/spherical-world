@@ -22,6 +22,17 @@ type CubeProperties = Readonly<{
   };
 }>;
 
+type RenderableFace = Readonly<{
+  vertexes: [
+    [number, number, number],
+    [number, number, number],
+    [number, number, number],
+    [number, number, number],
+  ];
+  indexes: [number, number, number, number, number, number];
+  uv: UVTuple;
+}>;
+
 const getColorComponent = (
   light: number,
   c: number,
@@ -146,14 +157,14 @@ const addVertexBR = addVertex(1, 1);
 
 const vertexLightCalc = [addVertexBL, addVertexTL, addVertexBR, addVertexTR];
 
-const defaultUV = [
+const defaultUV: UVTuple = [
   [1 / 16, 0],
   [0, 0],
   [1 / 16, 1 / 16],
   [0, 1 / 16],
 ];
 
-const transformUV = ([u, v, uMax, vMax]: UVProperties) => [
+const transformUV = ([u, v, uMax, vMax]: UVProperties): UVTuple => [
   [uMax / 16, vMax / 16],
   [u / 16, vMax / 16],
   [uMax / 16, v / 16],
@@ -168,12 +179,12 @@ const addTexCoordsToUV = (texture: number, uv: UVTuple): UVTuple => {
 
 export class Cube {
   faces: {
-    top: number[];
-    bottom: number[];
-    north: number[];
-    south: number[];
-    west: number[];
-    east: number[];
+    top: RenderableFace;
+    bottom: RenderableFace;
+    north: RenderableFace;
+    south: RenderableFace;
+    west: RenderableFace;
+    east: RenderableFace;
   };
 
   textures: {
@@ -422,12 +433,12 @@ export class Cube {
     x: number,
     y: number,
     z: number,
-    face,
+    face: RenderableFace,
     buffers,
     vertexCount: number,
     block: number,
     globalLightIntensity: number,
-    chunk,
+    chunk: Chunk,
     lightLevel: number,
     dx: number,
     dy: number,

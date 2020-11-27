@@ -36,21 +36,21 @@ const Chat = (): JSX.Element => {
 
   const send = useSocketSend();
   useEffect(() => {
-    const mouseScroll = (event: MouseWheelEvent) => {
+    const element = ref.current;
+    if (!element) return;
+    const mouseScroll = (event: WheelEvent) => {
       event.preventDefault();
       if (event.deltaY > 0) {
-        ref.current.scrollTop += 17;
+        element.scrollTop += 17;
       } else {
-        ref.current.scrollTop -= 17;
+        element.scrollTop -= 17;
       }
     };
 
-    if (ref.current) {
-      ref.current.addEventListener('mousewheel', mouseScroll);
-      return () => {
-        ref.current.removeEventListener('mousewheel', mouseScroll);
-      };
-    }
+    element.addEventListener('wheel', mouseScroll);
+    return () => {
+      element.removeEventListener('wheel', mouseScroll);
+    };
   }, [ref]);
   return (
     <div className={chatWrapper}>

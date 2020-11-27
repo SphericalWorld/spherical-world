@@ -38,7 +38,7 @@ import { THREAD_PHYSICS, THREAD_CHUNK_HANDLER, THREAD_MAIN } from './Thread/thre
 
 import inputProvider from './Input/inputProvider';
 import inputContextsProvider from './Input/inputContexts';
-import { textureLibrary, shaderLibrary, materialLibrary, GlObject } from './engine';
+import { textureLibrary, shaderLibrary, materialLibrary } from './engine';
 import { initHudAPI } from './hud/HudApi';
 import type { MainThreadEvents } from './Events';
 import { generateBlockModels } from './blocks/blocksInfo';
