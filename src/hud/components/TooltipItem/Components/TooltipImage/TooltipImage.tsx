@@ -1,4 +1,3 @@
-import React from 'react';
 import TooltipText from '../../Elements/TooltipText';
 // import { getIcon } from '../../../../utils/CSSHelpers';
 import { imageTooltip, gridArea, imgItem } from './tooltipImage.module.css';

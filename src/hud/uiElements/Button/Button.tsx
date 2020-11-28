@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { button, small, big } from './button.module.css';
 
 export const SIZE_SMALL: 'small' = 'small';

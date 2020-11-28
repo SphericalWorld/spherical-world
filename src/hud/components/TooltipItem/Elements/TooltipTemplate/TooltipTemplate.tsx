@@ -1,4 +1,3 @@
-import React from 'react';
 import TooltipText from '../TooltipText';
 import { templateTooltip, labelTooltip, valueTooltip } from './tooltipTemplate.module.css';
 

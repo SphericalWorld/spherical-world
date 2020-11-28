@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import type { ComponentType } from 'react';
 import type { State } from '../../../reducers/rootReducer';
 import { useMemoizedSelector } from '../../../util/reducerUtils';
 

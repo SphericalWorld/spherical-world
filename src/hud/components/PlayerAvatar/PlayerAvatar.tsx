@@ -1,4 +1,3 @@
-import React from 'react';
 import { imgPlayer, avatar, lvlPlayer, lvl } from './playerAvatar.module.css';
 
 const PlayerAvatar = (): JSX.Element => (

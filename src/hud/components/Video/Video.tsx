@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { VIDEO } from './videoConstants';
 import { Label, Select } from '../../uiElements';
 import ModalWindowMenu from '../ModalWindowMenu';

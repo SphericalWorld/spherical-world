@@ -1,5 +1,4 @@
-import type { ReactNode } from 'react';
-import React from 'react';
+import { forwardRef, ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
 const portalRoot = document.getElementById('hud') || document.body;
@@ -19,4 +18,4 @@ const Portal = ({ children, ...props }: Props, ref) =>
     portalRoot,
   );
 
-export default React.forwardRef<Props, HTMLDivElement>(Portal);
+export default forwardRef<Props, HTMLDivElement>(Portal);

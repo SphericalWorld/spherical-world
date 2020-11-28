@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import React from 'react';
 import classnames from 'classnames';
 import {
   inner,

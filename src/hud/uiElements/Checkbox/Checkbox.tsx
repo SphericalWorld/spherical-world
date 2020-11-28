@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import Label from '../Label';
 import { checkbox, small, big, checkboxLabel, checkboxName } from './checkbox.module.css';
 

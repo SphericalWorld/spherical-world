@@ -27,12 +27,12 @@ module.exports = function override(config, env) {
   disableEslint(config);
   const assetLoaders = rules[rules.length - 1].oneOf;
 
-  getBabelLoader(config).options.presets = babelConfig.presets;
-  getBabelLoader(config).options.plugins = babelConfig.plugins;
-  getBabelLoader(config).include = [
-    getBabelLoader(config).include,
-    path.resolve(__dirname, 'common'),
-  ];
+  const babelLoader = getBabelLoader(config);
+  delete babelLoader.options.presets;
+  delete babelLoader.options.plugins;
+  babelLoader.options.babelrc = true;
+
+  babelLoader.include = [babelLoader.include, path.resolve(__dirname, 'common')];
   // throw 1;
   config.resolve.plugins.splice(
     config.resolve.plugins.indexOf(

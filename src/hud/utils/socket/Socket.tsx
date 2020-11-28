@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useContext, useEffect, useCallback } from 'react';
+import { ReactNode, useMemo, useContext, useEffect, useCallback, createContext } from 'react';
 import type Network from '../../../network';
 import { useHudApi } from '../../HudApi';
 import {
@@ -21,7 +21,7 @@ export type IncomingMessage = {
   };
 };
 
-const SocketContext = React.createContext<Socket | null>(null);
+const SocketContext = createContext<Socket | null>(null);
 
 export const SocketProvider = ({
   value,

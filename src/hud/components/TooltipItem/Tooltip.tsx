@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Slot } from '../../../../common/Inventory/Inventory';
 import TooltipName from './Components/TooltipName';
 import TooltipDamage from './Components/TooltipDamage';

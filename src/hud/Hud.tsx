@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route } from './utils/StateRouter';
 import { MAIN_MENU } from './components/MainMenu/mainMenuConstants';
 import { KEY_BINDINGS } from './components/KeyBindings/keyBindingsConstants';

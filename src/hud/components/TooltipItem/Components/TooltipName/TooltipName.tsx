@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Rareness } from '../../../../../../common/Inventory/Inventory';
 import TooltipText from '../../Elements/TooltipText';
 import { getRarenessColor } from '../../../../utils/CSSHelpers';

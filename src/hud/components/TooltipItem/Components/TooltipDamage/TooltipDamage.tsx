@@ -1,4 +1,3 @@
-import React from 'react';
 import TooltipTemplate from '../../Elements/TooltipTemplate';
 import { gridArea } from './tooltipDamage.module.css';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import TooltipText from '../../Elements/TooltipText';
 import { descriptionTooltip, gridArea } from './tooltipDescription.module.css';
 

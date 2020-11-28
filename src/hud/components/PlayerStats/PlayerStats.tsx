@@ -1,4 +1,3 @@
-import React from 'react';
 import { Label, ProgressBar } from '../../uiElements';
 import PlayerAvatar from '../PlayerAvatar';
 import { content, stats, statsInner, name } from './playerStats.module.css';

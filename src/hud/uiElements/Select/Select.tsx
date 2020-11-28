@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { select } from './select.module.css';
 
 type Item<ValueType> = Readonly<{

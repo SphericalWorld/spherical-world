@@ -1,4 +1,3 @@
-import React from 'react';
 import classnames from 'classnames';
 import { formInputText, input } from './inputText.module.css';
 import { fontMain } from '../../styles/fonts.module.css';
