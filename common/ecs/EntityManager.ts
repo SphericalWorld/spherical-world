@@ -8,29 +8,21 @@ type Obj<T extends ComponentLike> = {
   [key in T['componentName']]: InstanceType<T>;
 };
 
-type Merge<A, B> = SpreadTypes<A, B>;
+type Merge<A> = A extends [infer First, ...infer Rest] ? SpreadTypes<First, Merge<Rest>> : {};
 
-export type transform = (<A extends ComponentLike>(
-  includeComponents: [A],
+export type transform = <A extends ComponentLike[]>(
+  includeComponents: [...A],
   excludeComponents?: ReadonlyArray<ComponentLike>,
-) => ReadonlyArray<Merge<{ id: Entity }, Obj<A>>>) &
-  (<A extends ComponentLike, B extends ComponentLike>(
-    includeComponents: [A, B],
-    excludeComponents?: ReadonlyArray<ComponentLike>,
-  ) => ReadonlyArray<Merge<{ id: Entity } & Obj<A>, Obj<B>>>) &
-  (<A extends ComponentLike, B extends ComponentLike, C extends ComponentLike>(
-    includeComponents: [A, B, C],
-    excludeComponents?: ReadonlyArray<ComponentLike>,
-  ) => ReadonlyArray<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>>) &
-  (<
-    A extends ComponentLike,
-    B extends ComponentLike,
-    C extends ComponentLike,
-    D extends ComponentLike
-  >(
-    includeComponents: [A, B, C, D],
-    excludeComponents?: ReadonlyArray<ComponentLike>,
-  ) => ReadonlyArray<Merge<Merge<Merge<{ id: Entity } & Obj<A>, Obj<B>>, Obj<C>>, Obj<D>>>);
+) => ReadonlyArray<
+  Merge<
+    [
+      { id: Entity },
+      ...{
+        [K in keyof A]: A[K] extends ComponentLike ? Obj<A[K]> : never;
+      }
+    ]
+  >
+>;
 
 export type GameObject<T> = ReturnType<transform>[number];
 
