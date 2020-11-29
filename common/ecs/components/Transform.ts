@@ -22,7 +22,7 @@ export class Transform extends Component<TransformProps> implements Networkable 
 
   readonly translationNext: vec3 = Component.memoryManager.getVec3();
 
-  parent: Entity | null;
+  parent: Entity | undefined;
 
   constructor({
     translation = ZERO_VECTOR,

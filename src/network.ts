@@ -19,10 +19,6 @@ class Network {
   events: EventObservable<ServerToClientMessages> = new EventObservable();
   listeners: Array<(event: ServerToClientMessages) => unknown> = [];
 
-  addonServerInfo = {
-    host: window.location.origin,
-  };
-
   processBinaryData(data: ArrayBuffer): void {
     this.requestBinaryData = data;
   }

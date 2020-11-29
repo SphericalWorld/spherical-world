@@ -154,7 +154,7 @@ const onLogin = (server: Server, ds: DataStorage, createPlayer: CreatePlayer, pl
           id,
           transform,
           playerData,
-          inventory,
+          inventory: inventory.data,
           camera,
         },
       });

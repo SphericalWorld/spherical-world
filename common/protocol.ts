@@ -1,7 +1,11 @@
+import type { TransformProps } from './ecs/components/Transform';
 import type { EventTypes } from './constants/input/eventTypes';
 import type { InputRawEvents } from './constants/input/rawEvents';
 import type { Slot } from './Inventory';
 import type { SlotInfo } from './Inventory/Inventory';
+import type { InventoryProps } from './ecs/components/Inventory';
+import type { PlayerData } from '../server/components';
+import type { CameraProps } from './ecs/components/Camera';
 
 export enum ServerToClientMessage {
   syncGameData,
@@ -25,7 +29,16 @@ export type ServerToClientMessages =
       };
     }>
   | Readonly<{ type: ServerToClientMessage.gameStart }>
-  | Readonly<{ type: ServerToClientMessage.loggedIn; data: Readonly<{ id: string }> }>
+  | Readonly<{
+      type: ServerToClientMessage.loggedIn;
+      data: Readonly<{
+        id: string;
+        transform: TransformProps;
+        inventory: InventoryProps;
+        playerData: PlayerData;
+        camera: CameraProps;
+      }>;
+    }>
   | Readonly<{
       type: ServerToClientMessage.loadControlSettings;
       data: { controls: ReadonlyArray<[EventTypes, InputRawEvents, InputRawEvents]> };

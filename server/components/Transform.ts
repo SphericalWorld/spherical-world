@@ -28,7 +28,7 @@ export class Transform extends Component<TransformProps> implements Networkable 
   readonly translation: vec3 = Component.memoryManager.getVec3();
   readonly rotation: quat = Component.memoryManager.getQuat();
 
-  parent: Entity | null;
+  parent: Entity | undefined;
 
   constructor({ translation = ZERO_VECTOR, rotation = ZERO_QUAT, parent }: TransformProps) {
     super();

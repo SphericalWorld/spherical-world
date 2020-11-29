@@ -110,7 +110,7 @@ export class World<Events = unknown> {
 
   createSelector: transform = <T extends ReadonlyArray<Class<Component>>>(
     includeComponents: T,
-    excludeComponents?: Class<Component>[],
+    excludeComponents?: typeof Component[],
   ) => {
     const selector = new EntitySelector(this, includeComponents, excludeComponents);
     this.selectors.push(selector);

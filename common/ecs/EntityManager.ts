@@ -8,7 +8,7 @@ type Obj<T extends ComponentLike> = {
   [key in T['componentName']]: InstanceType<T>;
 };
 
-type Merge<A> = A extends [infer First, ...infer Rest] ? SpreadTypes<First, Merge<Rest>> : {};
+type Merge<A> = A extends [infer First, ...infer Rest] ? SpreadTypes<First, Merge<Rest>> : unknown;
 
 export type transform = <A extends ComponentLike[]>(
   includeComponents: [...A],
@@ -28,11 +28,11 @@ export type GameObject<T> = ReturnType<transform>[number];
 
 export class EntitySelector<T extends typeof Component> {
   includeComponents: T[];
-  excludeComponents: T[];
+  excludeComponents: typeof Component[];
   components: GameObject<T>[] = [];
   world: World;
 
-  constructor(world: World, includeComponents: T[], excludeComponents: Class<Component>[] = []) {
+  constructor(world: World, includeComponents: T[], excludeComponents: typeof Component[] = []) {
     this.world = world;
     this.includeComponents = includeComponents;
     this.excludeComponents = excludeComponents;

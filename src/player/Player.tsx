@@ -114,7 +114,7 @@ export const Player = ({
       <Velocity />
       <Gravity />
       <PlayerScript />
-      <Inventory {...inventory.data} />
+      <Inventory {...inventory} />
       {isMainPlayer
         ? [<UserControlled />, <Camera {...camera} />, <PlayerHands parent={id} />]
         : [

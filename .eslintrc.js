@@ -42,5 +42,7 @@ module.exports = {
     'max-classes-per-file': 'off',
     'consistent-return': 'off', // garbage rule, forbids totally valid cases
     'no-use-before-define': 'off', // sometimes doesn't work properly and redundand with TS checker
+    'no-shadow': 'off', // replaced by ts-eslint rule below
+    '@typescript-eslint/no-shadow': 'error',
   },
 };

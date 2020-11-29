@@ -19,7 +19,6 @@ const App = (): JSX.Element => (
       <div>
         <section id="hud">
           <Hud />
-          <div id="addons" />
         </section>
       </div>
     </SocketProvider>

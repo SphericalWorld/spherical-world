@@ -10,12 +10,12 @@ export type Viewport = {
   pMatrix: mat4;
 };
 
-type Props = { yaw?: number; pitch?: number };
+export type CameraProps = { yaw?: number; pitch?: number };
 
 /**
  * Component to store data about Camera
  */
-export class Camera extends Component<Props> implements Networkable {
+export class Camera extends Component<CameraProps> implements Networkable {
   static threads = [THREAD_MAIN, THREAD_PHYSICS];
   static componentName: 'camera' = 'camera';
   static networkable = true;
@@ -28,7 +28,7 @@ export class Camera extends Component<Props> implements Networkable {
   readonly worldPosition: vec3 = Component.memoryManager.getVec3();
   readonly viewport: Viewport;
 
-  constructor({ yaw = 0, pitch = 0 }: Props) {
+  constructor({ yaw = 0, pitch = 0 }: CameraProps) {
     super();
     this.viewport = {
       viewportWidth: Component.memoryManager.getUint16(),

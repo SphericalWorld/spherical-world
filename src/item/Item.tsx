@@ -1,7 +1,6 @@
 import { vec3 } from 'gl-matrix';
 import type { Entity } from '../../common/ecs';
 import { GameObject, React } from '../../common/ecs';
-import type { TransformProps, InventoryProps } from '../components/react';
 import {
   Visual,
   Collider,
@@ -10,6 +9,8 @@ import {
   Gravity,
   Item as ItemComponent,
   Transform,
+  TransformProps,
+  InventoryProps,
 } from '../components';
 import { createCube } from '../engine/Model';
 import { COLLIDER_AABB } from '../physicsThread/physics/colliders/AABB';

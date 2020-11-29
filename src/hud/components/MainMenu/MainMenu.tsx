@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { setUIState as doSetUIState } from '../../utils/StateRouter';
+import { useSetUIState } from '../../utils/StateRouter';
 import Button from '../../uiElements/Button';
 import ModalWindowMenu from '../ModalWindowMenu';
 import { KEY_BINDINGS } from '../KeyBindings/keyBindingsConstants';
@@ -11,11 +10,7 @@ import { MAIN_MENU } from './mainMenuConstants';
 import { content } from './mainMenu.module.css';
 
 const MainMenu = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const setUIState = useCallback(
-    (...params: Parameters<typeof doSetUIState>) => dispatch(doSetUIState(...params)),
-    [dispatch],
-  );
+  const setUIState = useSetUIState();
   const openKeyBindings = useCallback(() => {
     setUIState(MAIN_MENU, false);
     setUIState(KEY_BINDINGS, true);
