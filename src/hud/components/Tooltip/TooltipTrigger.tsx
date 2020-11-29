@@ -1,5 +1,5 @@
 import type { ReactNode, ReactElement } from 'react';
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import classnames from 'classnames';
 import Portal from '../../uiElements/Portal';
 import { tooltip, wrapper, hidden } from './tooltip.module.css';

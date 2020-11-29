@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { createSelector } from 'reselect';
 import type { State } from '../../../reducers/rootReducer';
 import Label from '../../uiElements/Label';

@@ -7,10 +7,8 @@ type Props = Readonly<{
   component: ComponentType;
 }>;
 
-const Route = ({ on, component: Component }: Props): JSX.Element | null => {
+export const Route = ({ on, component: Component }: Props): JSX.Element | null => {
   const isVisible = useMemoizedSelector(({ uiStates }: State) => uiStates[on]);
   if (!isVisible) return null;
   return <Component />;
 };
-
-export default Route;

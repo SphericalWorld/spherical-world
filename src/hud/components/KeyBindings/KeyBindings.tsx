@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import classnames from 'classnames';
 import type { KeyPosition } from './keyBindingsTypes';
 import type { EVENT_CATEGORY } from '../../../Input/eventTypes';

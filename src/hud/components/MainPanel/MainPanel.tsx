@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { createSelector } from 'reselect';
 import classnames from 'classnames';
 import {

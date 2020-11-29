@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import classnames from 'classnames';
 import { chatWrapper, chat, messagesBox, message, input } from './chat.module.css';
 import { useMessage, useSocketSend } from '../../utils/socket/Socket';

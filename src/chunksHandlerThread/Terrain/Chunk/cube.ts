@@ -155,20 +155,20 @@ const addVertexTR = addVertex(-1, 1);
 const addVertexBL = addVertex(1, -1);
 const addVertexBR = addVertex(1, 1);
 
-const vertexLightCalc = [addVertexBL, addVertexTL, addVertexBR, addVertexTR];
+const vertexLightCalc = [addVertexTL, addVertexBL, addVertexBR, addVertexTR];
 
 const defaultUV: UVTuple = [
-  [1 / 16, 0],
   [0, 0],
+  [1 / 16, 0],
   [1 / 16, 1 / 16],
   [0, 1 / 16],
 ];
 
 const transformUV = ([u, v, uMax, vMax]: UVProperties): UVTuple => [
+  [u / 16 / 16, v / 16],
+  [uMax / 16, v / 16],
   [uMax / 16, vMax / 16],
   [u / 16, vMax / 16],
-  [uMax / 16, v / 16],
-  [u / 16 / 16, v / 16],
 ];
 
 const addTexCoordsToUV = (texture: number, uv: UVTuple): UVTuple => {
@@ -203,12 +203,12 @@ export class Cube {
     this.faces = {
       top: {
         vertexes: [
-          [x, yTo, zTo],
           [x, yTo, z],
+          [x, yTo, zTo],
           [xTo, yTo, zTo],
           [xTo, yTo, z],
         ],
-        indexes: [0, 3, 1, 0, 2, 3],
+        indexes: [0, 1, 2, 2, 3, 0],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.top?.texture],
           cubeProperies.faces.top?.uv ? transformUV(cubeProperies.faces.top.uv) : defaultUV,
@@ -216,12 +216,12 @@ export class Cube {
       },
       bottom: {
         vertexes: [
-          [x, y, zTo],
           [x, y, z],
+          [x, y, zTo],
           [xTo, y, zTo],
           [xTo, y, z],
         ],
-        indexes: [0, 1, 3, 0, 3, 2],
+        indexes: [0, 2, 1, 2, 0, 3],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.bottom?.texture],
           cubeProperies.faces.bottom?.uv ? transformUV(cubeProperies.faces.bottom.uv) : defaultUV,
@@ -229,12 +229,12 @@ export class Cube {
       },
       north: {
         vertexes: [
-          [xTo, y, zTo],
           [xTo, y, z],
+          [xTo, y, zTo],
           [xTo, yTo, zTo],
           [xTo, yTo, z],
         ],
-        indexes: [0, 1, 3, 0, 3, 2],
+        indexes: [0, 2, 1, 2, 0, 3],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.north?.texture],
           cubeProperies.faces.north?.uv ? transformUV(cubeProperies.faces.north.uv) : defaultUV,
@@ -242,12 +242,12 @@ export class Cube {
       },
       south: {
         vertexes: [
-          [x, y, zTo],
           [x, y, z],
+          [x, y, zTo],
           [x, yTo, zTo],
           [x, yTo, z],
         ],
-        indexes: [0, 3, 1, 0, 2, 3],
+        indexes: [0, 1, 2, 2, 3, 0],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.south?.texture],
           cubeProperies.faces.south?.uv ? transformUV(cubeProperies.faces.south.uv) : defaultUV,
@@ -255,12 +255,12 @@ export class Cube {
       },
       west: {
         vertexes: [
-          [xTo, y, zTo],
           [x, y, zTo],
+          [xTo, y, zTo],
           [xTo, yTo, zTo],
           [x, yTo, zTo],
         ],
-        indexes: [0, 3, 1, 0, 2, 3],
+        indexes: [0, 1, 2, 2, 3, 0],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.west?.texture],
           cubeProperies.faces.west?.uv ? transformUV(cubeProperies.faces.west.uv) : defaultUV,
@@ -268,12 +268,12 @@ export class Cube {
       },
       east: {
         vertexes: [
-          [xTo, y, z],
           [x, y, z],
+          [xTo, y, z],
           [xTo, yTo, z],
           [x, yTo, z],
         ],
-        indexes: [0, 1, 3, 0, 3, 2],
+        indexes: [0, 2, 1, 2, 0, 3],
         uv: addTexCoordsToUV(
           this.textures[this.cubeProperies.faces.east?.texture],
           cubeProperies.faces.east?.uv ? transformUV(cubeProperies.faces.east.uv) : defaultUV,
