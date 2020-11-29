@@ -24,3 +24,4 @@ dist
 
 *.css.flow
 *.css.d.ts
+.eslintcache

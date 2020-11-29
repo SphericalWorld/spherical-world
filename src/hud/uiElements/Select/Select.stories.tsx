@@ -1,6 +1,4 @@
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import Select from './Select';
+import Select, { Props } from './Select';
 
 const items = [
   { value: '0', text: 'all' },
@@ -12,9 +10,14 @@ const items = [
   { value: '6', text: 'products' },
 ];
 
-storiesOf('Select', module).add('Select', () => (
-  <>
-    <br />
-    <Select options={items} onSelect={(value) => action(`selected ${String(value)}`)} />
-  </>
-));
+export default {
+  title: 'UI Elements/Select',
+  component: Select,
+  argTypes: { onSelect: { action: 'selected' } },
+};
+
+export const Basic = ({ options, onSelect }: Props<unknown>): JSX.Element => (
+  <Select onSelect={onSelect} options={options} />
+);
+
+Basic.args = { options: items };

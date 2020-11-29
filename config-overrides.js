@@ -66,3 +66,5 @@ module.exports = function override(config, env) {
   }
   return config;
 };
+
+module.exports.disableEslint = disableEslint;

@@ -6,7 +6,7 @@ type Item<ValueType> = Readonly<{
   text: string;
 }>;
 
-type Props<ValueType> = Readonly<{
+export type Props<ValueType> = Readonly<{
   options: ReadonlyArray<Item<ValueType>>;
   onSelect: (value: ValueType) => unknown;
 }>;
