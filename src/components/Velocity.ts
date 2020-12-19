@@ -1,7 +1,6 @@
 import { vec3 } from 'gl-matrix';
 import { Component } from '../../common/ecs/Component';
 import { THREAD_MAIN, THREAD_PHYSICS } from '../Thread/threadConstants';
-import type { MemoryManager } from '../../common/ecs/MemoryManager';
 
 /**
  * Component with info about velocity

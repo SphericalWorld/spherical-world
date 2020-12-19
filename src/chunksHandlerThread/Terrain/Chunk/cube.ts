@@ -471,7 +471,7 @@ export class Cube {
       );
     }
 
-    for (let index = 0; index < face.indexes.length; index++) {
+    for (let index = 0; index < face.indexes.length; index += 1) {
       buffers.indexBuffer.push(face.indexes[index] + vertexCount);
     }
 

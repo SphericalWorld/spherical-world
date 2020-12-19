@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import PhysicsThread from 'worker-loader!./physicsThread/index';
 // eslint-disable-next-line
 import ChunksHandlerThread from 'worker-loader!./chunksHandlerThread/index';
-import store from './store/store';
+import store, { uiRouterState } from './store/store';
 import Network from './network';
 import Hud from './hud/Hud';
 import { SocketProvider } from './hud/utils/socket/Socket';
@@ -18,7 +18,7 @@ const App = (): JSX.Element => (
     <SocketProvider value={network}>
       <div>
         <section id="hud">
-          <Hud />
+          <Hud state={uiRouterState} />
         </section>
       </div>
     </SocketProvider>

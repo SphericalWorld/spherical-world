@@ -23,7 +23,7 @@ const Chat = (): JSX.Element => {
   );
   const [lastMessageindex, setLastMessageindex] = useState(-1);
 
-  const ref = useRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;

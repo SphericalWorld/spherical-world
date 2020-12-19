@@ -38,7 +38,6 @@ import {
   NEXT_ITEM_SELECTED,
 } from '../hud/components/MainPanel/mainPanelConstants';
 import { GameEvent } from '../Events';
-import { STATE_ROUTER_TOGGLE } from '../hud/utils/StateRouter/stateRouterConstants';
 import type { MappedEvent } from './InputContext';
 
 // TODO: move events to separate files
@@ -138,7 +137,6 @@ export const toggleMenuEvent = {
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.menuToggled,
-  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'MAIN_MENU' } },
 };
 
 export const toggleInventoryEvent = {
@@ -147,7 +145,6 @@ export const toggleInventoryEvent = {
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.inventoryToggled,
-  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'INVENTORY' } },
 };
 
 export const selectNextItemEvent = {
@@ -203,5 +200,4 @@ export const toggleCraftEvent: MappedEvent = {
   caption: 'Craft',
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.craftToggled,
-  uiEvent: { type: STATE_ROUTER_TOGGLE, payload: { stateName: 'CRAFT' } },
 };

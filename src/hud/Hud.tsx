@@ -16,9 +16,10 @@ import Inventory from './components/Inventory/Inventory';
 import DebugPanel from './components/Debug/DebugPanel';
 import Chat from './components/Chat';
 import Craft from './components/Craft';
+import { Router } from './utils/StateRouter/StateRouter';
 
-const Hud = (): JSX.Element => (
-  <div>
+const Hud = ({ state }): JSX.Element => (
+  <Router state={state}>
     <Route on={MAIN_MENU} component={MainMenu} />
     <Route on={KEY_BINDINGS} component={KeyBindings} />
     <Route on={INVENTORY} component={Inventory} />
@@ -30,7 +31,7 @@ const Hud = (): JSX.Element => (
     <Chat />
     <PlayerStats />
     <MenuButton />
-  </div>
+  </Router>
 );
 
 export default Hud;

@@ -146,22 +146,22 @@ export class MemoryManager {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getUint8(): number {
+  getUint8(): 0 {
     throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getUint16(): number {
+  getUint16(): 0 {
     throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getUint32(): number {
+  getUint32(): 0 {
     throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getFloat32(): number {
+  getFloat32(): 0 {
     throw new Error('This method is a placeholder for babel plugin, you cant invoke it directly');
   }
 }

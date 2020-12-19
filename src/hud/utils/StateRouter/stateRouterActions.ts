@@ -1,27 +1,18 @@
-import { useDispatch } from 'react-redux';
 import { useCallback } from 'react';
-import { STATE_ROUTER_TOGGLE, STATE_ROUTER_SET } from './stateRouterConstants';
+import { useRouterContext } from './StateRouter';
 
-export const useToggleUIState = () => {
-  const dispatch = useDispatch();
+export const useToggleUIState = (): ((stateName: string) => void) => {
+  const context = useRouterContext();
   return useCallback(
-    (stateName: string) =>
-      dispatch({
-        type: STATE_ROUTER_TOGGLE,
-        payload: { stateName },
-      }),
-    [dispatch],
+    (stateName) => context.setState((state) => ({ ...state, [stateName]: !state[stateName] })),
+    [context],
   );
 };
 
-export const useSetUIState = () => {
-  const dispatch = useDispatch();
+export const useSetUIState = (): ((stateName: string, value: boolean) => void) => {
+  const context = useRouterContext();
   return useCallback(
-    (stateName: string, value: boolean) =>
-      dispatch({
-        type: STATE_ROUTER_SET,
-        payload: { stateName, value },
-      }),
-    [dispatch],
+    (stateName, value) => context.setState((state) => ({ ...state, [stateName]: value })),
+    [context],
   );
 };

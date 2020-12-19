@@ -20,8 +20,8 @@ export class Camera extends Component<CameraProps> implements Networkable {
   static componentName: 'camera' = 'camera';
   static networkable = true;
 
-  yaw = Component.memoryManager.getFloat32();
-  pitch = Component.memoryManager.getFloat32();
+  yaw: number = Component.memoryManager.getFloat32();
+  pitch: number = Component.memoryManager.getFloat32();
 
   readonly mvMatrix: mat4 = Component.memoryManager.getMat4();
   readonly sight: vec3 = Component.memoryManager.getVec3();

@@ -1,6 +1,6 @@
 import type { System } from '../../common/ecs/System';
 import type { Input } from '../Input/Input';
-import type { Store } from '../store/store';
+import { Store, uiRouterState } from '../store/store';
 import { Transform, UserControlled, Inventory } from '../components';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
 import { INVENTORY } from '../hud/components/Inventory/inventoryConstants';
@@ -37,10 +37,24 @@ const onInventoryChanged = (world: WorldMainThread, store: Store) =>
     .filter((e) => e.type === GameEvent.playerPutBlock && e)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
-const onDispatchableEvent = (events, store: Store) =>
-  events
-    .filter((e) => e.uiEvent)
-    .subscribe((e) => store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent));
+const onDispatchableEvent = (world: WorldMainThread, store: Store) =>
+  world.events
+    .filter((e) => e)
+    .subscribe((e) => {
+      switch (e.type) {
+        case GameEvent.menuToggled:
+          uiRouterState.setState((state) => ({ ...state, MAIN_MENU: !state.MAIN_MENU }));
+          break;
+        case GameEvent.inventoryToggled:
+          uiRouterState.setState((state) => ({ ...state, INVENTORY: !state.INVENTORY }));
+          break;
+        case GameEvent.craftToggled:
+          uiRouterState.setState((state) => ({ ...state, CRAFT: !state.CRAFT }));
+          break;
+        default:
+          e.uiEvent && store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent);
+      }
+    });
 
 const onStateChanged = (input: Input, player) => (
   { keyBindings: { editing }, inventory: inventoryOld },
@@ -72,7 +86,7 @@ const onPlayerAddItem = (network: Network, store: Store) =>
 export default (world: WorldMainThread, store: Store, input: Input, network: Network): System => {
   const player = world.createSelector([Transform, UserControlled, Inventory]);
 
-  onDispatchableEvent(world.events, store);
+  onDispatchableEvent(world, store);
   onInventoryChanged(world, store);
   onPlayerAddItem(network, store);
   connect(mapState, store)(onStateChanged(input, player));

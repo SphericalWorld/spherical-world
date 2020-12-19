@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { SyntheticEvent, useState } from 'react';
 import Label from '../Label';
 import { inputRange, valueLabel, valueDescript, formInputRange } from './inputRange.module.css';
 
@@ -12,7 +12,7 @@ type Props = Readonly<{
 
 const InputRange = ({ value = 15, className = '', min = 0, max, step = 1 }: Props): JSX.Element => {
   const [activeNumber, setActiveNumber] = useState(value);
-  const handleInputChange = (e: SyntheticInputEvent<HTMLInputElement>) =>
+  const handleInputChange = (e: SyntheticEvent<HTMLInputElement>) =>
     setActiveNumber(parseInt(e.currentTarget.value, 10));
 
   return (

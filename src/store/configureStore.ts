@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import type { State } from '../reducers/rootReducer';
 import rootReducer from '../reducers/rootReducer';
 
-export default function configureStore(preloadedState: State | null): Store<State, any> {
+export default function configureStore(preloadedState?: State): Store<State, any> {
   const composedEnhancer = composeWithDevTools();
 
   const store = createStore(rootReducer, preloadedState, composedEnhancer);
