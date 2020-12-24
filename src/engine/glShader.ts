@@ -1,4 +1,4 @@
-import { gl } from './glEngine';
+import { gl, glCreateProgram, glCreateShader } from './glEngine';
 
 type Constants = { [name: string]: string | number };
 
@@ -22,7 +22,7 @@ class GlShader {
   }
 
   compile() {
-    this.shader = gl.createShader(this.type);
+    this.shader = glCreateShader(this.type);
     gl.shaderSource(this.shader, this.source);
     gl.compileShader(this.shader);
     if (!gl.getShaderParameter(this.shader, gl.COMPILE_STATUS)) {
@@ -33,7 +33,7 @@ class GlShader {
 
 class GlVertexShader extends GlShader {
   type = gl.VERTEX_SHADER;
-  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
+  constructor(source: string, { constants = {} }: { constants?: Constants } = {}) {
     super(source, constants);
     this.compile();
   }
@@ -41,7 +41,7 @@ class GlVertexShader extends GlShader {
 
 class GlFragmentShader extends GlShader {
   type = gl.FRAGMENT_SHADER;
-  constructor(source: string, { constants = {} }: { constants: Constants } = {}) {
+  constructor(source: string, { constants = {} }: { constants?: Constants } = {}) {
     super(source, constants);
     this.compile();
   }
@@ -49,8 +49,6 @@ class GlFragmentShader extends GlShader {
 
 class GlShaderProgram {
   name: string;
-  attributes: string[];
-  uniforms: string[];
   vertexShader: GlVertexShader;
   fragmentShader: GlFragmentShader;
   program: WebGLProgram;
@@ -58,7 +56,7 @@ class GlShaderProgram {
   uMVMatrix: WebGLUniformLocation;
 
   constructor(vertexShader: GlVertexShader, fragmentShader: GlFragmentShader) {
-    this.program = gl.createProgram();
+    this.program = glCreateProgram();
     this.vertexShader = vertexShader;
     this.fragmentShader = fragmentShader;
 
@@ -68,24 +66,6 @@ class GlShaderProgram {
     if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
       throw new Error('Shader linking error');
     }
-  }
-
-  link(): void {
-    for (const attribute of this.attributes) {
-      this.setAttribLocation(attribute);
-    }
-    for (const uniform of this.uniforms) {
-      this.setUniformLocation(uniform);
-    }
-  }
-
-  setAttribLocation(attribName: string): void {
-    this[attribName] = gl.getAttribLocation(this.program, attribName);
-    gl.enableVertexAttribArray(this[attribName]);
-  }
-
-  setUniformLocation(attribName: string): void {
-    this[attribName] = gl.getUniformLocation(this.program, attribName);
   }
 
   use(): void {

@@ -36,14 +36,6 @@ type Props = {
   isMainPlayer: boolean;
 };
 
-// declare global {
-//   namespace JSX {
-//     interface IntrinsicElements {
-//       transform: { qwe: number };
-//     }
-//   }
-// }
-
 const tmp = vec3.create();
 
 class PlayerScript extends Script {

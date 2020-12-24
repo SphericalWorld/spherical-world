@@ -37,4 +37,20 @@ export const glCreateBuffer = (): WebGLBuffer => {
   return buffer;
 };
 
+export const glCreateShader = (type: number): WebGLShader => {
+  const shader = gl.createShader(type);
+  if (!shader) {
+    throw new Error('Fatal error: unable to create WebGL shader');
+  }
+  return shader;
+};
+
+export const glCreateProgram = (): WebGLProgram => {
+  const shader = gl.createProgram();
+  if (!shader) {
+    throw new Error('Fatal error: unable to create WebGL shader program');
+  }
+  return shader;
+};
+
 export { gl, canvas };

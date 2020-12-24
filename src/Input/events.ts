@@ -1,22 +1,4 @@
-import {
-  CAMERA_MOVED_EVENT,
-  CAMERA_UNLOCKED_EVENT,
-  PLAYER_MOVE_FORWARD_EVENT,
-  PLAYER_MOVE_BACKWARD_EVENT,
-  PLAYER_MOVE_LEFT_EVENT,
-  PLAYER_MOVE_RIGHT_EVENT,
-  PLAYER_JUMP_EVENT,
-  PLAYER_RUN_EVENT,
-  CAMERA_LOCK_EVENT,
-  TOGGLE_MENU_EVENT,
-  TOGGLE_INVENTORY_EVENT,
-  INVENTORY_NEXT_ITEM,
-  INVENTORY_PREVIOUS_ITEM,
-  PLAYER_ATTACK_EVENT,
-  PLAYER_PUT_BLOCK_EVENT,
-  SET_KEY_EVENT,
-  TOGGLE_CRAFT_EVENT,
-} from '../../common/constants/input/eventTypes';
+import { InputEvent } from '../../common/constants/input/eventTypes';
 import {
   INPUT_TYPE_RANGE,
   INPUT_TYPE_ACTION,
@@ -43,7 +25,7 @@ import type { MappedEvent } from './InputContext';
 // TODO: move events to separate files
 
 export const cameraMovedEvent = {
-  action: CAMERA_MOVED_EVENT,
+  action: InputEvent.cameraMoved,
   type: INPUT_TYPE_RANGE,
   gameEvent: GameEvent.cameraMoved,
   data: ({ x, y, z }: RangeInputEvent) => ({
@@ -54,13 +36,13 @@ export const cameraMovedEvent = {
 };
 
 export const cameraUnlockedEvent = {
-  action: CAMERA_UNLOCKED_EVENT,
+  action: InputEvent.cameraUnlocked,
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.cameraUnlocked,
 };
 
 export const playerMoveForwardEvent = {
-  action: PLAYER_MOVE_FORWARD_EVENT,
+  action: InputEvent.playerMoveForward,
   category: CATEGORY_MOVEMENT,
   caption: 'Move Forward',
   type: INPUT_TYPE_STATE,
@@ -72,7 +54,7 @@ export const playerMoveForwardEvent = {
 };
 
 export const playerMoveBackwardEvent = {
-  action: PLAYER_MOVE_BACKWARD_EVENT,
+  action: InputEvent.playerMoveBackward,
   category: CATEGORY_MOVEMENT,
   caption: 'Move Backward',
   type: INPUT_TYPE_STATE,
@@ -84,7 +66,7 @@ export const playerMoveBackwardEvent = {
 };
 
 export const playerMoveLeftEvent = {
-  action: PLAYER_MOVE_LEFT_EVENT,
+  action: InputEvent.playerMoveLeft,
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Left',
   type: INPUT_TYPE_STATE,
@@ -96,7 +78,7 @@ export const playerMoveLeftEvent = {
 };
 
 export const playerMoveRightEvent = {
-  action: PLAYER_MOVE_RIGHT_EVENT,
+  action: InputEvent.playerMoveRight,
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Right',
   type: INPUT_TYPE_STATE,
@@ -108,7 +90,7 @@ export const playerMoveRightEvent = {
 };
 
 export const playerJumpEvent = {
-  action: PLAYER_JUMP_EVENT,
+  action: InputEvent.playerJump,
   category: CATEGORY_MOVEMENT,
   caption: 'Jump',
   type: INPUT_TYPE_STATE,
@@ -117,7 +99,7 @@ export const playerJumpEvent = {
 };
 
 export const playerRunEvent = {
-  action: PLAYER_RUN_EVENT,
+  action: InputEvent.playerRun,
   category: CATEGORY_MOVEMENT,
   caption: 'Run',
   type: INPUT_TYPE_STATE,
@@ -126,13 +108,13 @@ export const playerRunEvent = {
 };
 
 export const cameraLockEvent = {
-  action: CAMERA_LOCK_EVENT,
+  action: InputEvent.cameraLock,
   type: INPUT_TYPE_ACTION,
   gameEvent: GameEvent.cameraLocked,
 };
 
 export const toggleMenuEvent = {
-  action: TOGGLE_MENU_EVENT,
+  action: InputEvent.toggleMenu,
   category: CATEGORY_INTERFACE,
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
@@ -140,7 +122,7 @@ export const toggleMenuEvent = {
 };
 
 export const toggleInventoryEvent = {
-  action: TOGGLE_INVENTORY_EVENT,
+  action: InputEvent.toggleInventory,
   category: CATEGORY_INTERFACE,
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
@@ -148,7 +130,7 @@ export const toggleInventoryEvent = {
 };
 
 export const selectNextItemEvent = {
-  action: INVENTORY_NEXT_ITEM,
+  action: InputEvent.inventoryNextItem,
   category: CATEGORY_INTERFACE,
   caption: 'Select next item',
   type: INPUT_TYPE_RANGE,
@@ -159,7 +141,7 @@ export const selectNextItemEvent = {
 };
 
 export const selectPreviousItemEvent = {
-  action: INVENTORY_PREVIOUS_ITEM,
+  action: InputEvent.inventoryPreviousItem,
   category: CATEGORY_INTERFACE,
   caption: 'Select previous item',
   type: INPUT_TYPE_RANGE,
@@ -170,7 +152,7 @@ export const selectPreviousItemEvent = {
 };
 
 export const playerAttackEvent = {
-  action: PLAYER_ATTACK_EVENT,
+  action: InputEvent.playerAttack,
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Attack / Destroy block',
   type: INPUT_TYPE_STATE,
@@ -179,7 +161,7 @@ export const playerAttackEvent = {
 };
 
 export const playerPutBlockEvent = {
-  action: PLAYER_PUT_BLOCK_EVENT,
+  action: InputEvent.playerPutBlock,
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Put Block',
   type: INPUT_TYPE_ACTION,
@@ -187,7 +169,7 @@ export const playerPutBlockEvent = {
 };
 
 export const keySetEvent = {
-  action: SET_KEY_EVENT,
+  action: InputEvent.setKey,
   type: INPUT_TYPE_ACTION,
   gameEvent: KEY_SELECT_BUTTON,
   data: ({ data }: { data: string }) => data,
@@ -195,7 +177,7 @@ export const keySetEvent = {
 };
 
 export const toggleCraftEvent: MappedEvent = {
-  action: TOGGLE_CRAFT_EVENT,
+  action: InputEvent.toggleCraft,
   category: CATEGORY_INTERFACE,
   caption: 'Craft',
   type: INPUT_TYPE_ACTION,

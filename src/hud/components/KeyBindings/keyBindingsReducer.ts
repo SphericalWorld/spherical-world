@@ -1,5 +1,5 @@
 import type { KeyPosition } from './keyBindingsTypes';
-import type { EventTypes } from '../../../../common/constants/input/eventTypes';
+import type { InputEvent } from '../../../../common/constants/input/eventTypes';
 import { createReducer, reduceReducers } from '../../../util/reducerUtils';
 import * as events from '../../../Input/events';
 import { EVENT_CATEGORIES } from '../../../Input/eventTypes';
@@ -34,7 +34,7 @@ export type KeyBindingsState = Readonly<{
   editing: boolean;
   keyPosition?: KeyPosition;
   key?: string;
-  action?: EventTypes;
+  action?: InputEvent;
 }>;
 
 const initialState: KeyBindingsState = {

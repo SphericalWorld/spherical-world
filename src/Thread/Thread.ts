@@ -11,9 +11,9 @@ class Thread implements IThread {
     this.id = id;
     this.thread = thread;
 
-    thread.onmessage = (e) => {
+    thread.addEventListener('message', (e) => {
       this.events.emit(e.data);
-    };
+    });
   }
 
   postMessage(message: unknown, ports?: any): void {

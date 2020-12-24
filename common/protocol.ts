@@ -1,5 +1,5 @@
 import type { TransformProps } from './ecs/components/Transform';
-import type { EventTypes } from './constants/input/eventTypes';
+import type { InputEvent } from './constants/input/eventTypes';
 import type { InputRawEvents } from './constants/input/rawEvents';
 import type { Slot } from './Inventory';
 import type { SlotInfo } from './Inventory/Inventory';
@@ -41,7 +41,7 @@ export type ServerToClientMessages =
     }>
   | Readonly<{
       type: ServerToClientMessage.loadControlSettings;
-      data: { controls: ReadonlyArray<[EventTypes, InputRawEvents, InputRawEvents]> };
+      data: { controls: ReadonlyArray<[InputEvent, InputRawEvents, InputRawEvents]> };
     }>
   | Readonly<{
       type: ServerToClientMessage.loadChunk;
