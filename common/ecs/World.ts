@@ -7,6 +7,8 @@ import EventObservable from '../GameEvent/EventObservable';
 import { EntityManager, EntitySelector } from './EntityManager';
 import { MemoryManager } from './MemoryManager';
 import { THREAD_PHYSICS, THREAD_MAIN } from '../../src/Thread/threadConstants';
+import { InputAction } from '../../src/Input/InputAction';
+import { InputEvent } from '../constants/input/eventTypes';
 
 type SerializedComponent = {
   type: string;
@@ -52,6 +54,11 @@ export class World<Events = unknown> {
 
   constructor(thread: THREAD_ID) {
     this.thread = thread;
+    if (thread === THREAD_MAIN) {
+      InputAction.setMemory(
+        new SharedArrayBuffer(InputEvent.ELEMENTS_COUNT * Int32Array.BYTES_PER_ELEMENT),
+      );
+    }
   }
 
   registerThread(thread: Thread): void {
@@ -64,6 +71,7 @@ export class World<Events = unknown> {
           memory: this.memoryManager.memory,
           interthreadDescriptors: this.interthreadDescriptors,
           interthreadDescriptors2: this.interthreadDescriptors2,
+          inputActions: InputAction.getMemory(),
         },
       });
 
@@ -84,6 +92,7 @@ export class World<Events = unknown> {
         this.threadTicker = new Float64Array(this.interthreadDescriptors, 0, 1);
         this.mutexes = new Int32Array(this.interthreadDescriptors2, 0, 1);
         this.startGameLoopInThread();
+        InputAction.setMemory(payload.inputActions);
       } else if (type === 'START_PSEUDO_SYNC_TIMER') {
         this.pseudoSyncTimer = setInterval(() => this.update(1000 / 60), 1000 / 60);
       } else if (type === 'STOP_PSEUDO_SYNC_TIMER') {

@@ -5,6 +5,7 @@ import { INPUT_TYPE_ACTION, INPUT_TYPE_STATE, INPUT_TYPE_RANGE } from './eventTy
 import type InputEvent from './InputEvent';
 import { STATE_DOWN } from './StateInputEvent';
 import type { MainThreadEvents } from '../Events';
+import { InputAction } from './InputAction';
 
 export type MappedEvent = Readonly<{
   action: string;
@@ -54,7 +55,7 @@ export const getMappedInputEvent = (
 ): GameEvent1 | null => {
   const event = events.get(inputEvent.name);
   if (!event) return null;
-  const { type, data, gameEvent, onEnd, uiEvent } = event;
+  const { type, data, gameEvent, onEnd, uiEvent, action } = event;
   const payload = data && data(inputEvent);
   switch (type) {
     case INPUT_TYPE_ACTION:
@@ -64,8 +65,10 @@ export const getMappedInputEvent = (
       return null;
     case INPUT_TYPE_STATE:
       if (inputEvent.status === STATE_DOWN) {
+        InputAction.setActive(action, true);
         return { type: gameEvent, payload, uiEvent };
       }
+      InputAction.setActive(action, false);
       return { type: onEnd, payload, uiEvent };
     case INPUT_TYPE_RANGE:
       return { type: gameEvent, payload, uiEvent };

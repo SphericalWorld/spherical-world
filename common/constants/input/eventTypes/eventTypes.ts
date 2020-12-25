@@ -16,4 +16,5 @@ export enum InputEvent {
   playerPutBlock,
   setKey,
   toggleCraft,
+  ELEMENTS_COUNT,
 }
