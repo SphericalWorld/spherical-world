@@ -1,7 +1,14 @@
 import { ComponentType, createContext, useContext, useEffect, useRef, useState } from 'react';
+import { InputEvent } from '../../../../common/constants/input/eventTypes';
+import { InputAction } from '../../../Input/InputAction';
 
 type Props = Readonly<{
   on: string;
+  component: ComponentType;
+}>;
+
+type Props2 = Readonly<{
+  on: InputEvent;
   component: ComponentType;
 }>;
 

@@ -1,17 +1,17 @@
-import type { GameEvent1 } from '../../common/GameEvent/GameEvent';
 import type { InputContext } from './InputContext';
 import type { InputContexts } from './inputContexts';
 import type { EventTypes } from '../../common/constants/input/eventTypes';
 import type InputEvent from './InputEvent';
 import { activate, deactivate, getMappedInputEvent, setKey as setContextKey } from './InputContext';
 import * as events from './events';
+import type { MainThreadEvents } from '../Events';
 
 export class Input {
   private contextsMap = new Map<InputContexts, InputContext>();
   contexts: InputContext[] = [];
   activeContexts: InputContext[];
   inputStates: Map<string, InputEvent> = new Map();
-  dispatchHandler: (event: GameEvent1) => unknown;
+  dispatchHandler: (event: MainThreadEvents) => unknown;
 
   constructor(inputContexts: InputContext[]) {
     this.contexts = inputContexts;
@@ -45,11 +45,11 @@ export class Input {
   activateContext = this.switchContext(activate);
   deactivateContext = this.switchContext(deactivate);
 
-  dispatch = (event: GameEvent1): void => {
+  dispatch = (event: MainThreadEvents): void => {
     this.dispatchHandler(event);
   };
 
-  onDispatch(dispatchHandler: (event: GameEvent1) => unknown): void {
+  onDispatch(dispatchHandler: (event: MainThreadEvents) => unknown): void {
     this.dispatchHandler = dispatchHandler;
   }
 }

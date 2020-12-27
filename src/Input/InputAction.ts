@@ -1,8 +1,11 @@
-import type { InputEvent } from '../../common/constants/input/eventTypes';
+import { InputEvent } from '../../common/constants/input/eventTypes';
 
 export class InputAction {
   private static memory: SharedArrayBuffer = new SharedArrayBuffer(0);
   private static memoryMapping: Int32Array = new Int32Array(0);
+  private static actionHandlersMap: Array<Set<() => unknown>> = new Array(InputEvent.ELEMENTS_COUNT)
+    .fill(0)
+    .map(() => new Set());
 
   static isActive(event: InputEvent): boolean {
     return !!this.memoryMapping[event];
@@ -19,5 +22,15 @@ export class InputAction {
 
   static getMemory(): SharedArrayBuffer {
     return this.memory;
+  }
+
+  static on(event: InputEvent, callback: () => unknown): void {
+    this.actionHandlersMap[event].add(callback);
+  }
+
+  static dispatch(event: InputEvent): void {
+    for (const handler of this.actionHandlersMap[event]) {
+      handler();
+    }
   }
 }

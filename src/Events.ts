@@ -2,27 +2,14 @@ import type { World } from '../common/ecs';
 import type { Slot } from '../common/Inventory';
 
 export enum GameEvent {
-  cameraLocked,
-  cameraUnlocked,
   cameraMoved,
-  inventoryToggled,
-  menuToggled,
-  playerMoved,
-  playerStopedMove,
-  playerJumped,
-  playerStopedJump,
-  playerRun,
-  playerStopedRun,
   updateComponents,
   chunkLoaded,
   playerDestroyedBlock,
   playerPutBlock,
   playerTriedPutBlock,
-  playerAttacked,
-  playerStopedAttack,
   setDayTime,
   chunkVBOLoaded,
-  craftToggled,
   previousItemSelected,
   nextItemSelected,
   itemSelected,
@@ -67,12 +54,6 @@ type PlayerPutBlock = Readonly<{
 
 export type MainThreadEvents =
   | Readonly<{
-      type: GameEvent.cameraLocked;
-    }>
-  | Readonly<{
-      type: GameEvent.cameraUnlocked;
-    }>
-  | Readonly<{
       type: GameEvent.cameraMoved;
       payload: {
         x: number;
@@ -80,24 +61,9 @@ export type MainThreadEvents =
       };
     }>
   | Readonly<{
-      type: GameEvent.inventoryToggled;
-    }>
-  | Readonly<{
-      type: GameEvent.craftToggled;
-    }>
-  | Readonly<{
-      type: GameEvent.menuToggled;
-    }>
-  | Readonly<{
       type: GameEvent.playerTriedPutBlock;
     }>
   | ChunkLoadedEvent
-  | Readonly<{
-      type: GameEvent.playerAttacked;
-    }>
-  | Readonly<{
-      type: GameEvent.playerStopedAttack;
-    }>
   | Readonly<{
       type: GameEvent.setDayTime;
       payload: string;
@@ -116,26 +82,7 @@ export type MainThreadEvents =
       };
     }>;
 
-export type PhysicsThreadEvents =
-  | Readonly<{
-      type: GameEvent.playerMoved;
-    }>
-  | Readonly<{
-      type: GameEvent.playerStopedMove;
-    }>
-  | Readonly<{
-      type: GameEvent.playerJumped;
-    }>
-  | Readonly<{
-      type: GameEvent.playerStopedJump;
-    }>
-  | Readonly<{
-      type: GameEvent.playerRun;
-    }>
-  | Readonly<{
-      type: GameEvent.playerStopedRun;
-    }>
-  | ChunkLoadedEvent;
+export type PhysicsThreadEvents = ChunkLoadedEvent;
 
 export type ChunkHandlerThreadEvents =
   | Readonly<{

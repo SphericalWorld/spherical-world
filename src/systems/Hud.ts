@@ -21,6 +21,8 @@ import { ServerToClientMessage } from '../../common/protocol';
 import type { State } from '../reducers/rootReducer';
 import type Network from '../network';
 import { WorldMainThread, GameEvent } from '../Events';
+import { InputAction } from '../Input/InputAction';
+import { InputEvent } from '../../common/constants/input/eventTypes';
 
 const mapState = ({
   keyBindings,
@@ -37,24 +39,22 @@ const onInventoryChanged = (world: WorldMainThread, store: Store) =>
     .filter((e) => e.type === GameEvent.playerPutBlock && e)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
-const onDispatchableEvent = (world: WorldMainThread, store: Store) =>
+const onDispatchableEvent = (world: WorldMainThread, store: Store) => {
+  InputAction.on(InputEvent.toggleMenu, () =>
+    uiRouterState.setState((state) => ({ ...state, MAIN_MENU: !state.MAIN_MENU })),
+  );
+  InputAction.on(InputEvent.toggleInventory, () =>
+    uiRouterState.setState((state) => ({ ...state, INVENTORY: !state.INVENTORY })),
+  );
+  InputAction.on(InputEvent.toggleCraft, () =>
+    uiRouterState.setState((state) => ({ ...state, CRAFT: !state.CRAFT })),
+  );
   world.events
-    .filter((e) => e)
+    .filter((e) => e.uiEvent)
     .subscribe((e) => {
-      switch (e.type) {
-        case GameEvent.menuToggled:
-          uiRouterState.setState((state) => ({ ...state, MAIN_MENU: !state.MAIN_MENU }));
-          break;
-        case GameEvent.inventoryToggled:
-          uiRouterState.setState((state) => ({ ...state, INVENTORY: !state.INVENTORY }));
-          break;
-        case GameEvent.craftToggled:
-          uiRouterState.setState((state) => ({ ...state, CRAFT: !state.CRAFT }));
-          break;
-        default:
-          e.uiEvent && store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent);
-      }
+      store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent);
     });
+};
 
 const onStateChanged = (input: Input, player) => (
   { keyBindings: { editing }, inventory: inventoryOld },

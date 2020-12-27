@@ -10,12 +10,6 @@ import {
 import type RangeInputEvent from './RangeInputEvent';
 import { KEY_SELECT_BUTTON } from '../hud/hudConstants';
 import {
-  DIRECTION_FORWARD,
-  DIRECTION_BACK,
-  DIRECTION_LEFT,
-  DIRECTION_RIGHT,
-} from '../player/events';
-import {
   PREVIOUS_ITEM_SELECTED,
   NEXT_ITEM_SELECTED,
 } from '../hud/components/MainPanel/mainPanelConstants';
@@ -38,7 +32,6 @@ export const cameraMovedEvent = {
 export const cameraUnlockedEvent = {
   action: InputEvent.cameraUnlocked,
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.cameraUnlocked,
 };
 
 export const playerMoveForwardEvent = {
@@ -46,11 +39,6 @@ export const playerMoveForwardEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Move Forward',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerMoved,
-  onEnd: GameEvent.playerStopedMove,
-  data: () => ({
-    direction: DIRECTION_FORWARD,
-  }),
 };
 
 export const playerMoveBackwardEvent = {
@@ -58,11 +46,6 @@ export const playerMoveBackwardEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Move Backward',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerMoved,
-  onEnd: GameEvent.playerStopedMove,
-  data: () => ({
-    direction: DIRECTION_BACK,
-  }),
 };
 
 export const playerMoveLeftEvent = {
@@ -70,11 +53,6 @@ export const playerMoveLeftEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Left',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerMoved,
-  onEnd: GameEvent.playerStopedMove,
-  data: () => ({
-    direction: DIRECTION_LEFT,
-  }),
 };
 
 export const playerMoveRightEvent = {
@@ -82,11 +60,6 @@ export const playerMoveRightEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Strafe Right',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerMoved,
-  onEnd: GameEvent.playerStopedMove,
-  data: () => ({
-    direction: DIRECTION_RIGHT,
-  }),
 };
 
 export const playerJumpEvent = {
@@ -94,8 +67,6 @@ export const playerJumpEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Jump',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerJumped,
-  onEnd: GameEvent.playerStopedJump,
 };
 
 export const playerRunEvent = {
@@ -103,14 +74,11 @@ export const playerRunEvent = {
   category: CATEGORY_MOVEMENT,
   caption: 'Run',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerRun,
-  onEnd: GameEvent.playerStopedRun,
 };
 
 export const cameraLockEvent = {
   action: InputEvent.cameraLock,
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.cameraLocked,
 };
 
 export const toggleMenuEvent = {
@@ -118,7 +86,6 @@ export const toggleMenuEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Main menu',
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.menuToggled,
 };
 
 export const toggleInventoryEvent = {
@@ -126,7 +93,6 @@ export const toggleInventoryEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Inventory',
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.inventoryToggled,
 };
 
 export const selectNextItemEvent = {
@@ -156,8 +122,6 @@ export const playerAttackEvent = {
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Attack / Destroy block',
   type: INPUT_TYPE_STATE,
-  gameEvent: GameEvent.playerAttacked,
-  onEnd: GameEvent.playerStopedAttack,
 };
 
 export const playerPutBlockEvent = {
@@ -181,5 +145,4 @@ export const toggleCraftEvent: MappedEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Craft',
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.craftToggled,
 };

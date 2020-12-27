@@ -6,6 +6,8 @@ import { ClientToServerMessage } from '../../common/protocol';
 import { WorldMainThread, GameEvent } from '../Events';
 import type Network from '../network';
 import { blocksInfo } from '../blocks/blocksInfo';
+import { InputAction } from '../Input/InputAction';
+import { InputEvent } from '../../common/constants/input/eventTypes';
 // import { Sound } from '../Sound';
 
 // import woodHit from '../sounds/wood_hit.wav';
@@ -59,19 +61,10 @@ const getPutBlockEvents = (world: WorldMainThread, network: Network, picker) =>
       }
     });
 
-const getPlayerAttackEvents = (world: WorldMainThread) =>
-  world.events
-    .filter(
-      (e) => (e.type === GameEvent.playerAttacked || e.type === GameEvent.playerStopedAttack) && e,
-    )
-    .map((e) => e.type === GameEvent.playerAttacked)
-    .subscribeQueue();
-
 export default (world: WorldMainThread, network: Network): System => {
   const removers = world.createSelector([Transform, BlockRemover, Visual, Joint]);
   const picker = world.createSelector([Transform, Player, Raytracer, Visual]);
 
-  const playerAttackEvents = getPlayerAttackEvents(world);
   getPutBlockEvents(world, network, picker);
 
   const raytracerRegistry = world.components.get('raytracer');
@@ -88,9 +81,7 @@ export default (world: WorldMainThread, network: Network): System => {
       if (id === id) {
         // TODO: main player ID
         const { removing } = blockRemover;
-        playerAttackEvents.events.forEach((possibleRemoving) => {
-          blockRemover.removing = possibleRemoving;
-        });
+        blockRemover.removing = InputAction.isActive(InputEvent.playerAttack);
         if (removing !== blockRemover.removing) {
           network.emit({
             type: ClientToServerMessage.playerStartedDestroyingBlock,
@@ -140,7 +131,6 @@ export default (world: WorldMainThread, network: Network): System => {
     for (const { visual, raytracer } of picker) {
       visual.enabled = !!raytracer.block.block;
     }
-    playerAttackEvents.clear();
   };
   return blockRemove;
 };

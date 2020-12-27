@@ -8,6 +8,8 @@ import type { System } from '../../common/ecs/System';
 import { Transform, Camera } from '../components';
 import { unproject } from '../../common/utils/vector';
 import { GameEvent, WorldMainThread } from '../Events';
+import { InputAction } from '../Input/InputAction';
+import { InputEvent } from '../../common/constants/input/eventTypes';
 
 const resizeViewport = (viewport: Viewport): void => {
   const width = canvas.clientWidth;
@@ -73,20 +75,15 @@ export default (world: WorldMainThread, input: Input): System => {
 
   const cameraMovements = getCameraMovements(world);
 
-  world.events
-    .filter((e) => e.type === GameEvent.cameraLocked && e)
-    .subscribe(() => {
-      // input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
-      input.activateContext(GAMEPLAY_MAIN_CONTEXT);
-      bodyElement.requestPointerLock();
-    });
+  InputAction.on(InputEvent.cameraLock, () => {
+    input.activateContext(GAMEPLAY_MAIN_CONTEXT);
+    bodyElement.requestPointerLock();
+  });
 
-  world.events
-    .filter((e) => e.type === GameEvent.cameraUnlocked && e)
-    .subscribe(() => {
-      input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
-      input.activateContext(GAMEPLAY_MENU_CONTEXT);
-    });
+  InputAction.on(InputEvent.cameraUnlocked, () => {
+    input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
+    input.activateContext(GAMEPLAY_MENU_CONTEXT);
+  });
 
   const rotationMatrixQuat = quat.create();
   const worldPosition = vec3.create();
