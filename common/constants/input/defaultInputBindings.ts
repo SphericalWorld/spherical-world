@@ -44,6 +44,5 @@ export const defaultInputBindings: ReadonlyArray<[InputEvent, InputRawEvents, In
   [InputEvent.toggleInventory, KEY_I, KEY_UNBOUND],
   [InputEvent.inventoryNextItem, MOUSE_WHEEL_UP, KEY_UNBOUND],
   [InputEvent.inventoryPreviousItem, MOUSE_WHEEL_DOWN, KEY_UNBOUND],
-  [InputEvent.setKey, KEY_ANY, KEY_UNBOUND],
   [InputEvent.toggleCraft, KEY_T, KEY_UNBOUND],
 ];

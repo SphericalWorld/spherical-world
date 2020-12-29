@@ -269,8 +269,7 @@ export class World<Events = unknown> {
   }
 
   dispatch(gameEvent: Events): void {
-    const { uiEvent, ...eventForThread } = gameEvent;
-    this.eventsForThreads.push(eventForThread);
+    this.eventsForThreads.push(gameEvent);
     this.events.emit(gameEvent);
   }
 

@@ -5,15 +5,19 @@ import type InputEvent from './InputEvent';
 import { activate, deactivate, getMappedInputEvent, setKey as setContextKey } from './InputContext';
 import * as events from './events';
 import type { MainThreadEvents } from '../Events';
+import StateInputEvent from './StateInputEvent';
 
 export class Input {
-  private contextsMap = new Map<InputContexts, InputContext>();
-  contexts: InputContext[] = [];
-  activeContexts: InputContext[];
-  inputStates: Map<string, InputEvent> = new Map();
-  dispatchHandler: (event: MainThreadEvents) => unknown;
+  private static contextsMap = new Map<InputContexts, InputContext>();
+  private static keyToRebind: InputEvent | null = null;
+  private static onRebind: null | ((key: string) => unknown);
 
-  constructor(inputContexts: InputContext[]) {
+  static contexts: InputContext[] = [];
+  static activeContexts: InputContext[];
+  static inputStates: Map<string, InputEvent> = new Map();
+  static dispatchHandler: (event: MainThreadEvents) => unknown;
+
+  static setContexts(inputContexts: InputContext[]): void {
     this.contexts = inputContexts;
     for (const context of inputContexts) {
       this.contextsMap.set(context.type, context);
@@ -21,43 +25,58 @@ export class Input {
     this.activeContexts = this.getActiveContexts();
   }
 
-  onEvent(event: InputEvent): void {
+  static onEvent(event: InputEvent): void {
+    if (this.keyToRebind) {
+      if (event instanceof StateInputEvent) {
+        this.setKey(event.name, this.keyToRebind);
+        if (this.onRebind) this.onRebind(event.name);
+
+        this.keyToRebind = null;
+        this.onRebind = null;
+      }
+      return;
+    }
     for (let i = 0; i < this.activeContexts.length; i += 1) {
       const mappedEvent = getMappedInputEvent(this.activeContexts[i].events, event);
       if (mappedEvent) this.dispatch(mappedEvent);
     }
   }
 
-  getActiveContexts(): InputContext[] {
+  static getActiveContexts(): InputContext[] {
     return this.contexts.filter((el) => el.active);
   }
 
-  switchContext = (activateFn: (context: InputContext) => InputContext) => (
+  static switchContext = (activateFn: (context: InputContext) => InputContext) => (
     contextType: InputContexts,
   ): void => {
-    const context = this.contextsMap.get(contextType);
+    const context = Input.contextsMap.get(contextType);
     if (!context) return;
-    this.contextsMap.set(contextType, activateFn(context));
-    this.contexts = [...this.contextsMap.values()];
-    this.activeContexts = this.getActiveContexts();
+    Input.contextsMap.set(contextType, activateFn(context));
+    Input.contexts = [...Input.contextsMap.values()];
+    Input.activeContexts = Input.getActiveContexts();
   };
 
-  activateContext = this.switchContext(activate);
-  deactivateContext = this.switchContext(deactivate);
+  static activateContext = Input.switchContext(activate);
+  static deactivateContext = Input.switchContext(deactivate);
 
-  dispatch = (event: MainThreadEvents): void => {
+  static dispatch(event: MainThreadEvents): void {
     this.dispatchHandler(event);
-  };
+  }
 
-  onDispatch(dispatchHandler: (event: MainThreadEvents) => unknown): void {
+  static onDispatch(dispatchHandler: (event: MainThreadEvents) => unknown): void {
     this.dispatchHandler = dispatchHandler;
   }
-}
 
-export const setKey = (input: Input, key: string, actionType: EventTypes): void => {
-  const action = Object.values(events).find((e) => e.action === actionType);
-  const context = input.contexts.find((el) => el.eventTypes.has(action));
-  if (context) {
-    setContextKey(context, key, action);
+  static waitForNewKey(action: InputEvent, onRebind: (key: string) => unknown): void {
+    this.keyToRebind = action;
+    this.onRebind = onRebind;
   }
-};
+
+  static setKey(key: string, actionType: EventTypes): void {
+    const action = Object.values(events).find((e) => e.action === actionType);
+    const context = this.contexts.find((el) => el.eventTypes.has(action));
+    if (context) {
+      setContextKey(context, key, action);
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import type { StatelessFunctionalComponent } from 'react';
+import type { FC } from 'react';
 import type { World } from './World';
 import type { Entity } from './Entity';
 import { EntityManager } from './EntityManager';
@@ -22,7 +22,7 @@ export const GameObject = <T extends any>(params: T & { id?: Entity }): React$El
   params;
 
 export const createElement: React$CreateElement = <Props extends { id: Entity }, T extends Props>(
-  component: StatelessFunctionalComponent<T>,
+  component: FC<T>,
   origProps: Props | null,
   ...children
 ) => {
@@ -56,7 +56,7 @@ export const createElement: React$CreateElement = <Props extends { id: Entity },
   return element;
 };
 
-export const render = <T>(component: StatelessFunctionalComponent<T>, world: World): void => {
+export const render = <T>(component: FC<T>, world: World): void => {
   worlds.stack.push(world);
   return createElement(component, null);
 };

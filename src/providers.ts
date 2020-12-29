@@ -115,7 +115,7 @@ const mainProvider = async (store: Store, network: Network, threads: Threads) =>
   const inputContexts = inputContextsProvider();
   const input = inputProvider(inputContexts);
   input.onDispatch((event) => world.dispatch(event));
-  world.registerSystem(...systemsProvider(world, terrain, network, time, input, store));
+  world.registerSystem(...systemsProvider(world, terrain, network, time, store));
   initHudAPI(world);
   generateBlockModels();
   return Main(network, world);

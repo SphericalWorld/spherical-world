@@ -7,11 +7,8 @@ export enum GameEvent {
   chunkLoaded,
   playerDestroyedBlock,
   playerPutBlock,
-  playerTriedPutBlock,
   setDayTime,
   chunkVBOLoaded,
-  previousItemSelected,
-  nextItemSelected,
   itemSelected,
   playerCraftAttempt,
 }
@@ -59,9 +56,6 @@ export type MainThreadEvents =
         x: number;
         y: number;
       };
-    }>
-  | Readonly<{
-      type: GameEvent.playerTriedPutBlock;
     }>
   | ChunkLoadedEvent
   | Readonly<{

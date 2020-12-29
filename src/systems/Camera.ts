@@ -1,6 +1,6 @@
 import { mat4, quat, vec3, vec4 } from 'gl-matrix';
 import type { Viewport } from '../components/Camera';
-import type { Input } from '../Input/Input';
+import { Input } from '../Input';
 import { PLAYER_CAMERA_HEIGHT } from '../../common/player';
 import { canvas, gl } from '../engine/glEngine';
 import { GAMEPLAY_MAIN_CONTEXT, GAMEPLAY_MENU_CONTEXT } from '../Input/inputContexts';
@@ -69,20 +69,20 @@ const sumCameraMovements = (
   { payload }: { payload: { x: number; y: number } },
 ): [number, number] => [x + payload.x, y + payload.y];
 
-export default (world: WorldMainThread, input: Input): System => {
+export default (world: WorldMainThread): System => {
   const cameras = world.createSelector([Transform, Camera]);
   const bodyElement = document.getElementsByTagName('body')[0];
 
   const cameraMovements = getCameraMovements(world);
 
   InputAction.on(InputEvent.cameraLock, () => {
-    input.activateContext(GAMEPLAY_MAIN_CONTEXT);
+    Input.activateContext(GAMEPLAY_MAIN_CONTEXT);
     bodyElement.requestPointerLock();
   });
 
   InputAction.on(InputEvent.cameraUnlocked, () => {
-    input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
-    input.activateContext(GAMEPLAY_MENU_CONTEXT);
+    Input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
+    Input.activateContext(GAMEPLAY_MENU_CONTEXT);
   });
 
   const rotationMatrixQuat = quat.create();

@@ -1,4 +1,3 @@
-import type { Input } from '../Input/Input';
 import type Network from '../network';
 import type { Time } from '../Time/Time';
 import type { System } from '../../common/ecs/System';
@@ -20,16 +19,15 @@ export default (
   terrain: Terrain,
   network: Network,
   time: Time,
-  input: Input,
   store: Store,
 ): System[] => [
   TerrainSystem(world, network, terrain),
   BlockRemoveSystem(world, network),
   DayNightCycleSystem(world, time),
-  CameraSystem(world, input),
+  CameraSystem(world),
   DrawSystem(world, terrain, time),
-  NetworkSystem(world, network, input, store),
+  NetworkSystem(world, network, store),
   DropableSystem(world),
   ScriptingSystem(world),
-  HudSystem(world, store, input, network),
+  HudSystem(world, store, network),
 ];

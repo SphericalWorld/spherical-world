@@ -1,10 +1,9 @@
 import { React, render } from '../../common/ecs';
-import type { Input } from '../Input/Input';
+import { Input } from '../Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
 import type { Store } from '../store/store';
 import { Transform, Camera, Inventory } from '../components';
-import { setKey } from '../Input/Input';
 import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 import { WorldMainThread, GameEvent } from '../Events';
@@ -25,13 +24,13 @@ const onSyncGameData = (world: WorldMainThread, network: Network) =>
       world.updateComponents(components);
     });
 
-const onLoadControlSettings = (network: Network, input: Input, store: Store) =>
+const onLoadControlSettings = (network: Network, store: Store) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.loadControlSettings && e)
     .subscribe(({ data }) => {
       data.controls.forEach(([action, firstKey, secondKey]) => {
-        setKey(input, firstKey, action);
-        setKey(input, secondKey, action);
+        Input.setKey(firstKey, action);
+        Input.setKey(secondKey, action);
         store.dispatch(setKeyRedux(action, firstKey, secondKey));
       });
     });
@@ -44,7 +43,7 @@ const onPlayerAddItem = (network: Network, player) =>
       player[0].inventory.data.slots[data.position] = data.slot.id;
     });
 
-export default (world: WorldMainThread, network: Network, input: Input, store: Store): System => {
+export default (world: WorldMainThread, network: Network, store: Store): System => {
   const player = world.createSelector([Transform, Camera, Inventory]);
   world.events
     .filter((el) => el.network === true)
@@ -64,7 +63,7 @@ export default (world: WorldMainThread, network: Network, input: Input, store: S
   });
 
   onSyncGameData(world, network);
-  onLoadControlSettings(network, input, store);
+  onLoadControlSettings(network, store);
   onPlayerAddItem(network, player);
 
   let lastUpdate = Date.now();

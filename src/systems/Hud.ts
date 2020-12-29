@@ -1,5 +1,4 @@
 import type { System } from '../../common/ecs/System';
-import type { Input } from '../Input/Input';
 import { Store, uiRouterState } from '../store/store';
 import { Transform, UserControlled, Inventory } from '../components';
 import { MAIN_MENU } from '../hud/components/MainMenu/mainMenuConstants';
@@ -10,12 +9,6 @@ import {
   inventoryItemDecrease,
   inventoryItemSet,
 } from '../hud/hudActions';
-import {
-  GAMEPLAY_MAIN_CONTEXT,
-  GAMEPLAY_MENU_CONTEXT,
-  KEY_BINDING_CONTEXT,
-} from '../Input/inputContexts';
-import { setKey } from '../Input/Input';
 import { throttle } from '../../common/utils';
 import { ServerToClientMessage } from '../../common/protocol';
 import type { State } from '../reducers/rootReducer';
@@ -39,7 +32,7 @@ const onInventoryChanged = (world: WorldMainThread, store: Store) =>
     .filter((e) => e.type === GameEvent.playerPutBlock && e)
     .subscribe((e) => store.dispatch(inventoryItemDecrease(e.payload.itemId)));
 
-const onDispatchableEvent = (world: WorldMainThread, store: Store) => {
+const onDispatchableEvent = () => {
   InputAction.on(InputEvent.toggleMenu, () =>
     uiRouterState.setState((state) => ({ ...state, MAIN_MENU: !state.MAIN_MENU })),
   );
@@ -49,30 +42,11 @@ const onDispatchableEvent = (world: WorldMainThread, store: Store) => {
   InputAction.on(InputEvent.toggleCraft, () =>
     uiRouterState.setState((state) => ({ ...state, CRAFT: !state.CRAFT })),
   );
-  world.events
-    .filter((e) => e.uiEvent)
-    .subscribe((e) => {
-      store.dispatch(typeof e.uiEvent === 'function' ? e.uiEvent(e) : e.uiEvent);
-    });
 };
 
-const onStateChanged = (input: Input, player) => (
-  { keyBindings: { editing }, inventory: inventoryOld },
-  { keyBindings, inventory },
-) => {
+const onStateChanged = (player) => ({ inventory: inventoryOld }, { inventory }) => {
   if (inventoryOld !== inventory && player[0]) {
     player[0].inventory.data = inventory;
-  }
-  if (keyBindings.editing !== editing) {
-    if (keyBindings.editing) {
-      input.deactivateContext(GAMEPLAY_MENU_CONTEXT);
-      input.deactivateContext(GAMEPLAY_MAIN_CONTEXT);
-      input.activateContext(KEY_BINDING_CONTEXT);
-    } else {
-      input.activateContext(GAMEPLAY_MENU_CONTEXT);
-      input.deactivateContext(KEY_BINDING_CONTEXT);
-      setKey(input, keyBindings.key, keyBindings.action);
-    }
   }
 };
 
@@ -83,13 +57,13 @@ const onPlayerAddItem = (network: Network, store: Store) =>
       store.dispatch(inventoryItemSet(data));
     });
 
-export default (world: WorldMainThread, store: Store, input: Input, network: Network): System => {
+export default (world: WorldMainThread, store: Store, network: Network): System => {
   const player = world.createSelector([Transform, UserControlled, Inventory]);
 
-  onDispatchableEvent(world, store);
+  onDispatchableEvent();
   onInventoryChanged(world, store);
   onPlayerAddItem(network, store);
-  connect(mapState, store)(onStateChanged(input, player));
+  connect(mapState, store)(onStateChanged(player));
   const syncData = throttle((data) => store.dispatch(doUpdateHudData(data)), 100);
   return () => {
     syncData({

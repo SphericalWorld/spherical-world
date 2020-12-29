@@ -14,52 +14,51 @@ import { InputEvent } from '../../common/constants/input/eventTypes';
 
 // const blockRemoveSound = new Sound({ src: woodHit });
 
-const getPutBlockEvents = (world: WorldMainThread, network: Network, picker) =>
-  world.events
-    .filter((e) => e.type === GameEvent.playerTriedPutBlock && e)
-    .subscribe(() => {
-      const { emptyBlock, face, hasEmptyBlock } = picker[0].raytracer;
-      if (hasEmptyBlock) {
-        const inventory = world.objects.get(picker[0].transform.parent).inventory.data;
-        const item = inventory.items[inventory.selectedItem];
-        if (!item || !item.count) {
-          return;
-        }
-        item.count -= 1;
-        if (!item.count) {
-          const { [inventory.selectedItem]: toRemove, ...newItems } = inventory.items;
-          inventory.items = newItems;
-        } else {
-          inventory.items = { ...inventory.items };
-        }
-        network.emit({
-          type: ClientToServerMessage.playerPutBlock,
-          data: {
-            flags: face,
-            geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
-            position: Array.from(emptyBlock.position),
-            positionInChunk: Array.from(emptyBlock.positionInChunk),
-            blockId: item.itemTypeId,
-            itemId: item.id,
-          },
-        });
-        world.dispatch({
-          type: GameEvent.playerPutBlock,
-          payload: {
-            flags: face,
-            geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
-            position: [emptyBlock.position[0], emptyBlock.position[1], emptyBlock.position[2]],
-            positionInChunk: [
-              emptyBlock.positionInChunk[0],
-              emptyBlock.positionInChunk[1],
-              emptyBlock.positionInChunk[2],
-            ],
-            blockId: item.itemTypeId,
-            itemId: item.id,
-          },
-        });
+const getPutBlockEvents = (world: WorldMainThread, network: Network, picker) => {
+  InputAction.on(InputEvent.playerPutBlock, () => {
+    const { emptyBlock, face, hasEmptyBlock } = picker[0].raytracer;
+    if (hasEmptyBlock) {
+      const inventory = world.objects.get(picker[0].transform.parent).inventory.data;
+      const item = inventory.items[inventory.selectedItem];
+      if (!item || !item.count) {
+        return;
       }
-    });
+      item.count -= 1;
+      if (!item.count) {
+        const { [inventory.selectedItem]: toRemove, ...newItems } = inventory.items;
+        inventory.items = newItems;
+      } else {
+        inventory.items = { ...inventory.items };
+      }
+      network.emit({
+        type: ClientToServerMessage.playerPutBlock,
+        data: {
+          flags: face,
+          geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
+          position: Array.from(emptyBlock.position),
+          positionInChunk: Array.from(emptyBlock.positionInChunk),
+          blockId: item.itemTypeId,
+          itemId: item.id,
+        },
+      });
+      world.dispatch({
+        type: GameEvent.playerPutBlock,
+        payload: {
+          flags: face,
+          geoId: getGeoId(emptyBlock.coordinates[0], emptyBlock.coordinates[1]),
+          position: [emptyBlock.position[0], emptyBlock.position[1], emptyBlock.position[2]],
+          positionInChunk: [
+            emptyBlock.positionInChunk[0],
+            emptyBlock.positionInChunk[1],
+            emptyBlock.positionInChunk[2],
+          ],
+          blockId: item.itemTypeId,
+          itemId: item.id,
+        },
+      });
+    }
+  });
+};
 
 export default (world: WorldMainThread, network: Network): System => {
   const removers = world.createSelector([Transform, BlockRemover, Visual, Joint]);

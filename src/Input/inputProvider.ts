@@ -4,7 +4,8 @@ import inputSourcesProvider from './inputSources';
 import type InputEvent from './InputEvent';
 
 export default (inputContexts: InputContext[]): Input => {
-  const input = new Input(inputContexts);
+  const input = Input;
+  input.setContexts(inputContexts);
   inputSourcesProvider((event: InputEvent) => input.onEvent(event));
   return input;
 };

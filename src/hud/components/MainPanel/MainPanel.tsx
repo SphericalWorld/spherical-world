@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createSelector } from 'reselect';
 import classnames from 'classnames';
 import {
@@ -19,6 +19,8 @@ import { useMemoizedSelector } from '../../../util/reducerUtils';
 import { useHudApi } from '../../HudApi';
 import { GameEvent } from '../../../Events';
 import { blocksInfo } from '../../../blocks/blocksInfo';
+import { InputAction } from '../../../Input/InputAction';
+import { InputEvent } from '../../../../common/constants/input/eventTypes';
 
 const slotsSelector = createSelector(
   (state: State) => state.mainPanel.slots,
@@ -26,11 +28,22 @@ const slotsSelector = createSelector(
   (slots, items) => slots.map((el) => items[el || ''] || null),
 );
 
+const useSelectedItemIndex = (slotsCount: number) => {
+  const [index, setIndex] = useState(0);
+  useEffect(() => {
+    InputAction.on(InputEvent.inventoryNextItem, () => {
+      setIndex((currentIndex) => (currentIndex + 1) % slotsCount);
+    });
+    InputAction.on(InputEvent.inventoryPreviousItem, () => {
+      setIndex((currentIndex) => (slotsCount + currentIndex - 1) % slotsCount);
+    });
+  }, [slotsCount]);
+  return index;
+};
+
 const MainPanel = (): JSX.Element => {
-  const selectedItemIndex = useMemoizedSelector(
-    (state: State) => state.mainPanel.selectedItemIndex,
-  );
   const slots = useMemoizedSelector((state: State) => slotsSelector(state));
+  const selectedItemIndex = useSelectedItemIndex(slots.length);
   const selectInventoryItem = useSelectInventoryItem();
   const swapSlots = useSwapSlots();
   const hudApi = useHudApi();

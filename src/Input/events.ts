@@ -8,11 +8,6 @@ import {
   CATEGORY_COMBAT_AND_BLOCKS,
 } from './eventTypes';
 import type RangeInputEvent from './RangeInputEvent';
-import { KEY_SELECT_BUTTON } from '../hud/hudConstants';
-import {
-  PREVIOUS_ITEM_SELECTED,
-  NEXT_ITEM_SELECTED,
-} from '../hud/components/MainPanel/mainPanelConstants';
 import { GameEvent } from '../Events';
 import type { MappedEvent } from './InputContext';
 
@@ -100,10 +95,6 @@ export const selectNextItemEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Select next item',
   type: INPUT_TYPE_RANGE,
-  gameEvent: GameEvent.nextItemSelected,
-  uiEvent: {
-    type: NEXT_ITEM_SELECTED,
-  },
 };
 
 export const selectPreviousItemEvent = {
@@ -111,10 +102,6 @@ export const selectPreviousItemEvent = {
   category: CATEGORY_INTERFACE,
   caption: 'Select previous item',
   type: INPUT_TYPE_RANGE,
-  gameEvent: GameEvent.previousItemSelected,
-  uiEvent: {
-    type: PREVIOUS_ITEM_SELECTED,
-  },
 };
 
 export const playerAttackEvent = {
@@ -129,15 +116,6 @@ export const playerPutBlockEvent = {
   category: CATEGORY_COMBAT_AND_BLOCKS,
   caption: 'Put Block',
   type: INPUT_TYPE_ACTION,
-  gameEvent: GameEvent.playerTriedPutBlock,
-};
-
-export const keySetEvent = {
-  action: InputEvent.setKey,
-  type: INPUT_TYPE_ACTION,
-  gameEvent: KEY_SELECT_BUTTON,
-  data: ({ data }: { data: string }) => data,
-  uiEvent: ({ payload }: { data: string }) => ({ type: 'KEY_SELECT_BUTTON', payload }),
 };
 
 export const toggleCraftEvent: MappedEvent = {
