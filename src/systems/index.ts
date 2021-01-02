@@ -26,7 +26,7 @@ export default (
   DayNightCycleSystem(world, time),
   CameraSystem(world),
   DrawSystem(world, terrain, time),
-  NetworkSystem(world, network, store),
+  NetworkSystem(world, network),
   DropableSystem(world),
   ScriptingSystem(world),
   HudSystem(world, store, network),

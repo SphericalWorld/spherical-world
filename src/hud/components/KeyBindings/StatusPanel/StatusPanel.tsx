@@ -1,11 +1,7 @@
-import type { State } from '../../../../reducers/rootReducer';
 import Label from '../../../uiElements/Label';
 import { labelCommandGroup } from './statusPanel.module.css';
-import { useMemoizedSelector } from '../../../../util/reducerUtils';
 
-const StatusPanel = (): JSX.Element => {
-  const statusText = useMemoizedSelector<State>((state) => state.keyBindings.status);
-
+const StatusPanel = ({ statusText }: { statusText: string }): JSX.Element => {
   return (
     <Label size="small" className={labelCommandGroup}>
       {statusText}

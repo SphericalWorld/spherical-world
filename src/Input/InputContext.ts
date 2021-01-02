@@ -10,7 +10,7 @@ import type { InputEvent } from '../../common/constants/input/eventTypes';
 export type MappedEvent = Readonly<{
   action: InputEvent;
   type: INPUT_TYPE;
-  gameEvent: MainThreadEvents['type'];
+  gameEvent?: MainThreadEvents['type'];
   data?: (e: InputEvent1) => unknown;
   caption?: string;
   category?: EVENT_CATEGORY;

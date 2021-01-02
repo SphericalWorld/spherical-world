@@ -2,9 +2,7 @@ import { React, render } from '../../common/ecs';
 import { Input } from '../Input';
 import type Network from '../network';
 import type { System } from '../../common/ecs/System';
-import type { Store } from '../store/store';
 import { Transform, Camera, Inventory } from '../components';
-import { setKey as setKeyRedux } from '../hud/components/KeyBindings/keyBindingsActions';
 import { ServerToClientMessage, ClientToServerMessage } from '../../common/protocol';
 import { WorldMainThread, GameEvent } from '../Events';
 
@@ -24,14 +22,13 @@ const onSyncGameData = (world: WorldMainThread, network: Network) =>
       world.updateComponents(components);
     });
 
-const onLoadControlSettings = (network: Network, store: Store) =>
+const onLoadControlSettings = (network: Network) =>
   network.events
     .filter((e) => e.type === ServerToClientMessage.loadControlSettings && e)
     .subscribe(({ data }) => {
       data.controls.forEach(([action, firstKey, secondKey]) => {
-        Input.setKey(firstKey, action);
-        Input.setKey(secondKey, action);
-        store.dispatch(setKeyRedux(action, firstKey, secondKey));
+        Input.setKey(firstKey, action, 'first');
+        Input.setKey(secondKey, action, 'second');
       });
     });
 
@@ -43,7 +40,7 @@ const onPlayerAddItem = (network: Network, player) =>
       player[0].inventory.data.slots[data.position] = data.slot.id;
     });
 
-export default (world: WorldMainThread, network: Network, store: Store): System => {
+export default (world: WorldMainThread, network: Network): System => {
   const player = world.createSelector([Transform, Camera, Inventory]);
   world.events
     .filter((el) => el.network === true)
@@ -63,7 +60,7 @@ export default (world: WorldMainThread, network: Network, store: Store): System 
   });
 
   onSyncGameData(world, network);
-  onLoadControlSettings(network, store);
+  onLoadControlSettings(network);
   onPlayerAddItem(network, player);
 
   let lastUpdate = Date.now();

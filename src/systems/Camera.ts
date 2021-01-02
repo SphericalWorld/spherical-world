@@ -77,6 +77,7 @@ export default (world: WorldMainThread): System => {
 
   InputAction.on(InputEvent.cameraLock, () => {
     Input.activateContext(GAMEPLAY_MAIN_CONTEXT);
+    // Input.deactivateContext(GAMEPLAY_MENU_CONTEXT); TODO: find what to do with requestPointerLock bug in chrome
     bodyElement.requestPointerLock();
   });
 

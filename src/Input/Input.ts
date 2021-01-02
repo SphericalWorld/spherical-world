@@ -1,21 +1,25 @@
 import type { InputContext } from './InputContext';
 import type { InputContexts } from './inputContexts';
-import type { EventTypes } from '../../common/constants/input/eventTypes';
-import type InputEvent from './InputEvent';
+import type { InputEvent } from '../../common/constants/input/eventTypes';
+import type InputEvent1 from './InputEvent';
 import { activate, deactivate, getMappedInputEvent, setKey as setContextKey } from './InputContext';
 import * as events from './events';
 import type { MainThreadEvents } from '../Events';
 import StateInputEvent from './StateInputEvent';
 
+export type KeyPosition = 'first' | 'second';
+
 export class Input {
   private static contextsMap = new Map<InputContexts, InputContext>();
   private static keyToRebind: InputEvent | null = null;
+  private static keyPositionToRebind: KeyPosition | null = null;
   private static onRebind: null | ((key: string) => unknown);
 
   static contexts: InputContext[] = [];
   static activeContexts: InputContext[];
-  static inputStates: Map<string, InputEvent> = new Map();
+  static inputStates: Map<string, InputEvent1> = new Map();
   static dispatchHandler: (event: MainThreadEvents) => unknown;
+  static keyMappings: Map<InputEvent, { first: string; second: string }> = new Map();
 
   static setContexts(inputContexts: InputContext[]): void {
     this.contexts = inputContexts;
@@ -25,10 +29,10 @@ export class Input {
     this.activeContexts = this.getActiveContexts();
   }
 
-  static onEvent(event: InputEvent): void {
-    if (this.keyToRebind) {
+  static onEvent(event: InputEvent1): void {
+    if (this.keyToRebind && this.keyPositionToRebind) {
       if (event instanceof StateInputEvent) {
-        this.setKey(event.name, this.keyToRebind);
+        this.setKey(event.name, this.keyToRebind, this.keyPositionToRebind);
         if (this.onRebind) this.onRebind(event.name);
 
         this.keyToRebind = null;
@@ -67,14 +71,25 @@ export class Input {
     this.dispatchHandler = dispatchHandler;
   }
 
-  static waitForNewKey(action: InputEvent, onRebind: (key: string) => unknown): void {
+  static waitForNewKey(
+    action: InputEvent,
+    keyPositionToRebind: KeyPosition,
+    onRebind: (key: string) => unknown,
+  ): void {
     this.keyToRebind = action;
+    this.keyPositionToRebind = keyPositionToRebind;
     this.onRebind = onRebind;
   }
 
-  static setKey(key: string, actionType: EventTypes): void {
+  static setKey(key: string, actionType: InputEvent, keyPosition: KeyPosition): void {
     const action = Object.values(events).find((e) => e.action === actionType);
     const context = this.contexts.find((el) => el.eventTypes.has(action));
+    let mapping = this.keyMappings.get(actionType);
+    if (!mapping) {
+      mapping = { first: '', second: '' };
+      this.keyMappings.set(actionType, mapping);
+    }
+    mapping[keyPosition] = key;
     if (context) {
       setContextKey(context, key, action);
     }
