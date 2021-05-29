@@ -23,7 +23,7 @@
     "seedrandom": "^3.0.5",
     "simplex-noise": "^2.4.0",
     "uuid": "^8.2.0",
-    "ws": "^7.3.0"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.10.3",
